@@ -93,11 +93,12 @@
     position: absolute;
     top: 100%;
     left: 0;
-    min-width: 160px;
+    min-width: 170px;
     background-color: #1e40af;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     border-radius: 0 0 6px 6px;
     overflow: hidden;
+    white-space: nowrap;
   }
 
   .payzon-header .sub-dropdown a {
@@ -142,29 +143,77 @@
     <div class="gnb-item">
       <a href="${pageContext.request.contextPath}/index.jsp" class="gnb-link">🏠 HOME</a>
     </div>  
-  
+
+    <!-- [신규 추가] 기본환경 설정 -->
     <div class="gnb-item">
-      <a href="#" class="gnb-link">인사관리 ▾</a>
-      <div class="sub-dropdown">
-        <a href="${pageContext.request.contextPath}/emp/register.do">사원등록</a>
-        <a href="${pageContext.request.contextPath}/emp/list.do">사원현황</a>
+      <a href="#" class="gnb-link">기본환경 설정 ▾</a>
+      <div class="sub-dropdown">	
+        <%-- <a href="${pageContext.request.contextPath}/config/empRegister.do">사원 등록</a> --%>
+        <a href="${pageContext.request.contextPath}/view/config/empRegister.jsp">사원 등록</a>
+        <a href="${pageContext.request.contextPath}/config/vacation.do">휴가/근태 설정</a>
+        <a href="${pageContext.request.contextPath}/config/salaryItem.do">급여항목 설정</a>
       </div>
     </div>
 
+    <!-- 인사관리 -->
     <div class="gnb-item">
-      <a href="${pageContext.request.contextPath}/attendance/list.do" class="gnb-link">근태관리 ▾</a>
+      <a href="#" class="gnb-link">인사관리 ▾</a>
+      <div class="sub-dropdown">
+        <a href="${pageContext.request.contextPath}/emp/list.do">사원현황/관리</a>
+        <a href="${pageContext.request.contextPath}/emp/card.do">인사기록 카드</a>
+        <a href="${pageContext.request.contextPath}/emp/cert/issue.do">제 증명서 발급</a>
+        <a href="${pageContext.request.contextPath}/emp/cert/list.do">제 증명서 발급대장</a>
+      </div>
     </div>
 
+    <!-- 근태관리 -->
     <div class="gnb-item">
-      <a href="${pageContext.request.contextPath}/salary/list.do" class="gnb-link">급여관리 ▾</a>
+      <a href="#" class="gnb-link">근태관리 ▾</a>
+      <div class="sub-dropdown">
+        <a href="${pageContext.request.contextPath}/attendance/record.do">근태기록/관리</a>
+        <a href="${pageContext.request.contextPath}/attendance/list.do">근태조회</a>
+        <a href="${pageContext.request.contextPath}/attendance/vacation.do">휴가조회</a>
+        <a href="${pageContext.request.contextPath}/attendance/daily/record.do">일용직 근무기록/관리</a>
+        <a href="${pageContext.request.contextPath}/attendance/daily/list.do">일용직 근무 조회</a>
+      </div>
     </div>
 
+    <!-- 급여관리 -->
     <div class="gnb-item">
-      <a href="${pageContext.request.contextPath}/stats/salary.do" class="gnb-link">급여통계 ▾</a>
+      <a href="#" class="gnb-link">급여관리 ▾</a>
+      <div class="sub-dropdown">
+        <a href="${pageContext.request.contextPath}/salary/entry.do">급여입력/관리</a>
+        <a href="${pageContext.request.contextPath}/salary/daily/entry.do">급여입력/관리(일용직)</a>
+        <a href="${pageContext.request.contextPath}/salary/register.do">급여대장</a>
+        <a href="${pageContext.request.contextPath}/salary/payslip.do">급여명세서</a>
+        <a href="${pageContext.request.contextPath}/salary/empHistory.do">사원별 급여내역</a>
+        <a href="${pageContext.request.contextPath}/salary/transfer/apply.do">급여이체 신청</a>
+        <a href="${pageContext.request.contextPath}/salary/transfer/result.do">급여이체 결과조회</a>
+        <a href="${pageContext.request.contextPath}/salary/itemRegister.do">항목별 대장</a>
+        <a href="${pageContext.request.contextPath}/salary/insurance.do">4대보험 공제내역</a>
+      </div>
     </div>
 
+    <!-- 급여통계 -->
     <div class="gnb-item">
-      <a href="${pageContext.request.contextPath}/retire/list.do" class="gnb-link">퇴직관리 ▾</a>
+      <a href="#" class="gnb-link">급여통계 ▾</a>
+      <div class="sub-dropdown">
+        <a href="${pageContext.request.contextPath}/stats/yearlyTotal.do">연도별 전체급여 통계</a>
+        <a href="${pageContext.request.contextPath}/stats/monthlyTotal.do">월별 전체급여 통계</a>
+        <a href="${pageContext.request.contextPath}/stats/yearlyPersonal.do">연도별 개인연봉 통계</a>
+        <a href="${pageContext.request.contextPath}/stats/monthlyPersonal.do">월별 개인급여 통계</a>
+        <a href="${pageContext.request.contextPath}/stats/itemComposition.do">급여항목 구성 통계</a>
+      </div>
+    </div>
+
+    <!-- 퇴직관리 -->
+    <div class="gnb-item">
+      <a href="#" class="gnb-link">퇴직관리 ▾</a>
+      <div class="sub-dropdown">
+        <a href="${pageContext.request.contextPath}/retire/process.do">사원 퇴직처리</a>
+        <a href="${pageContext.request.contextPath}/retire/pay/entry.do">퇴직급여 입력/관리</a>
+        <a href="${pageContext.request.contextPath}/retire/payslip.do">퇴직급여명세서</a>
+      </div>
     </div>
   </nav>
 </header>
