@@ -209,3 +209,6 @@
     </div>
   </nav>
 </header>
+
+<!-- ★ 이 줄을 headerNav.tag 맨 밑에 추가해 주세요! (헤더와 본문 사이 여백 확보) -->
+<div style="margin-bottom: 30px;"></div>
