@@ -1,7 +1,7 @@
 <%@ tag language="java" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<!-- 헤더 전용 CSS 스타일을 태그 파일 안에 포함 -->
+<!-- 헤더 전용 CSS 스타일 -->
 <style>
   /* 1. 기본 리셋 및 폰트 */
   .payzon-header * {
@@ -60,40 +60,7 @@
     text-decoration: none;
   }
 
-  /* 4. 빠른 실행 메뉴 */
-  .payzon-header .quick-menu {
-    background-color: #ffffff;
-    border-bottom: 1px solid #cbd5e1;
-    padding: 10px 20px;
-    display: flex;
-    gap: 24px;
-    overflow-x: auto;
-  }
-
-  .payzon-header .quick-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-decoration: none;
-    color: #334155;
-    font-size: 12px;
-    font-weight: 600;
-    gap: 4px;
-    cursor: pointer;
-  }
-
-  .payzon-header .quick-icon {
-    width: 32px;
-    height: 32px;
-    background-color: #f1f5f9;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-  }
-
-  /* 5. 파란색 GNB 네비게이션 */
+  /* 4. 파란색 GNB 네비게이션 */
   .payzon-header .gnb-navbar {
     background-color: #2563eb;
     display: flex;
@@ -120,7 +87,7 @@
     background-color: #1d4ed8;
   }
 
-  /* 6. 마우스 올리면 나오는 서브 드롭다운 */
+  /* 5. 마우스 올리면 나오는 서브 드롭다운 */
   .payzon-header .sub-dropdown {
     display: none;
     position: absolute;
@@ -170,16 +137,12 @@
     </div>
   </div>
 
-
   <!-- 3. 메인 네비게이션 바 -->
   <nav class="gnb-navbar">
-  
-    <!-- 0)  -->
     <div class="gnb-item">
-      <a href="#" class="gnb-link">🏠 HOME</a>
+      <a href="${pageContext.request.contextPath}/index.jsp" class="gnb-link">🏠 HOME</a>
     </div>  
   
-    <!-- 1) 인사관리 (사원등록, 사원현황 서브메뉴) -->
     <div class="gnb-item">
       <a href="#" class="gnb-link">인사관리 ▾</a>
       <div class="sub-dropdown">
@@ -188,27 +151,23 @@
       </div>
     </div>
 
-    <!-- 2) 근태관리 -->
     <div class="gnb-item">
       <a href="${pageContext.request.contextPath}/attendance/list.do" class="gnb-link">근태관리 ▾</a>
     </div>
 
-    <!-- 3) 급여관리 -->
     <div class="gnb-item">
       <a href="${pageContext.request.contextPath}/salary/list.do" class="gnb-link">급여관리 ▾</a>
     </div>
 
-    <!-- 4) 급여통계 -->
     <div class="gnb-item">
       <a href="${pageContext.request.contextPath}/stats/salary.do" class="gnb-link">급여통계 ▾</a>
     </div>
 
-    <!-- 5) 퇴직관리 -->
     <div class="gnb-item">
       <a href="${pageContext.request.contextPath}/retire/list.do" class="gnb-link">퇴직관리 ▾</a>
     </div>
   </nav>
 </header>
 
-<!-- ★ 이 줄을 headerNav.tag 맨 밑에 추가해 주세요! (헤더와 본문 사이 여백 확보) -->
+<!-- 헤더와 본문 사이 기본 여백 -->
 <div style="margin-bottom: 30px;"></div>
