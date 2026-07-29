@@ -1,7 +1,7 @@
 <img width="1896" height="890" alt="image" src="https://github.com/user-attachments/assets/4698a605-0f83-47ea-baa4-74e929901631" />
 
 
-# 🧴 페이존 모티브 급여관리 사이트 
+# 페이존 모티브 급여관리 사이트 
 > “페이존”을 벤치마킹한 회사 급여관리 웹 사이트 프로젝트입니다.  
 
 ---
