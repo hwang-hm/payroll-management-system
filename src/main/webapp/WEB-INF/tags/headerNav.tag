@@ -159,7 +159,8 @@
     <div class="gnb-item">
       <a href="#" class="gnb-link">인사관리 ▾</a>
       <div class="sub-dropdown">
-        <a href="${pageContext.request.contextPath}/emp/list.do">사원현황/관리</a>
+       <%--  <a href="${pageContext.request.contextPath}/emp/list.do">사원현황/관리</a> --%>
+        <a href="${pageContext.request.contextPath}/view/emp/list.jsp">사원현황/관리</a>
         <a href="${pageContext.request.contextPath}/emp/card.do">인사기록 카드</a>
         <a href="${pageContext.request.contextPath}/emp/cert/issue.do">제 증명서 발급</a>
         <a href="${pageContext.request.contextPath}/emp/cert/list.do">제 증명서 발급대장</a>

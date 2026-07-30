@@ -50,7 +50,14 @@
   <servlet-mapping>
     <servlet-name>ControllerUsingURI</servlet-name>
     <url-pattern>*.do</url-pattern>
-  </servlet-mapping>    
+  </servlet-mapping> 
+  
+  
+  <!-- [4] 필터 -->
+  <filter>
+    <filter-name>LoginCheckFilter</filter-name>
+    <filter-class>filter.LoginCheckFilter</filter-class>
+  </filter>   
   
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>

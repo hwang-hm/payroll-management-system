@@ -39,6 +39,6 @@
 <!-- 푸터 HTML 영역 -->
 <footer class="payzon-footer">
   <div class="footer-container">
-    <img src="${pageContext.request.contextPath}/images/FO.png" alt="PAYZON 하단 푸터 정보" />
+    <img src="${pageContext.request.contextPath}/images/bottom.gif" alt="PAYZON 하단 푸터 정보" />
   </div>
 </footer>
