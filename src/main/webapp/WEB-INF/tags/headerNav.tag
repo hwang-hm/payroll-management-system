@@ -131,7 +131,7 @@
   <!-- 2. 브랜드 로고 영역 -->
   <div class="header-top">
     <div class="brand-logo">
-      헥사곤존 <span>인사&급여관리</span>
+      헥사존 <span>인사&급여관리</span>
     </div>
     <div class="user-info">
       <span>고객님 무료체험회원 입니다.</span>
