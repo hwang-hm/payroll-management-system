@@ -6,7 +6,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>헥사곤존 - 인사&급여관리 시스템</title>
+  <title>헥사곤존 - 인사&급여관리 시스템 </title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
   
   <style>
