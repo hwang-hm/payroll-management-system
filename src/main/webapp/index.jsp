@@ -211,7 +211,8 @@
     <!-- 1. 메인 히어로 영역 -->
     <div class="hero-section">
       <div class="hero-text">
-        <h1>스마트한 인사·급여 관리의 시작 🚀🚀🚀🚀</h1>
+        <h1>스마트한 인사·급여 관리의 시작 🚀</h1>
+        <h1>여기는 new_update 깃 테스트중입니다</h1>
         <p>헥사곤존에서 빠르고 정확하게 업무를 처리하세요.</p>
       </div>
       <div class="team-badge">
