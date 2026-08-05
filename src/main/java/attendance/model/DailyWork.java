@@ -10,31 +10,31 @@ public class DailyWork {
 
 	// 일용직 근무기록 번호 / 日雇い勤務記録番号
 
-	private int daily_work_id;
+	private int dailyWorkId;
 
 	// 근무일자 / 勤務日
-	private Date work_date;
+	private Date workDate;
 
 	// 현장 또는 프로젝트명 / 現場またはプロジェクト名
-	private String project_name;
+	private String projectName;
 
 	// 일당 / 日当
-	private int daily_wage;
+	private int dailyWage;
 
 	// 지급률 / 支給率
-	private double payment_rate;
+	private double paymentRate;
 
 	// 소득세 / 所得税
-	private int income_tax;
+	private int incomeTax;
 
 	// 지방소득세 / 地方所得税
-	private int local_income_tax;
+	private int localIncomeTax;
 
 	// 실지급액 / 実支給額
-	private int net_pay;
+	private int netPay;
 
 	// 사원번호 / 社員番号
-	private int emp_id;
+	private int empId;
 
 	// 기본 생성자 / デフォルトコンストラクタ
 	public DailyWork() {
@@ -42,99 +42,104 @@ public class DailyWork {
 	}
 
 	// 전체 필드 생성자 / 全フィールドコンストラクタ
-	public DailyWork(int daily_work_id, Date work_date, String project_name, int daily_wage, double payment_rate,
-			int income_tax, int local_income_tax, int net_pay, int emp_id) {
-		this.daily_work_id = daily_work_id;
-		this.work_date = work_date;
-		this.project_name = project_name;
-		this.daily_wage = daily_wage;
-		this.payment_rate = payment_rate;
-		this.income_tax = income_tax;
-		this.local_income_tax = local_income_tax;
-		this.net_pay = net_pay;
-		this.emp_id = emp_id;
-	}
+	public DailyWork(int dailyWorkId, Date workDate, String projectName, int dailyWage,
+            double paymentRate, int incomeTax, int localIncomeTax, int netPay, int empId) {
+        this.dailyWorkId = dailyWorkId;
+        this.workDate = workDate;
+        this.projectName = projectName;
+        this.dailyWage = dailyWage;
+        this.paymentRate = paymentRate;
+        this.incomeTax = incomeTax;
+        this.localIncomeTax = localIncomeTax;
+        this.netPay = netPay;
+        this.empId = empId;
+    }
 
 	// getter 및 setter / getterおよびsetter
-	public int getDaily_work_id() {
-		return daily_work_id;
-	}
+	public int getDailyWorkId() {
+        return dailyWorkId;
+    }
 
-	public void setDaily_work_id(int daily_work_id) {
-		this.daily_work_id = daily_work_id;
-	}
+    public void setDailyWorkId(int dailyWorkId) {
+        this.dailyWorkId = dailyWorkId;
+    }
 
-	public Date getWork_date() {
-		return work_date;
-	}
+    public Date getWorkDate() {
+        return workDate;
+    }
 
-	public void setWork_date(Date work_date) {
-		this.work_date = work_date;
-	}
+    public void setWorkDate(Date workDate) {
+        this.workDate = workDate;
+    }
 
-	public String getProject_name() {
-		return project_name;
-	}
+    public String getProjectName() {
+        return projectName;
+    }
 
-	public void setProject_name(String project_name) {
-		this.project_name = project_name;
-	}
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
 
-	public int getDaily_wage() {
-		return daily_wage;
-	}
+    public int getDailyWage() {
+        return dailyWage;
+    }
 
-	public void setDaily_wage(int daily_wage) {
-		this.daily_wage = daily_wage;
-	}
+    public void setDailyWage(int dailyWage) {
+        this.dailyWage = dailyWage;
+    }
 
-	public double getPayment_rate() {
-	    return payment_rate;
-	}
+    public double getPaymentRate() {
+        return paymentRate;
+    }
 
-	public void setPayment_rate(double payment_rate) {
-	    this.payment_rate = payment_rate;
-	}
+    public void setPaymentRate(double paymentRate) {
+        this.paymentRate = paymentRate;
+    }
 
-	public int getIncome_tax() {
-		return income_tax;
-	}
+    public int getIncomeTax() {
+        return incomeTax;
+    }
 
-	public void setIncome_tax(int income_tax) {
-		this.income_tax = income_tax;
-	}
+    public void setIncomeTax(int incomeTax) {
+        this.incomeTax = incomeTax;
+    }
 
-	public int getLocal_income_tax() {
-		return local_income_tax;
-	}
+    public int getLocalIncomeTax() {
+        return localIncomeTax;
+    }
 
-	public void setLocal_income_tax(int local_income_tax) {
-		this.local_income_tax = local_income_tax;
-	}
+    public void setLocalIncomeTax(int localIncomeTax) {
+        this.localIncomeTax = localIncomeTax;
+    }
 
-	public int getNet_pay() {
-		return net_pay;
-	}
+    public int getNetPay() {
+        return netPay;
+    }
 
-	public void setNet_pay(int net_pay) {
-		this.net_pay = net_pay;
-	}
+    public void setNetPay(int netPay) {
+        this.netPay = netPay;
+    }
 
-	public int getEmp_id() {
-		return emp_id;
-	}
+    public int getEmpId() {
+        return empId;
+    }
 
-	public void setEmp_id(int emp_id) {
-		this.emp_id = emp_id;
-	}
+    public void setEmpId(int empId) {
+        this.empId = empId;
+    }
 
 	// 객체 정보를 문자열로 반환 / オブジェクト情報を文字列として返す
 	@Override
 	public String toString() {
-		return "DailyWork [daily_work_id=" + daily_work_id + ", work_date=" + work_date + ", project_name="
-				+ project_name + ", daily_wage=" + daily_wage + ", payment_rate=" + payment_rate + ", income_tax="
-				+ income_tax + ", local_income_tax=" + local_income_tax + ", net_pay=" + net_pay + ", emp_id=" + emp_id
-				+ "]";
-	}
+        return "DailyWork [dailyWorkId=" + dailyWorkId
+                + ", workDate=" + workDate
+                + ", projectName=" + projectName
+                + ", dailyWage=" + dailyWage
+                + ", paymentRate=" + paymentRate
+                + ", incomeTax=" + incomeTax
+                + ", localIncomeTax=" + localIncomeTax
+                + ", netPay=" + netPay
+                + ", empId=" + empId + "]";
+    }
 
 }

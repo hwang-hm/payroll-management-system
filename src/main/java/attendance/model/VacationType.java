@@ -10,22 +10,22 @@ import java.sql.Date;
 public class VacationType {
 
 	// 휴가항목 번호 / 休暇項目番号
-	private int vacation_type_id;
+	private int vacationTypeId;
 
 	// 휴가항목 이름 / 休暇項目名
-	private String vacation_name;
+	private String vacationName;
 
 	// 적용 시작일 / 適用開始日
-	private Date apply_start_date;
+	private Date applyStartDate;
 
 	// 적용 종료일 / 適用終了日
-	private Date apply_end_date;
+	private Date applyEndDate;
 
 	// 휴가일수 / 休暇日数
-	private String vacation_days;
+	private String vacationDays;
 
 	// 사용 여부 / 使用可否
-	private String use_yn;
+	private String useYn;
 
 	
 	// 기본 생성자 / デフォルトコンストラクタ
@@ -35,73 +35,76 @@ public class VacationType {
 
 	
 	// 전체 필드 생성자 / 全フィールドコンストラクタ
-	public VacationType(int vacation_type_id, String vacation_name, Date apply_start_date, Date apply_end_date,
-			String vacation_days, String use_yn) {
-		this.vacation_type_id = vacation_type_id;
-		this.vacation_name = vacation_name;
-		this.apply_start_date = apply_start_date;
-		this.apply_end_date = apply_end_date;
-		this.vacation_days = vacation_days;
-		this.use_yn = use_yn;
-	}
+	public VacationType(int vacationTypeId, String vacationName, Date applyStartDate,
+            Date applyEndDate, String vacationDays, String useYn) {
+        this.vacationTypeId = vacationTypeId;
+        this.vacationName = vacationName;
+        this.applyStartDate = applyStartDate;
+        this.applyEndDate = applyEndDate;
+        this.vacationDays = vacationDays;
+        this.useYn = useYn;
+    }
 
 	
 	// getter 및 setter / getterおよびsetter
-	public int getVacation_type_id() {
-		return vacation_type_id;
-	}
+	public int getVacationTypeId() {
+        return vacationTypeId;
+    }
 
-	public void setVacation_type_id(int vacation_type_id) {
-		this.vacation_type_id = vacation_type_id;
-	}
+    public void setVacationTypeId(int vacationTypeId) {
+        this.vacationTypeId = vacationTypeId;
+    }
 
-	public String getVacation_name() {
-		return vacation_name;
-	}
+    public String getVacationName() {
+        return vacationName;
+    }
 
-	public void setVacation_name(String vacation_name) {
-		this.vacation_name = vacation_name;
-	}
+    public void setVacationName(String vacationName) {
+        this.vacationName = vacationName;
+    }
 
-	public Date getApply_start_date() {
-		return apply_start_date;
-	}
+    public Date getApplyStartDate() {
+        return applyStartDate;
+    }
 
-	public void setApply_start_date(Date apply_start_date) {
-		this.apply_start_date = apply_start_date;
-	}
+    public void setApplyStartDate(Date applyStartDate) {
+        this.applyStartDate = applyStartDate;
+    }
 
-	public Date getApply_end_date() {
-		return apply_end_date;
-	}
+    public Date getApplyEndDate() {
+        return applyEndDate;
+    }
 
-	public void setApply_end_date(Date apply_end_date) {
-		this.apply_end_date = apply_end_date;
-	}
+    public void setApplyEndDate(Date applyEndDate) {
+        this.applyEndDate = applyEndDate;
+    }
 
-	public String getVacation_days() {
-		return vacation_days;
-	}
+    public String getVacationDays() {
+        return vacationDays;
+    }
 
-	public void setVacation_days(String vacation_days) {
-		this.vacation_days = vacation_days;
-	}
+    public void setVacationDays(String vacationDays) {
+        this.vacationDays = vacationDays;
+    }
 
-	public String getUse_yn() {
-		return use_yn;
-	}
+    public String getUseYn() {
+        return useYn;
+    }
 
-	public void setUse_yn(String use_yn) {
-		this.use_yn = use_yn;
-	}
+    public void setUseYn(String useYn) {
+        this.useYn = useYn;
+    }
 
 	
 	// 객체 정보를 문자열로 반환 / オブジェクト情報を文字列として返す
 	@Override
-	public String toString() {
-		return "VacationType [vacation_type_id=" + vacation_type_id + ", vacation_name=" + vacation_name
-				+ ", apply_start_date=" + apply_start_date + ", apply_end_date=" + apply_end_date + ", vacation_days="
-				+ vacation_days + ", use_yn=" + use_yn + "]";
-	}
+	 public String toString() {
+        return "VacationType [vacationTypeId=" + vacationTypeId
+                + ", vacationName=" + vacationName
+                + ", applyStartDate=" + applyStartDate
+                + ", applyEndDate=" + applyEndDate
+                + ", vacationDays=" + vacationDays
+                + ", useYn=" + useYn + "]";
+    }
 
 }

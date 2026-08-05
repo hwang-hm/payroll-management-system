@@ -10,31 +10,31 @@ import java.sql.Date;
 public class Attendance {
 
 	// 근태기록 번호 / 勤怠記録番号
-	private int attendance_id;
+	private int attendanceId;
 	
 	// 입력일자 / 入力日
-	private Date input_date;
+	private Date inputDate;
 	
 	// 근태 시작일 / 勤怠開始日
-	private Date attendance_start_date;
+	private Date attendanceStartDate;
 	
 	// 근태 종료일 / 勤怠終了日
-	private Date attendance_end_date;
+	private Date attendanceEndDate;
 	
 	// 근태일수 / 勤怠日数
-	private double attendance_days;
+	private double attendanceDays;
 	
 	// 수당 금액 / 手当金額
-	private int allowance_amount;
+	private int allowanceAmount;
 	
 	// 적요 / 摘要
 	private String remarks;
 	
 	// 사원번호 / 社員番号
-	private int emp_id;
+	private int empId;
 	
 	// 근태항목 번호 / 勤怠項目番号
-	private int attendance_type_id;
+	private int attendanceTypeId;
 
 	// 기본 생성자 / デフォルトコンストラクタ
 
@@ -44,101 +44,106 @@ public class Attendance {
 
 	
 	// 전체 필드 생성자 / 全フィールドコンストラクタ
-	public Attendance(int attendance_id, Date input_date, Date attendance_start_date, Date attendance_end_date,
-			double attendance_days, int allowance_amount, String remarks, int emp_id, int attendance_type_id) {
-		this.attendance_id = attendance_id;
-		this.input_date = input_date;
-		this.attendance_start_date = attendance_start_date;
-		this.attendance_end_date = attendance_end_date;
-		this.attendance_days = attendance_days;
-		this.allowance_amount = allowance_amount;
+	public Attendance(int attendanceId, Date inputDate, Date attendanceStartDate, Date attendanceEndDate,
+			double attendanceDays, int allowanceAmount, String remarks, int empId, int attendanceTypeId) {
+		this.attendanceId = attendanceId;
+		this.inputDate = inputDate;
+		this.attendanceStartDate = attendanceStartDate;
+		this.attendanceEndDate = attendanceEndDate;
+		this.attendanceDays = attendanceDays;
+		this.allowanceAmount = allowanceAmount;
 		this.remarks = remarks;
-		this.emp_id = emp_id;
-		this.attendance_type_id = attendance_type_id;
+		this.empId = empId;
+		this.attendanceTypeId = attendanceTypeId;
 	}
 
 	
 	// getter 및 setter / getterおよびsetter
-	public int getAttendance_id() {
-		return attendance_id;
-	}
+	public int getAttendanceId() {
+        return attendanceId;
+    }
 
-	public void setAttendance_id(int attendance_id) {
-		this.attendance_id = attendance_id;
-	}
+    public void setAttendanceId(int attendanceId) {
+        this.attendanceId = attendanceId;
+    }
 
-	public Date getInput_date() {
-		return input_date;
-	}
+    public Date getInputDate() {
+        return inputDate;
+    }
 
-	public void setInput_date(Date input_date) {
-		this.input_date = input_date;
-	}
+    public void setInputDate(Date inputDate) {
+        this.inputDate = inputDate;
+    }
 
-	public Date getAttendance_start_date() {
-		return attendance_start_date;
-	}
+    public Date getAttendanceStartDate() {
+        return attendanceStartDate;
+    }
 
-	public void setAttendance_start_date(Date attendance_start_date) {
-		this.attendance_start_date = attendance_start_date;
-	}
+    public void setAttendanceStartDate(Date attendanceStartDate) {
+        this.attendanceStartDate = attendanceStartDate;
+    }
 
-	public Date getAttendance_end_date() {
-		return attendance_end_date;
-	}
+    public Date getAttendanceEndDate() {
+        return attendanceEndDate;
+    }
 
-	public void setAttendance_end_date(Date attendance_end_date) {
-		this.attendance_end_date = attendance_end_date;
-	}
+    public void setAttendanceEndDate(Date attendanceEndDate) {
+        this.attendanceEndDate = attendanceEndDate;
+    }
 
-	public double getAttendance_days() {
-		return attendance_days;
-	}
+    public double getAttendanceDays() {
+        return attendanceDays;
+    }
 
-	public void setAttendance_days(double attendance_days) {
-		this.attendance_days = attendance_days;
-	}
+    public void setAttendanceDays(double attendanceDays) {
+        this.attendanceDays = attendanceDays;
+    }
 
-	public int getAllowance_amount() {
-		return allowance_amount;
-	}
+    public int getAllowanceAmount() {
+        return allowanceAmount;
+    }
 
-	public void setAllowance_amount(int allowance_amount) {
-		this.allowance_amount = allowance_amount;
-	}
+    public void setAllowanceAmount(int allowanceAmount) {
+        this.allowanceAmount = allowanceAmount;
+    }
 
-	public String getRemarks() {
-		return remarks;
-	}
+    public String getRemarks() {
+        return remarks;
+    }
 
-	public void setRemarks(String remarks) {
-		this.remarks = remarks;
-	}
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
 
-	public int getEmp_id() {
-		return emp_id;
-	}
+    public int getEmpId() {
+        return empId;
+    }
 
-	public void setEmp_id(int emp_id) {
-		this.emp_id = emp_id;
-	}
+    public void setEmpId(int empId) {
+        this.empId = empId;
+    }
 
-	public int getAttendance_type_id() {
-		return attendance_type_id;
-	}
+    public int getAttendanceTypeId() {
+        return attendanceTypeId;
+    }
 
-	public void setAttendance_type_id(int attendance_type_id) {
-		this.attendance_type_id = attendance_type_id;
-	}
+    public void setAttendanceTypeId(int attendanceTypeId) {
+        this.attendanceTypeId = attendanceTypeId;
+    }
 	
 	
 	// 객체 정보를 문자열로 반환 / オブジェクト情報を文字列として返す
 	@Override
 	public String toString() {
-		return "Attendance [attendance_id=" + attendance_id + ", input_date=" + input_date + ", attendance_start_date="
-				+ attendance_start_date + ", attendance_end_date=" + attendance_end_date + ", attendance_days="
-				+ attendance_days + ", allowance_amount=" + allowance_amount + ", remarks=" + remarks + ", emp_id="
-				+ emp_id + ", attendance_type_id=" + attendance_type_id + "]";
-	}
+        return "Attendance [attendanceId=" + attendanceId
+                + ", inputDate=" + inputDate
+                + ", attendanceStartDate=" + attendanceStartDate
+                + ", attendanceEndDate=" + attendanceEndDate
+                + ", attendanceDays=" + attendanceDays
+                + ", allowanceAmount=" + allowanceAmount
+                + ", remarks=" + remarks
+                + ", empId=" + empId
+                + ", attendanceTypeId=" + attendanceTypeId + "]";
+    }
 
 }
