@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 public class Military {
-	private int empId;
+	private Integer empId;
 	private String militaryType;
 	private String militaryBranch;
 	private Date startDate;
@@ -17,7 +17,7 @@ public class Military {
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 	
-	public int getEmpId() {
+	public Integer getEmpId() {
 		return empId;
 	}
 	public void setEmpId(int empId) {

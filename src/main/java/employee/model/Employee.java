@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 
 public class Employee {
 	//필수 입력 항목
-	private int empId;
+	private Integer empId;
 	private String nameKor;
 	private Date hireDate;
 	private String employmentType;
@@ -30,7 +30,7 @@ public class Employee {
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 	
-	public int getEmpId() {
+	public Integer getEmpId() {
 		return empId;
 	}
 	public void setEmpId(int empId) {
