@@ -67,7 +67,7 @@ public class VacationTypeDao {
 		// 휴가항목 번호는 Oracle 시퀀스를 이용하여 자동 생성한다.
 		// 休暇項目番号はOracleシーケンスを利用して自動生成する。
 		String sql = "INSERT INTO vacation_type (" + "vacation_type_id, " + "vacation_name, " + "apply_start_date, "
-				+ "apply_end_date, " + "vacation_days, " + "use_yn" + ") VALUES (" + "vacation_type_seq.NEXTVAL, "
+				+ "apply_end_date, " + "vacation_days, " + "use_yn" + ") VALUES (" + "seq_vacation_type.NEXTVAL, "
 				+ "?, ?, ?, ?, ?" + ")";
 
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
