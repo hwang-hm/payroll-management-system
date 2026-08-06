@@ -770,11 +770,11 @@ ALTER TABLE salary_detail
     FOREIGN KEY (salary_item_id) REFERENCES salary_item (salary_item_id);
 
 ALTER TABLE salary_item
-    ADD CONSTRAINT fk_salary_item_attendance_type
+    ADD CONSTRAINT fk_salary_item_att_type
     FOREIGN KEY (attendance_type_id) REFERENCES attendance_type (attendance_type_id);
 
 ALTER TABLE salary_detail
-    ADD CONSTRAINT fk_salary_detail_attendance_type
+    ADD CONSTRAINT fk_salary_detail_att_type
     FOREIGN KEY (attendance_type_id) REFERENCES attendance_type (attendance_type_id);
 
 ALTER TABLE payroll_information
