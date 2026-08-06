@@ -2,22 +2,22 @@ package salary.model;
 
 public class TransferForm {
 
-	private Long formId;
+	private Integer formId;
 	private String formName;
 
 	public TransferForm() {
 	}
 
-	public TransferForm(Long formId, String formName) {
+	public TransferForm(Integer formId, String formName) {
 		this.formId = formId;
 		this.formName = formName;
 	}
 
-	public Long getFormId() {
+	public Integer getFormId() {
 		return formId;
 	}
 
-	public void setFormId(Long formId) {
+	public void setFormId(Integer formId) {
 		this.formId = formId;
 	}
 

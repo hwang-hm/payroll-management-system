@@ -4,14 +4,9 @@ import java.util.Date;
 
 public class Salary {
 
-	private Long salaryId;
-	private Long empId;
-	private Integer payYear;
-	private Integer payMonth;
-	private Integer paySeq;
-	private Date startDate;
-	private Date endDate;
-	private Date payDate;
+	private Integer salaryId;
+	private Integer salaryDateId;
+	private Integer empId;
 	private Long totalPay;
 	private Long totalDeduct;
 	private Long netPay;
@@ -21,16 +16,11 @@ public class Salary {
 	public Salary() {
 	}
 
-	public Salary(Long salaryId, Long empId, Integer payYear, Integer payMonth, Integer paySeq, Date startDate,
-			Date endDate, Date payDate, Long totalPay, Long totalDeduct, Long netPay, Date createdAt, Date updatedAt) {
+	public Salary(Integer salaryId, Integer salaryDateId, Integer empId, Long totalPay, Long totalDeduct, Long netPay,
+			Date createdAt, Date updatedAt) {
 		this.salaryId = salaryId;
+		this.salaryDateId = salaryDateId;
 		this.empId = empId;
-		this.payYear = payYear;
-		this.payMonth = payMonth;
-		this.paySeq = paySeq;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.payDate = payDate;
 		this.totalPay = totalPay;
 		this.totalDeduct = totalDeduct;
 		this.netPay = netPay;
@@ -38,68 +28,28 @@ public class Salary {
 		this.updatedAt = updatedAt;
 	}
 
-	public Long getSalaryId() {
+	public Integer getSalaryId() {
 		return salaryId;
 	}
 
-	public void setSalaryId(Long salaryId) {
+	public void setSalaryId(Integer salaryId) {
 		this.salaryId = salaryId;
 	}
 
-	public Long getEmpId() {
+	public Integer getSalaryDateId() {
+		return salaryDateId;
+	}
+
+	public void setSalaryDateId(Integer salaryDateId) {
+		this.salaryDateId = salaryDateId;
+	}
+
+	public Integer getEmpId() {
 		return empId;
 	}
 
-	public void setEmpId(Long empId) {
+	public void setEmpId(Integer empId) {
 		this.empId = empId;
-	}
-
-	public Integer getPayYear() {
-		return payYear;
-	}
-
-	public void setPayYear(Integer payYear) {
-		this.payYear = payYear;
-	}
-
-	public Integer getPayMonth() {
-		return payMonth;
-	}
-
-	public void setPayMonth(Integer payMonth) {
-		this.payMonth = payMonth;
-	}
-
-	public Integer getPaySeq() {
-		return paySeq;
-	}
-
-	public void setPaySeq(Integer paySeq) {
-		this.paySeq = paySeq;
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
-	public Date getPayDate() {
-		return payDate;
-	}
-
-	public void setPayDate(Date payDate) {
-		this.payDate = payDate;
 	}
 
 	public Long getTotalPay() {
