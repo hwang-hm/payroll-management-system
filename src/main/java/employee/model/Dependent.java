@@ -3,8 +3,8 @@ package employee.model;
 import java.sql.Timestamp;
 
 public class Dependent {
-	private int dependentId;
-	private int empId;
+	private Integer dependentId;
+	private Integer empId;
 	
 	//필수 입력 항목
 	private String relation;
@@ -22,13 +22,13 @@ public class Dependent {
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 	
-	public int getDependentId() {
+	public Integer getDependentId() {
 		return dependentId;
 	}
 	public void setDependentId(int dependentId) {
 		this.dependentId = dependentId;
 	}
-	public int getEmpId() {
+	public Integer getEmpId() {
 		return empId;
 	}
 	public void setEmpId(int empId) {

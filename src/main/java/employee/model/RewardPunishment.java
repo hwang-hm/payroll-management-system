@@ -4,8 +4,8 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 public class RewardPunishment {
-	private int rewardId;
-	private int empId;
+	private Integer rewardId;
+	private Integer empId;
 	private String rewardType;
 	private String rewardName;
 	private String manager;
@@ -16,13 +16,13 @@ public class RewardPunishment {
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 	
-	public int getRewardId() {
+	public Integer getRewardId() {
 		return rewardId;
 	}
 	public void setRewardId(int rewardId) {
 		this.rewardId = rewardId;
 	}
-	public int getEmpId() {
+	public Integer getEmpId() {
 		return empId;
 	}
 	public void setEmpId(int empId) {

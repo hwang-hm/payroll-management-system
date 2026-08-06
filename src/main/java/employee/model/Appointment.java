@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 public class Appointment {
-	private int appointmentId;
+	private Integer appointmentId;
 	private int empId;
 	private String appointmentType;
 	private Date appointmentDate;
@@ -16,7 +16,7 @@ public class Appointment {
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 	
-	public int getAppointmentId() {
+	public Integer getAppointmentId() {
 		return appointmentId;
 	}
 	public void setAppointmentId(int appointmentId) {

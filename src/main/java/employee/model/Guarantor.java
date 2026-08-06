@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 public class Guarantor {
-	private int empId;
+	private Integer empId;
 	private String guarantorName;
 	private String relation;
 	private String residentNo;
@@ -16,7 +16,7 @@ public class Guarantor {
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 	
-	public int getEmpId() {
+	public Integer getEmpId() {
 		return empId;
 	}
 	public void setEmpId(int empId) {
