@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 public class GuaranteeInsurance {
-	private int empId;
+	private Integer empId;
 	private String insuranceCompany;
 	private String insuranceNumber;
 	private Integer insuranceAmount;
@@ -15,7 +15,7 @@ public class GuaranteeInsurance {
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 	
-	public int getEmpId() {
+	public Integer getEmpId() {
 		return empId;
 	}
 	public void setEmpId(int empId) {

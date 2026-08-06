@@ -4,8 +4,8 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 public class EducationTraining {
-	private int trainingId;
-	private int empId;
+	private Integer trainingId;
+	private Integer empId;
 	private String trainingType;
 	private String trainingName;
 	private Date startDate;
@@ -17,13 +17,13 @@ public class EducationTraining {
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 	
-	public int getTrainingId() {
+	public Integer getTrainingId() {
 		return trainingId;
 	}
 	public void setTrainingId(int trainingId) {
 		this.trainingId = trainingId;
 	}
-	public int getEmpId() {
+	public Integer getEmpId() {
 		return empId;
 	}
 	public void setEmpId(int empId) {

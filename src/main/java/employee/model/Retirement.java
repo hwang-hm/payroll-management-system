@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 public class Retirement {
-	private int empId;
+	private Integer empId;
 	private String retirementType;
 	private Date retirementDate;
 	private String retirementReason;
@@ -14,7 +14,7 @@ public class Retirement {
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 	
-	public int getEmpId() {
+	public Integer getEmpId() {
 		return empId;
 	}
 	public void setEmpId(int empId) {

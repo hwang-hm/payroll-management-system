@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 
 public class EmpInfoSalary {
 
-	private int empId;
+	private Integer empId;
 	private String nationalPensionYN;
 	private String healthInsuranceYN;
 	private int healthDiscountRate;
@@ -28,7 +28,7 @@ public class EmpInfoSalary {
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 	
-	public int getEmpId() {
+	public Integer getEmpId() {
 		return empId;
 	}
 	public void setEmpId(int empId) {
