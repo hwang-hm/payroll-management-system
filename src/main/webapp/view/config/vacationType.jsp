@@ -5,6 +5,55 @@
 <head>
 <meta charset="UTF-8">
 <title>休暇項目設定</title>
+<style>
+    body {
+        font-family: Arial, "Malgun Gothic", sans-serif;
+        margin: 30px;
+        color: #333;
+    }
+
+    h2 {
+        border-bottom: 2px solid #3b78c8;
+        padding-bottom: 10px;
+        width: 500px;
+    }
+
+    table {
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+    th, td {
+        border: 1px solid #d9d9d9;
+        padding: 9px 12px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #f3f7fc;
+    }
+
+    input[type="text"],
+    input[type="date"] {
+        box-sizing: border-box;
+        width: 200px;
+        padding: 6px;
+    }
+
+    button {
+        border: 0;
+        border-radius: 3px;
+        padding: 8px 14px;
+        color: white;
+        background-color: #3b78c8;
+        cursor: pointer;
+    }
+
+    button[type="reset"] {
+        background-color: #8a8a8a;
+    }
+</style>
+
 </head>
 <body>
 
