@@ -1,0 +1,74 @@
+package employee.model;
+
+import java.sql.Date;
+import java.sql.Timestamp;
+
+public class GuaranteeInsurance {
+	private int empId;
+	private String insuranceCompany;
+	private String insuranceNumber;
+	private Integer insuranceAmount;
+	private Date joinDate;
+	private Date expirationDate;
+	private String remarks;
+	
+	private Timestamp createdAt;
+	private Timestamp updatedAt;
+	
+	public int getEmpId() {
+		return empId;
+	}
+	public void setEmpId(int empId) {
+		this.empId = empId;
+	}
+	public String getInsuranceCompany() {
+		return insuranceCompany;
+	}
+	public void setInsuranceCompany(String insuranceCompany) {
+		this.insuranceCompany = insuranceCompany;
+	}
+	public String getInsuranceNumber() {
+		return insuranceNumber;
+	}
+	public void setInsuranceNumber(String insuranceNumber) {
+		this.insuranceNumber = insuranceNumber;
+	}
+	public Integer getInsuranceAmount() {
+		return insuranceAmount;
+	}
+	public void setInsuranceAmount(Integer insuranceAmount) {
+		this.insuranceAmount = insuranceAmount;
+	}
+	public Date getJoinDate() {
+		return joinDate;
+	}
+	public void setJoinDate(Date joinDate) {
+		this.joinDate = joinDate;
+	}
+	public Date getExpirationDate() {
+		return expirationDate;
+	}
+	public void setExpirationDate(Date expirationDate) {
+		this.expirationDate = expirationDate;
+	}
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+	public Timestamp getCreatedAt() {
+		return createdAt;
+	}
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
+	}
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
+	}
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+	
+	
+}
