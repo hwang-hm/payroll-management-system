@@ -6,52 +6,51 @@
 <meta charset="UTF-8">
 <title>休暇項目設定</title>
 <style>
-    body {
-        font-family: Arial, "Malgun Gothic", sans-serif;
-        margin: 30px;
-        color: #333;
-    }
+body {
+	font-family: Arial, "Malgun Gothic", sans-serif;
+	margin: 30px;
+	color: #333;
+}
 
-    h2 {
-        border-bottom: 2px solid #3b78c8;
-        padding-bottom: 10px;
-        width: 500px;
-    }
+h2 {
+	border-bottom: 2px solid #3b78c8;
+	padding-bottom: 10px;
+	width: 500px;
+}
 
-    table {
-        border-collapse: collapse;
-        margin-top: 15px;
-    }
+table {
+	border-collapse: collapse;
+	margin-top: 15px;
+}
 
-    th, td {
-        border: 1px solid #d9d9d9;
-        padding: 9px 12px;
-        text-align: center;
-    }
+th, td {
+	border: 1px solid #d9d9d9;
+	padding: 9px 12px;
+	text-align: center;
+}
 
-    th {
-        background-color: #f3f7fc;
-    }
+th {
+	background-color: #f3f7fc;
+}
 
-    input[type="text"],
-    input[type="date"] {
-        box-sizing: border-box;
-        width: 200px;
-        padding: 6px;
-    }
+input[type="text"], input[type="date"], input[type="number"] {
+	box-sizing: border-box;
+	width: 200px;
+	padding: 6px;
+}
 
-    button {
-        border: 0;
-        border-radius: 3px;
-        padding: 8px 14px;
-        color: white;
-        background-color: #3b78c8;
-        cursor: pointer;
-    }
+button {
+	border: 0;
+	border-radius: 3px;
+	padding: 8px 14px;
+	color: white;
+	background-color: #3b78c8;
+	cursor: pointer;
+}
 
-    button[type="reset"] {
-        background-color: #8a8a8a;
-    }
+button[type="reset"] {
+	background-color: #8a8a8a;
+}
 </style>
 
 </head>
@@ -78,42 +77,47 @@
 			</tr>
 
 			<tr>
-				<th>使用可否<td>
-				<label>
-					<input type="radio" name="useYn" value="Y" checked> 使用    
-				</label>
-				<label>
-					<input type="radio" name="useYn" value="N"> 未使用 
-				</label>
-			</td>
-		</tr>
-	</table>
+				<th>休暇日数</th>
+				<td><input type="number" name="vacationDays" min="0" step="0.5"
+					placeholder="例: 15"></td>
+			</tr>
+
+			<tr>
+				<th>使用可否</th>
+				<td><label> <input type="radio" name="useYn" value="Y"
+						checked> 使用
+				</label> <label> <input type="radio" name="useYn" value="N">
+						未使用
+				</label></td>
+			</tr>
+		</table>
+
+		<br>
+
+		<button type="button">登録</button>
+		<button type="reset">初期化</button>
+	</form>
 
 	<br>
 
-	<button type="submit">登録</button>
-	<button type="reset">初期化</button>
-</form>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>番号</th>
+				<th>休暇項目名</th>
+				<th>適用期間</th>
+				<th>休暇日数</th>
+				<th>使用可否</th>
+				<th>管理</th>
+			</tr>
+		</thead>
 
-<br>
-
-<table border="1">
-    <thead>
-        <tr>
-            <th>番号</th>
-            <th>休暇項目名</th>
-            <th>適用期間</th>
-            <th>使用可否</th>
-            <th>管理</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        <tr>
-            <td colspan="5">登録された休暇項目はありません。</td>
-        </tr>
-    </tbody>
-</table>
+		<tbody>
+			<tr>
+				<td colspan="6">登録された休暇項目はありません。</td>
+			</tr>
+		</tbody>
+	</table>
 
 
 </body>
