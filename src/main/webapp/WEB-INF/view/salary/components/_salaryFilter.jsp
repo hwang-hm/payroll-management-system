@@ -3,7 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<!-- 날짜 기본값 계산 로직 -->
 <jsp:useBean id="now" class="java.util.Date" />
 <fmt:formatDate var="nowYear" value="${now}" pattern="yyyy" />
 <fmt:formatDate var="nowMonth" value="${now}" pattern="M" />
@@ -17,7 +16,7 @@
 		<!-- 귀속연도 드롭다운 -->
 		<span class="filter-label">* 귀속연월</span> <select name="belongYear"
 			id="belongYear" class="filter-select"
-			onchange="checkFilterSelect(this)">
+			onchange="loadOrSetSalaryDate()">
 			<option value="">선택</option>
 			<c:forEach var="y" begin="2020" end="${nowYear + 1}">
 				<option value="${y}" ${y == defaultYear ? 'selected' : ''}>${y}
@@ -27,7 +26,7 @@
 
 		<!-- 귀속월 드롭다운 -->
 		<select name="belongMonth" id="belongMonth" class="filter-select"
-			onchange="checkFilterSelect(this)">
+			onchange="loadOrSetSalaryDate()">
 			<option value="">선택</option>
 			<c:forEach var="m" begin="1" end="12">
 				<fmt:formatNumber var="formattedMonth" value="${m}" pattern="00" />
@@ -39,7 +38,7 @@
 		<!-- 급여차수 드롭다운 -->
 		<span class="filter-label" style="margin-left: 10px;">* 급여차수</span> <select
 			name="payDegree" id="payDegree" class="filter-select"
-			onchange="checkFilterSelect(this)">
+			onchange="loadOrSetSalaryDate()">
 			<option value="">차수 선택</option>
 			<c:forEach var="d" begin="1" end="10">
 				<fmt:formatNumber var="formattedDegree" value="${d}" pattern="00" />
@@ -51,15 +50,13 @@
 	<div class="filter-right-group">
 		<div class="date-input-group">
 			<label>* 정산기간</label> <input type="date" name="startDate"
-				id="startDate" value="2026-08-01" class="input-text" /> <span>~</span>
-			<input type="date" name="endDate" id="endDate" value="2026-08-31"
-				class="input-text" />
+				id="startDate" class="input-text" /> <span>~</span> <input
+				type="date" name="endDate" id="endDate" class="input-text" />
 		</div>
 
 		<div class="date-input-group">
 			<label>* 급여지급일</label> <input type="date" name="payDate" id="payDate"
-				value="2026-09-05" class="input-text" />
-			<!-- [수정] 버튼 클릭 시 정산일자 저장 AJAX 함수 실행 -->
+				class="input-text" />
 			<button type="button" class="btn btn-secondary"
 				onclick="saveSalaryDate()">수정</button>
 		</div>
@@ -67,6 +64,68 @@
 </div>
 
 <script>
+//페이지 초기 로딩 시 기본 설정값으로 날짜 자동 세팅
+document.addEventListener("DOMContentLoaded", function() {
+	loadOrSetSalaryDate();
+});
+
+// 드롭다운 변경 시 실행되는 메인 로직
+function loadOrSetSalaryDate() {
+	const year = document.getElementById('belongYear').value;
+	const month = document.getElementById('belongMonth').value;
+	const degree = document.getElementById('payDegree').value;
+
+	// 세 항목 중 하나라도 미선택 시 실행 안 함
+	if (!year || !month || !degree) return;
+
+	// 1. DB 조회 AJAX 호출
+	fetch('${pageContext.request.contextPath}/salary/dateGet.do?belongYear=' + year + '&belongMonth=' + month + '&payDegree=' + degree)
+		.then(response => response.json())
+		.then(data => {
+			if (data.status === 'found') {
+				// DB에 데이터가 존재하는 경우 : DB값 적용
+				document.getElementById('startDate').value = data.startDate;
+				document.getElementById('endDate').value = data.endDate;
+				document.getElementById('payDate').value = data.payDate;
+			} else if (data.status === 'notFound') {
+				// DB에 데이터가 없는 경우 : 1일~말일, 익월 5일 자동 계산 적용
+				autoCalculateDates(parseInt(year, 10), parseInt(month, 10));
+			}
+		})
+		.catch(error => {
+			console.error('Date fetch error:', error);
+			// 통신 에러 발생 시에도 계산 로직으로 셋팅
+			autoCalculateDates(parseInt(year, 10), parseInt(month, 10));
+		});
+}
+
+// 자동 날짜 계산 함수 (1일 ~ 말일 / 익월 5일)
+function autoCalculateDates(year, month) {
+	const monthStr = String(month).padStart(2, '0');
+	
+	// 1. 시작일: 해당 년월의 01일
+	const startDateStr = year + '-' + monthStr + '-01';
+
+	// 2. 종료일: 해당 년월의 마지막 날 (Date 객체의 month는 0-indexed이므로 new Date(year, month, 0) 이용)
+	const lastDay = new Date(year, month, 0).getDate();
+	const endDateStr = year + '-' + monthStr + '-' + String(lastDay).padStart(2, '0');
+
+	// 3. 지급일: 익월(다음 달) 5일 계산
+	let nextYear = year;
+	let nextMonth = month + 1;
+	if (nextMonth > 12) {
+		nextMonth = 1;
+		nextYear++;
+	}
+	const nextMonthStr = String(nextMonth).padStart(2, '0');
+	const payDateStr = nextYear + '-' + nextMonthStr + '-05';
+
+	// input 필드에 바인딩
+	document.getElementById('startDate').value = startDateStr;
+	document.getElementById('endDate').value = endDateStr;
+	document.getElementById('payDate').value = payDateStr;
+}
+
 // 정산기간 및 급여지급일 비동기 저장 함수
 function saveSalaryDate() {
 	const belongYear = document.getElementById('belongYear').value;
