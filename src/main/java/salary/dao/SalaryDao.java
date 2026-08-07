@@ -7,40 +7,41 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import salary.model.Salary;
+import salary.service.SalaryView;
 
 public class SalaryDao {
 
-	// 년,월,급여차수로 Salary 리스트를 가져온다.
-	public List<Salary> selectListByPeriod(Connection conn, int payYear, int payMonth, int paySeq) throws SQLException {
-		String sql = "SELECT * FROM salary WHERE pay_year = ? AND pay_month = ? AND pay_seq = ? ORDER BY salary_id";
+	public List<SalaryView> selectViewListBySalaryDateId(Connection conn, int salaryDateId)
+			throws SQLException {
+		String sql = "SELECT s.salary_id, s.emp_id, e.employment_type, e.name_kor, "
+				+ "NVL(d.dept_name, '-') AS dept_name, s.total_pay, s.total_deduct, s.net_pay "
+				+ "FROM salary s "
+				+ "JOIN employee e ON s.emp_id = e.emp_id "
+				+ "LEFT JOIN department d ON e.dept_id = d.dept_id "
+				+ "WHERE s.salary_date_id = ? "
+				+ "ORDER BY s.salary_id";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setInt(1, payYear);
-			pstmt.setInt(2, payMonth);
-			pstmt.setInt(3, paySeq);
+			pstmt.setInt(1, salaryDateId);
 			try (ResultSet rs = pstmt.executeQuery()) {
-				List<Salary> list = new ArrayList<>();
+				List<SalaryView> list = new ArrayList<>();
 				while (rs.next()) {
-					list.add(toSalary(rs));
+					list.add(toSalaryView(rs));
 				}
 				return list;
 			}
 		}
 	}
 
-	private Salary toSalary(ResultSet rs) throws SQLException {
-		Salary salary = new Salary();
-		salary.setSalaryId(rs.getLong("salary_id"));
-		salary.setEmpId(rs.getLong("emp_id"));
-		salary.setPayYear(rs.getInt("pay_year"));
-		salary.setPayMonth(rs.getInt("pay_month"));
-		salary.setPaySeq(rs.getInt("pay_seq"));
-		salary.setStartDate(rs.getDate("start_date"));
-		salary.setEndDate(rs.getDate("end_date"));
-		salary.setPayDate(rs.getDate("pay_date"));
-		salary.setTotalPay(rs.getLong("total_pay"));
-		salary.setTotalDeduct(rs.getLong("total_deduct"));
-		salary.setNetPay(rs.getLong("net_pay"));
-		return salary;
+	private SalaryView toSalaryView(ResultSet rs) throws SQLException {
+		SalaryView view = new SalaryView();
+		view.setSalaryId(rs.getInt("salary_id"));
+		view.setEmpId(rs.getInt("emp_id"));
+		view.setEmploymentType(rs.getString("employment_type"));
+		view.setNameKor(rs.getString("name_kor"));
+		view.setDeptName(rs.getString("dept_name"));
+		view.setTotalPay(rs.getLong("total_pay"));
+		view.setTotalDeduct(rs.getLong("total_deduct"));
+		view.setNetPay(rs.getLong("net_pay"));
+		return view;
 	}
 }

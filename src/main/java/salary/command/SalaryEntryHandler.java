@@ -21,7 +21,7 @@ public class SalaryEntryHandler implements CommandHandler {
 		int payMonth = parseInt(req.getParameter("payMonth"), Calendar.getInstance().get(Calendar.MONTH) + 1);
 		int paySeq = parseInt(req.getParameter("paySeq"), 1);
 		// 클릭한 salary행의 ID
-		long salaryId = parseLong(req.getParameter("salaryId"), 0);
+		int salaryId = parseInt(req.getParameter("salaryId"), 0);
 
 		SalaryEntryData entryData = entryService.getEntryData(payYear, payMonth, paySeq, salaryId);
 		req.setAttribute("entryData", entryData);
@@ -34,17 +34,6 @@ public class SalaryEntryHandler implements CommandHandler {
 		}
 		try {
 			return Integer.parseInt(value.trim());
-		} catch (NumberFormatException e) {
-			return defaultValue;
-		}
-	}
-
-	private long parseLong(String value, long defaultValue) {
-		if (value == null || value.trim().isEmpty()) {
-			return defaultValue;
-		}
-		try {
-			return Long.parseLong(value.trim());
 		} catch (NumberFormatException e) {
 			return defaultValue;
 		}

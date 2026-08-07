@@ -1,31 +1,29 @@
 package salary.service;
 
-//급여입력 페이지의 좌측 salary하나의 행을 표현해주는 view용 데이터.
-//SalaryEntryData에 list로 넣어줌
 public class SalaryView {
 
-	private Long salaryId;
-	private Long empId;
+	private int salaryId;
+	private int empId;
 	private String employmentType;
 	private String nameKor;
 	private String deptName;
-	private Long totalPay;
-	private Long totalDeduct;
-	private Long netPay;
+	private long totalPay;
+	private long totalDeduct;
+	private long netPay;
 
-	public Long getSalaryId() {
+	public int getSalaryId() {
 		return salaryId;
 	}
 
-	public void setSalaryId(Long salaryId) {
+	public void setSalaryId(int salaryId) {
 		this.salaryId = salaryId;
 	}
 
-	public Long getEmpId() {
+	public int getEmpId() {
 		return empId;
 	}
 
-	public void setEmpId(Long empId) {
+	public void setEmpId(int empId) {
 		this.empId = empId;
 	}
 
@@ -53,27 +51,27 @@ public class SalaryView {
 		this.deptName = deptName;
 	}
 
-	public Long getTotalPay() {
+	public long getTotalPay() {
 		return totalPay;
 	}
 
-	public void setTotalPay(Long totalPay) {
+	public void setTotalPay(long totalPay) {
 		this.totalPay = totalPay;
 	}
 
-	public Long getTotalDeduct() {
+	public long getTotalDeduct() {
 		return totalDeduct;
 	}
 
-	public void setTotalDeduct(Long totalDeduct) {
+	public void setTotalDeduct(long totalDeduct) {
 		this.totalDeduct = totalDeduct;
 	}
 
-	public Long getNetPay() {
+	public long getNetPay() {
 		return netPay;
 	}
 
-	public void setNetPay(Long netPay) {
+	public void setNetPay(long netPay) {
 		this.netPay = netPay;
 	}
 }

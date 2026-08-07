@@ -15,7 +15,7 @@ public class SalaryEntryData {
 	private String payDate;
 	private List<SalaryView> salaryList;
 	private SalarySummary summary;
-	private long selectedSalaryId;
+	private int selectedSalaryId;
 	private SalaryView selectedSalary;
 	private List<SalaryDetail> payDetails;
 	private List<SalaryDetail> deductDetails;
@@ -84,11 +84,11 @@ public class SalaryEntryData {
 		this.summary = summary;
 	}
 
-	public long getSelectedSalaryId() {
+	public int getSelectedSalaryId() {
 		return selectedSalaryId;
 	}
 
-	public void setSelectedSalaryId(long selectedSalaryId) {
+	public void setSelectedSalaryId(int selectedSalaryId) {
 		this.selectedSalaryId = selectedSalaryId;
 	}
 
