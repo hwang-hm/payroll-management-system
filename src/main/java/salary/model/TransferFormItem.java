@@ -2,34 +2,34 @@ package salary.model;
 
 public class TransferFormItem {
 
-	private Long itemId;
-	private Long formId;
+	private Integer itemId;
+	private Integer formId;
 	private String itemCode;
-	private Long displayOrder;
+	private Integer displayOrder;
 
 	public TransferFormItem() {
 	}
 
-	public TransferFormItem(Long itemId, Long formId, String itemCode, Long displayOrder) {
+	public TransferFormItem(Integer itemId, Integer formId, String itemCode, Integer displayOrder) {
 		this.itemId = itemId;
 		this.formId = formId;
 		this.itemCode = itemCode;
 		this.displayOrder = displayOrder;
 	}
 
-	public Long getItemId() {
+	public Integer getItemId() {
 		return itemId;
 	}
 
-	public void setItemId(Long itemId) {
+	public void setItemId(Integer itemId) {
 		this.itemId = itemId;
 	}
 
-	public Long getFormId() {
+	public Integer getFormId() {
 		return formId;
 	}
 
-	public void setFormId(Long formId) {
+	public void setFormId(Integer formId) {
 		this.formId = formId;
 	}
 
@@ -41,11 +41,11 @@ public class TransferFormItem {
 		this.itemCode = itemCode;
 	}
 
-	public Long getDisplayOrder() {
+	public Integer getDisplayOrder() {
 		return displayOrder;
 	}
 
-	public void setDisplayOrder(Long displayOrder) {
+	public void setDisplayOrder(Integer displayOrder) {
 		this.displayOrder = displayOrder;
 	}
 }

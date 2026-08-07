@@ -12,6 +12,7 @@ CREATE SEQUENCE seq_company_information START WITH 1 INCREMENT BY 1 NOCACHE NOCY
 CREATE SEQUENCE seq_license           START WITH 1 INCREMENT BY 1 NOCACHE NOCYCLE;
 CREATE SEQUENCE seq_attendance        START WITH 1 INCREMENT BY 1 NOCACHE NOCYCLE;
 CREATE SEQUENCE seq_dependent         START WITH 1 INCREMENT BY 1 NOCACHE NOCYCLE;
+CREATE SEQUENCE seq_salary_date       START WITH 1 INCREMENT BY 1 NOCACHE NOCYCLE;
 CREATE SEQUENCE seq_salary            START WITH 1 INCREMENT BY 1 NOCACHE NOCYCLE;
 CREATE SEQUENCE seq_vacation_type     START WITH 1 INCREMENT BY 1 NOCACHE NOCYCLE;
 CREATE SEQUENCE seq_transfer_form     START WITH 1 INCREMENT BY 1 NOCACHE NOCYCLE;
@@ -149,21 +150,28 @@ CREATE TABLE education_training (
     CONSTRAINT pk_education_training PRIMARY KEY (training_id)
 );
 
+-- 귀속연월
+CREATE TABLE salary_date (
+    salary_date_id NUMBER         NOT NULL,
+    pay_year       NUMBER(4)      NOT NULL,
+    pay_month      NUMBER(2)      NOT NULL,
+    pay_seq        NUMBER(2)      NOT NULL,
+    start_date     DATE           NOT NULL,
+    end_date       DATE           NOT NULL,
+    pay_date       DATE           NOT NULL,
+    CONSTRAINT pk_salary_date PRIMARY KEY (salary_date_id)
+);
+
 -- 급여
 CREATE TABLE salary (
-    salary_id    NUMBER         NOT NULL,
-    emp_id       NUMBER         NOT NULL,
-    pay_year     NUMBER(4)      NOT NULL,
-    pay_month    NUMBER(2)      NOT NULL,
-    pay_seq      NUMBER(2)      NOT NULL,
-    start_date   DATE           NOT NULL,
-    end_date     DATE           NOT NULL,
-    pay_date     DATE           NOT NULL,
-    total_pay    NUMBER(19)     NOT NULL,
-    total_deduct NUMBER(19)     NOT NULL,
-    net_pay      NUMBER(19)     NOT NULL,
-    created_at   DATE           DEFAULT SYSDATE NOT NULL,
-    updated_at   DATE           NULL,
+    salary_id      NUMBER         NOT NULL,
+    salary_date_id NUMBER         NOT NULL,
+    emp_id         NUMBER         NOT NULL,
+    total_pay      NUMBER(19)     NOT NULL,
+    total_deduct   NUMBER(19)     NOT NULL,
+    net_pay        NUMBER(19)     NOT NULL,
+    created_at     DATE           DEFAULT SYSDATE NOT NULL,
+    updated_at     DATE           NULL,
     CONSTRAINT pk_salary PRIMARY KEY (salary_id)
 );
 
@@ -379,63 +387,64 @@ CREATE TABLE personal_history (
 
 -- 급여 항목
 CREATE TABLE salary_item (
-    salary_item_id NUMBER         NOT NULL,
-    item_type      VARCHAR2(10)   NOT NULL,
-    item_name      VARCHAR2(100)  NOT NULL,
-    tax_yn         CHAR(1)        NOT NULL,
-    tax_free_name  VARCHAR2(100)  NULL,
-    tax_free_limit NUMBER         DEFAULT 0 NULL,
-    calc_method    VARCHAR2(100)  NULL,
-    round_unit     VARCHAR2(10)   NOT NULL,
-    pay_type       VARCHAR2(10)   NULL,
-    default_amount NUMBER         DEFAULT 0 NULL,
-    remark         VARCHAR2(300)  NULL,
-    use_yn         CHAR(1)        NOT NULL,
-    created_at     DATE           DEFAULT SYSDATE NOT NULL,
-    updated_at     DATE           NULL,
+    salary_item_id      NUMBER         NOT NULL,
+    attendance_type_id  NUMBER         NULL,
+    item_type           VARCHAR2(10)   NOT NULL,
+    item_name           VARCHAR2(100)  NOT NULL,
+    tax_yn              CHAR(1)        NOT NULL,
+    tax_free_name       VARCHAR2(100)  NULL,
+    tax_free_limit      NUMBER         DEFAULT 0 NULL,
+    calc_method         VARCHAR2(100)  NULL,
+    round_unit          VARCHAR2(10)   NOT NULL,
+    default_amount      NUMBER         DEFAULT 0 NULL,
+    remark              VARCHAR2(300)  NULL,
+    use_yn              CHAR(1)        NOT NULL,
+    created_at          DATE           DEFAULT SYSDATE NOT NULL,
+    updated_at          DATE           NULL,
     CONSTRAINT pk_salary_item PRIMARY KEY (salary_item_id),
     CONSTRAINT ck_salary_item_type CHECK (item_type IN ('PAY', 'DEDUCT')),
     CONSTRAINT ck_salary_item_tax_yn CHECK (tax_yn IN ('Y', 'N')),
     CONSTRAINT ck_salary_item_use_yn CHECK (use_yn IN ('Y', 'N'))
 );
 
-COMMENT ON COLUMN salary_item.item_type      IS 'PAY(지급), DEDUCT(공제)';
-COMMENT ON COLUMN salary_item.item_name      IS '항목명(기본급, 식대 등)';
-COMMENT ON COLUMN salary_item.tax_yn         IS 'Y(전체과세)/N(비과세)';
-COMMENT ON COLUMN salary_item.round_unit     IS 'NONE 등 반올림 단위';
-COMMENT ON COLUMN salary_item.pay_type       IS '근태 테이블 연동 구분';
-COMMENT ON COLUMN salary_item.default_amount IS '일괄지급일 때만 사용';
-COMMENT ON COLUMN salary_item.remark         IS '공제항목용';
-COMMENT ON COLUMN salary_item.use_yn         IS 'Y(사용)/N(미사용)';
+COMMENT ON COLUMN salary_item.attendance_type_id IS '근태항목 jk';
+COMMENT ON COLUMN salary_item.item_type           IS 'PAY(지급), DEDUCT(공제)';
+COMMENT ON COLUMN salary_item.item_name           IS '항목명(기본급, 식대 등)';
+COMMENT ON COLUMN salary_item.tax_yn              IS 'Y(전체과세)/N(비과세)';
+COMMENT ON COLUMN salary_item.round_unit          IS 'NONE 등 반올림 단위';
+COMMENT ON COLUMN salary_item.default_amount      IS '일괄지급일 때만 사용';
+COMMENT ON COLUMN salary_item.remark              IS '공제항목용';
+COMMENT ON COLUMN salary_item.use_yn              IS 'Y(사용)/N(미사용)';
 
 -- 급여 상세
 CREATE TABLE salary_detail (
-    detail_id      NUMBER         NOT NULL,
-    salary_id      NUMBER         NOT NULL,
-    salary_item_id NUMBER         NULL,
-    item_type      VARCHAR2(10)   NOT NULL,
-    item_name      VARCHAR2(100)  NOT NULL,
-    tax_yn         CHAR(1)        NOT NULL,
-    tax_free_name  VARCHAR2(100)  NULL,
-    tax_free_limit NUMBER         DEFAULT 0 NULL,
-    calc_method    VARCHAR2(100)  NULL,
-    round_unit     VARCHAR2(10)   NOT NULL,
-    pay_type       VARCHAR2(10)   NULL,
-    default_amount NUMBER         DEFAULT 0 NULL,
-    memo           VARCHAR2(300)  NULL,
-    amount         NUMBER(19)     DEFAULT 0 NULL,
+    detail_id          NUMBER         NOT NULL,
+    salary_id          NUMBER         NOT NULL,
+    salary_item_id     NUMBER         NULL,
+    attendance_type_id NUMBER         NULL,
+    item_type          VARCHAR2(10)   NOT NULL,
+    item_name          VARCHAR2(100)  NOT NULL,
+    tax_yn             CHAR(1)        NOT NULL,
+    tax_free_name      VARCHAR2(100)  NULL,
+    tax_free_limit     NUMBER         DEFAULT 0 NULL,
+    calc_method        VARCHAR2(100)  NULL,
+    round_unit         VARCHAR2(10)   NOT NULL,
+    default_amount     NUMBER         DEFAULT 0 NULL,
+    memo               VARCHAR2(300)  NULL,
+    amount             NUMBER(19)     DEFAULT 0 NULL,
     CONSTRAINT pk_salary_detail PRIMARY KEY (detail_id),
     CONSTRAINT ck_salary_detail_type CHECK (item_type IN ('PAY', 'DEDUCT')),
     CONSTRAINT ck_salary_detail_tax_yn CHECK (tax_yn IN ('Y', 'N'))
 );
 
-COMMENT ON COLUMN salary_detail.item_type      IS 'PAY(지급), DEDUCT(공제)';
-COMMENT ON COLUMN salary_detail.item_name      IS '항목명(기본급, 식대 등)';
-COMMENT ON COLUMN salary_detail.tax_yn         IS 'Y(전체과세)/N(비과세)';
-COMMENT ON COLUMN salary_detail.tax_free_limit IS 'DEFAULT 0';
-COMMENT ON COLUMN salary_detail.default_amount IS '일괄지급일 때만 나타난다 DEFAULT 0';
-COMMENT ON COLUMN salary_detail.memo           IS '공제항목용';
-COMMENT ON COLUMN salary_detail.amount         IS 'DEFAULT 0';
+COMMENT ON COLUMN salary_detail.attendance_type_id IS '근태항목 jk';
+COMMENT ON COLUMN salary_detail.item_type          IS 'PAY(지급), DEDUCT(공제)';
+COMMENT ON COLUMN salary_detail.item_name          IS '항목명(기본급, 식대 등)';
+COMMENT ON COLUMN salary_detail.tax_yn             IS 'Y(전체과세)/N(비과세)';
+COMMENT ON COLUMN salary_detail.tax_free_limit     IS 'DEFAULT 0';
+COMMENT ON COLUMN salary_detail.default_amount     IS '일괄지급일 때만 나타난다 DEFAULT 0';
+COMMENT ON COLUMN salary_detail.memo               IS '공제항목용';
+COMMENT ON COLUMN salary_detail.amount             IS 'DEFAULT 0';
 
 -- 급여 지급 정보 (회사 1:1)
 CREATE TABLE payroll_information (
@@ -688,6 +697,10 @@ ALTER TABLE salary
     ADD CONSTRAINT fk_salary_emp
     FOREIGN KEY (emp_id) REFERENCES employee (emp_id);
 
+ALTER TABLE salary
+    ADD CONSTRAINT fk_salary_salary_date
+    FOREIGN KEY (salary_date_id) REFERENCES salary_date (salary_date_id);
+
 ALTER TABLE transfer_history
     ADD CONSTRAINT fk_transfer_history_salary
     FOREIGN KEY (salary_id) REFERENCES salary (salary_id);
@@ -755,6 +768,14 @@ ALTER TABLE salary_detail
 ALTER TABLE salary_detail
     ADD CONSTRAINT fk_salary_detail_item
     FOREIGN KEY (salary_item_id) REFERENCES salary_item (salary_item_id);
+
+ALTER TABLE salary_item
+    ADD CONSTRAINT fk_salary_item_att_type
+    FOREIGN KEY (attendance_type_id) REFERENCES attendance_type (attendance_type_id);
+
+ALTER TABLE salary_detail
+    ADD CONSTRAINT fk_salary_detail_att_type
+    FOREIGN KEY (attendance_type_id) REFERENCES attendance_type (attendance_type_id);
 
 ALTER TABLE payroll_information
     ADD CONSTRAINT fk_payroll_info_company

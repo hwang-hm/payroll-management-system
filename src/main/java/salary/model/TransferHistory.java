@@ -4,8 +4,8 @@ import java.util.Date;
 
 public class TransferHistory {
 
-	private Long transferId;
-	private Long salaryId;
+	private Integer transferId;
+	private Integer salaryId;
 	private Date transferDate;
 	private String withdrawBank;
 	private String withdrawAccount;
@@ -19,7 +19,7 @@ public class TransferHistory {
 	public TransferHistory() {
 	}
 
-	public TransferHistory(Long transferId, Long salaryId, Date transferDate, String withdrawBank,
+	public TransferHistory(Integer transferId, Integer salaryId, Date transferDate, String withdrawBank,
 			String withdrawAccount, String depositBank, String depositAccount, String depositorName,
 			Long transferAmount, String depositMemo, String transferResult) {
 		this.transferId = transferId;
@@ -35,19 +35,19 @@ public class TransferHistory {
 		this.transferResult = transferResult;
 	}
 
-	public Long getTransferId() {
+	public Integer getTransferId() {
 		return transferId;
 	}
 
-	public void setTransferId(Long transferId) {
+	public void setTransferId(Integer transferId) {
 		this.transferId = transferId;
 	}
 
-	public Long getSalaryId() {
+	public Integer getSalaryId() {
 		return salaryId;
 	}
 
-	public void setSalaryId(Long salaryId) {
+	public void setSalaryId(Integer salaryId) {
 		this.salaryId = salaryId;
 	}
 
