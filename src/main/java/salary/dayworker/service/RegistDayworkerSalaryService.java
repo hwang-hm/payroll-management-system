@@ -1,16 +1,16 @@
-package salary.service;
+package salary.dayworker.service;
 
 import java.sql.Connection;
 
 import jdbc.JdbcUtil;
 import jdbc.connection.ConnectionProvider;
-import salary.dao.SalaryDao;
-import salary.dao.SalaryDateDao;
-import salary.dao.SalaryDetailDao;
+import salary.dayworker.dao.SalaryDao;
+import salary.dayworker.dao.SalaryDateDao;
+import salary.dayworker.dao.SalaryDetailDao;
+import salary.dayworker.service.request.RegistSalaryRequest;
 import salary.model.Salary;
 import salary.model.SalaryDate;
 import salary.model.SalaryDetail;
-import salary.service.request.RegistSalaryRequest;
 
 public class RegistDayworkerSalaryService {
 

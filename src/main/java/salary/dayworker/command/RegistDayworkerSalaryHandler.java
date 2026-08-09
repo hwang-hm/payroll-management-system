@@ -1,4 +1,4 @@
-package salary.command;
+package salary.dayworker.command;
 
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
@@ -12,12 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import mvc.command.CommandHandler;
-import salary.service.RegistDayworkerSalaryService;
-import salary.service.request.RegistSalaryRequest;
-import salary.service.request.RegistSalaryRequest.SalaryDetailRequest;
+import salary.dayworker.service.RegistDayworkerSalaryService;
+import salary.dayworker.service.request.RegistSalaryRequest;
+import salary.dayworker.service.request.RegistSalaryRequest.SalaryDetailRequest;
 
 public class RegistDayworkerSalaryHandler implements CommandHandler {
-	private static final String FORM_VIEW = "/WEB-INF/view/salary/registDayworkerSalaryForm.jsp";
+	private static final String FORM_VIEW = "/WEB-INF/view/salary/dayworker/registDayworkerSalaryForm.jsp";
 	private RegistDayworkerSalaryService registService = new RegistDayworkerSalaryService();
 
 	@Override
@@ -52,13 +52,10 @@ public class RegistDayworkerSalaryHandler implements CommandHandler {
 				return null;
 			}
 
-			System.out.println("============== [DEBUG 4] Service.regist() 호출 직전 ==============");
 			registService.regist(registReq);
-			System.out.println("============== [DEBUG 5] Service.regist() 정상 완료! ==============");
 			out.print("{\"status\":\"success\", \"message\":\"일용직 급여 내역이 성공적으로 저장되었습니다.\"}");
 
 		} catch (Exception e) {
-			System.out.println("❌❌❌ [DEBUG ERROR] Handler에서 예외 터짐! ❌❌❌");
 			e.printStackTrace(); // 콘솔에 상세 에러 출력
 			// 클라이언트에 상세 예외 메시지 반환
 			String errMsg = e.getMessage() != null ? e.getMessage().replace("\"", "'") : "알 수 없는 서버 오류";
@@ -74,9 +71,9 @@ public class RegistDayworkerSalaryHandler implements CommandHandler {
 		// 1. 헤더 기본 정보 (parseLongNull: ID용, parseLongAmount: 금액용)
 		Long empId = parseLongNull(req.getParameter("empId"));
 		registReq.setEmpId(empId != null ? empId : 0L);
-		registReq.setPayYear(parseInt(req.getParameter("belongYear")));
-		registReq.setPayMonth(parseInt(req.getParameter("belongMonth")));
-		registReq.setPaySeq(parseInt(req.getParameter("payDegree")));
+		registReq.setPayYear(parseInt(req.getParameter("payYear")));
+		registReq.setPayMonth(parseInt(req.getParameter("payMonth")));
+		registReq.setPaySeq(parseInt(req.getParameter("paySeq")));
 
 		registReq.setStartDate(parseDate(req.getParameter("startDate")));
 		registReq.setEndDate(parseDate(req.getParameter("endDate")));

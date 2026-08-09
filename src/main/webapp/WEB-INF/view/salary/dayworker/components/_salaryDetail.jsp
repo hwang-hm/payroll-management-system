@@ -75,16 +75,16 @@
 <script>
 // 사원 선택 시 백엔드에서 사원의 기존 급여 상세 또는 active salary_item 항목 조회
 function loadEmployeeSalaryDetail(empId, empName) {
-	const year = document.getElementById('belongYear').value;
-	const month = document.getElementById('belongMonth').value;
-	const degree = document.getElementById('payDegree').value;
+	const year = document.getElementById('payYear').value;
+	const month = document.getElementById('payMonth').value;
+	const degree = document.getElementById('paySeq').value;
 
 	if (!year || !month || !degree) {
 		alert("귀속연월과 급여차수를 먼저 선택해 주세요.");
 		return;
 	}
 
-	fetch('${pageContext.request.contextPath}/salary/getEmpDetail.do?empId=' + empId + '&belongYear=' + year + '&belongMonth=' + month + '&payDegree=' + degree)
+	fetch('${pageContext.request.contextPath}/salary/getEmpDetail.do?empId=' + empId + '&payYear=' + year + '&payMonth=' + month + '&paySeq=' + degree)
 		.then(res => res.json())
 		.then(data => {
 			renderSalaryTables(data);

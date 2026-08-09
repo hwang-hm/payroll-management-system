@@ -1,4 +1,4 @@
-package salary.dao;
+package salary.dayworker.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +11,7 @@ import jdbc.JdbcUtil;
 import salary.model.SalaryDate;
 
 public class SalaryDateDao {
+
 	// 1. 기존 데이터 존재 여부 확인 (귀속연/월/차수 기준)
 	public SalaryDate selectByYearMonthSeq(Connection conn, int year, int month, int seq) throws SQLException {
 		PreparedStatement pstmt = null;
@@ -25,14 +26,9 @@ public class SalaryDateDao {
 			rs = pstmt.executeQuery();
 
 			if (rs.next()) {
-				SalaryDate sd = new SalaryDate();
-				sd.setSalaryDateId(rs.getLong("salary_date_id"));
-				sd.setPayYear(rs.getInt("pay_year"));
-				sd.setPayMonth(rs.getInt("pay_month"));
-				sd.setPaySeq(rs.getInt("pay_seq"));
-				sd.setStartDate(rs.getDate("start_date"));
-				sd.setEndDate(rs.getDate("end_date"));
-				sd.setPayDate(rs.getDate("pay_date"));
+				SalaryDate sd = new SalaryDate(rs.getLong("salary_date_id"), rs.getInt("pay_year"),
+						rs.getInt("pay_month"), rs.getInt("pay_seq"), rs.getDate("start_date"), rs.getDate("end_date"),
+						rs.getDate("pay_date"));
 				return sd;
 			}
 			return null;
@@ -65,16 +61,13 @@ public class SalaryDateDao {
 	// 3. 기존 정산일자 수정
 	public boolean update(Connection conn, SalaryDate salaryDate) throws SQLException {
 		PreparedStatement pstmt = null;
-		String sql = "UPDATE salary_date SET start_date = ?, end_date = ?, pay_date = ? "
-				+ "WHERE pay_year = ? AND pay_month = ? AND pay_seq = ?";
+		String sql = "UPDATE salary_date SET start_date = ?, end_date = ?, pay_date = ? " + "WHERE salary_date_id = ?";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setTimestamp(1, toTimestamp(salaryDate.getStartDate()));
 			pstmt.setTimestamp(2, toTimestamp(salaryDate.getEndDate()));
 			pstmt.setTimestamp(3, toTimestamp(salaryDate.getPayDate()));
-			pstmt.setInt(4, salaryDate.getPayYear());
-			pstmt.setInt(5, salaryDate.getPayMonth());
-			pstmt.setInt(6, salaryDate.getPaySeq());
+			pstmt.setLong(4, salaryDate.getSalaryDateId());
 
 			return pstmt.executeUpdate() > 0;
 		} finally {

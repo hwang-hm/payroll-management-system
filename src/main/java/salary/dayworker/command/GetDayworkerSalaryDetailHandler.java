@@ -1,4 +1,4 @@
-package salary.command;
+package salary.dayworker.command;
 
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -10,10 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 import jdbc.JdbcUtil;
 import jdbc.connection.ConnectionProvider;
 import mvc.command.CommandHandler;
-import salary.dao.SalaryDao;
-import salary.dao.SalaryDateDao;
-import salary.dao.SalaryDetailDao;
-import salary.dao.SalaryItemDao;
+import salary.dayworker.dao.SalaryDao;
+import salary.dayworker.dao.SalaryDateDao;
+import salary.dayworker.dao.SalaryDetailDao;
+import salary.dayworker.dao.SalaryItemDao;
 import salary.model.Salary;
 import salary.model.SalaryDate;
 import salary.model.SalaryDetail;
@@ -36,9 +36,9 @@ public class GetDayworkerSalaryDetailHandler implements CommandHandler {
 			conn = ConnectionProvider.getConnection();
 
 			long empId = Long.parseLong(req.getParameter("empId"));
-			int year = Integer.parseInt(req.getParameter("belongYear"));
-			int month = Integer.parseInt(req.getParameter("belongMonth"));
-			int seq = Integer.parseInt(req.getParameter("payDegree"));
+			int year = Integer.parseInt(req.getParameter("payYear"));
+			int month = Integer.parseInt(req.getParameter("payMonth"));
+			int seq = Integer.parseInt(req.getParameter("paySeq"));
 
 			SalaryDate salaryDate = salaryDateDao.selectByYearMonthSeq(conn, year, month, seq);
 			Salary salary = null;

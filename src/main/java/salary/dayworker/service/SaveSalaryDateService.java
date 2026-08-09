@@ -1,11 +1,11 @@
-package salary.service;
+package salary.dayworker.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
 import jdbc.JdbcUtil;
 import jdbc.connection.ConnectionProvider;
-import salary.dao.SalaryDateDao;
+import salary.dayworker.dao.SalaryDateDao;
 import salary.model.SalaryDate;
 
 public class SaveSalaryDateService {
@@ -18,11 +18,18 @@ public class SaveSalaryDateService {
 			conn.setAutoCommit(false);
 
 			// 동일 귀속연/월/차수 데이터가 존재하는지 확인
-			SalaryDate existing = salaryDateDao.selectByYearMonthSeq(conn, salaryDate.getPayYear(),
-					salaryDate.getPayMonth(), salaryDate.getPaySeq());
+			if (salaryDate.getSalaryDateId() == null) {
+				SalaryDate existData = salaryDateDao.selectByYearMonthSeq(conn, salaryDate.getPayYear(),
+						salaryDate.getPayMonth(), salaryDate.getPaySeq());
+
+				if (existData != null) {
+					// DB에 이미 동일 귀속년월/차수가 존재하면 해당 PK를 주입
+					salaryDate.setSalaryDateId(existData.getSalaryDateId());
+				}
+			}
 
 			boolean result;
-			if (existing != null) {
+			if (salaryDate.getSalaryDateId() != null) {
 				// 이미 존재하면 UPDATE
 				result = salaryDateDao.update(conn, salaryDate);
 			} else {

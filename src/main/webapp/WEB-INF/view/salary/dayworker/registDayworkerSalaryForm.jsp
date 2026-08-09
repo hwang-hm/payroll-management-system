@@ -383,16 +383,16 @@
 					e.preventDefault(); // 동기 폼 제출 방지
 					
 					// 1. 유효성 검증
-					const year = document.getElementById('belongYear')?.value;
-					const month = document.getElementById('belongMonth')?.value;
-					const degree = document.getElementById('payDegree')?.value;
+					const year = document.getElementById('payYear')?.value;
+					const month = document.getElementById('payMonth')?.value;
+					const degree = document.getElementById('paySeq')?.value;
 					const empId = document.getElementById('selectedEmpId')?.value;
 
 					if (!year || !month || !degree) {
 						alert("귀속년월 또는 차수가 유효하지 않습니다.");
-						if (!year) document.getElementById('belongYear')?.focus();
-						else if (!month) document.getElementById('belongMonth')?.focus();
-						else if (!degree) document.getElementById('payDegree')?.focus();
+						if (!year) document.getElementById('payYear')?.focus();
+						else if (!month) document.getElementById('payMonth')?.focus();
+						else if (!degree) document.getElementById('paySeq')?.focus();
 						return;
 					}
 

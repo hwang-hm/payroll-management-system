@@ -1,4 +1,4 @@
-package salary.service.request;
+package salary.dayworker.service.request;
 
 import java.util.ArrayList;
 import java.util.Date;

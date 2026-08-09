@@ -12,10 +12,11 @@
 <c:set var="defaultMonth" value="${nowMonth == 1 ? 12 : nowMonth - 1}" />
 
 <div class="filter-card">
+	<input type="hidden" id="salaryDateId" name="salaryDateId" value="" />
 	<div class="filter-left-group">
+		<span class="filter-label">* 귀속연월</span>
 		<!-- 귀속연도 드롭다운 -->
-		<span class="filter-label">* 귀속연월</span> <select name="belongYear"
-			id="belongYear" class="filter-select"
+		<select name="payYear" id="payYear" class="filter-select"
 			onchange="loadOrSetSalaryDate()">
 			<option value="">선택</option>
 			<c:forEach var="y" begin="2020" end="${nowYear + 1}">
@@ -25,7 +26,7 @@
 		</select>
 
 		<!-- 귀속월 드롭다운 -->
-		<select name="belongMonth" id="belongMonth" class="filter-select"
+		<select name="payMonth" id="payMonth" class="filter-select"
 			onchange="loadOrSetSalaryDate()">
 			<option value="">선택</option>
 			<c:forEach var="m" begin="1" end="12">
@@ -33,11 +34,9 @@
 				<option value="${m}" ${m == defaultMonth ? 'selected' : ''}>${formattedMonth}
 					월</option>
 			</c:forEach>
-		</select>
-
+		</select> <span class="filter-label" style="margin-left: 10px;">* 급여차수</span>
 		<!-- 급여차수 드롭다운 -->
-		<span class="filter-label" style="margin-left: 10px;">* 급여차수</span> <select
-			name="payDegree" id="payDegree" class="filter-select"
+		<select name="paySeq" id="paySeq" class="filter-select"
 			onchange="loadOrSetSalaryDate()">
 			<option value="">차수 선택</option>
 			<c:forEach var="d" begin="1" end="10">
@@ -71,30 +70,33 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // 드롭다운 변경 시 실행되는 메인 로직
 function loadOrSetSalaryDate() {
-	const year = document.getElementById('belongYear').value;
-	const month = document.getElementById('belongMonth').value;
-	const degree = document.getElementById('payDegree').value;
+	const year = document.getElementById('payYear').value;
+	const month = document.getElementById('payMonth').value;
+	const degree = document.getElementById('paySeq').value;
 
 	// 세 항목 중 하나라도 미선택 시 실행 안 함
 	if (!year || !month || !degree) return;
 
 	// 1. DB 조회 AJAX 호출
-	fetch('${pageContext.request.contextPath}/salary/dateGet.do?belongYear=' + year + '&belongMonth=' + month + '&payDegree=' + degree)
+	fetch('${pageContext.request.contextPath}/salary/salaryDate.do?payYear=' + year + '&payMonth=' + month + '&paySeq=' + degree)
 		.then(response => response.json())
 		.then(data => {
 			if (data.status === 'found') {
 				// DB에 데이터가 존재하는 경우 : DB값 적용
+				document.getElementById('salaryDateId').value = data.salaryDateId || '';
 				document.getElementById('startDate').value = data.startDate;
 				document.getElementById('endDate').value = data.endDate;
 				document.getElementById('payDate').value = data.payDate;
 			} else if (data.status === 'notFound') {
 				// DB에 데이터가 없는 경우 : 1일~말일, 익월 5일 자동 계산 적용
+				document.getElementById('salaryDateId').value = '';
 				autoCalculateDates(parseInt(year, 10), parseInt(month, 10));
 			}
 		})
 		.catch(error => {
 			console.error('Date fetch error:', error);
 			// 통신 에러 발생 시에도 계산 로직으로 셋팅
+			document.getElementById('salaryDateId').value = '';
 			autoCalculateDates(parseInt(year, 10), parseInt(month, 10));
 		});
 }
@@ -128,14 +130,14 @@ function autoCalculateDates(year, month) {
 
 // 정산기간 및 급여지급일 비동기 저장 함수
 function saveSalaryDate() {
-	const belongYear = document.getElementById('belongYear').value;
-	const belongMonth = document.getElementById('belongMonth').value;
-	const payDegree = document.getElementById('payDegree').value;
+	const payYear = document.getElementById('payYear').value;
+	const payMonth = document.getElementById('payMonth').value;
+	const paySeq = document.getElementById('paySeq').value;
 	const startDate = document.getElementById('startDate').value;
 	const endDate = document.getElementById('endDate').value;
 	const payDate = document.getElementById('payDate').value;
 
-	if (!belongYear || !belongMonth || !payDegree) {
+	if (!payYear || !payMonth || !paySeq) {
 		alert("귀속년월과 급여차수를 먼저 선택해 주세요.");
 		return;
 	}
@@ -147,15 +149,15 @@ function saveSalaryDate() {
 
 	// 서버로 전달할 FormData 생성
 	const params = new URLSearchParams();
-	params.append('belongYear', belongYear);
-	params.append('belongMonth', belongMonth);
-	params.append('payDegree', payDegree);
+	params.append('payYear', payYear);
+	params.append('payMonth', payMonth);
+	params.append('paySeq', paySeq);
 	params.append('startDate', startDate);
 	params.append('endDate', endDate);
 	params.append('payDate', payDate);
 
 	// AJAX 요청
-	fetch('${pageContext.request.contextPath}/salary/dateSave.do', {
+	fetch('${pageContext.request.contextPath}/salary/salaryDate.do', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'

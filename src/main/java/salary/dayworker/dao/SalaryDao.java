@@ -1,4 +1,4 @@
-package salary.dao;
+package salary.dayworker.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
