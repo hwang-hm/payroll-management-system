@@ -1,195 +1,224 @@
 package salary.service.request;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 public class RegistSalaryRequest {
-	private Long salaryId; // salaryId가 null이면 저장
-	private Long empId;
-	private Integer payYear;
-	private Integer payMonth;
-	private Integer paySeq;
-	private String startDate;
-	private String endDate;
-	private String payDate;
-	private Long totalPay;
-	private Long totalDeduct;
-	private Long netPay;
-
-	// 급여 상세 항목 목록 (SALARY_DETAIL 테이블 매핑용)
+	private int payYear;
+	private int payMonth;
+	private int paySeq;
+	private Date startDate;
+	private Date endDate;
+	private Date payDate;
+	private Long empId = 0L;
+	private Long totalPay = 0L;
+	private Long totalDeduct = 0L;
+	private Long netPay = 0L;
 	private List<SalaryDetailRequest> details = new ArrayList<>();
 
-	// --- Getter / Setter ---
-	public Long getSalaryId() {
-		return salaryId;
+	// --- Constructors ---
+	public RegistSalaryRequest() {
 	}
 
-	public void setSalaryId(Long salaryId) {
-		this.salaryId = salaryId;
+	public RegistSalaryRequest(int payYear, int payMonth, int paySeq, Date startDate, Date endDate, Date payDate,
+			Long empId, Long totalPay, Long totalDeduct, Long netPay, List<SalaryDetailRequest> details) {
+		this.payYear = payYear;
+		this.payMonth = payMonth;
+		this.paySeq = paySeq;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.payDate = payDate;
+		setEmpId(empId);
+		setTotalPay(totalPay);
+		setTotalDeduct(totalDeduct);
+		setNetPay(netPay);
+		setDetails(details);
 	}
 
-	public Long getEmpId() {
-		return empId;
+	// --- Validation ---
+	public void validate(Map<String, Boolean> errors) {
+		if (empId == null || empId <= 0) {
+			errors.put("empId", Boolean.TRUE);
+		}
+		if (payYear <= 0) {
+			errors.put("payYear", Boolean.TRUE);
+		}
+		if (payMonth < 1 || payMonth > 12) {
+			errors.put("payMonth", Boolean.TRUE);
+		}
+		if (paySeq <= 0) {
+			errors.put("paySeq", Boolean.TRUE);
+		}
+		if (startDate == null) {
+			errors.put("startDate", Boolean.TRUE);
+		}
+		if (endDate == null) {
+			errors.put("endDate", Boolean.TRUE);
+		}
+		if (payDate == null) {
+			errors.put("payDate", Boolean.TRUE);
+		}
 	}
 
-	public void setEmpId(Long empId) {
-		this.empId = empId;
-	}
-
-	public Integer getPayYear() {
+	// --- Getters & Setters (Null-Safe 적용) ---
+	public int getPayYear() {
 		return payYear;
 	}
 
-	public void setPayYear(Integer payYear) {
+	public void setPayYear(int payYear) {
 		this.payYear = payYear;
 	}
 
-	public Integer getPayMonth() {
+	public int getPayMonth() {
 		return payMonth;
 	}
 
-	public void setPayMonth(Integer payMonth) {
+	public void setPayMonth(int payMonth) {
 		this.payMonth = payMonth;
 	}
 
-	public Integer getPaySeq() {
+	public int getPaySeq() {
 		return paySeq;
 	}
 
-	public void setPaySeq(Integer paySeq) {
+	public void setPaySeq(int paySeq) {
 		this.paySeq = paySeq;
 	}
 
-	public String getStartDate() {
+	public Date getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(String startDate) {
+	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 
-	public String getEndDate() {
+	public Date getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(String endDate) {
+	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
 
-	public String getPayDate() {
+	public Date getPayDate() {
 		return payDate;
 	}
 
-	public void setPayDate(String payDate) {
+	public void setPayDate(Date payDate) {
 		this.payDate = payDate;
 	}
 
-	public Long getTotalPay() {
-		return totalPay;
+	public long getEmpId() {
+		return empId != null ? empId : 0L;
+	}
+
+	public void setEmpId(Long empId) {
+		this.empId = (empId != null) ? empId : 0L;
+	}
+
+	public long getTotalPay() {
+		return totalPay != null ? totalPay : 0L;
 	}
 
 	public void setTotalPay(Long totalPay) {
-		this.totalPay = totalPay;
+		this.totalPay = (totalPay != null) ? totalPay : 0L;
 	}
 
-	public Long getTotalDeduct() {
-		return totalDeduct;
+	public long getTotalDeduct() {
+		return totalDeduct != null ? totalDeduct : 0L;
 	}
 
 	public void setTotalDeduct(Long totalDeduct) {
-		this.totalDeduct = totalDeduct;
+		this.totalDeduct = (totalDeduct != null) ? totalDeduct : 0L;
 	}
 
-	public Long getNetPay() {
-		return netPay;
+	public long getNetPay() {
+		return netPay != null ? netPay : 0L;
 	}
 
 	public void setNetPay(Long netPay) {
-		this.netPay = netPay;
+		this.netPay = (netPay != null) ? netPay : 0L;
 	}
 
 	public List<SalaryDetailRequest> getDetails() {
-		return details;
+		return details != null ? details : new ArrayList<>();
 	}
 
 	public void setDetails(List<SalaryDetailRequest> details) {
-		this.details = details;
+		this.details = (details != null) ? details : new ArrayList<>();
 	}
 
-	// --- 유효성 검증 ---
-	public void validate(Map<String, Boolean> errors) {
-		if (empId == null || empId <= 0)
-			errors.put("empId", Boolean.TRUE);
-		if (payYear == null || payYear <= 0)
-			errors.put("payYear", Boolean.TRUE);
-		if (payMonth == null || payMonth < 1 || payMonth > 12)
-			errors.put("payMonth", Boolean.TRUE);
-		if (paySeq == null || paySeq < 1 || paySeq > 10)
-			errors.put("paySeq", Boolean.TRUE);
-		if (startDate == null || startDate.trim().isEmpty())
-			errors.put("startDate", Boolean.TRUE);
-		if (endDate == null || endDate.trim().isEmpty())
-			errors.put("endDate", Boolean.TRUE);
-		if (payDate == null || payDate.trim().isEmpty())
-			errors.put("payDate", Boolean.TRUE);
-	}
-
-	// Inner Class: 급여 상세 항목 DTO
+	// --- Inner Class (상세 항목 요청 DTO) ---
 	public static class SalaryDetailRequest {
 		private Long salaryItemId;
-		private String itemType; // PAY(지급), DEDUCT(공제)
-		private String itemName; // 기본급, 식대, 소득세 등
-		private String taxYn; // Y, N
-		private Long amount; // 금액
-		private String memo; // 비고/메모
+		private String itemType;
+		private String itemName;
+		private String taxYn;
+		private Long amount;
+		private String memo;
+
+		public SalaryDetailRequest() {
+		}
+
+		public SalaryDetailRequest(Long salaryItemId, String itemType, String itemName, String taxYn, Long amount,
+				String memo) {
+			this.salaryItemId = salaryItemId;
+			setItemType(itemType);
+			setItemName(itemName);
+			setTaxYn(taxYn);
+			setAmount(amount);
+			setMemo(memo);
+		}
 
 		public Long getSalaryItemId() {
 			return salaryItemId;
 		}
 
 		public void setSalaryItemId(Long salaryItemId) {
-			this.salaryItemId = salaryItemId;
+			this.salaryItemId = salaryItemId; // 신규 항목일 수 있으므로 null 허용
 		}
 
 		public String getItemType() {
-			return itemType;
+			return itemType != null ? itemType : "PAY";
 		}
 
 		public void setItemType(String itemType) {
-			this.itemType = itemType;
+			this.itemType = (itemType != null) ? itemType : "PAY";
 		}
 
 		public String getItemName() {
-			return itemName;
+			return itemName != null ? itemName : "";
 		}
 
 		public void setItemName(String itemName) {
-			this.itemName = itemName;
+			this.itemName = (itemName != null) ? itemName : "";
 		}
 
 		public String getTaxYn() {
-			return taxYn;
+			return taxYn != null ? taxYn : "Y";
 		}
 
 		public void setTaxYn(String taxYn) {
-			this.taxYn = taxYn;
+			this.taxYn = (taxYn != null) ? taxYn : "Y";
 		}
 
-		public Long getAmount() {
-			return amount;
+		public long getAmount() {
+			return amount != null ? amount : 0L;
 		}
 
 		public void setAmount(Long amount) {
-			this.amount = amount;
+			this.amount = (amount != null) ? amount : 0L; // null 입력 시 0L로 자동 변환
 		}
 
 		public String getMemo() {
-			return memo;
+			return memo != null ? memo : "";
 		}
 
 		public void setMemo(String memo) {
-			this.memo = memo;
+			this.memo = (memo != null) ? memo : "";
 		}
 	}
 }

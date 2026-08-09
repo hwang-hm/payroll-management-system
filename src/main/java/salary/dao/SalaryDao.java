@@ -2,54 +2,91 @@ package salary.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.Date;
 
 import jdbc.JdbcUtil;
 import salary.model.Salary;
 
 public class SalaryDao {
 
-	public boolean insertDayworkerSalary(Connection conn, Salary salary) throws SQLException {
-
+	// 기존 급여 정보 조회
+	public Salary selectByDateAndEmp(Connection conn, long salaryDateId, long empId) throws SQLException {
 		PreparedStatement pstmt = null;
-
-		String sql = "INSERT INTO salary (" + "salary_id, emp_id, pay_year, pay_month, pay_seq, "
-				+ "start_date, end_date, pay_date, total_pay, total_deduct, net_pay" + ") VALUES ("
-				+ "seq_salary.nextval, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
+		ResultSet rs = null;
+		String sql = "SELECT salary_id, salary_date_id, emp_id, total_pay, total_deduct, net_pay "
+				+ "FROM salary WHERE salary_date_id = ? AND emp_id = ?";
 		try {
 			pstmt = conn.prepareStatement(sql);
-
-			pstmt.setLong(1, salary.getEmpId());
-			pstmt.setInt(2, salary.getPayYear());
-			pstmt.setInt(3, salary.getPayMonth());
-			pstmt.setInt(4, salary.getPaySeq());
-
-			pstmt.setTimestamp(5, toTimestamp(salary.getStartDate()));
-			pstmt.setTimestamp(6, toTimestamp(salary.getEndDate()));
-			pstmt.setTimestamp(7, toTimestamp(salary.getPayDate()));
-
-			pstmt.setLong(8, salary.getTotalPay());
-			pstmt.setLong(9, salary.getTotalDeduct());
-			pstmt.setLong(10, salary.getNetPay());
-
-			int insertedCount = pstmt.executeUpdate();
-
-			if (insertedCount > 0) {
-				return true;
+			pstmt.setLong(1, salaryDateId);
+			pstmt.setLong(2, empId);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				Salary s = new Salary();
+				s.setSalaryId(rs.getLong("salary_id"));
+				s.setSalaryDateId(rs.getLong("salary_date_id"));
+				s.setEmpId(rs.getLong("emp_id"));
+				s.setTotalPay(rs.getLong("total_pay"));
+				s.setTotalDeduct(rs.getLong("total_deduct"));
+				s.setNetPay(rs.getLong("net_pay"));
+				return s;
 			}
-
-			return false;
-
+			return null;
 		} finally {
+			JdbcUtil.close(rs);
 			JdbcUtil.close(pstmt);
 		}
 	}
 
-	private Timestamp toTimestamp(Date date) {
-		return new Timestamp(date.getTime());
+	// 신규 급여 헤더 저장 (시퀀스 사용)
+	public long insert(Connection conn, Salary salary) throws SQLException {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String seqSql = "SELECT seq_salary.NEXTVAL FROM dual";
+		String insertSql = "INSERT INTO salary (salary_id, salary_date_id, emp_id, total_pay, total_deduct, net_pay, created_at) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, SYSDATE)";
+		try {
+			pstmt = conn.prepareStatement(seqSql);
+			rs = pstmt.executeQuery();
+			long newSalaryId = 0;
+			if (rs.next()) {
+				newSalaryId = rs.getLong(1);
+			}
+			JdbcUtil.close(rs);
+			JdbcUtil.close(pstmt);
+
+			salary.setSalaryId(newSalaryId);
+
+			pstmt = conn.prepareStatement(insertSql);
+			pstmt.setLong(1, salary.getSalaryId());
+			pstmt.setLong(2, salary.getSalaryDateId());
+			pstmt.setLong(3, salary.getEmpId());
+			pstmt.setLong(4, salary.getTotalPay());
+			pstmt.setLong(5, salary.getTotalDeduct());
+			pstmt.setLong(6, salary.getNetPay());
+			pstmt.executeUpdate();
+
+			return newSalaryId;
+		} finally {
+			JdbcUtil.close(rs);
+			JdbcUtil.close(pstmt);
+		}
 	}
 
+	// 기존 급여 헤더 수정
+	public boolean update(Connection conn, Salary salary) throws SQLException {
+		PreparedStatement pstmt = null;
+		String sql = "UPDATE salary SET total_pay = ?, total_deduct = ?, net_pay = ?, updated_at = SYSDATE "
+				+ "WHERE salary_id = ?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setLong(1, salary.getTotalPay());
+			pstmt.setLong(2, salary.getTotalDeduct());
+			pstmt.setLong(3, salary.getNetPay());
+			pstmt.setLong(4, salary.getSalaryId());
+			return pstmt.executeUpdate() > 0;
+		} finally {
+			JdbcUtil.close(pstmt);
+		}
+	}
 }

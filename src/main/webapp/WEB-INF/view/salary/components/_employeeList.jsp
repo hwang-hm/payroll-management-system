@@ -23,14 +23,14 @@
 				</tr>
 			</thead>
 			<tbody id="workerListBody">
-				<!-- onclick 시 empId와 사원이름을 함께 전달 -->
-				<tr onclick="selectWorker(this, 1, '김철수', 98766)">
+				<!-- selectWorker(this, 실제_emp_id, '사원이름') 형식으로 통일 -->
+				<tr onclick="selectWorker(this, 1, '김철수')">
 					<td>일용직</td>
 					<td>김철수</td>
 					<td>관리팀</td>
 					<td style="text-align: right; font-weight: 600;">98,766</td>
 				</tr>
-				<tr class="active" onclick="selectWorker(2, 99100, '박영희', 99100)">
+				<tr onclick="selectWorker(this, 2, '박영희')">
 					<td>일용직</td>
 					<td>박영희</td>
 					<td>관리팀</td>
@@ -40,3 +40,32 @@
 		</table>
 	</div>
 </div>
+
+<script>
+// 사원 행 클릭 시 실행되는 함수
+function selectWorker(element, empId, empName) {
+	// 1. 이전 선택된 행의 active 클래스 제거 후, 클릭된 행에 active 추가
+	const rows = document.querySelectorAll('#workerListBody tr');
+	rows.forEach(r => r.classList.remove('active'));
+	element.classList.add('active');
+
+	// 2. 우측 패널 헤더의 [선택된 사원 이름] 변경
+	const targetEmpName = document.getElementById('targetEmpName');
+	if (targetEmpName) {
+		targetEmpName.innerText = empName;
+	}
+
+	// 3. 메인 저장 폼(hidden input)의 empId 설정
+	const selectedEmpIdInput = document.getElementById('selectedEmpId');
+	if (selectedEmpIdInput) {
+		selectedEmpIdInput.value = empId;
+	}
+
+	// 4. 우측 급여 상세 및 공제 항목 DB 동적 로드 함수 호출
+	if (typeof loadEmployeeSalaryDetail === 'function') {
+		loadEmployeeSalaryDetail(empId, empName);
+	} else {
+		console.error("loadEmployeeSalaryDetail 함수가 정의되지 않았습니다.");
+	}
+}
+</script>

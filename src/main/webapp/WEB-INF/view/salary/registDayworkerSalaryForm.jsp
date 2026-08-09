@@ -351,11 +351,10 @@
 			method="post">
 
 			<!-- 사원 선택 및 필터 동기화를 위한 Hidden 필드 -->
-			<input type="hidden" name="empId" id="selectedEmpId" value="98766" />
-			<input type="hidden" name="totalPay" id="formTotalPay" value="100000" />
-			<input type="hidden" name="totalDeduct" id="formTotalDeduct"
-				value="900" /> <input type="hidden" name="netPay" id="formNetPay"
-				value="99100" />
+			<input type="hidden" name="empId" id="selectedEmpId" value="" /> <input
+				type="hidden" name="totalPay" id="formTotalPay" value="0" /> <input
+				type="hidden" name="totalDeduct" id="formTotalDeduct" value="0" />
+			<input type="hidden" name="netPay" id="formNetPay" value="0" />
 
 			<!-- 1. 상단 필터 영역 컴포넌트 Include -->
 			<jsp:include page="./components/_salaryFilter.jsp" />
@@ -374,76 +373,113 @@
 
 	<!-- 클라이언트 동작 스크립트 -->
 	<script>
-		// 필터 선택 검증
-		function checkFilterSelect(selectElement) {
-			if (selectElement.value === "") {
-				alert("귀속년월/차수를 선택해 주세요.");
-			}
-		}
+		// DOM 로드 완료 후 초기화
+		document.addEventListener("DOMContentLoaded", function() {
+			
+			// 단일 Form 제출 이벤트 연동 (중복 제출 방지 및 AJAX 통합)
+			const payrollForm = document.getElementById('payrollForm');
+			if (payrollForm) {
+				payrollForm.addEventListener('submit', function(e) {
+					e.preventDefault(); // 동기 폼 제출 방지
+					
+					// 1. 유효성 검증
+					const year = document.getElementById('belongYear')?.value;
+					const month = document.getElementById('belongMonth')?.value;
+					const degree = document.getElementById('payDegree')?.value;
+					const empId = document.getElementById('selectedEmpId')?.value;
 
-		// 폼 제출 전 최종 검증
-		document.getElementById('payrollForm').addEventListener('submit', function(e) {
-			const year = document.getElementById('belongYear').value;
-			const month = document.getElementById('belongMonth').value;
-			const degree = document.getElementById('payDegree').value;
-			const empId = document.getElementById('selectedEmpId').value;
+					if (!year || !month || !degree) {
+						alert("귀속년월 또는 차수가 유효하지 않습니다.");
+						if (!year) document.getElementById('belongYear')?.focus();
+						else if (!month) document.getElementById('belongMonth')?.focus();
+						else if (!degree) document.getElementById('payDegree')?.focus();
+						return;
+					}
 
-			if (!year || !month || !degree) {
-				e.preventDefault();
-				alert("귀속년월 또는 차수가 유효하지 않습니다.");
-				if (!year) document.getElementById('belongYear').focus();
-				else if (!month) document.getElementById('belongMonth').focus();
-				else if (!degree) document.getElementById('payDegree').focus();
-				return;
-			}
+					if (!empId) {
+						alert("사원을 선택해 주세요.");
+						return;
+					}
 
-			if (!empId) {
-				e.preventDefault();
-				alert("사원을 선택해 주세요.");
+					// 2. 유효성 통과 시 AJAX 저장 실행
+					saveSalaryData();
+				});
 			}
 		});
 
-		// 사원 선택 동적 효과 및 데이터 변경
-		function selectWorker(element, empId, name, netPay) {
+		// 사원 선택 이벤트 (행 클릭 시)
+		function selectWorker(element, empId, name) {
 			const rows = document.querySelectorAll('#workerListBody tr');
 			rows.forEach(r => r.classList.remove('active'));
-			element.classList.add('active');
+			
+			if (element) {
+				element.classList.add('active');
+			}
 
+			// hidden input 업데이트
 			document.getElementById('selectedEmpId').value = empId;
-			// 3. 우측 급여 상세 헤더의 사원명 변경
-			  const targetEmpSpan = document.getElementById('targetEmpName');
-			  if (targetEmpSpan) {
-			    targetEmpSpan.innerText = name;
-			  }
+			
+			// 우측 급여 상세 헤더 사원명 변경
+			const targetEmpSpan = document.getElementById('targetEmpName');
+			if (targetEmpSpan) {
+				targetEmpSpan.innerText = name;
+			}
+
+			// 우측 급여/공제 상세 AJAX 조회 호출
+			if (typeof loadEmployeeSalaryDetail === 'function') {
+				loadEmployeeSalaryDetail(empId, name);
+			}
 		}
 
-		// 실시간 급여 및 공제 총액 계산 로직
-		function calculateTotal() {
-			// 지급총액 계산 (일자별 근무 내역 입력값 반영)
-			const payInput = document.getElementById('dailyPayInput').value.replace(/,/g, '') || 0;
-			const totalPay = parseInt(payInput, 10);
+		// 급여 데이터 AJAX 전송 함수
+		function saveSalaryData() {
+			const form = document.getElementById('payrollForm');
+			const empId = document.getElementById('selectedEmpId')?.value;
 
-			// 공제총액 계산 (공제항목 입력값들의 합산)
-			const deductionInputs = document.querySelectorAll('.deduction-input');
-			let totalDeduct = 0;
-			deductionInputs.forEach(input => {
-				const val = input.value.replace(/,/g, '') || 0;
-				totalDeduct += parseInt(val, 10);
+			const rawFormData = new FormData(form);
+			const params = new URLSearchParams();
+
+			for (const [key, value] of rawFormData.entries()) {
+				// 금액 관련 파라미터 천단위 콤마(,) 제거
+				if (['amount', 'totalPay', 'totalDeduct', 'netPay'].includes(key)) {
+					params.append(key, value.replace(/,/g, ''));
+				} else {
+					params.append(key, value);
+				}
+			}
+
+			fetch(form.action, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+				},
+				body: params.toString()
+			})
+			.then(async response => {
+			    // 서버가 200 OK가 아닐 때 (500, 404, 405 등)
+			    if (!response.ok) {
+			        // 서버가 보낸 HTML 에러 창 또는 텍스트 읽어오기
+			        const errorText = await response.text();
+			        console.error("서버 에러 원문:", errorText);
+			        
+			        // alert으로 에러 내용 일부 출력
+			        throw new Error(`[HTTP ${response.status}] 서버 오류 발생!\n요청 URL: ${form.action}\n네트워크 탭(F12)을 확인하세요.`);
+			    }
+			    return response.json();
+			})
+			.then(data => {
+			    alert(data.message);
+			    if (data.status === 'success') {
+			        location.reload();
+			    }
+			})
+			.catch(error => {
+			    console.error('AJAX Error:', error);
+			    alert(error.message);
 			});
-
-			const netPay = totalPay - totalDeduct;
-
-			// 화면 반영
-			document.getElementById('totalPayDisplay').innerText = totalPay.toLocaleString();
-			document.getElementById('totalDeductDisplay').innerText = totalDeduct.toLocaleString();
-			document.getElementById('netPayDisplay').innerText = netPay.toLocaleString();
-
-			// Hidden 전송값 반영
-			document.getElementById('formTotalPay').value = totalPay;
-			document.getElementById('formTotalDeduct').value = totalDeduct;
-			document.getElementById('formNetPay').value = netPay;
 		}
 
+		// 신규 추가 알림
 		function addWorker() {
 			alert("신규 일용직 근로자 추가 팝업/모달을 호출합니다.");
 		}
