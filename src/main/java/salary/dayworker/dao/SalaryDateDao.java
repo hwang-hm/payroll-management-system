@@ -26,7 +26,7 @@ public class SalaryDateDao {
 			rs = pstmt.executeQuery();
 
 			if (rs.next()) {
-				SalaryDate sd = new SalaryDate(rs.getLong("salary_date_id"), rs.getInt("pay_year"),
+				SalaryDate sd = new SalaryDate(rs.getInt("salary_date_id"), rs.getInt("pay_year"),
 						rs.getInt("pay_month"), rs.getInt("pay_seq"), rs.getDate("start_date"), rs.getDate("end_date"),
 						rs.getDate("pay_date"));
 				return sd;

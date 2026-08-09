@@ -23,7 +23,7 @@ public class SalaryItemDao {
 			List<SalaryItem> list = new ArrayList<>();
 			while (rs.next()) {
 				SalaryItem item = new SalaryItem();
-				item.setSalaryItemId(rs.getLong("salary_item_id"));
+				item.setSalaryItemId(rs.getInt("salary_item_id"));
 				item.setItemType(rs.getString("item_type"));
 				item.setItemName(rs.getString("item_name"));
 				item.setTaxYn(rs.getString("tax_yn"));

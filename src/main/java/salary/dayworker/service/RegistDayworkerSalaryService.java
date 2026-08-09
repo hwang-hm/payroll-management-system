@@ -28,10 +28,15 @@ public class RegistDayworkerSalaryService {
 			SalaryDate salaryDate = salaryDateDao.selectByYearMonthSeq(conn, req.getPayYear(), req.getPayMonth(),
 					req.getPaySeq());
 
-			long salaryDateId;
+			int salaryDateId;
 			if (salaryDate == null) {
-				SalaryDate newDate = new SalaryDate(req.getPayYear(), req.getPayMonth(), req.getPaySeq(),
-						req.getStartDate(), req.getEndDate(), req.getPayDate());
+				SalaryDate newDate = new SalaryDate();
+				newDate.setPayYear(req.getPayYear());
+				newDate.setPayMonth(req.getPayMonth());
+				newDate.setPaySeq(req.getPaySeq());
+				newDate.setStartDate(req.getStartDate());
+				newDate.setEndDate(req.getEndDate());
+				newDate.setPayDate(req.getPayDate());
 				salaryDateDao.insert(conn, newDate);
 
 				SalaryDate created = salaryDateDao.selectByYearMonthSeq(conn, req.getPayYear(), req.getPayMonth(),
@@ -47,7 +52,7 @@ public class RegistDayworkerSalaryService {
 
 			// Step 2: SALARY (헤더) 저장/수정
 			Salary salary = salaryDao.selectByDateAndEmp(conn, salaryDateId, req.getEmpId());
-			long salaryId;
+			int salaryId;
 
 			if (salary == null) {
 				Salary newSalary = new Salary();

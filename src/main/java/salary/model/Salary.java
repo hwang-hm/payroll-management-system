@@ -4,9 +4,9 @@ import java.util.Date;
 
 public class Salary {
 
-	private Long salaryId;
-	private Long salaryDateId;
-	private Long empId;
+	private Integer salaryId;
+	private Integer salaryDateId;
+	private Integer empId;
 	private Long totalPay;
 	private Long totalDeduct;
 	private Long netPay;
@@ -16,9 +16,8 @@ public class Salary {
 	public Salary() {
 	}
 
-	public Salary(Long salaryId, Long salaryDateId, Long empId, Long totalPay, Long totalDeduct, Long netPay,
+	public Salary(Integer salaryId, Integer salaryDateId, Integer empId, Long totalPay, Long totalDeduct, Long netPay,
 			Date createdAt, Date updatedAt) {
-		super();
 		this.salaryId = salaryId;
 		this.salaryDateId = salaryDateId;
 		this.empId = empId;
@@ -29,27 +28,27 @@ public class Salary {
 		this.updatedAt = updatedAt;
 	}
 
-	public Long getSalaryId() {
+	public Integer getSalaryId() {
 		return salaryId;
 	}
 
-	public void setSalaryId(Long salaryId) {
+	public void setSalaryId(Integer salaryId) {
 		this.salaryId = salaryId;
 	}
 
-	public Long getSalaryDateId() {
+	public Integer getSalaryDateId() {
 		return salaryDateId;
 	}
 
-	public void setSalaryDateId(Long salaryDateId) {
+	public void setSalaryDateId(Integer salaryDateId) {
 		this.salaryDateId = salaryDateId;
 	}
 
-	public Long getEmpId() {
+	public Integer getEmpId() {
 		return empId;
 	}
 
-	public void setEmpId(Long empId) {
+	public void setEmpId(Integer empId) {
 		this.empId = empId;
 	}
 
@@ -92,5 +91,4 @@ public class Salary {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-
 }

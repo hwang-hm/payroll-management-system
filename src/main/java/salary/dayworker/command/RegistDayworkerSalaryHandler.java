@@ -69,8 +69,8 @@ public class RegistDayworkerSalaryHandler implements CommandHandler {
 		RegistSalaryRequest registReq = new RegistSalaryRequest();
 
 		// 1. 헤더 기본 정보 (parseLongNull: ID용, parseLongAmount: 금액용)
-		Long empId = parseLongNull(req.getParameter("empId"));
-		registReq.setEmpId(empId != null ? empId : 0L);
+		Integer empId = parseIntNull(req.getParameter("empId"));
+		registReq.setEmpId(empId != null ? empId : 0);
 		registReq.setPayYear(parseInt(req.getParameter("payYear")));
 		registReq.setPayMonth(parseInt(req.getParameter("payMonth")));
 		registReq.setPaySeq(parseInt(req.getParameter("paySeq")));
@@ -99,7 +99,7 @@ public class RegistDayworkerSalaryHandler implements CommandHandler {
 
 				// ID는 빈 값일 때 0L이 아닌 null이 들어가야 DB FK 오류가 나지 않음
 				if (itemIds != null && i < itemIds.length) {
-					detail.setSalaryItemId(parseLongNull(itemIds[i]));
+					detail.setSalaryItemId(parseIntNull(itemIds[i]));
 				}
 
 				detail.setItemType(itemTypes != null && i < itemTypes.length ? itemTypes[i] : "PAY");
@@ -114,6 +114,17 @@ public class RegistDayworkerSalaryHandler implements CommandHandler {
 		}
 
 		return registReq;
+	}
+
+	// ID 파싱용 (빈 값 시 null 반환)
+	private Integer parseIntNull(String val) {
+		if (val == null || val.trim().isEmpty())
+			return null;
+		try {
+			return Integer.parseInt(val.replaceAll(",", "").trim());
+		} catch (NumberFormatException e) {
+			return null;
+		}
 	}
 
 	// ID 파싱용 (빈 값 시 null 반환)

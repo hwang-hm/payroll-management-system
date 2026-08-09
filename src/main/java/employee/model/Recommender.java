@@ -3,7 +3,7 @@ package employee.model;
 import java.sql.Timestamp;
 
 public class Recommender {
-	private int empId;
+	private Integer empId;
 	private String recommenderName;
 	private String relation;
 	private String companyName;
@@ -13,7 +13,7 @@ public class Recommender {
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 	
-	public int getEmpId() {
+	public Integer getEmpId() {
 		return empId;
 	}
 	public void setEmpId(int empId) {

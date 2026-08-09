@@ -4,8 +4,8 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 public class PersonalHistory {
-	private int careerId;
-	private int empId;
+	private Integer careerId;
+	private Integer empId;
 	private String companyName;
 	private Date hireDate;
 	private Date retireDate;
@@ -18,13 +18,13 @@ public class PersonalHistory {
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 	
-	public int getCareerId() {
+	public Integer getCareerId() {
 		return careerId;
 	}
 	public void setCareerId(int careerId) {
 		this.careerId = careerId;
 	}
-	public int getEmpId() {
+	public Integer getEmpId() {
 		return empId;
 	}
 	public void setEmpId(int empId) {

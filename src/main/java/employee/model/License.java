@@ -4,8 +4,8 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 public class License {
-	private int licenseId;
-	private int empId;
+	private Integer licenseId;
+	private Integer empId;
 	private String licenseName;
 	private Date acquisitionDate;
 	private String issuer;
@@ -16,13 +16,13 @@ public class License {
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 	
-	public int getLicenseId() {
+	public Integer getLicenseId() {
 		return licenseId;
 	}
 	public void setLicenseId(int licenseId) {
 		this.licenseId = licenseId;
 	}
-	public int getEmpId() {
+	public Integer getEmpId() {
 		return empId;
 	}
 	public void setEmpId(int empId) {

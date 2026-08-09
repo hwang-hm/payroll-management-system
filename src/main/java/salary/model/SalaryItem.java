@@ -4,7 +4,8 @@ import java.util.Date;
 
 public class SalaryItem {
 
-	private Long salaryItemId;
+	private Integer salaryItemId;
+	private Integer attendanceTypeId;
 	private String itemType;
 	private String itemName;
 	private String taxYn;
@@ -12,7 +13,6 @@ public class SalaryItem {
 	private Long taxFreeLimit;
 	private String calcMethod;
 	private String roundUnit;
-	private String payType;
 	private Long defaultAmount;
 	private String remark;
 	private String useYn;
@@ -22,10 +22,11 @@ public class SalaryItem {
 	public SalaryItem() {
 	}
 
-	public SalaryItem(Long salaryItemId, String itemType, String itemName, String taxYn, String taxFreeName,
-			Long taxFreeLimit, String calcMethod, String roundUnit, String payType, Long defaultAmount, String remark,
-			String useYn, Date createdAt, Date updatedAt) {
+	public SalaryItem(Integer salaryItemId, Integer attendanceTypeId, String itemType, String itemName, String taxYn,
+			String taxFreeName, Long taxFreeLimit, String calcMethod, String roundUnit, Long defaultAmount,
+			String remark, String useYn, Date createdAt, Date updatedAt) {
 		this.salaryItemId = salaryItemId;
+		this.attendanceTypeId = attendanceTypeId;
 		this.itemType = itemType;
 		this.itemName = itemName;
 		this.taxYn = taxYn;
@@ -33,7 +34,6 @@ public class SalaryItem {
 		this.taxFreeLimit = taxFreeLimit;
 		this.calcMethod = calcMethod;
 		this.roundUnit = roundUnit;
-		this.payType = payType;
 		this.defaultAmount = defaultAmount;
 		this.remark = remark;
 		this.useYn = useYn;
@@ -41,12 +41,20 @@ public class SalaryItem {
 		this.updatedAt = updatedAt;
 	}
 
-	public Long getSalaryItemId() {
+	public Integer getSalaryItemId() {
 		return salaryItemId;
 	}
 
-	public void setSalaryItemId(Long salaryItemId) {
+	public void setSalaryItemId(Integer salaryItemId) {
 		this.salaryItemId = salaryItemId;
+	}
+
+	public Integer getAttendanceTypeId() {
+		return attendanceTypeId;
+	}
+
+	public void setAttendanceTypeId(Integer attendanceTypeId) {
+		this.attendanceTypeId = attendanceTypeId;
 	}
 
 	public String getItemType() {
@@ -103,14 +111,6 @@ public class SalaryItem {
 
 	public void setRoundUnit(String roundUnit) {
 		this.roundUnit = roundUnit;
-	}
-
-	public String getPayType() {
-		return payType;
-	}
-
-	public void setPayType(String payType) {
-		this.payType = payType;
 	}
 
 	public Long getDefaultAmount() {

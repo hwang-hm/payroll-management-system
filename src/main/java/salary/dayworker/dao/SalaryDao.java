@@ -23,9 +23,9 @@ public class SalaryDao {
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
 				Salary s = new Salary();
-				s.setSalaryId(rs.getLong("salary_id"));
-				s.setSalaryDateId(rs.getLong("salary_date_id"));
-				s.setEmpId(rs.getLong("emp_id"));
+				s.setSalaryId(rs.getInt("salary_id"));
+				s.setSalaryDateId(rs.getInt("salary_date_id"));
+				s.setEmpId(rs.getInt("emp_id"));
 				s.setTotalPay(rs.getLong("total_pay"));
 				s.setTotalDeduct(rs.getLong("total_deduct"));
 				s.setNetPay(rs.getLong("net_pay"));
@@ -39,7 +39,7 @@ public class SalaryDao {
 	}
 
 	// 신규 급여 헤더 저장 (시퀀스 사용)
-	public long insert(Connection conn, Salary salary) throws SQLException {
+	public int insert(Connection conn, Salary salary) throws SQLException {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		String seqSql = "SELECT seq_salary.NEXTVAL FROM dual";
@@ -48,9 +48,9 @@ public class SalaryDao {
 		try {
 			pstmt = conn.prepareStatement(seqSql);
 			rs = pstmt.executeQuery();
-			long newSalaryId = 0;
+			int newSalaryId = 0;
 			if (rs.next()) {
-				newSalaryId = rs.getLong(1);
+				newSalaryId = rs.getInt(1);
 			}
 			JdbcUtil.close(rs);
 			JdbcUtil.close(pstmt);

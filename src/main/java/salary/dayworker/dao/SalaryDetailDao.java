@@ -24,9 +24,9 @@ public class SalaryDetailDao {
 			List<SalaryDetail> list = new ArrayList<>();
 			while (rs.next()) {
 				SalaryDetail sd = new SalaryDetail();
-				sd.setDetailId(rs.getLong("detail_id"));
-				sd.setSalaryId(rs.getLong("salary_id"));
-				sd.setSalaryItemId(rs.getObject("salary_item_id") != null ? rs.getLong("salary_item_id") : null);
+				sd.setDetailId(rs.getInt("detail_id"));
+				sd.setSalaryId(rs.getInt("salary_id"));
+				sd.setSalaryItemId(rs.getObject("salary_item_id") != null ? rs.getInt("salary_item_id") : null);
 				sd.setItemType(rs.getString("item_type"));
 				sd.setItemName(rs.getString("item_name"));
 				sd.setTaxYn(rs.getString("tax_yn"));

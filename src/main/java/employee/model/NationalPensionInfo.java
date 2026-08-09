@@ -2,9 +2,10 @@ package employee.model;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Map;
 
 public class NationalPensionInfo {
-	private int empId;
+	private Integer empId;
 	private String nationalNo;
 	private Date nationalAcqDate;
 	private Date nationalLossDate;
@@ -21,7 +22,7 @@ public class NationalPensionInfo {
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 	
-	public int getEmpId() {
+	public Integer getEmpId() {
 		return empId;
 	}
 	public void setEmpId(int empId) {
@@ -112,6 +113,5 @@ public class NationalPensionInfo {
 		this.updatedAt = updatedAt;
 	}
 	
-
 	
 }

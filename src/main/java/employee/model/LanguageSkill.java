@@ -4,8 +4,8 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 public class LanguageSkill {
-	private int languageId;
-	private int empId;
+	private Integer languageId;
+	private Integer empId;
 	private String languageName;
 	private String testName;
 	private String officialScore;
@@ -17,13 +17,13 @@ public class LanguageSkill {
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 	
-	public int getLanguageId() {
+	public Integer getLanguageId() {
 		return languageId;
 	}
 	public void setLanguageId(int languageId) {
 		this.languageId = languageId;
 	}
-	public int getEmpId() {
+	public Integer getEmpId() {
 		return empId;
 	}
 	public void setEmpId(int empId) {

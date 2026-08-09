@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class SalaryDate {
 
-	private Long salaryDateId;
+	private Integer salaryDateId;
 	private Integer payYear;
 	private Integer payMonth;
 	private Integer paySeq;
@@ -15,19 +15,8 @@ public class SalaryDate {
 	public SalaryDate() {
 	}
 
-	public SalaryDate(Integer payYear, Integer payMonth, Integer paySeq, Date startDate, Date endDate, Date payDate) {
-		super();
-		this.payYear = payYear;
-		this.payMonth = payMonth;
-		this.paySeq = paySeq;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.payDate = payDate;
-	}
-
-	public SalaryDate(Long salaryDateId, Integer payYear, Integer payMonth, Integer paySeq, Date startDate,
+	public SalaryDate(Integer salaryDateId, Integer payYear, Integer payMonth, Integer paySeq, Date startDate,
 			Date endDate, Date payDate) {
-		super();
 		this.salaryDateId = salaryDateId;
 		this.payYear = payYear;
 		this.payMonth = payMonth;
@@ -36,12 +25,12 @@ public class SalaryDate {
 		this.endDate = endDate;
 		this.payDate = payDate;
 	}
-	
-	public Long getSalaryDateId() {
+
+	public Integer getSalaryDateId() {
 		return salaryDateId;
 	}
 
-	public void setSalaryDateId(Long salaryDateId) {
+	public void setSalaryDateId(Integer salaryDateId) {
 		this.salaryDateId = salaryDateId;
 	}
 
@@ -92,5 +81,4 @@ public class SalaryDate {
 	public void setPayDate(Date payDate) {
 		this.payDate = payDate;
 	}
-
 }

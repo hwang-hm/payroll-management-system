@@ -101,11 +101,17 @@ public class SalaryDateHandler implements CommandHandler {
 			Date endDate = sdf.parse(endDateStr);
 			Date payDate = sdf.parse(payDateStr);
 
-			SalaryDate salaryDate = new SalaryDate(year, month, degree, startDate, endDate, payDate);
+			SalaryDate salaryDate = new SalaryDate();
+			salaryDate.setPayYear(year);
+			salaryDate.setPayMonth(month);
+			salaryDate.setPaySeq(degree);
+			salaryDate.setStartDate(startDate);
+			salaryDate.setEndDate(endDate);
+			salaryDate.setPayDate(payDate);
 
 			// PK 값이 넘어왔다면 domain 객체에 세팅
 			if (!isEmpty(salaryDateIdStr)) {
-				salaryDate.setSalaryDateId(Long.parseLong(salaryDateIdStr));
+				salaryDate.setSalaryDateId(Integer.parseInt(salaryDateIdStr));
 			}
 
 			boolean isSuccess = saveService.saveOrUpdate(salaryDate);

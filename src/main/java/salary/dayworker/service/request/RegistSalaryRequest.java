@@ -12,7 +12,7 @@ public class RegistSalaryRequest {
 	private Date startDate;
 	private Date endDate;
 	private Date payDate;
-	private Long empId = 0L;
+	private int empId = 0;
 	private Long totalPay = 0L;
 	private Long totalDeduct = 0L;
 	private Long netPay = 0L;
@@ -23,7 +23,7 @@ public class RegistSalaryRequest {
 	}
 
 	public RegistSalaryRequest(int payYear, int payMonth, int paySeq, Date startDate, Date endDate, Date payDate,
-			Long empId, Long totalPay, Long totalDeduct, Long netPay, List<SalaryDetailRequest> details) {
+			int empId, Long totalPay, Long totalDeduct, Long netPay, List<SalaryDetailRequest> details) {
 		this.payYear = payYear;
 		this.payMonth = payMonth;
 		this.paySeq = paySeq;
@@ -39,7 +39,7 @@ public class RegistSalaryRequest {
 
 	// --- Validation ---
 	public void validate(Map<String, Boolean> errors) {
-		if (empId == null || empId <= 0) {
+		if (empId <= 0) {
 			errors.put("empId", Boolean.TRUE);
 		}
 		if (payYear <= 0) {
@@ -111,12 +111,12 @@ public class RegistSalaryRequest {
 		this.payDate = payDate;
 	}
 
-	public long getEmpId() {
-		return empId != null ? empId : 0L;
+	public Integer getEmpId() {
+		return empId;
 	}
 
-	public void setEmpId(Long empId) {
-		this.empId = (empId != null) ? empId : 0L;
+	public void setEmpId(int empId) {
+		this.empId = empId;
 	}
 
 	public long getTotalPay() {
@@ -153,7 +153,7 @@ public class RegistSalaryRequest {
 
 	// --- Inner Class (상세 항목 요청 DTO) ---
 	public static class SalaryDetailRequest {
-		private Long salaryItemId;
+		private Integer salaryItemId;
 		private String itemType;
 		private String itemName;
 		private String taxYn;
@@ -163,7 +163,7 @@ public class RegistSalaryRequest {
 		public SalaryDetailRequest() {
 		}
 
-		public SalaryDetailRequest(Long salaryItemId, String itemType, String itemName, String taxYn, Long amount,
+		public SalaryDetailRequest(Integer salaryItemId, String itemType, String itemName, String taxYn, Long amount,
 				String memo) {
 			this.salaryItemId = salaryItemId;
 			setItemType(itemType);
@@ -173,11 +173,11 @@ public class RegistSalaryRequest {
 			setMemo(memo);
 		}
 
-		public Long getSalaryItemId() {
+		public Integer getSalaryItemId() {
 			return salaryItemId;
 		}
 
-		public void setSalaryItemId(Long salaryItemId) {
+		public void setSalaryItemId(Integer salaryItemId) {
 			this.salaryItemId = salaryItemId; // 신규 항목일 수 있으므로 null 허용
 		}
 
