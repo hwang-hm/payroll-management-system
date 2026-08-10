@@ -1,4 +1,4 @@
-package salary.service;
+package salary.entry.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -8,9 +8,9 @@ import java.util.Calendar;
 import java.util.List;
 
 import jdbc.connection.ConnectionProvider;
-import salary.dao.SalaryDao;
-import salary.dao.SalaryDateDao;
-import salary.dao.SalaryDetailDao;
+import salary.entry.dao.SalaryDao;
+import salary.entry.dao.SalaryDateDao;
+import salary.entry.dao.SalaryDetailDao;
 import salary.model.SalaryDate;
 import salary.model.SalaryDetail;
 

@@ -1,4 +1,4 @@
-package salary.dao;
+package salary.entry.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import salary.service.SalaryView;
+import salary.entry.service.SalaryView;
 
 public class SalaryDao {
 

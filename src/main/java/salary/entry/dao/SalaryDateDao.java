@@ -1,4 +1,4 @@
-package salary.dao;
+package salary.entry.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

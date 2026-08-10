@@ -1,4 +1,4 @@
-package salary.service;
+package salary.entry.service;
 
 import java.util.List;
 

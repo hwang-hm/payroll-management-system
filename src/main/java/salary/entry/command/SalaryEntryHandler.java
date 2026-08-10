@@ -1,4 +1,4 @@
-package salary.command;
+package salary.entry.command;
 
 import java.util.Calendar;
 
@@ -6,8 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import mvc.command.CommandHandler;
-import salary.service.SalaryEntryData;
-import salary.service.SalaryEntryService;
+import salary.entry.service.SalaryEntryData;
+import salary.entry.service.SalaryEntryService;
 
 //급여입력/관리 페이지 진입 핸들러.
 public class SalaryEntryHandler implements CommandHandler {
