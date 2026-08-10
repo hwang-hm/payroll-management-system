@@ -45,4 +45,16 @@ public class SalaryDao {
 		view.setNetPay(rs.getLong("net_pay"));
 		return view;
 	}
+
+	public void updateTotals(Connection conn, int salaryId, long totalPay, long totalDeduct, long netPay)
+			throws SQLException {
+		String sql = "UPDATE salary SET total_pay = ?, total_deduct = ?, net_pay = ? WHERE salary_id = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setLong(1, totalPay);
+			pstmt.setLong(2, totalDeduct);
+			pstmt.setLong(3, netPay);
+			pstmt.setInt(4, salaryId);
+			pstmt.executeUpdate();
+		}
+	}
 }

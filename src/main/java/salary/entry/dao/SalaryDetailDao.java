@@ -49,4 +49,15 @@ public class SalaryDetailDao {
 		detail.setAmount(rs.getLong("amount"));
 		return detail;
 	}
+
+	public void updateAmountAndCalcMethod(Connection conn, int detailId, long amount, String calcMethod)
+			throws SQLException {
+		String sql = "UPDATE salary_detail SET amount = ?, calc_method = ? WHERE detail_id = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setLong(1, amount);
+			pstmt.setString(2, calcMethod);
+			pstmt.setInt(3, detailId);
+			pstmt.executeUpdate();
+		}
+	}
 }

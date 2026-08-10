@@ -92,12 +92,59 @@
     .detail-section.pay h4 { color: var(--pay-color); border-color: var(--pay-color); }
     .detail-section.deduct h4 { color: var(--deduct-color); border-color: var(--deduct-color); }
     .item-row { margin-bottom: 10px; }
-    .item-row label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 3px; }
-    .item-row input[type="text"] {
-      width: 100%; box-sizing: border-box; padding: 7px 10px;
+    .item-amount-line {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .item-amount-line label {
+      flex: 1; font-size: 12px; font-weight: 600; color: #475569; margin: 0;
+    }
+    .item-amount-line .amount-input {
+      width: 110px; flex-shrink: 0; box-sizing: border-box; padding: 7px 10px;
       border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; text-align: right;
     }
-    .item-row .calc-label { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+    .calc-method-row { margin-top: 4px; }
+    .calc-method-row.hidden { display: none; }
+    .calc-method-input {
+      width: 100%; box-sizing: border-box; padding: 6px 10px;
+      border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; text-align: left;
+      color: #475569; background: #f8fafc;
+    }
+    .calc-method-input::placeholder { color: #94a3b8; }
+
+    .detail-toolbar {
+      display: flex; justify-content: flex-end; align-items: center;
+      margin-bottom: 12px; padding: 8px 12px;
+      background: #f1f5f9; border: 1px solid var(--border); border-radius: 6px;
+    }
+    .calc-toggle-wrap {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; font-weight: 600; color: #334155;
+    }
+    .calc-toggle-wrap .required { color: #e11d48; }
+    .toggle-switch {
+      position: relative; display: inline-flex; align-items: center;
+      width: 52px; height: 26px; cursor: pointer;
+    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .toggle-slider {
+      position: absolute; inset: 0; background: #cbd5e1; border-radius: 26px;
+      transition: background 0.2s;
+    }
+    .toggle-slider::before {
+      content: ''; position: absolute; width: 20px; height: 20px;
+      left: 3px; bottom: 3px; background: #fff; border-radius: 50%;
+      transition: transform 0.2s;
+    }
+    .toggle-switch input:checked + .toggle-slider { background: #22c55e; }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(26px); }
+    .toggle-label {
+      position: absolute; font-size: 10px; font-weight: 700; color: #fff;
+      top: 50%; transform: translateY(-50%); pointer-events: none;
+    }
+    .toggle-label.off { right: 7px; }
+    .toggle-label.on { left: 8px; display: none; }
+    .toggle-switch input:checked ~ .toggle-label.off { display: none; }
+    .toggle-switch input:checked ~ .toggle-label.on { display: block; }
 
     .net-pay-bar {
       background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff;
@@ -248,18 +295,35 @@
               <input type="hidden" name="payMonth" value="${entryData.payMonth}">
               <input type="hidden" name="paySeq" value="${entryData.paySeq}">
 
+              <div class="detail-toolbar">
+                <div class="calc-toggle-wrap">
+                  <span class="required">*</span> 계산방법
+                  <label class="toggle-switch" title="계산방법 표시/숨기기">
+                    <input type="checkbox" id="calcMethodToggle" onchange="toggleCalcMethod(this.checked)">
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-label off">off</span>
+                    <span class="toggle-label on">on</span>
+                  </label>
+                </div>
+              </div>
+
               <div class="detail-columns">
                 <!-- 지급항목 -->
                 <div class="detail-section pay">
                   <h4>지급항목</h4>
                   <c:forEach var="item" items="${entryData.payDetails}">
                     <div class="item-row">
-                      <label>${item.itemName}</label>
                       <input type="hidden" name="detailId" value="${item.detailId}">
-                      <input type="text" name="amount" class="amount-input pay-input"
-                             value="<fmt:formatNumber value='${item.amount}' pattern='#,###'/>"
-                             data-type="PAY" oninput="calcTotals()">
-                      <div class="calc-label">계산방법: ${empty item.calcMethod ? '-' : item.calcMethod}</div>
+                      <div class="item-amount-line">
+                        <label>${item.itemName}</label>
+                        <input type="text" name="amount" class="amount-input pay-input"
+                               value="<fmt:formatNumber value='${item.amount}' pattern='#,###'/>"
+                               data-type="PAY" oninput="calcTotals()">
+                      </div>
+                      <div class="calc-method-row hidden">
+                        <input type="text" name="calcMethod" class="calc-method-input"
+                               value="${item.calcMethod}" placeholder="계산방법">
+                      </div>
                     </div>
                   </c:forEach>
                 </div>
@@ -268,12 +332,17 @@
                   <h4>공제항목</h4>
                   <c:forEach var="item" items="${entryData.deductDetails}">
                     <div class="item-row">
-                      <label>${item.itemName}</label>
                       <input type="hidden" name="detailId" value="${item.detailId}">
-                      <input type="text" name="amount" class="amount-input deduct-input"
-                             value="<fmt:formatNumber value='${item.amount}' pattern='#,###'/>"
-                             data-type="DEDUCT" oninput="calcTotals()">
-                      <div class="calc-label">계산방법: ${empty item.calcMethod ? '-' : item.calcMethod}</div>
+                      <div class="item-amount-line">
+                        <label>${item.itemName}</label>
+                        <input type="text" name="amount" class="amount-input deduct-input"
+                               value="<fmt:formatNumber value='${item.amount}' pattern='#,###'/>"
+                               data-type="DEDUCT" oninput="calcTotals()">
+                      </div>
+                      <div class="calc-method-row hidden">
+                        <input type="text" name="calcMethod" class="calc-method-input"
+                               value="${item.calcMethod}" placeholder="계산방법">
+                      </div>
                     </div>
                   </c:forEach>
                 </div>
@@ -415,6 +484,26 @@
     if (el) el.textContent = formatAmount(net);
   }
 
+  function toggleCalcMethod(show) {
+    document.querySelectorAll('.calc-method-row').forEach(row => {
+      row.classList.toggle('hidden', !show);
+    });
+    try {
+      localStorage.setItem('salaryCalcMethodVisible', show ? '1' : '0');
+    } catch (e) { /* ignore */ }
+  }
+
+  function initCalcMethodToggle() {
+    const toggle = document.getElementById('calcMethodToggle');
+    if (!toggle) return;
+    let visible = false;
+    try {
+      visible = localStorage.getItem('salaryCalcMethodVisible') === '1';
+    } catch (e) { /* ignore */ }
+    toggle.checked = visible;
+    toggleCalcMethod(visible);
+  }
+
   function clearAmounts() {
     document.querySelectorAll('.amount-input').forEach(el => { el.value = '0'; });
     calcTotals();
@@ -479,6 +568,7 @@
       });
   }
 
+  initCalcMethodToggle();
   calcTotals();
 </script>
 </body>
