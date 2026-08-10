@@ -1,0 +1,485 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="layout" tagdir="/WEB-INF/tags" %>
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>급여입력/관리</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --pay-color: #2563eb;
+      --deduct-color: #e11d48;
+      --bg-gray: #f8fafc;
+      --border: #e2e8f0;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+    }
+    body { font-family: 'Pretendard Variable', Pretendard, sans-serif; background: var(--bg-gray); color: var(--text-main); margin: 0; }
+    .container { max-width: 1400px; margin: 0 auto 60px; padding: 0 20px; }
+    .page-header { margin-bottom: 16px; border-bottom: 2px solid var(--border); padding-bottom: 14px; }
+    .page-header h2 { font-size: 24px; font-weight: 700; margin: 0 0 4px 0; }
+    .page-header p { margin: 0; font-size: 13px; color: var(--text-muted); }
+
+    /* 필터 바 */
+    .filter-bar {
+      background: #2b3648; color: #fff; border-radius: 8px; padding: 14px 18px;
+      display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-bottom: 16px;
+    }
+    .filter-bar label { font-size: 13px; font-weight: 600; }
+    .filter-bar select, .filter-bar input[type="text"] {
+      padding: 6px 10px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 13px;
+    }
+    .filter-info { font-size: 12px; color: #cbd5e1; }
+    .filter-info strong { color: #fff; }
+
+    /* 버튼 */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+      padding: 7px 14px; font-size: 13px; font-weight: 600; border-radius: 6px;
+      cursor: pointer; border: none; text-decoration: none;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-danger { background: #e11d48; color: #fff; }
+    .btn-warning { background: #f59e0b; color: #fff; }
+    .btn-outline { background: #fff; border: 1px solid #cbd5e1; color: #334155; }
+    .btn-sm { padding: 5px 10px; font-size: 12px; }
+
+    /* 메인 2열 레이아웃 */
+    .main-split { display: grid; grid-template-columns: 1fr 1.2fr; gap: 16px; margin-bottom: 20px; }
+    .panel { background: #fff; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .panel-head {
+      padding: 10px 14px; background: #f8fafc; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .panel-head h3 { margin: 0; font-size: 14px; font-weight: 700; }
+    .panel-body { padding: 12px; }
+
+    /* 좌측 테이블 */
+    .action-bar { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+    .list-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .list-table th {
+      background: #f8fafc; color: #475569; font-weight: 700; padding: 10px 8px;
+      border-bottom: 2px solid var(--border); text-align: center;
+    }
+    .list-table td {
+      padding: 9px 8px; border-bottom: 1px solid var(--border); text-align: center;
+    }
+    .list-table tbody tr { cursor: pointer; }
+    .list-table tbody tr:hover { background: #eff6ff; }
+    .list-table tbody tr.selected { background: #dbeafe; }
+    .amount-pay { color: var(--pay-color); font-weight: 600; }
+    .amount-deduct { color: var(--deduct-color); font-weight: 600; }
+
+    /* 우측 상세 폼 */
+    .detail-tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 12px; }
+    .detail-tab {
+      padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer;
+      border-bottom: 2px solid transparent; margin-bottom: -2px; color: var(--text-muted);
+    }
+    .detail-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+    .detail-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .detail-section h4 {
+      font-size: 13px; font-weight: 700; margin: 0 0 10px 0; padding-bottom: 6px;
+      border-bottom: 2px solid var(--border);
+    }
+    .detail-section.pay h4 { color: var(--pay-color); border-color: var(--pay-color); }
+    .detail-section.deduct h4 { color: var(--deduct-color); border-color: var(--deduct-color); }
+    .item-row { margin-bottom: 10px; }
+    .item-row label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 3px; }
+    .item-row input[type="text"] {
+      width: 100%; box-sizing: border-box; padding: 7px 10px;
+      border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; text-align: right;
+    }
+    .item-row .calc-label { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+
+    .net-pay-bar {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff;
+      padding: 14px 18px; border-radius: 8px; text-align: center;
+      font-size: 18px; font-weight: 700; margin: 16px 0 12px 0;
+    }
+    .detail-actions { display: flex; gap: 8px; justify-content: center; }
+
+    /* 하단 종합정보 */
+    .summary-bar {
+      background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .summary-bar .summary-label { font-size: 14px; font-weight: 700; min-width: 80px; }
+    .summary-box {
+      flex: 1; text-align: center; padding: 14px; border-radius: 8px; font-weight: 700;
+    }
+    .summary-box .label { font-size: 12px; margin-bottom: 4px; opacity: 0.8; }
+    .summary-box .value { font-size: 20px; }
+    .summary-count { background: #f1f5f9; color: #334155; }
+    .summary-pay { background: #dbeafe; color: var(--pay-color); }
+    .summary-deduct { background: #ffe4e6; color: var(--deduct-color); }
+    .summary-net { background: #f1f5f9; color: #334155; }
+
+    /* 모달 */
+    .modal-overlay {
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal-box {
+      background: #fff; border-radius: 10px; width: 90%; max-width: 700px;
+      max-height: 80vh; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+    .modal-header {
+      background: #2b3648; color: #fff; padding: 14px 18px;
+      font-size: 15px; font-weight: 700; display: flex; justify-content: space-between;
+    }
+    .modal-header .close-btn { background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; }
+    .modal-body { padding: 16px 18px; overflow-y: auto; max-height: 60vh; }
+    .modal-footer { padding: 12px 18px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: center; }
+    .modal-search { display: flex; gap: 8px; margin-bottom: 12px; align-items: center; }
+    .modal-search input { flex: 1; padding: 7px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; }
+    .empty-msg { text-align: center; padding: 40px; color: #94a3b8; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<layout:headerNav />
+
+<div class="container">
+  <div class="page-header">
+    <h2>💳 급여입력/관리</h2>
+    <p>귀속연월별로 사원 급여를 입력·수정·삭제할 수 있습니다.</p>
+  </div>
+
+  <!-- 필터 바 -->
+  <form id="filterForm" action="${pageContext.request.contextPath}/salary/entry.do" method="get">
+    <div class="filter-bar">
+      <label>귀속연월</label>
+      <select name="payYear" onchange="this.form.submit()">
+        <c:forEach var="y" begin="2024" end="2027">
+          <option value="${y}" ${y eq entryData.payYear ? 'selected' : ''}>${y}년</option>
+        </c:forEach>
+      </select>
+      <select name="payMonth" onchange="this.form.submit()">
+        <c:forEach var="m" begin="1" end="12">
+          <option value="${m}" ${m eq entryData.payMonth ? 'selected' : ''}>${m}월</option>
+        </c:forEach>
+      </select>
+      <label>급여차수</label>
+      <select name="paySeq" onchange="this.form.submit()">
+        <option value="1" ${entryData.paySeq eq 1 ? 'selected' : ''}>급여-01</option>
+        <option value="2" ${entryData.paySeq eq 2 ? 'selected' : ''}>급여-02</option>
+      </select>
+      <span class="filter-info">
+        정산기간: <strong>${entryData.startDate} ~ ${entryData.endDate}</strong> &nbsp;|&nbsp;
+        급여지급일: <strong>${entryData.payDate}</strong>
+      </span>
+    </div>
+  </form>
+
+  <div class="main-split">
+    <!-- 좌측: 사원 목록 -->
+    <div class="panel">
+      <div class="panel-head">
+        <h3>급여 대상 사원</h3>
+        <span style="font-size:12px;color:#64748b;">${entryData.summary.count}건</span>
+      </div>
+      <div class="panel-body">
+        <div class="action-bar">
+          <button type="button" class="btn btn-outline btn-sm" onclick="openLoadModal()">지난급여 불러오기</button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="openEmpModal()">+ 신규추가</button>
+          <button type="button" class="btn btn-danger btn-sm" onclick="deleteSelected()">선택삭제</button>
+          <button type="button" class="btn btn-warning btn-sm" onclick="deleteAll()">전체삭제</button>
+        </div>
+        <table class="list-table">
+          <thead>
+            <tr>
+              <th width="30"><input type="checkbox" id="checkAll"></th>
+              <th>구분</th>
+              <th>성명</th>
+              <th>부서</th>
+              <th>지급총액</th>
+              <th>공제총액</th>
+              <th>실지급액</th>
+            </tr>
+          </thead>
+          <tbody>
+            <c:forEach var="sal" items="${entryData.salaryList}">
+              <tr class="${sal.salaryId eq entryData.selectedSalaryId ? 'selected' : ''}"
+                  onclick="selectSalary(${sal.salaryId})">
+                <td onclick="event.stopPropagation()">
+                  <input type="checkbox" class="salary-chk" value="${sal.salaryId}">
+                </td>
+                <td>${sal.employmentType}</td>
+                <td>${sal.nameKor}</td>
+                <td>${sal.deptName}</td>
+                <td class="amount-pay"><fmt:formatNumber value="${sal.totalPay}" pattern="#,###"/></td>
+                <td class="amount-deduct"><fmt:formatNumber value="${sal.totalDeduct}" pattern="#,###"/></td>
+                <td><fmt:formatNumber value="${sal.netPay}" pattern="#,###"/></td>
+              </tr>
+            </c:forEach>
+            <c:if test="${empty entryData.salaryList}">
+              <tr><td colspan="7" class="empty-msg">등록된 급여 대상 사원이 없습니다.</td></tr>
+            </c:if>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 우측: 급여 상세 입력 -->
+    <div class="panel">
+      <div class="panel-head">
+        <h3>
+          <c:choose>
+            <c:when test="${not empty entryData.selectedSalary}">${entryData.selectedSalary.nameKor} 급여 상세</c:when>
+            <c:otherwise>급여 상세 입력</c:otherwise>
+          </c:choose>
+        </h3>
+      </div>
+      <div class="panel-body">
+        <c:choose>
+          <c:when test="${not empty entryData.selectedSalary}">
+            <form id="detailForm" action="${pageContext.request.contextPath}/salary/entry/save.do" method="post">
+              <input type="hidden" name="salaryId" value="${entryData.selectedSalaryId}">
+              <input type="hidden" name="payYear" value="${entryData.payYear}">
+              <input type="hidden" name="payMonth" value="${entryData.payMonth}">
+              <input type="hidden" name="paySeq" value="${entryData.paySeq}">
+
+              <div class="detail-columns">
+                <!-- 지급항목 -->
+                <div class="detail-section pay">
+                  <h4>지급항목</h4>
+                  <c:forEach var="item" items="${entryData.payDetails}">
+                    <div class="item-row">
+                      <label>${item.itemName}</label>
+                      <input type="hidden" name="detailId" value="${item.detailId}">
+                      <input type="text" name="amount" class="amount-input pay-input"
+                             value="<fmt:formatNumber value='${item.amount}' pattern='#,###'/>"
+                             data-type="PAY" oninput="calcTotals()">
+                      <div class="calc-label">계산방법: ${empty item.calcMethod ? '-' : item.calcMethod}</div>
+                    </div>
+                  </c:forEach>
+                </div>
+                <!-- 공제항목 -->
+                <div class="detail-section deduct">
+                  <h4>공제항목</h4>
+                  <c:forEach var="item" items="${entryData.deductDetails}">
+                    <div class="item-row">
+                      <label>${item.itemName}</label>
+                      <input type="hidden" name="detailId" value="${item.detailId}">
+                      <input type="text" name="amount" class="amount-input deduct-input"
+                             value="<fmt:formatNumber value='${item.amount}' pattern='#,###'/>"
+                             data-type="DEDUCT" oninput="calcTotals()">
+                      <div class="calc-label">계산방법: ${empty item.calcMethod ? '-' : item.calcMethod}</div>
+                    </div>
+                  </c:forEach>
+                </div>
+              </div>
+
+              <div class="net-pay-bar" id="netPayBar">
+                실지급액 : <span id="netPayValue">0</span> 원
+              </div>
+              <div class="detail-actions">
+                <button type="submit" class="btn btn-primary">저장</button>
+                <button type="button" class="btn btn-outline" onclick="clearAmounts()">내용 지우기</button>
+              </div>
+            </form>
+          </c:when>
+          <c:otherwise>
+            <div class="empty-msg">좌측에서 사원을 선택하거나 신규 사원을 추가해 주세요.</div>
+          </c:otherwise>
+        </c:choose>
+      </div>
+    </div>
+  </div>
+
+  <!-- 하단 종합정보 -->
+  <div class="summary-bar">
+    <div class="summary-label">급여 종합정보</div>
+    <div class="summary-box summary-count">
+      <div class="label">월 합계</div>
+      <div class="value">${entryData.summary.count} 건</div>
+    </div>
+    <div class="summary-box summary-pay">
+      <div class="label">지급 총액</div>
+      <div class="value"><fmt:formatNumber value="${entryData.summary.totalPay}" pattern="#,###"/> 원</div>
+    </div>
+    <div class="summary-box summary-deduct">
+      <div class="label">공제 총액</div>
+      <div class="value"><fmt:formatNumber value="${entryData.summary.totalDeduct}" pattern="#,###"/> 원</div>
+    </div>
+    <div class="summary-box summary-net">
+      <div class="label">실지급액</div>
+      <div class="value"><fmt:formatNumber value="${entryData.summary.netPay}" pattern="#,###"/> 원</div>
+    </div>
+  </div>
+</div>
+
+<!-- 지난급여 불러오기 모달 -->
+<div class="modal-overlay" id="loadModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span>급여년월 선택</span>
+      <button class="close-btn" onclick="closeLoadModal()">&times;</button>
+    </div>
+    <form action="${pageContext.request.contextPath}/salary/entry/loadPrevious.do" method="post">
+      <input type="hidden" name="payYear" value="${entryData.payYear}">
+      <input type="hidden" name="payMonth" value="${entryData.payMonth}">
+      <input type="hidden" name="paySeq" value="${entryData.paySeq}">
+      <div class="modal-body">
+        <p style="font-size:13px;color:#64748b;margin-bottom:12px;">불러올 급여 귀속연월을 선택하세요.</p>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <select name="sourceYear" style="padding:7px;border-radius:6px;border:1px solid #cbd5e1;">
+            <c:forEach var="y" begin="2024" end="2027">
+              <option value="${y}">${y}년</option>
+            </c:forEach>
+          </select>
+          <select name="sourceMonth" style="padding:7px;border-radius:6px;border:1px solid #cbd5e1;">
+            <c:forEach var="m" begin="1" end="12">
+              <option value="${m}">${m}월</option>
+            </c:forEach>
+          </select>
+          <select name="sourceSeq" style="padding:7px;border-radius:6px;border:1px solid #cbd5e1;">
+            <option value="1">급여-01</option>
+            <option value="2">급여-02</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">급여정보 불러오기</button>
+        <button type="button" class="btn btn-outline" onclick="closeLoadModal()">취소</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 사원선택 모달 -->
+<div class="modal-overlay" id="empModal">
+  <div class="modal-box" style="max-width:800px;">
+    <div class="modal-header">
+      <span>급여지급 사원선택</span>
+      <button class="close-btn" onclick="closeEmpModal()">&times;</button>
+    </div>
+    <form id="addEmpForm" action="${pageContext.request.contextPath}/salary/entry/addEmployees.do" method="post">
+      <input type="hidden" name="payYear" value="${entryData.payYear}">
+      <input type="hidden" name="payMonth" value="${entryData.payMonth}">
+      <input type="hidden" name="paySeq" value="${entryData.paySeq}">
+      <div class="modal-body" id="empModalBody">
+        <div class="modal-search">
+          <input type="text" id="empSearchKeyword" placeholder="사원검색 (성명)">
+          <button type="button" class="btn btn-primary btn-sm" onclick="searchEmployees()">검색</button>
+          <button type="button" class="btn btn-outline btn-sm" onclick="searchEmployees(true)">전체보기</button>
+        </div>
+        <div id="empSearchResult">
+          <p class="empty-msg">검색 버튼을 눌러 사원을 조회하세요.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">사원선택</button>
+        <button type="button" class="btn btn-outline" onclick="closeEmpModal()">선택취소</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<layout:footer />
+
+<script>
+  const ctx = '${pageContext.request.contextPath}';
+  const payYear = ${entryData.payYear};
+  const payMonth = ${entryData.payMonth};
+  const paySeq = ${entryData.paySeq};
+
+  function selectSalary(salaryId) {
+    location.href = ctx + '/salary/entry.do?payYear=' + payYear + '&payMonth=' + payMonth
+      + '&paySeq=' + paySeq + '&salaryId=' + salaryId;
+  }
+
+  function parseAmount(val) {
+    return parseInt((val || '0').replace(/,/g, ''), 10) || 0;
+  }
+
+  function formatAmount(num) {
+    return num.toLocaleString('ko-KR');
+  }
+
+  function calcTotals() {
+    let totalPay = 0, totalDeduct = 0;
+    document.querySelectorAll('.pay-input').forEach(el => totalPay += parseAmount(el.value));
+    document.querySelectorAll('.deduct-input').forEach(el => totalDeduct += parseAmount(el.value));
+    const net = totalPay - totalDeduct;
+    const el = document.getElementById('netPayValue');
+    if (el) el.textContent = formatAmount(net);
+  }
+
+  function clearAmounts() {
+    document.querySelectorAll('.amount-input').forEach(el => { el.value = '0'; });
+    calcTotals();
+  }
+
+  document.getElementById('checkAll')?.addEventListener('change', function() {
+    document.querySelectorAll('.salary-chk').forEach(cb => cb.checked = this.checked);
+  });
+
+  function deleteSelected() {
+    const checked = document.querySelectorAll('.salary-chk:checked');
+    if (checked.length === 0) { alert('삭제할 사원을 선택해 주세요.'); return; }
+    if (!confirm('선택한 ' + checked.length + '명의 급여를 삭제하시겠습니까?')) return;
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = ctx + '/salary/entry/delete.do';
+    addHidden(form, 'payYear', payYear);
+    addHidden(form, 'payMonth', payMonth);
+    addHidden(form, 'paySeq', paySeq);
+    checked.forEach(cb => addHidden(form, 'salaryIds', cb.value));
+    document.body.appendChild(form);
+    form.submit();
+  }
+
+  function deleteAll() {
+    if (!confirm('현재 귀속연월의 모든 급여 데이터를 삭제하시겠습니까?')) return;
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = ctx + '/salary/entry/deleteAll.do';
+    addHidden(form, 'payYear', payYear);
+    addHidden(form, 'payMonth', payMonth);
+    addHidden(form, 'paySeq', paySeq);
+    document.body.appendChild(form);
+    form.submit();
+  }
+
+  function addHidden(form, name, value) {
+    const input = document.createElement('input');
+    input.type = 'hidden'; input.name = name; input.value = value;
+    form.appendChild(input);
+  }
+
+  function openLoadModal() { document.getElementById('loadModal').classList.add('show'); }
+  function closeLoadModal() { document.getElementById('loadModal').classList.remove('show'); }
+  function openEmpModal() {
+    document.getElementById('empModal').classList.add('show');
+    searchEmployees(true);
+  }
+  function closeEmpModal() { document.getElementById('empModal').classList.remove('show'); }
+
+  function searchEmployees(showAll) {
+    const keyword = showAll ? '' : document.getElementById('empSearchKeyword').value;
+    fetch(ctx + '/salary/entry/searchEmployee.do?payYear=' + payYear + '&payMonth=' + payMonth
+      + '&paySeq=' + paySeq + '&searchKeyword=' + encodeURIComponent(keyword))
+      .then(res => res.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const table = doc.getElementById('empTableContent');
+        document.getElementById('empSearchResult').innerHTML = table ? table.outerHTML
+          : '<p class="empty-msg">검색 결과가 없습니다.</p>';
+      });
+  }
+
+  calcTotals();
+</script>
+</body>
+</html>
