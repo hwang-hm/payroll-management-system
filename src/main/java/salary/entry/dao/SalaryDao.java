@@ -19,6 +19,7 @@ public class SalaryDao {
 				+ "JOIN employee e ON s.emp_id = e.emp_id "
 				+ "LEFT JOIN department d ON e.dept_id = d.dept_id "
 				+ "WHERE s.salary_date_id = ? "
+				+ "AND e.employment_type <> '일용직' "
 				+ "ORDER BY s.salary_id";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, salaryDateId);
