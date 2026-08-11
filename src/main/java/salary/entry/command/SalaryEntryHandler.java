@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import mvc.command.CommandHandler;
-import salary.entry.service.SalaryEntryData;
+import salary.entry.viewdto.SalaryEntryData;
 import salary.entry.service.SalaryEntryService;
 
 //급여입력/관리 페이지 진입 핸들러.

@@ -433,6 +433,7 @@
       <button class="close-btn" onclick="closeEmpModal()">&times;</button>
     </div>
     <form id="addEmpForm" action="${pageContext.request.contextPath}/salary/entry/addEmployees.do" method="post">
+      <input type="hidden" name="salaryDateId" value="${entryData.salaryDateId}">
       <input type="hidden" name="payYear" value="${entryData.payYear}">
       <input type="hidden" name="payMonth" value="${entryData.payMonth}">
       <input type="hidden" name="paySeq" value="${entryData.paySeq}">
@@ -461,6 +462,7 @@
   const payYear = ${entryData.payYear};
   const payMonth = ${entryData.payMonth};
   const paySeq = ${entryData.paySeq};
+  const salaryDateId = ${entryData.salaryDateId};
 
   function selectSalary(salaryId) {
     location.href = ctx + '/salary/entry.do?payYear=' + payYear + '&payMonth=' + payMonth
@@ -556,8 +558,8 @@
 
   function searchEmployees(showAll) {
     const keyword = showAll ? '' : document.getElementById('empSearchKeyword').value;
-    fetch(ctx + '/salary/entry/searchEmployee.do?payYear=' + payYear + '&payMonth=' + payMonth
-      + '&paySeq=' + paySeq + '&searchKeyword=' + encodeURIComponent(keyword))
+    fetch(ctx + '/salary/entry/searchEmployee.do?salaryDateId=' + salaryDateId
+      + '&searchKeyword=' + encodeURIComponent(keyword))
       .then(res => res.text())
       .then(html => {
         const parser = new DOMParser();

@@ -53,6 +53,9 @@ public class SalarySaveDetailHandler implements CommandHandler {
 
 		saveDetailService.save(salaryId, detailIds, amounts, calcMethods);
 
+		// 리다이렉트 해주는 이유 : 포워드를 하면 URL이 바뀌지 않기 때문에 페이지 새로고침을 하면
+		// 여전히 /salary/entry/save.do를 호출하여 이 핸들러가 호출되는 문제가 발생.
+		// 때문에 salary/entry.do로 리다이렉트 해서 URL을 한번 갱신해줌
 		return "redirect:/salary/entry.do?payYear=" + payYear + "&payMonth=" + payMonth + "&paySeq=" + paySeq
 				+ "&salaryId=" + salaryId;
 	}

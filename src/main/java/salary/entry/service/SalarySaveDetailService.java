@@ -15,7 +15,7 @@ public class SalarySaveDetailService {
 	private final SalaryDao salaryDao = new SalaryDao();
 	private final SalaryDetailDao salaryDetailDao = new SalaryDetailDao();
 
-	// 급여상세 업데이터 하면서, salary테이블의 총합도 같이 업데이트 해준다.
+	// 급여상세 업데이터 하면서, salary테이블의 총합도 같이 업데이트 해준다.(salary 레코드 한 행의 급여상세 총합임)
 	public void save(int salaryId, List<Integer> detailIds, List<Long> amounts, List<String> calcMethods) {
 		Connection conn = null;
 		try {
