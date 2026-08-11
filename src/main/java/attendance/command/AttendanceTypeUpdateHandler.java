@@ -1,0 +1,182 @@
+package attendance.command;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import attendance.model.AttendanceType;
+import attendance.model.VacationType;
+import attendance.service.AttendanceTypeService;
+import attendance.service.VacationTypeService;
+import mvc.command.CommandHandler;
+
+/**
+ * 근태항목 수정 요청을 처리하는 Handler
+ * 勤怠項目修正リクエストを処理するHandler
+ */
+public class AttendanceTypeUpdateHandler implements CommandHandler {
+
+    // 근태항목 Service / 勤怠項目Service
+    private final AttendanceTypeService attendanceTypeService =
+            new AttendanceTypeService();
+
+    // 휴가항목 Service / 休暇項目Service
+    private final VacationTypeService vacationTypeService =
+            new VacationTypeService();
+
+    /**
+     * 근태항목 수정 요청을 처리한다.
+     * 勤怠項目修正リクエストを処理する。
+     */
+    @Override
+    public String process(
+            HttpServletRequest req,
+            HttpServletResponse res) throws Exception {
+
+        // POST 요청만 수정 처리
+        // POSTリクエストのみ修正処理
+        if (!"POST".equalsIgnoreCase(req.getMethod())) {
+            return "redirect:/attendance/type/list.do";
+        }
+
+        AttendanceType attendanceType =
+                createAttendanceType(req);
+
+        String validationMessage =
+                validate(attendanceType);
+
+        if (validationMessage != null) {
+            return showForm(
+                    req, attendanceType, validationMessage);
+        }
+
+        if (!attendanceTypeService.modifyAttendanceType(
+                attendanceType)) {
+
+            return showForm(
+                    req,
+                    attendanceType,
+                    "勤怠項目を修正できませんでした。");
+        }
+
+        return "redirect:/attendance/type/list.do"
+                + "?result=updated";
+    }
+
+    /**
+     * 요청값으로 수정할 근태항목 객체를 생성한다.
+     * リクエスト値から修正する勤怠項目オブジェクトを生成する。
+     */
+    private AttendanceType createAttendanceType(
+            HttpServletRequest req) {
+
+        AttendanceType attendanceType =
+                new AttendanceType();
+
+        attendanceType.setAttendanceTypeId(
+                toInt(req.getParameter("attendanceTypeId")));
+
+        attendanceType.setAttendanceType(
+                trim(req.getParameter("attendanceType")));
+
+        attendanceType.setUnit(
+                trim(req.getParameter("unit")));
+
+        attendanceType.setGroupName(
+                trim(req.getParameter("groupName")));
+
+        attendanceType.setUseYn(
+                "N".equals(req.getParameter("useYn"))
+                        ? "N" : "Y");
+
+        attendanceType.setVacationTypeId(
+                toInt(req.getParameter("vacationTypeId")));
+
+        return attendanceType;
+    }
+
+    /**
+     * 입력값을 검사한다.
+     * 入力値を検証する。
+     */
+    private String validate(
+            AttendanceType attendanceType) {
+
+        if (attendanceType.getAttendanceTypeId() <= 0) {
+            return "修正する勤怠項目を選択してください。";
+        }
+
+        if (attendanceType.getAttendanceType().isEmpty()) {
+            return "勤怠項目名を入力してください。";
+        }
+
+        if (attendanceType.getUnit().isEmpty()) {
+            return "単位を選択してください。";
+        }
+
+        if (attendanceType.getGroupName().isEmpty()) {
+            return "勤怠グループを選択してください。";
+        }
+
+        return null;
+    }
+
+    /**
+     * 오류 발생 시 목록과 입력값을 다시 화면에 표시한다.
+     * エラー発生時、リストと入力値を画面に再表示する。
+     */
+    private String showForm(
+            HttpServletRequest req,
+            AttendanceType attendanceType,
+            String message) {
+
+        List<AttendanceType> attendanceTypes =
+                attendanceTypeService.getAttendanceTypes();
+
+        List<VacationType> vacationTypes =
+                vacationTypeService.getVacationTypes();
+
+        req.setAttribute(
+                "attendanceTypes", attendanceTypes);
+
+        req.setAttribute(
+                "vacationTypes", vacationTypes);
+
+        req.setAttribute(
+                "formAttendanceType", attendanceType);
+
+        req.setAttribute(
+                "selectedAttendanceType", attendanceType);
+
+        req.setAttribute(
+                "errorMessage", message);
+
+        return "/view/config/attendanceType.jsp";
+    }
+
+    /**
+     * 문자열 앞뒤 공백을 제거한다.
+     * 文字列の前後の空白を削除する。
+     */
+    private String trim(String value) {
+        return value == null ? "" : value.trim();
+    }
+
+    /**
+     * 문자열을 정수로 변환한다.
+     * 文字列を整数に変換する。
+     */
+    private int toInt(String value) {
+        try {
+            if (value == null || value.trim().isEmpty()) {
+                return 0;
+            }
+
+            return Integer.parseInt(value);
+
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+}
