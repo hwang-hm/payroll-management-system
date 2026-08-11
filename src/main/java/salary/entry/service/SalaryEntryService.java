@@ -4,41 +4,42 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import jdbc.connection.ConnectionProvider;
 import salary.entry.dao.SalaryDao;
-import salary.entry.dao.SalaryDateDao;
 import salary.entry.dao.SalaryDetailDao;
+import salary.entry.viewdto.SalaryEntryData;
+import salary.entry.viewdto.SalarySummary;
+import salary.entry.viewdto.SalaryView;
 import salary.model.SalaryDate;
 import salary.model.SalaryDetail;
 
 public class SalaryEntryService {
 
 	private final SalaryDao salaryDao = new SalaryDao();
-	private final SalaryDateDao salaryDateDao = new SalaryDateDao();
 	private final SalaryDetailDao salaryDetailDao = new SalaryDetailDao();
+	private final SalaryDateService salaryDateService = new SalaryDateService();
 
 	public SalaryEntryData getEntryData(int payYear, int payMonth, int paySeq, int selectedSalaryId) {
 		try (Connection conn = ConnectionProvider.getConnection()) {
-			SalaryDate salaryDate = salaryDateDao.selectByPeriod(conn, payYear, payMonth, paySeq);
-			List<SalaryView> salaryList = salaryDate != null
-					? salaryDao.selectViewListBySalaryDateId(conn, salaryDate.getSalaryDateId())
-					: new ArrayList<>();
+			SalaryDate salaryDate = salaryDateService.ensureByPeriod(conn, payYear, payMonth, paySeq);
+			int salaryDateId = salaryDate.getSalaryDateId();
+			List<SalaryView> salaryList = salaryDao.selectViewListBySalaryDateId(conn, salaryDateId);
 
 			if (selectedSalaryId == 0 && !salaryList.isEmpty()) {
 				selectedSalaryId = salaryList.get(0).getSalaryId();
 			}
 
 			SalaryEntryData data = new SalaryEntryData();
+			data.setSalaryDateId(salaryDateId);
 			data.setPayYear(payYear);
 			data.setPayMonth(payMonth);
 			data.setPaySeq(paySeq);
 			data.setSalaryList(salaryList);
 			data.setSummary(toSummary(salaryList));
 			data.setSelectedSalaryId(selectedSalaryId);
-			setPeriodDates(data, salaryDate, payYear, payMonth);
+			setPeriodDates(data, salaryDate);
 
 			if (selectedSalaryId > 0) {
 				splitDetails(conn, selectedSalaryId, data);
@@ -91,22 +92,10 @@ public class SalaryEntryService {
 		return null;
 	}
 
-	private void setPeriodDates(SalaryEntryData data, SalaryDate salaryDate, int payYear, int payMonth) {
+	private void setPeriodDates(SalaryEntryData data, SalaryDate salaryDate) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		if (salaryDate != null) {
-			data.setStartDate(sdf.format(salaryDate.getStartDate()));
-			data.setEndDate(sdf.format(salaryDate.getEndDate()));
-			data.setPayDate(sdf.format(salaryDate.getPayDate()));
-			return;
-		}
-
-		int nextMonth = payMonth == 12 ? 1 : payMonth + 1;
-		int nextYear = payMonth == 12 ? payYear + 1 : payYear;
-		Calendar cal = Calendar.getInstance();
-		cal.set(payYear, payMonth - 1, 1);
-		int lastDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-		data.setStartDate(String.format("%04d-%02d-01", payYear, payMonth));
-		data.setEndDate(String.format("%04d-%02d-%02d", payYear, payMonth, lastDay));
-		data.setPayDate(String.format("%04d-%02d-05", nextYear, nextMonth));
+		data.setStartDate(sdf.format(salaryDate.getStartDate()));
+		data.setEndDate(sdf.format(salaryDate.getEndDate()));
+		data.setPayDate(sdf.format(salaryDate.getPayDate()));
 	}
 }
