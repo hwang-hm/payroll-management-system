@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import jdbc.JdbcUtil;
 import salary.entry.viewdto.EmployeeSearchView;
 import salary.entry.viewdto.SalaryView;
 import salary.model.Salary;
@@ -113,35 +112,30 @@ public class SalaryDao {
 	}
 
 	public int insert(Connection conn, Salary salary) throws SQLException {
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
 		String seqSql = "SELECT seq_salary.NEXTVAL FROM dual";
 		String insertSql = "INSERT INTO salary (salary_id, salary_date_id, emp_id, total_pay, total_deduct, net_pay, created_at) "
 				+ "VALUES (?, ?, ?, ?, ?, ?, SYSDATE)";
-		try {
-			pstmt = conn.prepareStatement(seqSql);
-			rs = pstmt.executeQuery();
-			int newSalaryId = 0;
-			if (rs.next()) {
-				newSalaryId = rs.getInt(1);
+
+		int newSalaryId;
+		try (PreparedStatement seqPstmt = conn.prepareStatement(seqSql);
+				ResultSet rs = seqPstmt.executeQuery()) {
+			if (!rs.next()) {
+				throw new SQLException("salary_id 시퀀스 조회에 실패했습니다.");
 			}
-			JdbcUtil.close(rs);
-			JdbcUtil.close(pstmt);
-
-			pstmt = conn.prepareStatement(insertSql);
-			pstmt.setInt(1, newSalaryId);
-			pstmt.setInt(2, salary.getSalaryDateId());
-			pstmt.setInt(3, salary.getEmpId());
-			pstmt.setLong(4, salary.getTotalPay());
-			pstmt.setLong(5, salary.getTotalDeduct());
-			pstmt.setLong(6, salary.getNetPay());
-			pstmt.executeUpdate();
-
-			return newSalaryId;
-		} finally {
-			JdbcUtil.close(rs);
-			JdbcUtil.close(pstmt);
+			newSalaryId = rs.getInt(1);
 		}
+
+		try (PreparedStatement insertPstmt = conn.prepareStatement(insertSql)) {
+			insertPstmt.setInt(1, newSalaryId);
+			insertPstmt.setInt(2, salary.getSalaryDateId());
+			insertPstmt.setInt(3, salary.getEmpId());
+			insertPstmt.setLong(4, salary.getTotalPay());
+			insertPstmt.setLong(5, salary.getTotalDeduct());
+			insertPstmt.setLong(6, salary.getNetPay());
+			insertPstmt.executeUpdate();
+		}
+
+		return newSalaryId;
 	}
 
 	public void updateTotals(Connection conn, int salaryId, long totalPay, long totalDeduct, long netPay)
