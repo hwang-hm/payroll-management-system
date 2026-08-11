@@ -26,13 +26,13 @@
     <param-name>poolConfig</param-name>
     <param-value>
       jdbcdriver=oracle.jdbc.driver.OracleDriver
-      jdbcUrl=jdbc:oracle:thin:@localhost:1521:xe
+      jdbcUrl=jdbc:oracle:thin:@DB_HOST:1521:xe
       dbUser=CHANGE_ME
       dbPass=CHANGE_ME
       validationQuery=select 1
       minIdle=3
       maxTotal=30
-      poolName=team
+      poolName=gcp-db
     </param-value>
   </context-param>   
   
