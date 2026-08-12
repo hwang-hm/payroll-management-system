@@ -2,24 +2,33 @@ package salary.register.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import jdbc.connection.ConnectionProvider;
+import salary.entry.dao.SalaryDao;
 import salary.entry.dao.SalaryDateDao;
 import salary.entry.viewdto.SalarySummary;
+import salary.model.Salary;
+import salary.model.SalaryDate;
 import salary.register.viewdto.SalaryRegisterData;
 import salary.register.viewdto.SalaryRegisterRow;
 
 public class SalaryRegisterService {
 
 	private final SalaryDateDao salaryDateDao = new SalaryDateDao();
+	private final SalaryDao salaryDao = new SalaryDao();
 
 	public SalaryRegisterData getRegisterData(int payYear) {
 		try (Connection conn = ConnectionProvider.getConnection()) {
-			List<SalaryRegisterRow> rows = salaryDateDao.selectRegisterRowsByYear(conn, payYear);
-			List<Integer> yearOptions = buildYearOptions(salaryDateDao.selectDistinctPayYears(conn), payYear);
+			List<SalaryDate> dates = salaryDateDao.selectByYear(conn, payYear);
+			List<Salary> salaries = salaryDao.selectByPayYear(conn, payYear);
+			List<SalaryRegisterRow> rows = toRegisterRows(dates, salaries);
+			List<Integer> yearOptions = buildYearOptions(salaryDao.selectDistinctPayYears(conn), payYear);
 
 			SalaryRegisterData data = new SalaryRegisterData();
 			data.setPayYear(payYear);
@@ -30,6 +39,54 @@ public class SalaryRegisterService {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	private List<SalaryRegisterRow> toRegisterRows(List<SalaryDate> dates, List<Salary> salaries) {
+		Map<Integer, List<Salary>> salariesByDateId = groupBySalaryDateId(salaries);
+		List<SalaryRegisterRow> rows = new ArrayList<>();
+
+		for (SalaryDate date : dates) {
+			List<Salary> dateSalaries = salariesByDateId.get(date.getSalaryDateId());
+			if (dateSalaries == null || dateSalaries.isEmpty()) {
+				continue;
+			}
+			rows.add(toRegisterRow(date, dateSalaries));
+		}
+		return rows;
+	}
+
+	private Map<Integer, List<Salary>> groupBySalaryDateId(List<Salary> salaries) {
+		Map<Integer, List<Salary>> grouped = new HashMap<>();
+		for (Salary salary : salaries) {
+			grouped.computeIfAbsent(salary.getSalaryDateId(), key -> new ArrayList<>()).add(salary);
+		}
+		return grouped;
+	}
+
+	private SalaryRegisterRow toRegisterRow(SalaryDate date, List<Salary> salaries) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		long totalPay = 0;
+		long totalDeduct = 0;
+		long netPay = 0;
+		for (Salary salary : salaries) {
+			totalPay += salary.getTotalPay() != null ? salary.getTotalPay() : 0L;
+			totalDeduct += salary.getTotalDeduct() != null ? salary.getTotalDeduct() : 0L;
+			netPay += salary.getNetPay() != null ? salary.getNetPay() : 0L;
+		}
+
+		SalaryRegisterRow row = new SalaryRegisterRow();
+		row.setSalaryDateId(date.getSalaryDateId());
+		row.setPayYear(date.getPayYear());
+		row.setPayMonth(date.getPayMonth());
+		row.setPaySeq(date.getPaySeq());
+		row.setStartDate(sdf.format(date.getStartDate()));
+		row.setEndDate(sdf.format(date.getEndDate()));
+		row.setPayDate(sdf.format(date.getPayDate()));
+		row.setEmpCount(salaries.size());
+		row.setTotalPay(totalPay);
+		row.setTotalDeduct(totalDeduct);
+		row.setNetPay(netPay);
+		return row;
 	}
 
 	private List<Integer> buildYearOptions(List<Integer> dbYears, int selectedYear) {
