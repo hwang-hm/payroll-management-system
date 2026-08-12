@@ -1,4 +1,4 @@
-package salary.entry.service;
+package salary.entry.viewdto;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import salary.model.SalaryDetail;
 //급여입력/관리 페이지의 전반적인 view용 정보
 public class SalaryEntryData {
 
+	private int salaryDateId;
 	private int payYear;
 	private int payMonth;
 	private int paySeq;
@@ -19,6 +20,14 @@ public class SalaryEntryData {
 	private SalaryView selectedSalary;
 	private List<SalaryDetail> payDetails;
 	private List<SalaryDetail> deductDetails;
+
+	public int getSalaryDateId() {
+		return salaryDateId;
+	}
+
+	public void setSalaryDateId(int salaryDateId) {
+		this.salaryDateId = salaryDateId;
+	}
 
 	public int getPayYear() {
 		return payYear;

@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import mvc.command.CommandHandler;
-import salary.entry.service.SalaryEntryData;
+import salary.entry.viewdto.SalaryEntryData;
 import salary.entry.service.SalaryEntryService;
 
 //급여입력/관리 페이지 진입 핸들러.
@@ -25,7 +25,7 @@ public class SalaryEntryHandler implements CommandHandler {
 
 		SalaryEntryData entryData = entryService.getEntryData(payYear, payMonth, paySeq, salaryId);
 		req.setAttribute("entryData", entryData);
-		return "/view/salary/entry.jsp";
+		return "/WEB-INF/view/salary/entry/entry.jsp";
 	}
 
 	private int parseInt(String value, int defaultValue) {

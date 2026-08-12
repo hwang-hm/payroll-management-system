@@ -7,19 +7,82 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import salary.entry.service.SalaryView;
+import salary.entry.viewdto.EmployeeSearchView;
+import salary.entry.viewdto.SalaryView;
+import salary.model.Salary;
 
 public class SalaryDao {
 
-	public List<SalaryView> selectViewListBySalaryDateId(Connection conn, int salaryDateId)
+	public boolean existsBySalaryDateIdAndEmpId(Connection conn, int salaryDateId, int empId) throws SQLException {
+		String sql = "SELECT 1 FROM salary WHERE salary_date_id = ? AND emp_id = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, salaryDateId);
+			pstmt.setInt(2, empId);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				return rs.next();
+			}
+		}
+	}
+
+	public Integer selectFirstSalaryIdBySalaryDateId(Connection conn, int salaryDateId) throws SQLException {
+		String sql = "SELECT MIN(salary_id) AS salary_id FROM salary WHERE salary_date_id = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, salaryDateId);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+					int salaryId = rs.getInt("salary_id");
+					if (!rs.wasNull()) {
+						return salaryId;
+					}
+				}
+				return null;
+			}
+		}
+	}
+
+	public int insert(Connection conn, Salary salary) throws SQLException {
+		String seqSql = "SELECT seq_salary.NEXTVAL FROM dual";
+		String insertSql = "INSERT INTO salary (salary_id, salary_date_id, emp_id, total_pay, total_deduct, net_pay, created_at) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, SYSDATE)";
+
+		int newSalaryId;
+		try (PreparedStatement seqPstmt = conn.prepareStatement(seqSql); ResultSet rs = seqPstmt.executeQuery()) {
+			if (!rs.next()) {
+				throw new SQLException("salary_id 시퀀스 조회에 실패했습니다.");
+			}
+			newSalaryId = rs.getInt(1);
+		}
+
+		try (PreparedStatement insertPstmt = conn.prepareStatement(insertSql)) {
+			insertPstmt.setInt(1, newSalaryId);
+			insertPstmt.setInt(2, salary.getSalaryDateId());
+			insertPstmt.setInt(3, salary.getEmpId());
+			insertPstmt.setLong(4, salary.getTotalPay());
+			insertPstmt.setLong(5, salary.getTotalDeduct());
+			insertPstmt.setLong(6, salary.getNetPay());
+			insertPstmt.executeUpdate();
+		}
+
+		return newSalaryId;
+	}
+
+	public void updateTotals(Connection conn, int salaryId, long totalPay, long totalDeduct, long netPay)
 			throws SQLException {
+		String sql = "UPDATE salary SET total_pay = ?, total_deduct = ?, net_pay = ?, updated_at = SYSDATE WHERE salary_id = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setLong(1, totalPay);
+			pstmt.setLong(2, totalDeduct);
+			pstmt.setLong(3, netPay);
+			pstmt.setInt(4, salaryId);
+			pstmt.executeUpdate();
+		}
+	}
+
+	public List<SalaryView> selectViewListBySalaryDateId(Connection conn, int salaryDateId) throws SQLException {
 		String sql = "SELECT s.salary_id, s.emp_id, e.employment_type, e.name_kor, "
-				+ "NVL(d.dept_name, '-') AS dept_name, s.total_pay, s.total_deduct, s.net_pay "
-				+ "FROM salary s "
-				+ "JOIN employee e ON s.emp_id = e.emp_id "
-				+ "LEFT JOIN department d ON e.dept_id = d.dept_id "
-				+ "WHERE s.salary_date_id = ? "
-				+ "ORDER BY s.salary_id";
+				+ "NVL(d.dept_name, '-') AS dept_name, s.total_pay, s.total_deduct, s.net_pay " + "FROM salary s "
+				+ "JOIN employee e ON s.emp_id = e.emp_id " + "LEFT JOIN department d ON e.dept_id = d.dept_id "
+				+ "WHERE s.salary_date_id = ? " + "AND e.employment_type <> '일용직' " + "ORDER BY s.salary_id";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, salaryDateId);
 			try (ResultSet rs = pstmt.executeQuery()) {
@@ -30,6 +93,92 @@ public class SalaryDao {
 				return list;
 			}
 		}
+	}
+
+	public List<Salary> selectByPayYear(Connection conn, int payYear) throws SQLException {
+		String sql = "SELECT s.salary_id, s.salary_date_id, s.emp_id, s.total_pay, s.total_deduct, s.net_pay, "
+				+ "s.created_at, s.updated_at " + "FROM salary s "
+				+ "JOIN salary_date sd ON s.salary_date_id = sd.salary_date_id "
+				+ "JOIN employee e ON s.emp_id = e.emp_id " + "WHERE sd.pay_year = ? "
+				+ "AND e.employment_type <> '일용직' " + "ORDER BY sd.pay_month, sd.pay_seq, s.salary_id";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, payYear);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				List<Salary> list = new ArrayList<>();
+				while (rs.next()) {
+					list.add(toSalary(rs));
+				}
+				return list;
+			}
+		}
+	}
+
+	public List<Integer> selectDistinctPayYears(Connection conn) throws SQLException {
+		String sql = "SELECT DISTINCT sd.pay_year " + "FROM salary s "
+				+ "JOIN salary_date sd ON s.salary_date_id = sd.salary_date_id "
+				+ "JOIN employee e ON s.emp_id = e.emp_id " + "WHERE e.employment_type <> '일용직' "
+				+ "ORDER BY sd.pay_year DESC";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
+			List<Integer> years = new ArrayList<>();
+			while (rs.next()) {
+				years.add(rs.getInt("pay_year"));
+			}
+			return years;
+		}
+	}
+
+	public List<EmployeeSearchView> selectEmployeesForAdd(Connection conn, int salaryDateId) throws SQLException {
+		String sql = "SELECT e.emp_id, e.employment_type, e.name_kor, "
+				+ "NVL(d.dept_name, '-') AS dept_name, NVL(p.position_name, '-') AS position_name, "
+				+ "CASE WHEN e.status = 'Y' THEN '재직' WHEN e.status = 'N' THEN '퇴직' ELSE '재직' END AS status_label "
+				+ "FROM employee e " + "LEFT JOIN department d ON e.dept_id = d.dept_id "
+				+ "LEFT JOIN position p ON e.position_id = p.position_id " + "WHERE e.employment_type <> '일용직' "
+				+ "AND e.emp_id NOT IN (SELECT emp_id FROM salary WHERE salary_date_id = ?) " + "ORDER BY e.emp_id";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, salaryDateId);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				List<EmployeeSearchView> list = new ArrayList<>();
+				while (rs.next()) {
+					list.add(toEmployeeSearchView(rs));
+				}
+				return list;
+			}
+		}
+	}
+
+	public List<EmployeeSearchView> selectEmployeesForAddByKeyword(Connection conn, int salaryDateId,
+			String searchKeyword) throws SQLException {
+		String sql = "SELECT e.emp_id, e.employment_type, e.name_kor, "
+				+ "NVL(d.dept_name, '-') AS dept_name, NVL(p.position_name, '-') AS position_name, "
+				+ "CASE WHEN e.status = 'Y' THEN '재직' WHEN e.status = 'N' THEN '퇴직' ELSE '재직' END AS status_label "
+				+ "FROM employee e " + "LEFT JOIN department d ON e.dept_id = d.dept_id "
+				+ "LEFT JOIN position p ON e.position_id = p.position_id " + "WHERE e.employment_type <> '일용직' "
+				+ "AND e.emp_id NOT IN (SELECT emp_id FROM salary WHERE salary_date_id = ?) "
+				+ "AND (e.name_kor LIKE ? OR TO_CHAR(e.emp_id) LIKE ?) " + "ORDER BY e.emp_id";
+		String keyword = "%" + searchKeyword.trim() + "%";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, salaryDateId);
+			pstmt.setString(2, keyword);
+			pstmt.setString(3, keyword);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				List<EmployeeSearchView> list = new ArrayList<>();
+				while (rs.next()) {
+					list.add(toEmployeeSearchView(rs));
+				}
+				return list;
+			}
+		}
+	}
+
+	private EmployeeSearchView toEmployeeSearchView(ResultSet rs) throws SQLException {
+		EmployeeSearchView view = new EmployeeSearchView();
+		view.setEmpId(rs.getInt("emp_id"));
+		view.setEmploymentType(rs.getString("employment_type"));
+		view.setNameKor(rs.getString("name_kor"));
+		view.setDeptName(rs.getString("dept_name"));
+		view.setPositionName(rs.getString("position_name"));
+		view.setStatus(rs.getString("status_label"));
+		return view;
 	}
 
 	private SalaryView toSalaryView(ResultSet rs) throws SQLException {
@@ -43,5 +192,18 @@ public class SalaryDao {
 		view.setTotalDeduct(rs.getLong("total_deduct"));
 		view.setNetPay(rs.getLong("net_pay"));
 		return view;
+	}
+
+	private Salary toSalary(ResultSet rs) throws SQLException {
+		Salary salary = new Salary();
+		salary.setSalaryId(rs.getInt("salary_id"));
+		salary.setSalaryDateId(rs.getInt("salary_date_id"));
+		salary.setEmpId(rs.getInt("emp_id"));
+		salary.setTotalPay(rs.getLong("total_pay"));
+		salary.setTotalDeduct(rs.getLong("total_deduct"));
+		salary.setNetPay(rs.getLong("net_pay"));
+		salary.setCreatedAt(rs.getDate("created_at"));
+		salary.setUpdatedAt(rs.getDate("updated_at"));
+		return salary;
 	}
 }

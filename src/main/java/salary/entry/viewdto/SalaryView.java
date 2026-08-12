@@ -1,4 +1,4 @@
-package salary.entry.service;
+package salary.entry.viewdto;
 
 public class SalaryView {
 
