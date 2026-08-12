@@ -21,6 +21,6 @@ public class SalarySearchEmployeeHandler implements CommandHandler {
 		List<EmployeeSearchView> employeeList = searchEmployeeService.search(salaryDateId, searchKeyword);
 		req.setAttribute("employeeList", employeeList);
 
-		return "/view/salary/employeeModal.jsp";
+		return "/WEB-INF/view/salary/entry/employeeModal.jsp";
 	}
 }
