@@ -151,7 +151,7 @@
         <%-- <a href="${pageContext.request.contextPath}/config/empRegister.do">사원 등록</a> --%>
         <a href="${pageContext.request.contextPath}/view/config/empRegister.jsp">사원 등록</a>
         <a href="${pageContext.request.contextPath}/config/vacation.do">휴가/근태 설정</a>
-        <a href="${pageContext.request.contextPath}/config/salaryItem.do">급여항목 설정</a>
+        <a href="${pageContext.request.contextPath}/salary/salaryItemRegister.do">급여항목 설정</a>
       </div>
     </div>
 
