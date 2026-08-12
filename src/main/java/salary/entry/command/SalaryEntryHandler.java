@@ -25,7 +25,7 @@ public class SalaryEntryHandler implements CommandHandler {
 
 		SalaryEntryData entryData = entryService.getEntryData(payYear, payMonth, paySeq, salaryId);
 		req.setAttribute("entryData", entryData);
-		return "/view/salary/entry.jsp";
+		return "/WEB-INF/view/salary/entry/entry.jsp";
 	}
 
 	private int parseInt(String value, int defaultValue) {

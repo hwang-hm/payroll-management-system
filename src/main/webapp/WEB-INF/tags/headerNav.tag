@@ -185,7 +185,7 @@
       <div class="sub-dropdown">
         <a href="${pageContext.request.contextPath}/salary/entry.do">급여입력/관리</a>
         <a href="${pageContext.request.contextPath}/salary/dayworker/register.do">급여입력/관리(일용직)</a>
-        <a href="${pageContext.request.contextPath}/salary/register.do">급여대장</a>
+        <a href="${pageContext.request.contextPath}/salary/ledger.do">급여대장</a>
         <a href="${pageContext.request.contextPath}/salary/payslip.do">급여명세서</a>
         <a href="${pageContext.request.contextPath}/salary/empHistory.do">사원별 급여내역</a>
         <a href="${pageContext.request.contextPath}/salary/transfer/apply.do">급여이체 신청</a>

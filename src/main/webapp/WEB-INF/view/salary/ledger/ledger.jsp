@@ -80,12 +80,12 @@
     <p>귀속연월·차수별 급여 현황을 조회할 수 있습니다.</p>
   </div>
 
-  <form id="filterForm" action="${pageContext.request.contextPath}/salary/register.do" method="get">
+  <form id="filterForm" action="${pageContext.request.contextPath}/salary/ledger.do" method="get">
     <div class="filter-bar">
       <label>귀속연도</label>
       <select name="payYear" onchange="this.form.submit()">
-        <c:forEach var="y" items="${registerData.yearOptions}">
-          <option value="${y}" ${y eq registerData.payYear ? 'selected' : ''}>${y} 년</option>
+        <c:forEach var="y" items="${ledgerData.yearOptions}">
+          <option value="${y}" ${y eq ledgerData.payYear ? 'selected' : ''}>${y} 년</option>
         </c:forEach>
       </select>
       <span class="filter-info">귀속연도를 선택하면 해당 연도의 급여대장 목록을 확인할 수 있습니다.</span>
@@ -95,7 +95,7 @@
   <div class="panel">
     <div class="panel-head">
       <h3>급여대장 목록</h3>
-      <span style="font-size:12px;color:#64748b;">${registerData.rows.size()}건</span>
+      <span style="font-size:12px;color:#64748b;">${ledgerData.rows.size()}건</span>
     </div>
     <div class="panel-body">
       <table class="list-table">
@@ -113,7 +113,7 @@
           </tr>
         </thead>
         <tbody>
-          <c:forEach var="row" items="${registerData.rows}">
+          <c:forEach var="row" items="${ledgerData.rows}">
             <tr>
               <td>
                 ${row.payYear}-<fmt:formatNumber value="${row.payMonth}" minIntegerDigits="2"/>
@@ -132,21 +132,21 @@
               </td>
             </tr>
           </c:forEach>
-          <c:if test="${empty registerData.rows}">
+          <c:if test="${empty ledgerData.rows}">
             <tr><td colspan="9" class="empty-msg">해당 연도에 등록된 급여 대장이 없습니다.</td></tr>
           </c:if>
         </tbody>
-        <c:if test="${not empty registerData.rows}">
+        <c:if test="${not empty ledgerData.rows}">
           <tfoot>
             <tr>
               <td>합계</td>
               <td></td>
               <td></td>
               <td></td>
-              <td>${registerData.summary.count}</td>
-              <td class="amount-pay"><fmt:formatNumber value="${registerData.summary.totalPay}" pattern="#,###"/></td>
-              <td class="amount-deduct"><fmt:formatNumber value="${registerData.summary.totalDeduct}" pattern="#,###"/></td>
-              <td><fmt:formatNumber value="${registerData.summary.netPay}" pattern="#,###"/></td>
+              <td>${ledgerData.summary.count}</td>
+              <td class="amount-pay"><fmt:formatNumber value="${ledgerData.summary.totalPay}" pattern="#,###"/></td>
+              <td class="amount-deduct"><fmt:formatNumber value="${ledgerData.summary.totalDeduct}" pattern="#,###"/></td>
+              <td><fmt:formatNumber value="${ledgerData.summary.netPay}" pattern="#,###"/></td>
               <td></td>
             </tr>
           </tfoot>

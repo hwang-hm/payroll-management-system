@@ -1,4 +1,4 @@
-package salary.register.service;
+package salary.ledger.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -13,24 +13,24 @@ import jdbc.connection.ConnectionProvider;
 import salary.entry.dao.SalaryDao;
 import salary.entry.dao.SalaryDateDao;
 import salary.entry.viewdto.SalarySummary;
+import salary.ledger.viewdto.SalaryLedgerData;
+import salary.ledger.viewdto.SalaryLedgerRow;
 import salary.model.Salary;
 import salary.model.SalaryDate;
-import salary.register.viewdto.SalaryRegisterData;
-import salary.register.viewdto.SalaryRegisterRow;
 
-public class SalaryRegisterService {
+public class SalaryLedgerService {
 
 	private final SalaryDateDao salaryDateDao = new SalaryDateDao();
 	private final SalaryDao salaryDao = new SalaryDao();
 
-	public SalaryRegisterData getRegisterData(int payYear) {
+	public SalaryLedgerData getLedgerData(int payYear) {
 		try (Connection conn = ConnectionProvider.getConnection()) {
 			List<SalaryDate> dates = salaryDateDao.selectByYear(conn, payYear);
 			List<Salary> salaries = salaryDao.selectByPayYear(conn, payYear);
-			List<SalaryRegisterRow> rows = toRegisterRows(dates, salaries);
+			List<SalaryLedgerRow> rows = toLedgerRows(dates, salaries);
 			List<Integer> yearOptions = buildYearOptions(salaryDao.selectDistinctPayYears(conn), payYear);
 
-			SalaryRegisterData data = new SalaryRegisterData();
+			SalaryLedgerData data = new SalaryLedgerData();
 			data.setPayYear(payYear);
 			data.setYearOptions(yearOptions);
 			data.setRows(rows);
@@ -41,16 +41,16 @@ public class SalaryRegisterService {
 		}
 	}
 
-	private List<SalaryRegisterRow> toRegisterRows(List<SalaryDate> dates, List<Salary> salaries) {
+	private List<SalaryLedgerRow> toLedgerRows(List<SalaryDate> dates, List<Salary> salaries) {
 		Map<Integer, List<Salary>> salariesByDateId = groupBySalaryDateId(salaries);
-		List<SalaryRegisterRow> rows = new ArrayList<>();
+		List<SalaryLedgerRow> rows = new ArrayList<>();
 
 		for (SalaryDate date : dates) {
 			List<Salary> dateSalaries = salariesByDateId.get(date.getSalaryDateId());
 			if (dateSalaries == null || dateSalaries.isEmpty()) {
 				continue;
 			}
-			rows.add(toRegisterRow(date, dateSalaries));
+			rows.add(toLedgerRow(date, dateSalaries));
 		}
 		return rows;
 	}
@@ -63,7 +63,7 @@ public class SalaryRegisterService {
 		return grouped;
 	}
 
-	private SalaryRegisterRow toRegisterRow(SalaryDate date, List<Salary> salaries) {
+	private SalaryLedgerRow toLedgerRow(SalaryDate date, List<Salary> salaries) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		long totalPay = 0;
 		long totalDeduct = 0;
@@ -74,7 +74,7 @@ public class SalaryRegisterService {
 			netPay += salary.getNetPay() != null ? salary.getNetPay() : 0L;
 		}
 
-		SalaryRegisterRow row = new SalaryRegisterRow();
+		SalaryLedgerRow row = new SalaryLedgerRow();
 		row.setSalaryDateId(date.getSalaryDateId());
 		row.setPayYear(date.getPayYear());
 		row.setPayMonth(date.getPayMonth());
@@ -105,13 +105,13 @@ public class SalaryRegisterService {
 		return years;
 	}
 
-	private SalarySummary toSummary(List<SalaryRegisterRow> rows) {
+	private SalarySummary toSummary(List<SalaryLedgerRow> rows) {
 		SalarySummary summary = new SalarySummary();
 		int count = 0;
 		long totalPay = 0;
 		long totalDeduct = 0;
 		long netPay = 0;
-		for (SalaryRegisterRow row : rows) {
+		for (SalaryLedgerRow row : rows) {
 			count += row.getEmpCount();
 			totalPay += row.getTotalPay();
 			totalDeduct += row.getTotalDeduct();

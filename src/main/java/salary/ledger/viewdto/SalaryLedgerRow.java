@@ -1,7 +1,7 @@
-package salary.register.viewdto;
+package salary.ledger.viewdto;
 
 // 급여대장 목록 한 행 (귀속연월·차수별 집계)
-public class SalaryRegisterRow {
+public class SalaryLedgerRow {
 
 	private int salaryDateId;
 	private int payYear;

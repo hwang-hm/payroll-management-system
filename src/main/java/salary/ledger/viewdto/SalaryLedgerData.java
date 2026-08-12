@@ -1,15 +1,15 @@
-package salary.register.viewdto;
+package salary.ledger.viewdto;
 
 import java.util.List;
 
 import salary.entry.viewdto.SalarySummary;
 
-// 급여대장 페이지 view용 데이터
-public class SalaryRegisterData {
+// 급여대장 조회 페이지 view용 데이터
+public class SalaryLedgerData {
 
 	private int payYear;
 	private List<Integer> yearOptions;
-	private List<SalaryRegisterRow> rows;
+	private List<SalaryLedgerRow> rows;
 	private SalarySummary summary;
 
 	public int getPayYear() {
@@ -28,11 +28,11 @@ public class SalaryRegisterData {
 		this.yearOptions = yearOptions;
 	}
 
-	public List<SalaryRegisterRow> getRows() {
+	public List<SalaryLedgerRow> getRows() {
 		return rows;
 	}
 
-	public void setRows(List<SalaryRegisterRow> rows) {
+	public void setRows(List<SalaryLedgerRow> rows) {
 		this.rows = rows;
 	}
 
