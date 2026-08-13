@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import salary.model.SalaryDate;
 
@@ -22,6 +24,20 @@ public class SalaryDateDao {
 					return toSalaryDate(rs);
 				}
 				return null;
+			}
+		}
+	}
+
+	public List<SalaryDate> selectByYear(Connection conn, int payYear) throws SQLException {
+		String sql = "SELECT * FROM salary_date WHERE pay_year = ? ORDER BY pay_month, pay_seq";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, payYear);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				List<SalaryDate> list = new ArrayList<>();
+				while (rs.next()) {
+					list.add(toSalaryDate(rs));
+				}
+				return list;
 			}
 		}
 	}
