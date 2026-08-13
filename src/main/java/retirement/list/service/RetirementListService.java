@@ -1,15 +1,15 @@
-package retirement.service;
+package retirement.list.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
 import jdbc.connection.ConnectionProvider;
-import retirement.dao.EmpDao;
+import retirement.dao.RetirementEmpDao;
 
 
 public class RetirementListService {
-	private EmpDao empDao = new EmpDao();
+	private RetirementEmpDao empDao = new RetirementEmpDao();
 	private int size = 10;
 	
 	public RetirementEmpPage  getRetirementEmpPage (int pageNum) {
