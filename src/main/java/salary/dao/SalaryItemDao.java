@@ -106,12 +106,12 @@ public class SalaryItemDao {
 	}
 
 	// 5. 삭제 (DELETE)
-	public boolean delete(Connection conn, Long salaryItemId) throws SQLException {
+	public boolean delete(Connection conn, int salaryItemId) throws SQLException {
 		PreparedStatement pstmt = null;
 		String sql = "DELETE FROM salary_item WHERE salary_item_id = ?";
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setLong(1, salaryItemId);
+			pstmt.setInt(1, salaryItemId);
 			return pstmt.executeUpdate() > 0;
 		} finally {
 			JdbcUtil.close(pstmt);

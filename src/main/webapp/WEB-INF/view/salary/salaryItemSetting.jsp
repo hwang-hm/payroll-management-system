@@ -428,8 +428,7 @@ main {
 										name="taxYn" value="Y" checked
 										onclick="toggleTaxFreeInputs(false)"> 전체과세</label> <label
 									class="radio-label"><input type="radio" name="taxYn"
-										value="N" onclick="toggleTaxFreeInputs(true)"> 비과세</label>
-								</td>
+										value="N" onclick="toggleTaxFreeInputs(true)"> 비과세</label></td>
 							</tr>
 							<tr>
 								<th>비과세명</th>
@@ -490,6 +489,8 @@ main {
 
 						<div class="btn-group">
 							<button type="submit" class="btn btn-action">저장 (추가/수정)</button>
+							<button type="button" class="btn btn-delete"
+								onclick="deletePayItem()">삭제</button>
 							<button type="button" class="btn btn-clear"
 								onclick="clearPayForm()">내용 지우기 (초기화)</button>
 						</div>
@@ -609,6 +610,8 @@ main {
 
 						<div class="btn-group">
 							<button type="submit" class="btn btn-action">저장 (추가/수정)</button>
+							<button type="button" class="btn btn-delete"
+								onclick="deleteDeductItem()">삭제</button>
 							<button type="button" class="btn btn-clear"
 								onclick="clearDeductForm()">내용 지우기 (초기화)</button>
 						</div>
@@ -743,6 +746,36 @@ main {
 			
 			const rows = document.querySelectorAll('#deductItemTable tbody tr');
 			rows.forEach(r => r.classList.remove('selected'));
+		}
+		
+		// 지급항목 삭제 함수
+		function deletePayItem() {
+		    const id = document.getElementById('payItemId').value;
+		    if (!id) {
+		        alert('삭제할 지급항목을 목록에서 선택해 주세요.');
+		        return;
+		    }
+
+		    if (confirm('선택한 지급항목을 삭제하시겠습니까?')) {
+		        const form = document.getElementById('payItemForm');
+		        form.action = '${pageContext.request.contextPath}/salary/item/delete.do';
+		        form.submit();
+		    }
+		}
+
+		// 공제항목 삭제 함수
+		function deleteDeductItem() {
+		    const id = document.getElementById('deductItemId').value;
+		    if (!id) {
+		        alert('삭제할 공제항목을 목록에서 선택해 주세요.');
+		        return;
+		    }
+
+		    if (confirm('선택한 공제항목을 삭제하시겠습니까?')) {
+		        const form = document.getElementById('deductItemForm');
+		        form.action = '${pageContext.request.contextPath}/salary/item/delete.do';
+		        form.submit();
+		    }
 		}
 	</script>
 </body>

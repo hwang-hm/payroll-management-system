@@ -12,7 +12,7 @@ public class DeleteSalaryItemService {
 	SalaryItemDao itemDao = new SalaryItemDao();
 
 	// 2. 삭제
-	public boolean deleteItem(Long salaryItemId) {
+	public boolean deleteItem(int salaryItemId) {
 		Connection conn = null;
 		try {
 			conn = ConnectionProvider.getConnection();
