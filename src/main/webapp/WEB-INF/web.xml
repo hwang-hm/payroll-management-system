@@ -32,7 +32,7 @@
       validationQuery=select 1
       minIdle=3
       maxTotal=30
-      poolName=gcp-db
+      poolName=team
     </param-value>
   </context-param>   
   
