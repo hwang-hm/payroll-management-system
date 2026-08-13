@@ -37,9 +37,8 @@ public class AttendanceTypeRegisterHandler implements CommandHandler {
         // POST 요청만 등록 처리
         // POSTリクエストのみ登録処理
         if (!"POST".equalsIgnoreCase(req.getMethod())) {
-            return "redirect:/attendance/type/list.do";
+            return "redirect:/config/vacation-attendance.do#attendance";
         }
-
         AttendanceType attendanceType =
                 createAttendanceType(req);
 
@@ -60,8 +59,7 @@ public class AttendanceTypeRegisterHandler implements CommandHandler {
                     "勤怠項目を登録できませんでした。");
         }
 
-        return "redirect:/attendance/type/list.do"
-                + "?result=registered";
+        return "redirect:/config/vacation-attendance.do?result=attendanceRegistered#attendance";
     }
 
     /**
