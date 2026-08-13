@@ -144,12 +144,12 @@
       <a href="${pageContext.request.contextPath}/index.jsp" class="gnb-link">🏠 HOME</a>
     </div>  
 
-    <!-- [신규 추가] 기본환경 설정 -->
+    <!-- 기본환경 설정 -->
     <div class="gnb-item">
       <a href="#" class="gnb-link">기본환경 설정 ▾</a>
-      <div class="sub-dropdown">	
+      <div class="sub-dropdown"> 
         <a href="${pageContext.request.contextPath}/emp/register.do">사원 등록</a>
-        <a href="${pageContext.request.contextPath}/config/vacation.do">휴가/근태 설정</a>
+        <a href="${pageContext.request.contextPath}/config/vacation-attendance.do">휴가/근태 설정</a>
         <a href="${pageContext.request.contextPath}/config/salaryItem.do">급여항목 설정</a>
       </div>
     </div>
@@ -159,7 +159,6 @@
       <a href="#" class="gnb-link">인사관리 ▾</a>
       <div class="sub-dropdown">
         <a href="${pageContext.request.contextPath}/emp/list.do">사원현황/관리</a>
-        <a href="${pageContext.request.contextPath}/view/emp/list.jsp">사원현황/관리</a>
         <a href="${pageContext.request.contextPath}/emp/card.do">인사기록 카드</a>
         <a href="${pageContext.request.contextPath}/emp/cert/issue.do">제 증명서 발급</a>
         <a href="${pageContext.request.contextPath}/emp/cert/list.do">제 증명서 발급대장</a>

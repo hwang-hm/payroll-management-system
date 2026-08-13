@@ -37,9 +37,8 @@ public class AttendanceTypeUpdateHandler implements CommandHandler {
         // POST 요청만 수정 처리
         // POSTリクエストのみ修正処理
         if (!"POST".equalsIgnoreCase(req.getMethod())) {
-            return "redirect:/attendance/type/list.do";
+            return "redirect:/config/vacation-attendance.do#attendance";
         }
-
         AttendanceType attendanceType =
                 createAttendanceType(req);
 
@@ -60,8 +59,7 @@ public class AttendanceTypeUpdateHandler implements CommandHandler {
                     "勤怠項目を修正できませんでした。");
         }
 
-        return "redirect:/attendance/type/list.do"
-                + "?result=updated";
+        return "redirect:/config/vacation-attendance.do?result=attendanceUpdated#attendance";
     }
 
     /**

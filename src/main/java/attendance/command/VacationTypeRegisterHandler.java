@@ -21,7 +21,7 @@ public class VacationTypeRegisterHandler implements CommandHandler {
 	@Override
 	public String process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		if (!"POST".equalsIgnoreCase(req.getMethod())) {
-			return "redirect:/vacation/type/list.do";
+			return "redirect:/config/vacation-attendance.do#vacation";
 		}
 
 		VacationType vacationType = createVacationType(req);
@@ -34,7 +34,7 @@ public class VacationTypeRegisterHandler implements CommandHandler {
 		if (!vacationTypeService.addVacationType(vacationType)) {
 			return showForm(req, vacationType, "休暇項目を登録できませんでした。");
 		}
-		return "redirect:/vacation/type/list.do?result=registered";
+		return "redirect:/config/vacation-attendance.do?result=vacationRegistered#vacation";
 	}
 
 	private VacationType createVacationType(HttpServletRequest req) {
