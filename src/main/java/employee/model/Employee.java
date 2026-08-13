@@ -30,6 +30,39 @@ public class Employee {
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 	
+	public Employee() {
+	}
+	
+	
+	public Employee(Integer empId, String nameKor, Date hireDate, String employmentType, Integer deptId,
+			String nationality, String nameEng, Date retireDate, Integer positionId, String residentNo, String zipCode,
+			String address, String phoneNum, String mobileNum, String email, String sns, String remarks, String status,
+			String photoPath, Timestamp createdAt) 
+	{
+		this.empId = empId;
+		this.nameKor = nameKor;
+		this.hireDate = hireDate;
+		this.employmentType = employmentType;
+		this.deptId = deptId;
+		this.nationality = nationality;
+		this.nameEng = nameEng;
+		this.retireDate = retireDate;
+		this.positionId = positionId;
+		this.residentNo = residentNo;
+		this.zipCode = zipCode;
+		this.address = address;
+		this.phoneNum = phoneNum;
+		this.mobileNum = mobileNum;
+		this.email = email;
+		this.sns = sns;
+		this.remarks = remarks;
+		this.status = status;
+		this.photoPath = photoPath;
+		this.createdAt = createdAt;
+		
+	}
+
+
 	public Integer getEmpId() {
 		return empId;
 	}

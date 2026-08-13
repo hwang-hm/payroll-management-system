@@ -2,6 +2,7 @@ package employee.dao;
 
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -108,10 +109,10 @@ public class EmpDao {
 
 	           String sql =
 	               "select * from (select rownum as rnum, a.* from ( select e.emp_id, e.name_kor, e.hire_date, e.status, " +
-	                       "d.dept_name, p.position_name, e.retire_date, e.resident_no, e.mobile_Num, e.email, e.employment_type from employee e " +
-	                     "left join department d on e.dept_id = d.dept_id " +
-	                       "left join position p on e.position_id = p.position_id " +
-	                       "order by e.emp_id desc) a where rownum <= ? ) where rnum >= ?";
+	               "d.dept_name, p.position_name, e.retire_date, e.resident_no, e.mobile_Num, e.email, e.employment_type from employee e " +
+	               "left join department d on e.dept_id = d.dept_id " +
+	               "left join position p on e.position_id = p.position_id " +
+	               "order by e.emp_id desc) a where rownum <= ? ) where rnum >= ?";
 
 	           pstmt = conn.prepareStatement(sql);
 
@@ -190,4 +191,53 @@ public class EmpDao {
 
 	    	    return 0;
 	    	}
+	       
+	       //사원번호로 사원 select
+	       public Employee selectById(Connection conn, int empId) throws SQLException{
+	  		 PreparedStatement pstmt = null;
+	  		 ResultSet rs = null;
+	  		 
+	  		 try {
+	  			pstmt = conn.prepareStatement("select * from employee where emp_id = ?");
+	  			pstmt.setInt(1, empId);
+	  			rs = pstmt.executeQuery();
+	  			Employee emp = null;
+	  			
+	  			if (rs.next()) {
+	  				emp = convertEmployee(rs);
+	  			}
+	  			return emp;
+	  		} finally {
+	  			JdbcUtil.close(rs);
+	  			JdbcUtil.close(pstmt);
+	  		}
+	  	 }
+	       
+	       //ResultSet 객체를 Employee로 변환
+	       private Employee convertEmployee(ResultSet rs) throws SQLException {
+
+	             return new Employee(
+	            		 rs.getInt("emp_id"),
+	            	     rs.getString("name_kor"),
+	            	     rs.getDate("hire_date"),
+	            	     rs.getString("employment_type"),
+
+	            	     rs.getInt("dept_id"),
+	            	     rs.getString("nationality"),
+	            	     rs.getString("name_eng"),
+	            	     rs.getDate("retire_date"),
+	            	     rs.getInt("position_id"),
+	            	     rs.getString("resident_no"),
+	            	     rs.getString("zip_code"),
+	            	     rs.getString("address"),
+	            	     rs.getString("phone_num"),
+	            	     rs.getString("mobile_num"),
+	            	     rs.getString("email"),
+	            	     rs.getString("sns"),
+	            	     rs.getString("remarks"),
+	            	     rs.getString("status"),
+	            	     rs.getString("photo_path"),
+	            	     rs.getTimestamp("created_at")
+	             );
+	         }
 }

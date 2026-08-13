@@ -30,6 +30,6 @@ public class ListRetirementHandler implements CommandHandler {
 		request.setAttribute("retirementEmpPage", retirementEmpPage);
 		
 		
-		return "/view/retirement/listRetirement.jsp";
+		return "/WEB-INF/view/retirement/listStatus.jsp";
 	}
 }
