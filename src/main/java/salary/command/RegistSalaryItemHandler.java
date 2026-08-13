@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import attendance.model.AttendanceType;
+import attendance.service.AttendanceTypeService;
 import mvc.command.CommandHandler;
 import salary.model.SalaryItem;
 import salary.service.GetSalaryItemService;
@@ -19,6 +21,7 @@ public class RegistSalaryItemHandler implements CommandHandler {
 
 	private GetSalaryItemService getService = new GetSalaryItemService();
 	private RegistSalaryItemService registService = new RegistSalaryItemService();
+	private AttendanceTypeService attendanceService = new AttendanceTypeService();
 
 	@Override
 	public String process(HttpServletRequest req, HttpServletResponse res) throws Exception {
@@ -36,9 +39,11 @@ public class RegistSalaryItemHandler implements CommandHandler {
 	private String processForm(HttpServletRequest req, HttpServletResponse res) {
 		List<SalaryItem> payList = getService.getItemsByType("PAY");
 		List<SalaryItem> deductList = getService.getItemsByType("DEDUCT");
+		List<AttendanceType> attendanceList = attendanceService.getAttendanceTypes();
 
 		req.setAttribute("payList", payList);
 		req.setAttribute("deductList", deductList);
+		req.setAttribute("attendanceList", attendanceList);
 
 		return FORM_VIEW;
 	}
@@ -58,7 +63,7 @@ public class RegistSalaryItemHandler implements CommandHandler {
 		registService.saveOrUpdate(itemReq);
 
 		// GET 조회 핸들러 URL로 리다이렉트
-		res.sendRedirect(req.getContextPath() + "/salary/item/setting.do");
+		res.sendRedirect(req.getContextPath() + "/config/salaryItem.do");
 
 		return null;
 

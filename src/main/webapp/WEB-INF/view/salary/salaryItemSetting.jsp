@@ -384,7 +384,14 @@ main {
 													<c:when test="${not empty item.defaultAmount}">일괄지급_<fmt:formatNumber
 															value="${item.defaultAmount}" pattern="#,##0" />
 													</c:when>
-													<c:when test="${not empty item.attendanceTypeId}">근태연결(${item.attendanceTypeId})</c:when>
+													<c:when test="${not empty item.attendanceTypeId}">
+														<c:forEach var="att" items="${attendanceList}">
+															<c:if
+																test="${att.attendanceTypeId eq item.attendanceTypeId}">
+																${att.attendanceType}
+															</c:if>
+														</c:forEach>
+													</c:when>
 													<c:otherwise></c:otherwise>
 												</c:choose></td>
 											<td><c:choose>
@@ -406,7 +413,7 @@ main {
 				<!-- 우측: 지급항목 상세 입력/수정 폼 -->
 				<div class="right-form-area">
 					<form id="payItemForm"
-						action="${pageContext.request.contextPath}/salary/item/setting.do"
+						action="${pageContext.request.contextPath}/config/salaryItem.do"
 						method="post">
 						<!-- 구분 파라미터 (지급: PAY) -->
 						<input type="hidden" name="itemType" value="PAY" />
@@ -462,8 +469,10 @@ main {
 									name="attendanceTypeId" class="select-box"
 									onchange="toggleLumpAmountInput(this.value)">
 										<option value="">선택하세요.</option>
-										<option value="1">연장근무</option>
-										<option value="2">휴일근무</option>
+										<c:forEach var="type" items="${attendanceList}">
+											<option value="${type.attendanceTypeId}">
+												${type.attendanceType}</option>
+										</c:forEach>
 										<option value="-1">일괄지급</option>
 								</select></td>
 							</tr>
@@ -472,11 +481,6 @@ main {
 								<td><input type="text" id="payLumpAmount"
 									name="defaultAmount" class="input-text input-amount" value="0"
 									placeholder="0" /> <span class="unit-text">원</span></td>
-							</tr>
-							<tr>
-								<th>비고 / 설명</th>
-								<td><input type="text" id="payRemark" name="remark"
-									class="input-text" placeholder="비고 입력" /></td>
 							</tr>
 							<tr>
 								<th>사용여부</th>
@@ -625,158 +629,213 @@ main {
 
 	<!-- 스크립트 영역 -->
 	<script>
-		// ----------------------------------------------------
-		// 1. 지급항목 스크립트
-		// ----------------------------------------------------
+	// 페이지 로딩 완료 시 이벤트 등록
+	document.addEventListener('DOMContentLoaded', function() {
+		// 1. 금액 입력란 숫자 전용 입력 제한 등록
+		initAmountInputRestriction();
+
+		// 2. 폼 전송(submit) 직전 데이터 정돈 이벤트
+		initFormSubmitHandler();
+	});
+
+	// ----------------------------------------------------
+	// [신규] 1. 금액 입력란 숫자만 입력 가능하도록 제한
+	// ----------------------------------------------------
+	function initAmountInputRestriction() {
+		const amountInputs = document.querySelectorAll('.input-amount');
 		
-		// 테이블 행 클릭 시 단일 항목 데이터 폼에 채우기
-		function selectPayRow(row) {
-			const rows = document.querySelectorAll('#payItemTable tbody tr');
-			rows.forEach(r => r.classList.remove('selected'));
-			row.classList.add('selected');
+		amountInputs.forEach(input => {
+			// 키 입력 시 숫자 이외의 문자 즉시 제거
+			input.addEventListener('input', function() {
+				this.value = this.value.replace(/[^0-9]/g, '');
+			});
 
-			// dataset 속성을 통한 데이터 추출
-			document.getElementById('payItemId').value = row.dataset.id || '';
-			document.getElementById('payItemName').value = row.dataset.name || '';
-			
-			const taxYn = row.dataset.tax;
-			const radioTax = document.querySelectorAll('#payItemForm input[name="taxYn"]');
-			if(taxYn === 'N') {
-				radioTax[1].checked = true;
-				toggleTaxFreeInputs(true);
-			} else {
-				radioTax[0].checked = true;
-				toggleTaxFreeInputs(false);
-			}
+			// 포커스 아웃 시 빈 값이면 '0'으로 초기화
+			input.addEventListener('blur', function() {
+				if (this.value.trim() === '') {
+					this.value = '0';
+				}
+			});
+		});
+	}
 
-			document.getElementById('taxFreeName').value = row.dataset.taxfreeName || '';
-			document.getElementById('taxFreeLimit').value = row.dataset.taxfreeLimit || '0';
-			document.getElementById('payCalcMethod').value = row.dataset.calc || '';
-			document.getElementById('payRoundUnit').value = row.dataset.round || 'NONE';
-			
-			// 일괄지급 / 근태연결 바인딩
-			const defaultAmt = row.dataset.defaultAmount;
-			const attendanceTypeId = row.dataset.attendanceTypeId;
-			const linkSelect = document.getElementById('payAttendanceTypeId');
+	// ----------------------------------------------------
+	// [신규] 2. 폼 전송 전 데이터 클리닝 (Submit Handler)
+	// ----------------------------------------------------
+	function initFormSubmitHandler() {
+		const payForm = document.getElementById('payItemForm');
+		
+		if (payForm) {
+			payForm.addEventListener('submit', function(e) {
+				const linkSelect = document.getElementById('payAttendanceTypeId');
+				const lumpInput = document.getElementById('payLumpAmount');
 
-			if (defaultAmt && defaultAmt !== 'null' && defaultAmt !== '') {
-				linkSelect.value = '-1'; // 일괄지급
-				toggleLumpAmountInput('-1');
-				document.getElementById('payLumpAmount').value = defaultAmt;
-			} else if (attendanceTypeId && attendanceTypeId !== 'null') {
-				linkSelect.value = attendanceTypeId;
-				toggleLumpAmountInput(attendanceTypeId);
-			} else {
-				linkSelect.value = '';
-				toggleLumpAmountInput('');
-			}
-
-			document.getElementById('payRemark').value = row.dataset.remark || '';
-
-			const useYn = row.dataset.use;
-			const radioUse = document.querySelectorAll('#payItemForm input[name="useYn"]');
-			if(useYn === 'N') radioUse[1].checked = true;
-			else radioUse[0].checked = true;
+				if (linkSelect.value === '-1') {
+					// [일괄지급] 선택 시: DB의 attendance_type_id는 NULL이 되어야 하므로 빈값 처리
+					linkSelect.value = '';
+				} else {
+					// [근태연결] 또는 [미선택] 시: 일괄지급액 defaultAmount는 NULL 처리
+					lumpInput.value = '';
+				}
+			});
 		}
+	}
 
-		// 비과세 옵션 토글
-		function toggleTaxFreeInputs(isFree) {
-			const nameInput = document.getElementById('taxFreeName');
-			const limitInput = document.getElementById('taxFreeLimit');
-			
-			nameInput.disabled = !isFree;
-			limitInput.disabled = !isFree;
+	// ----------------------------------------------------
+	// 3. 지급항목 스크립트
+	// ----------------------------------------------------
+	
+	// 테이블 행 클릭 시 단일 항목 데이터 폼에 채우기
+	function selectPayRow(row) {
+		const rows = document.querySelectorAll('#payItemTable tbody tr');
+		rows.forEach(r => r.classList.remove('selected'));
+		row.classList.add('selected');
 
-			if(!isFree) {
-				nameInput.value = '';
-				limitInput.value = '0';
-			}
-		}
-
-		// 일괄지급 입력칸 토글
-		function toggleLumpAmountInput(value) {
-			const lumpRow = document.getElementById('lumpAmountRow');
-			const lumpInput = document.getElementById('payLumpAmount');
-
-			if (value === '-1') { // -1을 일괄지급 선택값으로 활용
-				lumpRow.style.display = '';
-			} else {
-				lumpRow.style.display = 'none';
-				lumpInput.value = '0';
-			}
-		}
-
-		// 지급항목 내용 지우기 (신규 추가 모드로 전환)
-		function clearPayForm() {
-			document.getElementById('payItemId').value = '';
-			document.getElementById('payItemForm').reset();
+		// dataset 속성을 통한 데이터 추출
+		document.getElementById('payItemId').value = row.dataset.id || '';
+		document.getElementById('payItemName').value = row.dataset.name || '';
+		
+		const taxYn = row.dataset.tax;
+		const radioTax = document.querySelectorAll('#payItemForm input[name="taxYn"]');
+		if(taxYn === 'N') {
+			radioTax[1].checked = true;
+			toggleTaxFreeInputs(true);
+		} else {
+			radioTax[0].checked = true;
 			toggleTaxFreeInputs(false);
-			toggleLumpAmountInput('');
-			
-			const rows = document.querySelectorAll('#payItemTable tbody tr');
-			rows.forEach(r => r.classList.remove('selected'));
 		}
 
-		// ----------------------------------------------------
-		// 2. 공제항목 스크립트
-		// ----------------------------------------------------
-
-		// 공제항목 행 클릭 시 데이터 채우기
-		function selectDeductRow(row) {
-			const rows = document.querySelectorAll('#deductItemTable tbody tr');
-			rows.forEach(r => r.classList.remove('selected'));
-			row.classList.add('selected');
-
-			document.getElementById('deductItemId').value = row.dataset.id || '';
-			document.getElementById('deductItemName').value = row.dataset.name || '';
-			document.getElementById('deductCalcMethod').value = row.dataset.calc || '';
-			document.getElementById('deductRoundUnit').value = row.dataset.round || 'NONE';
-			document.getElementById('deductRemark').value = row.dataset.remark || '';
-
-			const useYn = row.dataset.use;
-			const radioUse = document.querySelectorAll('#deductItemForm input[name="useYn"]');
-			if(useYn === 'N') radioUse[1].checked = true;
-			else radioUse[0].checked = true;
-		}
-
-		// 공제항목 내용 지우기 (신규 추가 모드로 전환)
-		function clearDeductForm() {
-			document.getElementById('deductItemId').value = '';
-			document.getElementById('deductItemForm').reset();
-			
-			const rows = document.querySelectorAll('#deductItemTable tbody tr');
-			rows.forEach(r => r.classList.remove('selected'));
-		}
+		document.getElementById('taxFreeName').value = row.dataset.taxfreeName || '';
+		document.getElementById('taxFreeLimit').value = row.dataset.taxfreeLimit || '0';
+		document.getElementById('payCalcMethod').value = row.dataset.calc || '';
+		document.getElementById('payRoundUnit').value = row.dataset.round || 'NONE';
 		
-		// 지급항목 삭제 함수
-		function deletePayItem() {
-		    const id = document.getElementById('payItemId').value;
-		    if (!id) {
-		        alert('삭제할 지급항목을 목록에서 선택해 주세요.');
-		        return;
-		    }
+		// 일괄지급 / 근태연결 바인딩
+		const defaultAmt = row.dataset.defaultAmount;
+		const attendanceTypeId = row.dataset.attendanceTypeId;
+		const linkSelect = document.getElementById('payAttendanceTypeId');
 
-		    if (confirm('선택한 지급항목을 삭제하시겠습니까?')) {
-		        const form = document.getElementById('payItemForm');
-		        form.action = '${pageContext.request.contextPath}/salary/item/delete.do';
-		        form.submit();
-		    }
+		if (defaultAmt && defaultAmt !== 'null' && defaultAmt !== '' && parseFloat(defaultAmt) > 0) {
+			// 1. 일괄지급인 경우
+			linkSelect.value = '-1'; 
+			toggleLumpAmountInput('-1');
+			document.getElementById('payLumpAmount').value = defaultAmt;
+		} else if (attendanceTypeId && attendanceTypeId !== 'null' && attendanceTypeId !== '') {
+			// 2. 근태연결인 경우 (해당 옵션 자동 선택됨)
+			linkSelect.value = attendanceTypeId;
+			toggleLumpAmountInput(attendanceTypeId);
+		} else {
+			// 3. 미선택인 경우
+			linkSelect.value = '';
+			toggleLumpAmountInput('');
 		}
 
-		// 공제항목 삭제 함수
-		function deleteDeductItem() {
-		    const id = document.getElementById('deductItemId').value;
-		    if (!id) {
-		        alert('삭제할 공제항목을 목록에서 선택해 주세요.');
-		        return;
-		    }
+		document.getElementById('payRemark').value = row.dataset.remark || '';
 
-		    if (confirm('선택한 공제항목을 삭제하시겠습니까?')) {
-		        const form = document.getElementById('deductItemForm');
-		        form.action = '${pageContext.request.contextPath}/salary/item/delete.do';
-		        form.submit();
-		    }
+		const useYn = row.dataset.use;
+		const radioUse = document.querySelectorAll('#payItemForm input[name="useYn"]');
+		if(useYn === 'N') radioUse[1].checked = true;
+		else radioUse[0].checked = true;
+	}
+
+	// 비과세 옵션 토글
+	function toggleTaxFreeInputs(isFree) {
+		const nameInput = document.getElementById('taxFreeName');
+		const limitInput = document.getElementById('taxFreeLimit');
+		
+		nameInput.disabled = !isFree;
+		limitInput.disabled = !isFree;
+
+		if(!isFree) {
+			nameInput.value = '';
+			limitInput.value = '0';
 		}
-	</script>
+	}
+
+	// 일괄지급 입력칸 토글
+	function toggleLumpAmountInput(value) {
+		const lumpRow = document.getElementById('lumpAmountRow');
+		const lumpInput = document.getElementById('payLumpAmount');
+
+		if (value === '-1') { // -1을 일괄지급 선택값으로 활용
+			lumpRow.style.display = '';
+		} else {
+			lumpRow.style.display = 'none';
+			lumpInput.value = '0';
+		}
+	}
+
+	// 지급항목 내용 지우기 (신규 추가 모드로 전환)
+	function clearPayForm() {
+		document.getElementById('payItemId').value = '';
+		document.getElementById('payItemForm').reset();
+		toggleTaxFreeInputs(false);
+		toggleLumpAmountInput('');
+		
+		const rows = document.querySelectorAll('#payItemTable tbody tr');
+		rows.forEach(r => r.classList.remove('selected'));
+	}
+
+	// ----------------------------------------------------
+	// 4. 공제항목 스크립트
+	// ----------------------------------------------------
+
+	// 공제항목 행 클릭 시 데이터 채우기
+	function selectDeductRow(row) {
+		const rows = document.querySelectorAll('#deductItemTable tbody tr');
+		rows.forEach(r => r.classList.remove('selected'));
+		row.classList.add('selected');
+
+		document.getElementById('deductItemId').value = row.dataset.id || '';
+		document.getElementById('deductItemName').value = row.dataset.name || '';
+		document.getElementById('deductCalcMethod').value = row.dataset.calc || '';
+		document.getElementById('deductRoundUnit').value = row.dataset.round || 'NONE';
+		document.getElementById('deductRemark').value = row.dataset.remark || '';
+
+		const useYn = row.dataset.use;
+		const radioUse = document.querySelectorAll('#deductItemForm input[name="useYn"]');
+		if(useYn === 'N') radioUse[1].checked = true;
+		else radioUse[0].checked = true;
+	}
+
+	// 공제항목 내용 지우기 (신규 추가 모드로 전환)
+	function clearDeductForm() {
+		document.getElementById('deductItemId').value = '';
+		document.getElementById('deductItemForm').reset();
+		
+		const rows = document.querySelectorAll('#deductItemTable tbody tr');
+		rows.forEach(r => r.classList.remove('selected'));
+	}
+	
+	// 지급항목 삭제 함수
+	function deletePayItem() {
+		const id = document.getElementById('payItemId').value;
+		if (!id) {
+			alert('삭제할 지급항목을 목록에서 선택해 주세요.');
+			return;
+		}
+
+		if (confirm('선택한 지급항목을 삭제하시겠습니까?')) {
+			const form = document.getElementById('payItemForm');
+			form.action = '${pageContext.request.contextPath}/salary/item/delete.do';
+			form.submit();
+		}
+	}
+
+	// 공제항목 삭제 함수
+	function deleteDeductItem() {
+		const id = document.getElementById('deductItemId').value;
+		if (!id) {
+			alert('삭제할 공제항목을 목록에서 선택해 주세요.');
+			return;
+		}
+
+		if (confirm('선택한 공제항목을 삭제하시겠습니까?')) {
+			const form = document.getElementById('deductItemForm');
+			form.action = '${pageContext.request.contextPath}/salary/item/delete.do';
+			form.submit();
+		}
+	}
+</script>
 </body>
 </html>
