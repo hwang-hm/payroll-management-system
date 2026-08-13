@@ -10,6 +10,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import employee.list.service.EmpListData;
 import employee.model.Employee;
 import jdbc.JdbcUtil;
 
@@ -78,4 +79,115 @@ public class EmpDao {
 		
 	}
 	
+	//전체 사원수
+	 public int selectCount(Connection conn) throws SQLException {
+
+		    String sql = "select count(*) from employee";
+
+		    try (PreparedStatement pstmt = conn.prepareStatement(sql);
+		         ResultSet rs = pstmt.executeQuery()) {
+
+		        if (rs.next()) {
+		            return rs.getInt(1);
+		        }
+
+		        return 0;
+		    }
+		}
+	   
+	   // 페이징
+	   public List<EmpListData> select(
+	           Connection conn,
+	           int firstRow,
+	           int endRow) throws SQLException {
+
+	       PreparedStatement pstmt = null;
+	       ResultSet rs = null;
+
+	       try {
+
+	           String sql =
+	               "select * from (select rownum as rnum, a.* from ( select e.emp_id, e.name_kor, e.hire_date, e.status, " +
+	                       "d.dept_name, p.position_name, e.retire_date, e.resident_no, e.mobile_Num, e.email, e.employment_type from employee e " +
+	                     "left join department d on e.dept_id = d.dept_id " +
+	                       "left join position p on e.position_id = p.position_id " +
+	                       "order by e.emp_id desc) a where rownum <= ? ) where rnum >= ?";
+
+	           pstmt = conn.prepareStatement(sql);
+
+	           pstmt.setInt(1, endRow);
+	           pstmt.setInt(2, firstRow);
+
+	           rs = pstmt.executeQuery();
+
+	           List<EmpListData> result = new ArrayList<>();
+
+	           while (rs.next()) {
+	               result.add(convertEmpListData(rs));
+	           }
+
+	           return result;
+
+	       } finally {
+	           JdbcUtil.close(rs);
+	           JdbcUtil.close(pstmt);
+	       }
+	   }
+	       
+	       //ResultSet 객체를 RetirementEmpListData로 변환
+	       private EmpListData convertEmpListData(ResultSet rs) throws SQLException {
+
+	             return new EmpListData(
+	                 rs.getInt("emp_id"),
+	                 rs.getString("name_kor"),
+	                 rs.getDate("hire_date"),
+	                 rs.getString("dept_name"),
+	                 rs.getString("position_name"),
+	                 rs.getDate("retire_date"),
+	                 rs.getString("resident_no"),
+	                 rs.getString("status"),
+	                 rs.getString("mobile_num"),
+	                 rs.getString("email"),
+	                 rs.getString("employment_type")
+	             );
+	         }
+	
+	       //고용형태 count
+	       public int selectCountByEmpType (Connection conn, String empType) throws SQLException {
+	    	   String sql = "select count(*) from employee where employment_type = ? and status = 'Y'";
+	    	   
+	    	   try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+	    	        pstmt.setString(1, empType);
+
+	    	        try (ResultSet rs = pstmt.executeQuery()) {
+
+	    	            if (rs.next()) {
+	    	                return rs.getInt(1);
+	    	            }
+
+	    	            return 0;
+	    	        }
+	  		    }
+	       }
+	       
+	       //재직, 퇴직 count
+	       public int selectCountByStatus(Connection conn, String status)
+	    	        throws SQLException {
+
+	    	    String sql = "select count(*) from employee where status = ?";
+
+	    	    try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+	    	        pstmt.setString(1, status);
+
+	    	        try (ResultSet rs = pstmt.executeQuery()) {
+	    	            if (rs.next()) {
+	    	                return rs.getInt(1);
+	    	            }
+	    	        }
+	    	    }
+
+	    	    return 0;
+	    	}
 }
