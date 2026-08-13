@@ -4,8 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import mvc.command.CommandHandler;
-import retirement.service.RetirementEmpPage;
-import retirement.service.RetirementListService;
+import retirement.list.service.RetirementEmpPage;
+import retirement.list.service.RetirementListService;
 
 public class ListRetirementHandler implements CommandHandler {
 
