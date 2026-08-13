@@ -33,8 +33,9 @@ body {
 main {
 	width: 100%;
 	padding-top: 20px; /* 위 */
-	padding-bottom: 20px; /* 아래 */ padding-left : 40px; /* 왼쪽 여백 */
-	padding-right : 100px; /* 오른쪽 여백 */
+	padding-bottom: 20px; /* 아래 */
+	padding-left: 40px; /* 왼쪽 여백 */
+	padding-right: 100px; /* 오른쪽 여백 */
 	box-sizing: border-box;
 	padding-left: 40px; /* 왼쪽 여백 */
 	padding-right: 100px;
@@ -323,7 +324,7 @@ main {
 		<div class="section-container">
 			<div class="section-header">
 				<div class="section-title">
-					지급항목 설정 <span class="count">(항목 수: 9개)</span>
+					지급항목 설정 <span class="count">(항목 수: ${empty payList ? 0 : payList.size()}개)</span>
 				</div>
 				<div class="header-btns">
 					<button type="button" class="btn-tip">❓ Tip</button>
@@ -345,101 +346,90 @@ main {
 							</tr>
 						</thead>
 						<tbody>
-							<tr onclick="selectPayRow(this)" data-id="1" data-name="기본급"
-								data-tax="TAX" data-taxfree-name="" data-taxfree-limit="0"
-								data-calc="기본급" data-round="NONE" data-link="" data-use="Y">
-								<td>기본급</td>
-								<td>전체과세</td>
-								<td></td>
-								<td>없음</td>
-								<td></td>
-								<td><span class="icon-use-o">O</span></td>
-							</tr>
-							<tr onclick="selectPayRow(this)" data-id="2" data-name="식대"
-								data-tax="FREE" data-taxfree-name="식사대(월 20만원 이하)"
-								data-taxfree-limit="200000" data-calc="일괄지급_200,000"
-								data-round="NONE" data-link="LUMP" data-use="Y">
-								<td>식비</td>
-								<td>비과세_비과세 식사대(월 20만원 이하)</td>
-								<td>200,000</td>
-								<td>없음</td>
-								<td>일괄지급_200,000</td>
-								<td><span class="icon-use-o">O</span></td>
-							</tr>
-							<tr onclick="selectPayRow(this)" data-id="3" data-name="보육수당"
-								data-tax="TAX" data-taxfree-name="" data-taxfree-limit="0"
-								data-calc="" data-round="NONE" data-link="" data-use="Y">
-								<td>보육수당</td>
-								<td>전체과세</td>
-								<td></td>
-								<td>없음</td>
-								<td></td>
-								<td><span class="icon-use-o">O</span></td>
-							</tr>
-							<tr onclick="selectPayRow(this)" data-id="4" data-name="직책수당"
-								data-tax="TAX" data-taxfree-name="" data-taxfree-limit="0"
-								data-calc="" data-round="NONE" data-link="" data-use="Y">
-								<td>직책수당</td>
-								<td>전체과세</td>
-								<td></td>
-								<td>없음</td>
-								<td></td>
-								<td><span class="icon-use-o">O</span></td>
-							</tr>
-							<tr onclick="selectPayRow(this)" data-id="5" data-name="차량유지비"
-								data-tax="FREE" data-taxfree-name="자가운전보조금"
-								data-taxfree-limit="200000" data-calc="" data-round="NONE"
-								data-link="" data-use="Y">
-								<td>차량유지비</td>
-								<td>비과세_소령§12 3(자가운전보조금)</td>
-								<td>200,000</td>
-								<td>없음</td>
-								<td></td>
-								<td><span class="icon-use-o">O</span></td>
-							</tr>
-							<tr onclick="selectPayRow(this)" data-id="6" data-name="당직수당"
-								data-tax="TAX" data-taxfree-name="" data-taxfree-limit="0"
-								data-calc="연장근무" data-round="NONE" data-link="OVERTIME"
-								data-use="Y">
-								<td>당직수당</td>
-								<td>전체과세</td>
-								<td></td>
-								<td>없음</td>
-								<td>연장근무</td>
-								<td><span class="icon-use-o">O</span></td>
-							</tr>
-							<tr onclick="selectPayRow(this)" data-id="7" data-name="휴일수당"
-								data-tax="TAX" data-taxfree-name="" data-taxfree-limit="0"
-								data-calc="휴일근무" data-round="NONE" data-link="HOLIDAY"
-								data-use="Y">
-								<td>휴일수당</td>
-								<td>전체과세</td>
-								<td></td>
-								<td>없음</td>
-								<td>휴일근무</td>
-								<td><span class="icon-use-o">O</span></td>
-							</tr>
+							<c:choose>
+								<c:when test="${empty payList}">
+									<tr>
+										<td colspan="6" style="padding: 20px; color: #999;">등록된
+											지급항목이 없습니다.</td>
+									</tr>
+								</c:when>
+								<c:otherwise>
+									<c:forEach var="item" items="${payList}">
+										<tr onclick="selectPayRow(this)"
+											data-id="${item.salaryItemId}"
+											data-attendance-type-id="${item.attendanceTypeId}"
+											data-name="${item.itemName}" data-tax="${item.taxYn}"
+											data-taxfree-name="${item.taxFreeName}"
+											data-taxfree-limit="${item.taxFreeLimit}"
+											data-calc="${item.calcMethod}" data-round="${item.roundUnit}"
+											data-default-amount="${item.defaultAmount}"
+											data-remark="${item.remark}" data-use="${item.useYn}">
+											<td>${item.itemName}</td>
+											<td><c:choose>
+													<c:when test="${item.taxYn eq 'N'}">비과세(${item.taxFreeName})</c:when>
+													<c:otherwise>전체과세</c:otherwise>
+												</c:choose></td>
+											<td><c:if test="${not empty item.taxFreeLimit}">
+													<fmt:formatNumber value="${item.taxFreeLimit}"
+														pattern="#,##0" />
+												</c:if></td>
+											<td><c:choose>
+													<c:when test="${item.roundUnit eq '1'}">1원 단위</c:when>
+													<c:when test="${item.roundUnit eq '10'}">10원 단위</option>
+													</c:when>
+													<c:when test="${item.roundUnit eq '100'}">100원 단위</c:when>
+													<c:otherwise>없음</c:otherwise>
+												</c:choose></td>
+											<td><c:choose>
+													<c:when test="${not empty item.defaultAmount}">일괄지급_<fmt:formatNumber
+															value="${item.defaultAmount}" pattern="#,##0" />
+													</c:when>
+													<c:when test="${not empty item.attendanceTypeId}">근태연결(${item.attendanceTypeId})</c:when>
+													<c:otherwise></c:otherwise>
+												</c:choose></td>
+											<td><c:choose>
+													<c:when test="${item.useYn eq 'Y'}">
+														<span class="icon-use-o">O</span>
+													</c:when>
+													<c:otherwise>
+														<span class="icon-use-x">X</span>
+													</c:otherwise>
+												</c:choose></td>
+										</tr>
+									</c:forEach>
+								</c:otherwise>
+							</c:choose>
 						</tbody>
 					</table>
 				</div>
 
 				<!-- 우측: 지급항목 상세 입력/수정 폼 -->
 				<div class="right-form-area">
-					<form id="payItemForm">
-						<input type="hidden" id="payItemId" name="payItemId" value="" />
+					<form id="payItemForm"
+						action="${pageContext.request.contextPath}/salary/item/setting.do"
+						method="post">
+						<!-- 구분 파라미터 (지급: PAY) -->
+						<input type="hidden" name="itemType" value="PAY" />
+						<!-- 선택된 항목 PK (없으면 신규 등록) -->
+						<input type="hidden" id="payItemId" name="salaryItemId" value="" />
+
 						<table class="form-table">
 							<tr>
 								<th>지급항목</th>
 								<td><input type="text" id="payItemName" name="itemName"
-									class="input-text" placeholder="지급 항목을 입력해주세요." required /></td>
+									class="input-text" placeholder="지급 항목을 입력해주세요." required /> <c:if
+										test="${errors.itemName}">
+										<span class="error-text">항목명을 입력해주세요.</span>
+									</c:if></td>
 							</tr>
 							<tr>
 								<th>과세여부</th>
 								<td><label class="radio-label"><input type="radio"
-										name="taxYn" value="TAX" checked
+										name="taxYn" value="Y" checked
 										onclick="toggleTaxFreeInputs(false)"> 전체과세</label> <label
 									class="radio-label"><input type="radio" name="taxYn"
-										value="FREE" onclick="toggleTaxFreeInputs(true)"> 비과세</label></td>
+										value="N" onclick="toggleTaxFreeInputs(true)"> 비과세</label>
+								</td>
 							</tr>
 							<tr>
 								<th>비과세명</th>
@@ -467,46 +457,41 @@ main {
 										<option value="100">100원 단위</option>
 								</select></td>
 							</tr>
-							<!-- 근태연결/일괄지급 -->
 							<tr>
 								<th>근태연결/일괄지급</th>
-								<td>
-									<!-- 💡 onchange 이벤트 추가 --> <select id="payAttendanceLink"
-									name="attendanceLink" class="select-box"
+								<td><select id="payAttendanceTypeId"
+									name="attendanceTypeId" class="select-box"
 									onchange="toggleLumpAmountInput(this.value)">
 										<option value="">선택하세요.</option>
-										<option value="OVERTIME">연장근무</option>
-										<option value="HOLIDAY">휴일근무</option>
-										<option value="LUMP">일괄지급</option>
-								</select>
-								</td>
+										<option value="1">연장근무</option>
+										<option value="2">휴일근무</option>
+										<option value="-1">일괄지급</option>
+								</select></td>
 							</tr>
-
-							<!-- 💡 [신규 추가] 일괄지급 선택 시에만 표시되는 일괄지급액 행 -->
 							<tr id="lumpAmountRow" style="display: none;">
 								<th>일괄지급액</th>
-								<td><input type="text" id="payLumpAmount" name="lumpAmount"
-									class="input-text input-amount" value="0" placeholder="0" /> <span
-									class="unit-text">원</span></td>
+								<td><input type="text" id="payLumpAmount"
+									name="defaultAmount" class="input-text input-amount" value="0"
+									placeholder="0" /> <span class="unit-text">원</span></td>
+							</tr>
+							<tr>
+								<th>비고 / 설명</th>
+								<td><input type="text" id="payRemark" name="remark"
+									class="input-text" placeholder="비고 입력" /></td>
 							</tr>
 							<tr>
 								<th>사용여부</th>
 								<td><label class="radio-label"><input type="radio"
-										name="payUseYn" value="Y" checked> 사용</label> <label
-									class="radio-label"><input type="radio" name="payUseYn"
+										name="useYn" value="Y" checked> 사용</label> <label
+									class="radio-label"><input type="radio" name="useYn"
 										value="N"> 사용안함</label></td>
 							</tr>
 						</table>
 
 						<div class="btn-group">
-							<button type="button" class="btn btn-action"
-								onclick="savePayItem('add')">추가</button>
-							<button type="button" class="btn btn-action"
-								onclick="savePayItem('update')">수정</button>
-							<button type="button" class="btn btn-delete"
-								onclick="deletePayItem()">삭제</button>
+							<button type="submit" class="btn btn-action">저장 (추가/수정)</button>
 							<button type="button" class="btn btn-clear"
-								onclick="clearPayForm()">내용 지우기</button>
+								onclick="clearPayForm()">내용 지우기 (초기화)</button>
 						</div>
 					</form>
 				</div>
@@ -517,7 +502,7 @@ main {
 		<div class="section-container">
 			<div class="section-header">
 				<div class="section-title">
-					공제항목 설정 <span class="count">(항목 수: 8개)</span>
+					공제항목 설정 <span class="count">(항목 수: ${empty deductList ? 0 : deductList.size()}개)</span>
 				</div>
 				<div class="header-btns">
 					<button type="button" class="btn-calc-ref">📊 공제항목 산정기준</button>
@@ -538,79 +523,54 @@ main {
 							</tr>
 						</thead>
 						<tbody>
-							<tr onclick="selectDeductRow(this)" data-id="101"
-								data-name="국민연금" data-calc="국민연금 산식 적용" data-round="NONE"
-								data-note="기본항목" data-use="Y">
-								<td>국민연금</td>
-								<td>없음</td>
-								<td><span class="icon-use-o">O</span></td>
-								<td>기본항목</td>
-							</tr>
-							<tr onclick="selectDeductRow(this)" data-id="102"
-								data-name="건강보험" data-calc="건강보험 산식 적용" data-round="1"
-								data-note="기본항목" data-use="Y">
-								<td>건강보험</td>
-								<td>1원 단위</td>
-								<td><span class="icon-use-o">O</span></td>
-								<td>기본항목</td>
-							</tr>
-							<tr onclick="selectDeductRow(this)" data-id="103"
-								data-name="장기요양보험" data-calc="장기요양 산식 적용" data-round="1"
-								data-note="기본항목" data-use="Y">
-								<td>장기요양보험</td>
-								<td>1원 단위</td>
-								<td><span class="icon-use-o">O</span></td>
-								<td>기본항목</td>
-							</tr>
-							<tr onclick="selectDeductRow(this)" data-id="104"
-								data-name="고용보험" data-calc="고용보험 산식 적용" data-round="1"
-								data-note="기본항목" data-use="Y">
-								<td>고용보험</td>
-								<td>1원 단위</td>
-								<td><span class="icon-use-o">O</span></td>
-								<td>기본항목</td>
-							</tr>
-							<tr onclick="selectDeductRow(this)" data-id="105" data-name="소득세"
-								data-calc="간이세액표 적용" data-round="1" data-note="기본항목"
-								data-use="Y">
-								<td>소득세</td>
-								<td>1원 단위</td>
-								<td><span class="icon-use-o">O</span></td>
-								<td>기본항목</td>
-							</tr>
-							<tr onclick="selectDeductRow(this)" data-id="106"
-								data-name="지방소득세" data-calc="소득세의 10%" data-round="1"
-								data-note="기본항목" data-use="Y">
-								<td>지방소득세</td>
-								<td>1원 단위</td>
-								<td><span class="icon-use-o">O</span></td>
-								<td>기본항목</td>
-							</tr>
-							<tr onclick="selectDeductRow(this)" data-id="107"
-								data-name="상조회비" data-calc="임의공제" data-round="NONE"
-								data-note="사용자 추가항목" data-use="Y">
-								<td>상조회비</td>
-								<td>없음</td>
-								<td><span class="icon-use-o">O</span></td>
-								<td>사용자 추가항목</td>
-							</tr>
-							<tr onclick="selectDeductRow(this)" data-id="108"
-								data-name="연말정산" data-calc="연말정산 결과 반영" data-round="1"
-								data-note="사용자 추가항목" data-use="N">
-								<td>연말정산</td>
-								<td>1원 단위</td>
-								<td><span class="icon-use-x">X</span></td>
-								<td>사용자 추가항목</td>
-							</tr>
+							<c:choose>
+								<c:when test="${empty deductList}">
+									<tr>
+										<td colspan="4" style="padding: 20px; color: #999;">등록된
+											공제항목이 없습니다.</td>
+									</tr>
+								</c:when>
+								<c:otherwise>
+									<c:forEach var="item" items="${deductList}">
+										<tr onclick="selectDeductRow(this)"
+											data-id="${item.salaryItemId}" data-name="${item.itemName}"
+											data-calc="${item.calcMethod}" data-round="${item.roundUnit}"
+											data-remark="${item.remark}" data-use="${item.useYn}">
+											<td>${item.itemName}</td>
+											<td><c:choose>
+													<c:when test="${item.roundUnit eq '1'}">1원 단위</c:when>
+													<c:when test="${item.roundUnit eq '10'}">10원 단위</c:when>
+													<c:when test="${item.roundUnit eq '100'}">100원 단위</c:when>
+													<c:otherwise>없음</c:otherwise>
+												</c:choose></td>
+											<td><c:choose>
+													<c:when test="${item.useYn eq 'Y'}">
+														<span class="icon-use-o">O</span>
+													</c:when>
+													<c:otherwise>
+														<span class="icon-use-x">X</span>
+													</c:otherwise>
+												</c:choose></td>
+											<td>${item.remark}</td>
+										</tr>
+									</c:forEach>
+								</c:otherwise>
+							</c:choose>
 						</tbody>
 					</table>
 				</div>
 
 				<!-- 우측: 공제항목 상세 입력/수정 폼 -->
 				<div class="right-form-area">
-					<form id="deductItemForm">
-						<input type="hidden" id="deductItemId" name="deductItemId"
+					<form id="deductItemForm"
+						action="${pageContext.request.contextPath}/salary/item/setting.do"
+						method="post">
+						<!-- 구분 파라미터 (공제: DEDUCT) -->
+						<input type="hidden" name="itemType" value="DEDUCT" />
+						<!-- 선택된 항목 PK -->
+						<input type="hidden" id="deductItemId" name="salaryItemId"
 							value="" />
+
 						<table class="form-table">
 							<tr>
 								<th>공제항목</th>
@@ -635,27 +595,22 @@ main {
 							</tr>
 							<tr>
 								<th>비고</th>
-								<td><input type="text" id="deductNote" name="note"
+								<td><input type="text" id="deductRemark" name="remark"
 									class="input-text" placeholder="비고 입력" /></td>
 							</tr>
 							<tr>
 								<th>사용여부</th>
 								<td><label class="radio-label"><input type="radio"
-										name="deductUseYn" value="Y" checked> 사용</label> <label
-									class="radio-label"><input type="radio"
-										name="deductUseYn" value="N"> 사용안함</label></td>
+										name="useYn" value="Y" checked> 사용</label> <label
+									class="radio-label"><input type="radio" name="useYn"
+										value="N"> 사용안함</label></td>
 							</tr>
 						</table>
 
 						<div class="btn-group">
-							<button type="button" class="btn btn-action"
-								onclick="saveDeductItem('add')">추가</button>
-							<button type="button" class="btn btn-action"
-								onclick="saveDeductItem('update')">수정</button>
-							<button type="button" class="btn btn-delete"
-								onclick="deleteDeductItem()">삭제</button>
+							<button type="submit" class="btn btn-action">저장 (추가/수정)</button>
 							<button type="button" class="btn btn-clear"
-								onclick="clearDeductForm()">내용 지우기</button>
+								onclick="clearDeductForm()">내용 지우기 (초기화)</button>
 						</div>
 					</form>
 				</div>
@@ -664,198 +619,131 @@ main {
 	</main>
 	<!-- 푸터 Include -->
 	<layout:footer />
+
 	<!-- 스크립트 영역 -->
 	<script>
-        // ----------------------------------------------------
-        // 1. 지급항목 스크립트 로직
-        // ----------------------------------------------------
-        
-        // 지급항목 테이블 행 클릭시 Form으로 데이터 세팅
-        function selectPayRow(row) {
-            // 테이블 선택 표시 (하이라이트)
-            const rows = document.querySelectorAll('#payItemTable tbody tr');
-            rows.forEach(r => r.classList.remove('selected'));
-            row.classList.add('selected');
+		// ----------------------------------------------------
+		// 1. 지급항목 스크립트
+		// ----------------------------------------------------
+		
+		// 테이블 행 클릭 시 단일 항목 데이터 폼에 채우기
+		function selectPayRow(row) {
+			const rows = document.querySelectorAll('#payItemTable tbody tr');
+			rows.forEach(r => r.classList.remove('selected'));
+			row.classList.add('selected');
 
-            // data 속성 읽기
-            document.getElementById('payItemId').value = row.dataset.id;
-            document.getElementById('payItemName').value = row.dataset.name;
-            
-            const taxYn = row.dataset.tax;
-            const radioTax = document.querySelectorAll('input[name="taxYn"]');
-            if(taxYn === 'FREE') {
-                radioTax[1].checked = true;
-                toggleTaxFreeInputs(true);
-            } else {
-                radioTax[0].checked = true;
-                toggleTaxFreeInputs(false);
-            }
+			// dataset 속성을 통한 데이터 추출
+			document.getElementById('payItemId').value = row.dataset.id || '';
+			document.getElementById('payItemName').value = row.dataset.name || '';
+			
+			const taxYn = row.dataset.tax;
+			const radioTax = document.querySelectorAll('#payItemForm input[name="taxYn"]');
+			if(taxYn === 'N') {
+				radioTax[1].checked = true;
+				toggleTaxFreeInputs(true);
+			} else {
+				radioTax[0].checked = true;
+				toggleTaxFreeInputs(false);
+			}
 
-            document.getElementById('taxFreeName').value = row.dataset.taxfreeName || '';
-            document.getElementById('taxFreeLimit').value = row.dataset.taxfreeLimit || '0';
-            document.getElementById('payCalcMethod').value = row.dataset.calc || '';
-            document.getElementById('payRoundUnit').value = row.dataset.round || 'NONE';
-            document.getElementById('payAttendanceLink').value = row.dataset.link || '';
+			document.getElementById('taxFreeName').value = row.dataset.taxfreeName || '';
+			document.getElementById('taxFreeLimit').value = row.dataset.taxfreeLimit || '0';
+			document.getElementById('payCalcMethod').value = row.dataset.calc || '';
+			document.getElementById('payRoundUnit').value = row.dataset.round || 'NONE';
+			
+			// 일괄지급 / 근태연결 바인딩
+			const defaultAmt = row.dataset.defaultAmount;
+			const attendanceTypeId = row.dataset.attendanceTypeId;
+			const linkSelect = document.getElementById('payAttendanceTypeId');
 
-            const useYn = row.dataset.use;
-            const radioUse = document.querySelectorAll('input[name="payUseYn"]');
-            if(useYn === 'N') radioUse[1].checked = true;
-            else radioUse[0].checked = true;
-        }
+			if (defaultAmt && defaultAmt !== 'null' && defaultAmt !== '') {
+				linkSelect.value = '-1'; // 일괄지급
+				toggleLumpAmountInput('-1');
+				document.getElementById('payLumpAmount').value = defaultAmt;
+			} else if (attendanceTypeId && attendanceTypeId !== 'null') {
+				linkSelect.value = attendanceTypeId;
+				toggleLumpAmountInput(attendanceTypeId);
+			} else {
+				linkSelect.value = '';
+				toggleLumpAmountInput('');
+			}
 
-        // 비과세 선택 시 비과세 전용 입력창 활성화
-        function toggleTaxFreeInputs(isFree) {
-            const nameInput = document.getElementById('taxFreeName');
-            const limitInput = document.getElementById('taxFreeLimit');
-            
-            nameInput.disabled = !isFree;
-            limitInput.disabled = !isFree;
+			document.getElementById('payRemark').value = row.dataset.remark || '';
 
-            if(!isFree) {
-                nameInput.value = '';
-                limitInput.value = '0';
-            }
-        }
+			const useYn = row.dataset.use;
+			const radioUse = document.querySelectorAll('#payItemForm input[name="useYn"]');
+			if(useYn === 'N') radioUse[1].checked = true;
+			else radioUse[0].checked = true;
+		}
 
-        // 지급항목 입력폼 리셋
-        function clearPayForm() {
-            document.getElementById('payItemId').value = '';
-            document.getElementById('payItemForm').reset();
-            toggleTaxFreeInputs(false);
-            
-            const rows = document.querySelectorAll('#payItemTable tbody tr');
-            rows.forEach(r => r.classList.remove('selected'));
-        }
+		// 비과세 옵션 토글
+		function toggleTaxFreeInputs(isFree) {
+			const nameInput = document.getElementById('taxFreeName');
+			const limitInput = document.getElementById('taxFreeLimit');
+			
+			nameInput.disabled = !isFree;
+			limitInput.disabled = !isFree;
 
-        // 지급항목 추가/수정 AJAX
-        function savePayItem(mode) {
-            const name = document.getElementById('payItemName').value.trim();
-            if(!name) {
-                alert('지급항목명을 입력해 주세요.');
-                document.getElementById('payItemName').focus();
-                return;
-            }
+			if(!isFree) {
+				nameInput.value = '';
+				limitInput.value = '0';
+			}
+		}
 
-            const formData = new URLSearchParams(new FormData(document.getElementById('payItemForm')));
-            formData.append('mode', mode);
+		// 일괄지급 입력칸 토글
+		function toggleLumpAmountInput(value) {
+			const lumpRow = document.getElementById('lumpAmountRow');
+			const lumpInput = document.getElementById('payLumpAmount');
 
-            fetch('${pageContext.request.contextPath}/salary/payItemSave.do', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
-                body: formData.toString()
-            })
-            .then(res => res.json())
-            .then(data => {
-                alert(data.message);
-                if(data.status === 'success') location.reload();
-            })
-            .catch(err => console.error(err));
-        }
+			if (value === '-1') { // -1을 일괄지급 선택값으로 활용
+				lumpRow.style.display = '';
+			} else {
+				lumpRow.style.display = 'none';
+				lumpInput.value = '0';
+			}
+		}
 
-        // 지급항목 삭제
-        function deletePayItem() {
-            const id = document.getElementById('payItemId').value;
-            if(!id) {
-                alert('삭제할 항목을 먼저 목록에서 선택해 주세요.');
-                return;
-            }
+		// 지급항목 내용 지우기 (신규 추가 모드로 전환)
+		function clearPayForm() {
+			document.getElementById('payItemId').value = '';
+			document.getElementById('payItemForm').reset();
+			toggleTaxFreeInputs(false);
+			toggleLumpAmountInput('');
+			
+			const rows = document.querySelectorAll('#payItemTable tbody tr');
+			rows.forEach(r => r.classList.remove('selected'));
+		}
 
-            if(confirm('해당 지급항목을 삭제하시겠습니까?')) {
-                fetch('${pageContext.request.contextPath}/salary/payItemDelete.do?id=' + id, { method: 'POST' })
-                .then(res => res.json())
-                .then(data => {
-                    alert(data.message);
-                    if(data.status === 'success') location.reload();
-                });
-            }
-        }
-        
-     // 일괄지급 선택 여부에 따라 입력칸 표시/숨김
-        function toggleLumpAmountInput(value) {
-            const lumpRow = document.getElementById('lumpAmountRow');
-            const lumpInput = document.getElementById('payLumpAmount');
+		// ----------------------------------------------------
+		// 2. 공제항목 스크립트
+		// ----------------------------------------------------
 
-            if (value === 'LUMP') {
-                lumpRow.style.display = ''; // 표시
-            } else {
-                lumpRow.style.display = 'none'; // 숨김
-                lumpInput.value = '0'; // 값 초기화
-            }
-        }
+		// 공제항목 행 클릭 시 데이터 채우기
+		function selectDeductRow(row) {
+			const rows = document.querySelectorAll('#deductItemTable tbody tr');
+			rows.forEach(r => r.classList.remove('selected'));
+			row.classList.add('selected');
 
-        // ----------------------------------------------------
-        // 2. 공제항목 스크립트 로직
-        // ----------------------------------------------------
+			document.getElementById('deductItemId').value = row.dataset.id || '';
+			document.getElementById('deductItemName').value = row.dataset.name || '';
+			document.getElementById('deductCalcMethod').value = row.dataset.calc || '';
+			document.getElementById('deductRoundUnit').value = row.dataset.round || 'NONE';
+			document.getElementById('deductRemark').value = row.dataset.remark || '';
 
-        // 공제항목 테이블 행 클릭시 Form으로 데이터 세팅
-        function selectDeductRow(row) {
-            const rows = document.querySelectorAll('#deductItemTable tbody tr');
-            rows.forEach(r => r.classList.remove('selected'));
-            row.classList.add('selected');
+			const useYn = row.dataset.use;
+			const radioUse = document.querySelectorAll('#deductItemForm input[name="useYn"]');
+			if(useYn === 'N') radioUse[1].checked = true;
+			else radioUse[0].checked = true;
+		}
 
-            document.getElementById('deductItemId').value = row.dataset.id;
-            document.getElementById('deductItemName').value = row.dataset.name;
-            document.getElementById('deductCalcMethod').value = row.dataset.calc || '';
-            document.getElementById('deductRoundUnit').value = row.dataset.round || 'NONE';
-            document.getElementById('deductNote').value = row.dataset.note || '';
-
-            const useYn = row.dataset.use;
-            const radioUse = document.querySelectorAll('input[name="deductUseYn"]');
-            if(useYn === 'N') radioUse[1].checked = true;
-            else radioUse[0].checked = true;
-        }
-
-        // 공제항목 입력폼 리셋
-        function clearDeductForm() {
-            document.getElementById('deductItemId').value = '';
-            document.getElementById('deductItemForm').reset();
-            
-            const rows = document.querySelectorAll('#deductItemTable tbody tr');
-            rows.forEach(r => r.classList.remove('selected'));
-        }
-
-        // 공제항목 추가/수정 AJAX
-        function saveDeductItem(mode) {
-            const name = document.getElementById('deductItemName').value.trim();
-            if(!name) {
-                alert('공제항목명을 입력해 주세요.');
-                document.getElementById('deductItemName').focus();
-                return;
-            }
-
-            const formData = new URLSearchParams(new FormData(document.getElementById('deductItemForm')));
-            formData.append('mode', mode);
-
-            fetch('${pageContext.request.contextPath}/salary/deductItemSave.do', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
-                body: formData.toString()
-            })
-            .then(res => res.json())
-            .then(data => {
-                alert(data.message);
-                if(data.status === 'success') location.reload();
-            })
-            .catch(err => console.error(err));
-        }
-
-        // 공제항목 삭제
-        function deleteDeductItem() {
-            const id = document.getElementById('deductItemId').value;
-            if(!id) {
-                alert('삭제할 항목을 먼저 목록에서 선택해 주세요.');
-                return;
-            }
-
-            if(confirm('해당 공제항목을 삭제하시겠습니까?')) {
-                fetch('${pageContext.request.contextPath}/salary/deductItemDelete.do?id=' + id, { method: 'POST' })
-                .then(res => res.json())
-                .then(data => {
-                    alert(data.message);
-                    if(data.status === 'success') location.reload();
-                });
-            }
-        }
-    </script>
+		// 공제항목 내용 지우기 (신규 추가 모드로 전환)
+		function clearDeductForm() {
+			document.getElementById('deductItemId').value = '';
+			document.getElementById('deductItemForm').reset();
+			
+			const rows = document.querySelectorAll('#deductItemTable tbody tr');
+			rows.forEach(r => r.classList.remove('selected'));
+		}
+	</script>
 </body>
 </html>
