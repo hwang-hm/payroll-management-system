@@ -11,8 +11,7 @@ import attendance.service.VacationTypeService;
 import mvc.command.CommandHandler;
 
 /**
- * 휴가항목 수정 요청을 처리하는 Handler
- * 休暇項目の修正リクエストを処理するHandler
+ * 휴가항목 수정 요청을 처리하는 Handler 休暇項目の修正リクエストを処理するHandler
  */
 public class VacationTypeUpdateHandler implements CommandHandler {
 
@@ -21,7 +20,7 @@ public class VacationTypeUpdateHandler implements CommandHandler {
 	@Override
 	public String process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		if (!"POST".equalsIgnoreCase(req.getMethod())) {
-			return "redirect:/vacation/type/list.do";
+			return "redirect:/config/vacation-attendance.do#vacation";
 		}
 
 		VacationType vacationType;
@@ -39,7 +38,7 @@ public class VacationTypeUpdateHandler implements CommandHandler {
 		if (!vacationTypeService.modifyVacationType(vacationType)) {
 			return showForm(req, vacationType, "修正する休暇項目が見つかりません。");
 		}
-		return "redirect:/vacation/type/list.do?result=updated";
+		return "redirect:/config/vacation-attendance.do?result=vacationUpdated#vacation";
 	}
 
 	private VacationType createVacationType(HttpServletRequest req) {

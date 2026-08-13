@@ -21,7 +21,7 @@ public class VacationTypeDeleteHandler implements CommandHandler {
 	@Override
 	public String process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		if (!"POST".equalsIgnoreCase(req.getMethod())) {
-			return "redirect:/vacation/type/list.do";
+			return "redirect:/config/vacation-attendance.do#vacation";
 		}
 
 		try {
@@ -29,7 +29,7 @@ public class VacationTypeDeleteHandler implements CommandHandler {
 			if (!vacationTypeService.removeVacationType(vacationTypeId)) {
 				return showError(req, "削除する休暇項目が見つかりません。");
 			}
-			return "redirect:/vacation/type/list.do?result=deleted";
+			return "redirect:/config/vacation-attendance.do?result=vacationDeleted#vacation";
 		} catch (NumberFormatException e) {
 			return showError(req, "削除する休暇項目を選択してください。");
 		} catch (RuntimeException e) {
