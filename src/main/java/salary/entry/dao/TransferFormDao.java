@@ -1,0 +1,110 @@
+package salary.entry.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import salary.model.TransferForm;
+import salary.model.TransferFormItem;
+
+public class TransferFormDao {
+
+	public List<TransferForm> selectAllForms(Connection conn) throws SQLException {
+		String sql = "SELECT form_id, form_name FROM transfer_form ORDER BY form_id";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
+			List<TransferForm> list = new ArrayList<>();
+			while (rs.next()) {
+				TransferForm form = new TransferForm();
+				form.setFormId(rs.getInt("form_id"));
+				form.setFormName(rs.getString("form_name"));
+				list.add(form);
+			}
+			return list;
+		}
+	}
+
+	public TransferForm selectFormById(Connection conn, int formId) throws SQLException {
+		String sql = "SELECT form_id, form_name FROM transfer_form WHERE form_id = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, formId);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				if (!rs.next()) {
+					return null;
+				}
+				TransferForm form = new TransferForm();
+				form.setFormId(rs.getInt("form_id"));
+				form.setFormName(rs.getString("form_name"));
+				return form;
+			}
+		}
+	}
+
+	public int insertForm(Connection conn, String formName) throws SQLException {
+		String seqSql = "SELECT seq_transfer_form.NEXTVAL FROM dual";
+		String insertSql = "INSERT INTO transfer_form (form_id, form_name) VALUES (?, ?)";
+		int formId;
+		try (PreparedStatement seqPstmt = conn.prepareStatement(seqSql); ResultSet rs = seqPstmt.executeQuery()) {
+			if (!rs.next()) {
+				throw new SQLException("transfer_form 시퀀스 조회 실패");
+			}
+			formId = rs.getInt(1);
+		}
+		try (PreparedStatement pstmt = conn.prepareStatement(insertSql)) {
+			pstmt.setInt(1, formId);
+			pstmt.setString(2, formName);
+			pstmt.executeUpdate();
+		}
+		return formId;
+	}
+
+	public void updateFormName(Connection conn, int formId, String formName) throws SQLException {
+		String sql = "UPDATE transfer_form SET form_name = ? WHERE form_id = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setString(1, formName);
+			pstmt.setInt(2, formId);
+			pstmt.executeUpdate();
+		}
+	}
+
+	public List<TransferFormItem> selectItemsByFormId(Connection conn, int formId) throws SQLException {
+		String sql = "SELECT item_id, form_id, item_code, display_order "
+				+ "FROM transfer_form_item WHERE form_id = ? ORDER BY display_order, item_id";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, formId);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				List<TransferFormItem> list = new ArrayList<>();
+				while (rs.next()) {
+					TransferFormItem item = new TransferFormItem();
+					item.setItemId(rs.getInt("item_id"));
+					item.setFormId(rs.getInt("form_id"));
+					item.setItemCode(rs.getString("item_code"));
+					item.setDisplayOrder(rs.getInt("display_order"));
+					list.add(item);
+				}
+				return list;
+			}
+		}
+	}
+
+	public void deleteItemsByFormId(Connection conn, int formId) throws SQLException {
+		String sql = "DELETE FROM transfer_form_item WHERE form_id = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, formId);
+			pstmt.executeUpdate();
+		}
+	}
+
+	public void insertItem(Connection conn, int formId, String itemCode, int displayOrder) throws SQLException {
+		String sql = "INSERT INTO transfer_form_item (item_id, form_id, item_code, display_order) "
+				+ "VALUES (seq_transfer_form_item.NEXTVAL, ?, ?, ?)";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, formId);
+			pstmt.setString(2, itemCode);
+			pstmt.setInt(3, displayOrder);
+			pstmt.executeUpdate();
+		}
+	}
+}
