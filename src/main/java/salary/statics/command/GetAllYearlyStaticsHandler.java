@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import mvc.command.CommandHandler;
 import salary.statics.service.GetAllYearlySalaryService;
-import salary.statics.service.request.YearlySalaryDto;
+import salary.statics.service.request.YearlySalaryDTO;
 
 public class GetAllYearlyStaticsHandler implements CommandHandler {
 
@@ -35,7 +35,7 @@ public class GetAllYearlyStaticsHandler implements CommandHandler {
 		}
 
 		// 10개년 보정 통계 데이터 조회
-		List<YearlySalaryDto> statList = yearlySalaryService.get10YearSalaryStats(targetYear);
+		List<YearlySalaryDTO> statList = yearlySalaryService.get10YearSalaryStats(targetYear);
 
 		req.setAttribute("selectedYear", targetYear);
 		req.setAttribute("statList", statList);
