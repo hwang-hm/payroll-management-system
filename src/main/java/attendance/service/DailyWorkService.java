@@ -27,7 +27,7 @@ public class DailyWorkService {
      * @param month 조회 월 / 照会月
      * @return 해당 사원의 월간 일용직 근무내역 / 該当社員の月間日雇い勤務内訳
      */
-    public List<DailyWork> getDailyWorksByEmployeeAndMonth(
+    public List<DailyWork> getMonthlyWorks(
             int empId,
             int year,
             int month) {
