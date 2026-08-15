@@ -1,16 +1,16 @@
 package salary.statics.service.request;
 
-public class YearlySalaryDto {
+public class YearlySalaryDTO {
 	private int year; // 귀속년도
 	private long totalSalaryThousand; // 전체 급여액 (천원 단위)
 	private double avgEmpCount; // 인원 (명)
 	private Double salaryGrowthRate; // 급여 증가율 (%)
 	private Double countGrowthRate; // 인원 증가율 (%)
 
-	public YearlySalaryDto() {
+	public YearlySalaryDTO() {
 	}
 
-	public YearlySalaryDto(int year, long totalSalaryThousand, double avgEmpCount) {
+	public YearlySalaryDTO(int year, long totalSalaryThousand, double avgEmpCount) {
 		this.year = year;
 		this.totalSalaryThousand = totalSalaryThousand;
 		this.avgEmpCount = avgEmpCount;

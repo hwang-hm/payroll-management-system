@@ -215,7 +215,7 @@
 				<a
 					href="${pageContext.request.contextPath}/salary/stats/yearlyTotal.do">연도별
 					전체급여 통계</a> <a
-					href="${pageContext.request.contextPath}/stats/monthlyTotal.do">월별
+					href="${pageContext.request.contextPath}/salary/stats/monthlyTotal.do">월별
 					전체급여 통계</a> <a
 					href="${pageContext.request.contextPath}/stats/yearlyPersonal.do">연도별
 					개인연봉 통계</a> <a

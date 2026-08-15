@@ -9,34 +9,34 @@ import java.util.Map;
 import jdbc.JdbcUtil;
 import jdbc.connection.ConnectionProvider;
 import salary.statics.dao.YearlySalaryDao;
-import salary.statics.service.request.YearlySalaryDto;
+import salary.statics.service.request.YearlySalaryDTO;
 
 public class GetAllYearlySalaryService {
 	private YearlySalaryDao dao = new YearlySalaryDao();
 
-	public List<YearlySalaryDto> get10YearSalaryStats(int targetYear) {
+	public List<YearlySalaryDTO> get10YearSalaryStats(int targetYear) {
 		Connection conn = null;
 		try {
 			conn = ConnectionProvider.getConnection();
 
 			// 1. DB에서 선택 연도 기준 과거 10개년 데이터 조회 (targetYear - 9 ~ targetYear)
-			Map<Integer, YearlySalaryDto> dbDataMap = dao.getYearlyStatsMap(conn, targetYear);
+			Map<Integer, YearlySalaryDTO> dbDataMap = dao.getYearlyStatsMap(conn, targetYear);
 
 			int startYear = targetYear - 9;
 			int endYear = targetYear;
 
 			// 2. 10개년 연속 리스트 생성 (DB에 없는 연도는 기본값 0 세팅)
-			List<YearlySalaryDto> result = new ArrayList<>();
+			List<YearlySalaryDTO> result = new ArrayList<>();
 			for (int y = startYear; y <= endYear; y++) {
-				YearlySalaryDto dto = dbDataMap.getOrDefault(y, new YearlySalaryDto(y, 0L, 0.0));
+				YearlySalaryDTO dto = dbDataMap.getOrDefault(y, new YearlySalaryDTO(y, 0L, 0.0));
 				result.add(dto);
 			}
 
 			// 3. 전년 대비 증가율 계산
 			for (int i = 0; i < result.size(); i++) {
-				YearlySalaryDto curr = result.get(i);
+				YearlySalaryDTO curr = result.get(i);
 				if (i > 0) {
-					YearlySalaryDto prev = result.get(i - 1);
+					YearlySalaryDTO prev = result.get(i - 1);
 
 					// 급여 증가율
 					if (prev.getTotalSalaryThousand() > 0) {

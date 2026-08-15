@@ -8,14 +8,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import jdbc.JdbcUtil;
-import salary.statics.service.request.YearlySalaryDto;
+import salary.statics.service.request.YearlySalaryDTO;
 
 public class YearlySalaryDao {
 	// 선택한 연도 기준 과거 10개년(targetYear - 9 ~ targetYear) 급여 및 인원 집계
-	public Map<Integer, YearlySalaryDto> getYearlyStatsMap(Connection conn, int targetYear) throws SQLException {
+	public Map<Integer, YearlySalaryDTO> getYearlyStatsMap(Connection conn, int targetYear) throws SQLException {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		Map<Integer, YearlySalaryDto> resultMap = new HashMap<>();
+		Map<Integer, YearlySalaryDTO> resultMap = new HashMap<>();
 
 		int startYear = targetYear - 9;
 		int endYear = targetYear;
@@ -33,7 +33,7 @@ public class YearlySalaryDao {
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
-				YearlySalaryDto dto = toDTO(rs);
+				YearlySalaryDTO dto = toDTO(rs);
 				resultMap.put(dto.getYear(), dto);
 			}
 			return resultMap;
@@ -43,10 +43,10 @@ public class YearlySalaryDao {
 		}
 	}
 
-	private YearlySalaryDto toDTO(ResultSet rs) throws SQLException {
+	private YearlySalaryDTO toDTO(ResultSet rs) throws SQLException {
 		int year = rs.getInt("pay_year");
 		long totalSalary = rs.getLong("total_salary_thousand");
 		double avgEmpCount = rs.getDouble("avg_emp_count");
-		return new YearlySalaryDto(year, totalSalary, avgEmpCount);
+		return new YearlySalaryDTO(year, totalSalary, avgEmpCount);
 	}
 }
