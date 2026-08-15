@@ -171,7 +171,7 @@
 		<div class="gnb-item">
 			<a href="#" class="gnb-link">근태관리 ▾</a>
 			<div class="sub-dropdown">
-				<a href="${pageContext.request.contextPath}/attendance/record.do">근태기록/관리</a>
+				<a href="${pageContext.request.contextPath}/attendance/record/list.do">근태기록/관리</a>
 				<a href="${pageContext.request.contextPath}/attendance/list.do">근태조회</a>
 				<a href="${pageContext.request.contextPath}/attendance/vacation.do">휴가조회</a>
 				<a
