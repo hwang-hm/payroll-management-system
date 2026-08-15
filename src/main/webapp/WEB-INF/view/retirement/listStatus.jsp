@@ -431,6 +431,127 @@ body {
 }
 
 
+
+/* =========================
+   퇴직처리 모달
+========================= */
+
+.calc-button {
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.retire-modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.35);
+    justify-content: center;
+    align-items: center;
+}
+
+.retire-modal-content {
+    position: relative;
+    width: 510px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 24px 24px 26px;
+    box-sizing: border-box;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.22);
+}
+
+.retire-modal-content h2 {
+    margin: 0 0 18px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #555555;
+}
+
+.retire-modal-close {
+    position: absolute;
+    right: 18px;
+    top: 12px;
+    border: none;
+    background: transparent;
+    color: #777777;
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.retire-form-box {
+    border: 1px solid #dddddd;
+    padding: 6px 18px;
+    box-sizing: border-box;
+}
+
+.retire-form-row {
+    display: flex;
+    align-items: center;
+    min-height: 50px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.retire-form-row:first-child {
+    border-top: 2px solid #222222;
+}
+
+.retire-form-row label {
+    width: 140px;
+    flex-shrink: 0;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #666666;
+}
+
+.retire-form-row input,
+.retire-form-row select {
+    width: 230px;
+    height: 30px;
+    padding: 4px 8px;
+    border: 1px solid #d6d9df;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 13px;
+    background-color: #ffffff;
+    outline: none;
+}
+
+.retire-form-row input:focus,
+.retire-form-row select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.08);
+}
+
+.retire-button-area {
+    margin-top: 14px;
+    text-align: center;
+}
+
+.retire-save-btn {
+    width: 90px;
+    height: 40px;
+    border: none;
+    border-radius: 6px;
+    background-color: #3d7dca;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.retire-save-btn:hover {
+    background-color: #326eb6;
+}
+
+
 /* =========================
    반응형
 ========================= */
@@ -747,26 +868,30 @@ body {
 
                             <td>
 
-                                <span
-                                    class="calc-icon calc-no"
-                                    title="중간정산 없음">
+                                <button
+                                    type="button"
+                                    class="calc-icon calc-no calc-button"
+                                    title="중간정산 처리"
+                                    onclick="openRetireModal('${emp.empId}')">
 
                                     ✕
 
-                                </span>
+                                </button>
 
                             </td>
 
 
                             <td>
 
-                                <span
-                                    class="calc-icon calc-no"
-                                    title="퇴직정산 없음">
+                                <button
+                                    type="button"
+                                    class="calc-icon calc-no calc-button"
+                                    title="퇴직정산 처리"
+                                    onclick="openRetireModal('${emp.empId}')">
 
                                     ✕
 
-                                </span>
+                                </button>
 
                             </td>
 
@@ -899,7 +1024,176 @@ body {
 </div>
 
 
+
+<!-- 퇴직처리 모달 -->
+<div id="retireModal" class="retire-modal">
+
+    <div class="retire-modal-content">
+
+        <button
+            type="button"
+            class="retire-modal-close"
+            onclick="closeRetireModal()"
+            aria-label="닫기">
+            ×
+        </button>
+
+        <h2>퇴사자 퇴직처리</h2>
+
+        <form
+            action="${pageContext.request.contextPath}/retirement/retire.do"
+            method="post"
+            onsubmit="return validateRetireForm();">
+
+            <input
+                type="hidden"
+                id="retireEmpId"
+                name="emp_id">
+
+            <div class="retire-form-box">
+
+                <div class="retire-form-row">
+
+                    <label for="retirementType">
+                        퇴직구분
+                    </label>
+
+                    <select
+                        id="retirementType"
+                        name="retirement_type">
+
+                        <option value="" selected>선택</option>
+                        <option value="정년퇴직">정년퇴직</option>
+                        <option value="정리해고">정리해고</option>
+                        <option value="자발적 퇴직">자발적 퇴직</option>
+                        <option value="임원퇴직">임원퇴직</option>
+                        <option value="중간정산">중간정산</option>
+                        <option value="기타">기타</option>
+
+                    </select>
+
+                </div>
+
+                <div class="retire-form-row">
+
+                    <label for="retirementDate">
+                        퇴직일자
+                    </label>
+
+                    <input
+                        type="date"
+                        id="retirementDate"
+                        name="retirement_date">
+
+                </div>
+
+                <div class="retire-form-row">
+
+                    <label for="retirementReason">
+                        퇴직사유
+                    </label>
+
+                    <input
+                        type="text"
+                        id="retirementReason"
+                        name="retirement_reason"
+                        maxlength="200">
+
+                </div>
+
+                <div class="retire-form-row">
+
+                    <label for="contactAfterRetirement">
+                        퇴직 후 연락처
+                    </label>
+
+                    <input
+                        type="text"
+                        id="contactAfterRetirement"
+                        name="contact_after_retirement"
+                        maxlength="30">
+
+                </div>
+
+            </div>
+
+            <div class="retire-button-area">
+
+                <button
+                    type="submit"
+                    class="retire-save-btn">
+                    저장
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
 <layout:footer />
+
+
+
+<script>
+function openRetireModal(empId) {
+
+    document.getElementById("retireEmpId").value = empId;
+
+    document.getElementById("retirementType").value = "";
+    document.getElementById("retirementDate").value = "";
+    document.getElementById("retirementReason").value = "";
+    document.getElementById("contactAfterRetirement").value = "";
+
+    document.getElementById("retireModal").style.display = "flex";
+}
+
+function closeRetireModal() {
+    document.getElementById("retireModal").style.display = "none";
+}
+
+function validateRetireForm() {
+
+    const retirementType =
+        document.getElementById("retirementType").value;
+
+    const retirementDate =
+        document.getElementById("retirementDate").value;
+
+    if (retirementType === "") {
+        alert("퇴직구분을 선택해주세요.");
+        document.getElementById("retirementType").focus();
+        return false;
+    }
+
+    if (retirementDate === "") {
+        alert("퇴직일자를 입력해주세요.");
+        document.getElementById("retirementDate").focus();
+        return false;
+    }
+
+    return confirm("해당 사원의 퇴직 정보를 저장하시겠습니까?");
+}
+
+window.addEventListener("click", function(event) {
+
+    const modal = document.getElementById("retireModal");
+
+    if (event.target === modal) {
+        closeRetireModal();
+    }
+});
+
+document.addEventListener("keydown", function(event) {
+
+    if (event.key === "Escape") {
+        closeRetireModal();
+    }
+});
+</script>
 
 
 </body>
