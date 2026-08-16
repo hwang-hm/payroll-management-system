@@ -148,7 +148,7 @@
     <div class="gnb-item">
       <a href="#" class="gnb-link">기본환경 설정 ▾</a>
       <div class="sub-dropdown"> 
-        <a href="${pageContext.request.contextPath}/emp/register.do">사원 등록</a>
+        <a href="${pageContext.request.contextPath}/config/register.do">사원 등록</a>
         <a href="${pageContext.request.contextPath}/config/vacation-attendance.do">휴가/근태 설정</a>
         <a href="${pageContext.request.contextPath}/config/salaryItem.do">급여항목 설정</a>
       </div>
