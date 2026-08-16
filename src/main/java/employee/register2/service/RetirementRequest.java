@@ -1,25 +1,34 @@
-package employee.service;
+package employee.register2.service;
 
 import java.sql.Date;
 
 public class RetirementRequest {
-	private String retirementType;
-	private Date retirementDate;
-	private String retirementReason;
-	private String contactAfterRetirement;
-	private Integer retirementPay;
-	
-	public RetirementRequest() {
+	private Integer empId;
+    private String retirementType;
+    private Date retirementDate;
+    private String retirementReason;
+    private String contactAfterRetirement;
+    
+
+    public RetirementRequest() {
+    }
+
+    public RetirementRequest(Integer empId, String retirementType, Date retirementDate, String retirementReason,
+            String contactAfterRetirement) {
+        super();
+        this.empId = empId;
+        this.retirementType = retirementType;
+        this.retirementDate = retirementDate;
+        this.retirementReason = retirementReason;
+        this.contactAfterRetirement = contactAfterRetirement;
+    }
+
+	public Integer getEmpId() {
+		return empId;
 	}
 
-	public RetirementRequest(String retirementType, Date retirementDate, String retirementReason,
-			String contactAfterRetirement, Integer retirementPay) {
-		super();
-		this.retirementType = retirementType;
-		this.retirementDate = retirementDate;
-		this.retirementReason = retirementReason;
-		this.contactAfterRetirement = contactAfterRetirement;
-		this.retirementPay = retirementPay;
+	public void setEmpId(Integer empId) {
+		this.empId = empId;
 	}
 
 	public String getRetirementType() {
@@ -53,14 +62,4 @@ public class RetirementRequest {
 	public void setContactAfterRetirement(String contactAfterRetirement) {
 		this.contactAfterRetirement = contactAfterRetirement;
 	}
-
-	public Integer getRetirementPay() {
-		return retirementPay;
-	}
-
-	public void setRetirementPay(Integer retirementPay) {
-		this.retirementPay = retirementPay;
-	}
-	
-	
 }
