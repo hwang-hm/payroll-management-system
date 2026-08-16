@@ -478,11 +478,7 @@
 			    alert(error.message);
 			});
 		}
-
-		// 신규 추가 알림
-		function addWorker() {
-			alert("신규 일용직 근로자 추가 팝업/모달을 호출합니다.");
-		}
+		
 	</script>
 
 </body>

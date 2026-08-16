@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<!-- 1. 메인 패널 영역 -->
 <div class="panel">
 	<div class="panel-header">
 		<button type="button" class="btn btn-primary" onclick="addWorker()">➕
@@ -23,49 +24,388 @@
 				</tr>
 			</thead>
 			<tbody id="workerListBody">
-				<!-- selectWorker(this, 실제_emp_id, '사원이름') 형식으로 통일 -->
-				<tr onclick="selectWorker(this, 1, '김철수')">
-					<td>일용직</td>
-					<td>김철수</td>
-					<td>관리팀</td>
-					<td style="text-align: right; font-weight: 600;">98,766</td>
-				</tr>
-				<tr onclick="selectWorker(this, 2, '박영희')">
-					<td>일용직</td>
-					<td>박영희</td>
-					<td>관리팀</td>
-					<td style="text-align: right; font-weight: 600;">99,100</td>
-				</tr>
+				<!-- 모달에서 선택된 사원들이 들어오는 영역 -->
 			</tbody>
 		</table>
 	</div>
 </div>
 
+<!-- 2. 급여지급 사원선택 모달 영역 (누락되었던 HTML 추가) -->
+<div id="workerSelectModal" class="modal-overlay" style="display: none;">
+	<div class="modal-content">
+		<!-- 모달 헤더 -->
+		<div class="modal-header">
+			<h3 class="modal-title">급여지급 사원선택</h3>
+		</div>
+
+		<!-- 모달 바디 -->
+		<div class="modal-body">
+			<!-- 검색 & 필터 바 -->
+			<div class="modal-filter-bar">
+				<div class="filter-left">
+					<div class="search-input-group">
+						<input type="text" id="modalSearchKeyword" placeholder="사원검색"
+							onkeyup="filterModalWorkers()" />
+						<button type="button" class="btn-search-icon"
+							onclick="filterModalWorkers()">🔍</button>
+					</div>
+					<button type="button" class="btn-reset-filter"
+						onclick="resetModalFilter()">전체보기</button>
+				</div>
+				<div class="filter-right">
+					<select id="filterStatus" onchange="filterModalWorkers()">
+						<option value="">상태별</option>
+						<option value="재직">재직</option>
+						<option value="퇴직">퇴직</option>
+					</select>
+				</div>
+			</div>
+
+			<!-- 사원 목록 테이블 -->
+			<div class="modal-table-wrapper">
+				<table class="erp-modal-table">
+					<thead>
+						<tr>
+							<th style="width: 38px; text-align: center;"><input
+								type="checkbox" id="checkAllModalWorkers"
+								onclick="toggleAllModalWorkers(this)" /></th>
+							<th style="width: 70px;">구분</th>
+							<th style="width: 110px;">사원번호</th>
+							<th style="width: 90px;">성명</th>
+							<th style="width: 100px;">부서</th>
+							<th style="width: 80px;">직위</th>
+							<th style="width: 70px;">상태</th>
+						</tr>
+					</thead>
+					<tbody id="modalWorkerListBody">
+						<!-- _modalWorkerList.jsp의 <tr> HTML 조각이 비동기로 들어옵니다 -->
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<!-- 모달 하단 버튼 -->
+		<div class="modal-footer">
+			<button type="button" class="btn-erp-blue"
+				onclick="applySelectedWorkers()">사원선택</button>
+			<button type="button" class="btn-erp-gray"
+				onclick="closeWorkerModal()">선택취소</button>
+		</div>
+	</div>
+</div>
+
+<!-- 3. 모달 스타일 정의 -->
+<style>
+.modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.35);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 2000;
+}
+
+.modal-content {
+	background: #ffffff;
+	border-radius: 8px;
+	width: 680px;
+	max-width: 95%;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+	padding: 20px;
+	box-sizing: border-box;
+}
+
+.modal-header {
+	margin-bottom: 15px;
+}
+
+.modal-title {
+	font-size: 18px;
+	font-weight: 700;
+	color: #333;
+	margin: 0;
+}
+
+.modal-filter-bar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+	font-size: 13px;
+}
+
+.filter-left, .filter-right {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.search-input-group {
+	display: flex;
+	align-items: center;
+	border: 1px solid #ccc;
+	background: #fff;
+}
+
+.search-input-group input {
+	border: none;
+	outline: none;
+	padding: 4px 8px;
+	font-size: 12px;
+	width: 130px;
+}
+
+.btn-search-icon {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 2px 6px;
+	font-size: 12px;
+}
+
+.btn-reset-filter {
+	border: 1px solid #ccc;
+	background: #f8f9fa;
+	cursor: pointer;
+	padding: 4px 8px;
+	font-size: 12px;
+}
+
+.filter-right select {
+	border: 1px solid #ccc;
+	padding: 4px 6px;
+	font-size: 12px;
+	outline: none;
+}
+
+.modal-table-wrapper {
+	max-height: 280px;
+	overflow-y: auto;
+	border: 1px solid #a6c2d7;
+}
+
+.erp-modal-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 12px;
+	text-align: center;
+}
+
+.erp-modal-table th {
+	background-color: #f2f7fb;
+	color: #333;
+	font-weight: 600;
+	border: 1px solid #d0dbe5;
+	padding: 6px 4px;
+	position: sticky;
+	top: 0;
+	z-index: 10;
+}
+
+.erp-modal-table td {
+	border: 1px solid #e1e8ee;
+	padding: 6px 4px;
+	color: #444;
+}
+
+.erp-modal-table tr:hover {
+	background-color: #f5f9fc;
+	cursor: pointer;
+}
+
+.modal-footer {
+	margin-top: 20px;
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+}
+
+.btn-erp-blue {
+	background-color: #337ab7;
+	color: white;
+	border: none;
+	padding: 8px 24px;
+	font-size: 13px;
+	font-weight: 600;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.btn-erp-blue:hover {
+	background-color: #286090;
+}
+
+.btn-erp-gray {
+	background-color: #a0a0a0;
+	color: white;
+	border: none;
+	padding: 8px 24px;
+	font-size: 13px;
+	font-weight: 600;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.btn-erp-gray:hover {
+	background-color: #8c8c8c;
+}
+</style>
+
+<!-- 4. 스크립트 정의 -->
 <script>
-// 사원 행 클릭 시 실행되는 함수
+// 메인 테이블의 사원 행 클릭 시 실행
 function selectWorker(element, empId, empName) {
-	// 1. 이전 선택된 행의 active 클래스 제거 후, 클릭된 행에 active 추가
 	const rows = document.querySelectorAll('#workerListBody tr');
 	rows.forEach(r => r.classList.remove('active'));
 	element.classList.add('active');
 
-	// 2. 우측 패널 헤더의 [선택된 사원 이름] 변경
 	const targetEmpName = document.getElementById('targetEmpName');
 	if (targetEmpName) {
 		targetEmpName.innerText = empName;
 	}
 
-	// 3. 메인 저장 폼(hidden input)의 empId 설정
 	const selectedEmpIdInput = document.getElementById('selectedEmpId');
 	if (selectedEmpIdInput) {
 		selectedEmpIdInput.value = empId;
 	}
 
-	// 4. 우측 급여 상세 및 공제 항목 DB 동적 로드 함수 호출
 	if (typeof loadEmployeeSalaryDetail === 'function') {
 		loadEmployeeSalaryDetail(empId, empName);
 	} else {
 		console.error("loadEmployeeSalaryDetail 함수가 정의되지 않았습니다.");
 	}
+}
+
+// 1. [신규추가] 버튼 클릭 시 모달 열기 및 데이터 로드
+function addWorker() {
+	const modal = document.getElementById('workerSelectModal');
+	if (modal) {
+		modal.style.display = 'flex';
+		document.getElementById('modalSearchKeyword').value = '';
+		document.getElementById('checkAllModalWorkers').checked = false;
+		
+		fetchWorkerMasterList();
+	}
+}
+
+// 2. 모달 닫기
+function closeWorkerModal() {
+	const modal = document.getElementById('workerSelectModal');
+	if (modal) {
+		modal.style.display = 'none';
+		document.getElementById('modalWorkerListBody').innerHTML = '';
+	}
+}
+
+// 3. 비동기로 모달 목록 HTML 수신
+function fetchWorkerMasterList() {
+	const tbody = document.getElementById('modalWorkerListBody');
+	tbody.innerHTML = '<tr><td colspan="7" style="padding:20px; text-align:center;">목록을 불러오는 중...</td></tr>';
+
+	fetch('${pageContext.request.contextPath}/emp/dayworker/list.do')
+		.then(res => {
+			if (!res.ok) throw new Error('응답 실패 (' + res.status + ')');
+			return res.text(); // _modalWorkerList.jsp의 <tr> 조각들을 받음
+		})
+		.then(html => {
+			tbody.innerHTML = html;
+		})
+		.catch(err => {
+			console.error("조회 실패:", err);
+			tbody.innerHTML = '<tr><td colspan="7" style="color:red; padding:20px; text-align:center;">일용직 목록을 가져올 수 없습니다.</td></tr>';
+		});
+}
+
+// 4. 모달 행 클릭 시 체크박스 토글
+function toggleModalRow(tr, event) {
+	if (event.target.type !== 'checkbox') {
+		const chk = tr.querySelector('.worker-chk');
+		if (chk) chk.checked = !chk.checked;
+	}
+}
+
+// 5. 모달 전체 선택/해제 토글
+function toggleAllModalWorkers(master) {
+	const chks = document.querySelectorAll('#modalWorkerListBody .worker-chk');
+	chks.forEach(chk => {
+		if (chk.closest('tr').style.display !== 'none') {
+			chk.checked = master.checked;
+		}
+	});
+}
+
+// 6. [사원선택] 버튼 클릭 시 메인 목록에 추가
+function applySelectedWorkers() {
+	const checkedBoxes = document.querySelectorAll('#modalWorkerListBody .worker-chk:checked');
+	if (checkedBoxes.length === 0) {
+		alert('사원을 선택해주세요.');
+		return;
+	}
+
+	const mainTbody = document.getElementById('workerListBody');
+	let addedCount = 0;
+
+	checkedBoxes.forEach(chk => {
+		const empId = chk.dataset.empId;
+		const empName = chk.dataset.empName;
+		const deptName = chk.dataset.deptName;
+		const workerType = chk.dataset.workerType;
+
+		// 메인 테이블에 이미 존재하는지 중복 검사
+		let exists = false;
+		mainTbody.querySelectorAll('tr').forEach(r => {
+			if (r.getAttribute('data-emp-id') === empId) exists = true;
+		});
+
+		if (!exists) {
+			const tr = document.createElement('tr');
+			tr.setAttribute('data-emp-id', empId);
+			tr.onclick = function() { selectWorker(this, empId, empName); };
+			tr.innerHTML =
+				'<td>' + workerType + '</td>' +
+		        '<td>' + empName + '</td>' +
+		        '<td>' + deptName + '</td>' +
+		        '<td style="text-align: right; font-weight: 600;">0</td>';
+			mainTbody.appendChild(tr);
+			addedCount++;
+		}
+	});
+
+	if (addedCount > 0) {
+		alert(addedCount + '명의 사원이 추가되었습니다.');
+	} else {
+		alert('선택한 사원이 이미 목록에 있습니다.');
+	}
+
+	closeWorkerModal();
+}
+
+// 7. 검색 및 필터링 기능
+function filterModalWorkers() {
+	const keyword = document.getElementById('modalSearchKeyword').value.toLowerCase().trim();
+	const statusFilter = document.getElementById('filterStatus').value;
+	const rows = document.querySelectorAll('#modalWorkerListBody tr');
+
+	rows.forEach(row => {
+		const text = row.innerText.toLowerCase();
+		const matchKeyword = text.includes(keyword);
+		const matchStatus = !statusFilter || text.includes(statusFilter);
+
+		if (matchKeyword && matchStatus) {
+			row.style.display = '';
+		} else {
+			row.style.display = 'none';
+		}
+	});
+}
+
+function resetModalFilter() {
+	document.getElementById('modalSearchKeyword').value = '';
+	document.getElementById('filterStatus').value = '';
+	filterModalWorkers();
 }
 </script>
