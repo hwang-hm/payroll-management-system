@@ -146,37 +146,24 @@
 				class="gnb-link">🏠 HOME</a>
 		</div>
 
-    <!-- 기본환경 설정 -->
-    <div class="gnb-item">
-      <a href="#" class="gnb-link">기본환경 설정 ▾</a>
-      <div class="sub-dropdown"> 
-        <a href="${pageContext.request.contextPath}/config/register.do">사원 등록</a>
-        <a href="${pageContext.request.contextPath}/config/vacation-attendance.do">휴가/근태 설정</a>
-        <a href="${pageContext.request.contextPath}/config/salaryItem.do">급여항목 설정</a>
-      </div>
-    </div>
-		<!-- 기본환경 설정 -->
-		<div class="gnb-item">
-			<a href="#" class="gnb-link">기본환경 설정 ▾</a>
-			<div class="sub-dropdown">
-				<a href="${pageContext.request.contextPath}/emp/register.do">사원
-					등록</a> <a
-					href="${pageContext.request.contextPath}/config/vacation-attendance.do">휴가/근태
-					설정</a> <a
-					href="${pageContext.request.contextPath}/config/salaryItem.do">급여항목
-					설정</a>
-			</div>
-		</div>
+	    <!-- 기본환경 설정 -->
+	    <div class="gnb-item">
+	      <a href="#" class="gnb-link">기본환경 설정 ▾</a>
+	      <div class="sub-dropdown"> 
+	        <a href="${pageContext.request.contextPath}/config/register.do">사원 등록</a>
+	        <a href="${pageContext.request.contextPath}/config/vacation-attendance.do">휴가/근태 설정</a>
+	        <a href="${pageContext.request.contextPath}/config/salaryItem.do">급여항목 설정</a>
+	      </div>
+	    </div>
+
 		<!-- 인사관리 -->
 		<div class="gnb-item">
 			<a href="#" class="gnb-link">인사관리 ▾</a>
 			<div class="sub-dropdown">
 				<a href="${pageContext.request.contextPath}/emp/list.do">사원현황/관리</a>
 				<a href="${pageContext.request.contextPath}/emp/card.do">인사기록 카드</a>
-				<a href="${pageContext.request.contextPath}/emp/cert/issue.do">제
-					증명서 발급</a> <a
-					href="${pageContext.request.contextPath}/emp/cert/list.do">제
-					증명서 발급대장</a>
+				<a href="${pageContext.request.contextPath}/emp/cert/issue.do">제증명서 발급</a> 
+				<a href="${pageContext.request.contextPath}/emp/cert/list.do">제증명서 발급대장</a>
 			</div>
 		</div>
 
@@ -187,11 +174,8 @@
 				<a href="${pageContext.request.contextPath}/attendance/record/list.do">근태기록/관리</a>
 				<a href="${pageContext.request.contextPath}/attendance/list.do">근태조회</a>
 				<a href="${pageContext.request.contextPath}/attendance/vacation.do">휴가조회</a>
-				<a
-					href="${pageContext.request.contextPath}/attendance/daily/record.do">일용직
-					근무기록/관리</a> <a
-					href="${pageContext.request.contextPath}/attendance/daily/list.do">일용직
-					근무 조회</a>
+				<a href="${pageContext.request.contextPath}/attendance/daily/record.do">일용직근무기록/관리</a> 
+				<a href="${pageContext.request.contextPath}/attendance/daily/list.do">일용직근무 조회</a>
 			</div>
 		</div>
 
@@ -200,19 +184,14 @@
 			<a href="#" class="gnb-link">급여관리 ▾</a>
 			<div class="sub-dropdown">
 				<a href="${pageContext.request.contextPath}/salary/entry.do">급여입력/관리</a>
-				<a
-					href="${pageContext.request.contextPath}/salary/dayworker/register.do">급여입력/관리(일용직)</a>
+				<a href="${pageContext.request.contextPath}/salary/dayworker/register.do">급여입력/관리(일용직)</a>
 				<a href="${pageContext.request.contextPath}/salary/ledger.do">급여대장</a>
 				<a href="${pageContext.request.contextPath}/salary/payslip.do">급여명세서</a>
-				<a href="${pageContext.request.contextPath}/salary/empHistory.do">사원별
-					급여내역</a> <a
-					href="${pageContext.request.contextPath}/salary/transfer/apply.do">급여이체
-					신청</a> <a
-					href="${pageContext.request.contextPath}/salary/transfer/result.do">급여이체
-					결과조회</a> <a
-					href="${pageContext.request.contextPath}/salary/itemRegister.do">항목별
-					대장</a> <a href="${pageContext.request.contextPath}/salary/insurance.do">4대보험
-					공제내역</a>
+				<a href="${pageContext.request.contextPath}/salary/empHistory.do">사원별급여내역</a> 
+				<a href="${pageContext.request.contextPath}/salary/transfer/apply.do">급여이체신청</a> 
+				<a href="${pageContext.request.contextPath}/salary/transfer/result.do">급여이체결과조회</a> 
+				<a href="${pageContext.request.contextPath}/salary/itemRegister.do">항목별대장</a> 
+				<a href="${pageContext.request.contextPath}/salary/insurance.do">4대보험공제내역</a>
 			</div>
 		</div>
 
@@ -220,17 +199,11 @@
 		<div class="gnb-item">
 			<a href="#" class="gnb-link">급여통계 ▾</a>
 			<div class="sub-dropdown">
-				<a
-					href="${pageContext.request.contextPath}/salary/stats/yearlyTotal.do">연도별
-					전체급여 통계</a> <a
-					href="${pageContext.request.contextPath}/salary/stats/monthlyTotal.do">월별
-					전체급여 통계</a> <a
-					href="${pageContext.request.contextPath}/stats/yearlyPersonal.do">연도별
-					개인연봉 통계</a> <a
-					href="${pageContext.request.contextPath}/stats/monthlyPersonal.do">월별
-					개인급여 통계</a> <a
-					href="${pageContext.request.contextPath}/stats/itemComposition.do">급여항목
-					구성 통계</a>
+				<a href="${pageContext.request.contextPath}/salary/stats/yearlyTotal.do">연도별전체급여 통계</a> 
+				<a href="${pageContext.request.contextPath}/salary/stats/monthlyTotal.do">월별전체급여 통계</a> 
+				<a href="${pageContext.request.contextPath}/stats/yearlyPersonal.do">연도별개인연봉 통계</a> 
+				<a href="${pageContext.request.contextPath}/stats/monthlyPersonal.do">월별개인급여 통계</a> 
+				<a href="${pageContext.request.contextPath}/stats/itemComposition.do">급여항목구성 통계</a>
 			</div>
 		</div>
 
@@ -238,11 +211,9 @@
 		<div class="gnb-item">
 			<a href="#" class="gnb-link">퇴직관리 ▾</a>
 			<div class="sub-dropdown">
-				<a href="${pageContext.request.contextPath}/retire/process.do">사원
-					퇴직처리</a> <a
-					href="${pageContext.request.contextPath}/retire/pay/entry.do">퇴직급여
-					입력/관리</a> <a
-					href="${pageContext.request.contextPath}/retire/payslip.do">퇴직급여명세서</a>
+				<a href="${pageContext.request.contextPath}/retirement/list.do">사원퇴직처리</a> 
+				<a href="${pageContext.request.contextPath}/retire/pay/entry.do">퇴직급여입력/관리</a> 
+				<a href="${pageContext.request.contextPath}/retire/payslip.do">퇴직급여명세서</a>
 			</div>
 		</div>
 	</nav>
