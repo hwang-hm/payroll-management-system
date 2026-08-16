@@ -11,9 +11,9 @@ import salary.dayworker.model.Dayworker;
 public class ListEmployeeService {
 	private DayworkerDao dayworkerDao = new DayworkerDao();
 
-	public List<Dayworker> getEmpList() {
+	public List<Dayworker> getEmpList(String keyword) {
 		try (Connection conn = ConnectionProvider.getConnection()) {
-			return dayworkerDao.selectAllEmp(conn);
+			return dayworkerDao.selectEmpByKeyword(conn, keyword);
 		} catch (SQLException e) {
 			throw new RuntimeException("근로자 목록 조회 실패", e);
 		}
