@@ -203,7 +203,7 @@
 				<a href="${pageContext.request.contextPath}/salary/stats/monthlyTotal.do">월별전체급여 통계</a> 
 				<a href="${pageContext.request.contextPath}/salary/stats/yearlyPersonal.do">연도별개인연봉 통계</a> 
 				<a href="${pageContext.request.contextPath}/salary/stats/monthlyPersonal.do">월별개인급여 통계</a> 
-				<a href="${pageContext.request.contextPath}/stats/itemComposition.do">급여항목구성 통계</a>
+				<a href="${pageContext.request.contextPath}/salary/stats/itemComposition.do">급여항목구성 통계</a>
 			</div>
 		</div>
 
