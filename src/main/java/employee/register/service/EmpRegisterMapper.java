@@ -3,6 +3,7 @@ package employee.register.service;
 import employee.model.Dependent;
 import employee.model.EmpInfoSalary;
 import employee.model.Employee;
+import employee.model.Retirement;
 
 public class EmpRegisterMapper {
 	public Employee toEmp(EmpRequest empReq) {
@@ -73,4 +74,5 @@ public class EmpRegisterMapper {
 		
 		return dependent;
 	}
+
 }

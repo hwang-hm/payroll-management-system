@@ -12,6 +12,7 @@ public class EmpRegisterRequest {
 		this.empReq = empReq;
 		this.empInfoSalaryReq = empInfoSalaryReq;
 		this.dependentReqs = dependentReqs;
+
 	}
 	public EmpRequest getEmpReq() {
 		return empReq;
@@ -22,6 +23,8 @@ public class EmpRegisterRequest {
 	public List<DependentRequest> getDependentReqs() {
 		return dependentReqs;
 	}
+	
+
 
 	
 }
