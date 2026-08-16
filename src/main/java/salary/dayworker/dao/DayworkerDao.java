@@ -39,4 +39,31 @@ public class DayworkerDao {
 			JdbcUtil.close(pstmt);
 		}
 	}
+
+	public List<Dayworker> selectAllEmp(Connection conn) throws SQLException {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<Dayworker> list = new ArrayList<>();
+
+		String sql = "SELECT e.employment_type, e.emp_id, e.name_kor, e.dept_id, "
+				+ "d.dept_name AS dept_name, e.position_id, p.position_name AS position_name, e.status "
+				+ "FROM employee e " + "LEFT JOIN department d ON e.dept_id = d.dept_id "
+				+ "LEFT JOIN position p ON e.position_id = p.position_id " + "ORDER BY e.emp_id ASC";
+
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				list.add(new Dayworker(rs.getString("employment_type"), rs.getInt("emp_id"), rs.getString("name_kor"),
+						rs.getObject("dept_id") != null ? rs.getInt("dept_id") : null, rs.getString("dept_name"),
+						rs.getObject("position_id") != null ? rs.getInt("position_id") : null,
+						rs.getString("position_name"), rs.getString("status")));
+			}
+			return list;
+		} finally {
+			JdbcUtil.close(rs);
+			JdbcUtil.close(pstmt);
+		}
+	}
 }
