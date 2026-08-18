@@ -14,6 +14,7 @@ public class SalaryEntryHandler implements CommandHandler {
 
 	private final SalaryEntryService entryService = new SalaryEntryService();
 
+	// 화면에서 고른 년월/차수/사원으로 급여입력 화면 열어줌
 	@Override
 	public String process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		// 년,월,급여차수를 JSP에서 가져옴, 없을시 디폴트 값으로 현재시간, 급여차수는 1을 세팅한다.

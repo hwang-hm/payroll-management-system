@@ -7,10 +7,12 @@ import mvc.command.CommandHandler;
 import salary.transfer.service.TransferApplyService;
 import salary.transfer.viewdto.TransferApplyData;
 
+// 급여이체 신청 화면 열어주는 핸들러.
 public class TransferApplyHandler implements CommandHandler {
 
 	private final TransferApplyService applyService = new TransferApplyService();
 
+	// 년월/차수/양식 받아서 이체신청 화면 데이터 세팅
 	@Override
 	public String process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		int payYear = parseInt(req.getParameter("payYear"), TransferApplyService.currentYear());

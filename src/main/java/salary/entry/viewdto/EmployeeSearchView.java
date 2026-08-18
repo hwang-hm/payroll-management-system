@@ -1,5 +1,6 @@
 package salary.entry.viewdto;
 
+// 사원추가 모달에 뿌릴 한 줄
 public class EmployeeSearchView {
 
 	private int empId;

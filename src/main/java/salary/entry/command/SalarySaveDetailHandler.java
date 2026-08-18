@@ -14,6 +14,7 @@ public class SalarySaveDetailHandler implements CommandHandler {
 
 	private final SalarySaveDetailService saveDetailService = new SalarySaveDetailService();
 
+	// 상세금액 저장하고 다시 급여입력 화면으로 돌아감
 	@Override
 	public String process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		if (!"POST".equalsIgnoreCase(req.getMethod())) {
