@@ -9,10 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 import mvc.command.CommandHandler;
 import salary.entry.service.SalaryAddEmployeesService;
 
+// 사원검색 모달에서 고른 사람들을 이번 급여에 추가하는 핸들러.
 public class SalaryAddEmployeesHandler implements CommandHandler {
 
 	private final SalaryAddEmployeesService addEmployeesService = new SalaryAddEmployeesService();
 
+	// 고른 사원 추가하고 급여입력 화면으로 다시 감
 	@Override
 	public String process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		if (!"POST".equalsIgnoreCase(req.getMethod())) {

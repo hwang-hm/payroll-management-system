@@ -11,6 +11,7 @@ import salary.model.SalaryItem;
 
 public class SalaryItemDao {
 
+	// 사용중인 급여항목만 가져옴. 사원 추가할 때 상세 만들려고
 	public List<SalaryItem> selectActiveItems(Connection conn) throws SQLException {
 		String sql = "SELECT salary_item_id, attendance_type_id, item_type, item_name, tax_yn, tax_free_name, "
 				+ "tax_free_limit, calc_method, round_unit, default_amount, remark, use_yn "
@@ -26,6 +27,7 @@ public class SalaryItemDao {
 		}
 	}
 
+	// 조회결과를 급여항목으로 옮겨담기
 	private SalaryItem toSalaryItem(ResultSet rs) throws SQLException {
 		SalaryItem item = new SalaryItem();
 		item.setSalaryItemId(rs.getInt("salary_item_id"));
