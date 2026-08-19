@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import jdbc.connection.ConnectionProvider;
-import salary.entry.dao.SalaryDao;
-import salary.entry.dao.SalaryDateDao;
+import salary.ledger.dao.SalaryLedgerDao;
+import salary.ledger.dao.SalaryLedgerDateDao;
 import salary.entry.viewdto.SalarySummary;
 import salary.ledger.viewdto.SalaryLedgerData;
 import salary.ledger.viewdto.SalaryLedgerRow;
@@ -20,15 +20,15 @@ import salary.model.SalaryDate;
 
 public class SalaryLedgerService {
 
-	private final SalaryDateDao salaryDateDao = new SalaryDateDao();
-	private final SalaryDao salaryDao = new SalaryDao();
+	private final SalaryLedgerDateDao salaryLedgerDateDao = new SalaryLedgerDateDao();
+	private final SalaryLedgerDao salaryLedgerDao = new SalaryLedgerDao();
 
 	public SalaryLedgerData getLedgerData(int payYear) {
 		try (Connection conn = ConnectionProvider.getConnection()) {
-			List<SalaryDate> dates = salaryDateDao.selectByYear(conn, payYear);
-			List<Salary> salaries = salaryDao.selectByPayYear(conn, payYear);
+			List<SalaryDate> dates = salaryLedgerDateDao.selectByYear(conn, payYear);
+			List<Salary> salaries = salaryLedgerDao.selectByPayYear(conn, payYear);
 			List<SalaryLedgerRow> rows = toLedgerRows(dates, salaries);
-			List<Integer> yearOptions = buildYearOptions(salaryDao.selectDistinctPayYears(conn), payYear);
+			List<Integer> yearOptions = buildYearOptions(salaryLedgerDao.selectDistinctPayYears(conn), payYear);
 
 			SalaryLedgerData data = new SalaryLedgerData();
 			data.setPayYear(payYear);

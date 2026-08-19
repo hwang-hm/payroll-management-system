@@ -88,6 +88,7 @@ public class TransferApplyRow {
 		this.hireDate = hireDate;
 	}
 
+	// 입사일 화면용. 없으면 '-'
 	public String getHireDateText() {
 		if (hireDate == null) {
 			return "-";
@@ -167,6 +168,7 @@ public class TransferApplyRow {
 		this.netPay = netPay;
 	}
 
+	// 양식에서 고른 컬럼 코드에 맞는 값을 꺼내줌
 	public String getValueByCode(String code) {
 		if (code == null) {
 			return "";
@@ -205,6 +207,7 @@ public class TransferApplyRow {
 		}
 	}
 
+	// 값 없으면 '-'로 보여주려고
 	private String nullToDash(String value) {
 		return value == null || value.trim().isEmpty() ? "-" : value;
 	}

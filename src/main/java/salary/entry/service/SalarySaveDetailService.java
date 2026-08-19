@@ -39,6 +39,7 @@ public class SalarySaveDetailService {
 		}
 	}
 
+	// 상세 금액 다시 더해서 salary 한 줄의 지급/공제/실지급 맞춰줌
 	private void recalculateTotals(Connection conn, int salaryId) throws SQLException {
 		long totalPay = 0;
 		long totalDeduct = 0;

@@ -10,10 +10,12 @@ import mvc.command.CommandHandler;
 import salary.transfer.service.TransferApplyService;
 import salary.transfer.service.TransferExecuteService;
 
+// 급여이체하기 버튼 누르면 실제로 이체 돌리는 핸들러.
 public class TransferExecuteHandler implements CommandHandler {
 
 	private final TransferExecuteService executeService = new TransferExecuteService();
 
+	// 이체 실행하고 결과 메시지 붙여서 신청화면으로 다시 보냄
 	@Override
 	public String process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		if (!"POST".equalsIgnoreCase(req.getMethod())) {

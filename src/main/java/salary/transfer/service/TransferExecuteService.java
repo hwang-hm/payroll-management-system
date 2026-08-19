@@ -8,7 +8,7 @@ import java.util.List;
 import jdbc.JdbcUtil;
 import jdbc.connection.ConnectionProvider;
 import salary.entry.dao.SalaryDao;
-import salary.entry.dao.TransferHistoryDao;
+import salary.transfer.dao.TransferHistoryDao;
 import salary.model.TransferHistory;
 import salary.transfer.viewdto.TransferApplyRow;
 
@@ -17,6 +17,7 @@ public class TransferExecuteService {
 	private final SalaryDao salaryDao = new SalaryDao();
 	private final TransferHistoryDao transferHistoryDao = new TransferHistoryDao();
 
+	// 해당 귀속년월 대상으로 이체 돌림. 계좌없거나 이미 이체된 사람은 건너뜀
 	public String execute(int payYear, int payMonth, int paySeq) {
 		Connection conn = null;
 		try {
@@ -75,6 +76,7 @@ public class TransferExecuteService {
 		}
 	}
 
+	// 빈 문자열인지 확인
 	private boolean isBlank(String value) {
 		return value == null || value.trim().isEmpty();
 	}
