@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import mvc.command.CommandHandler;
-import salary.transfer.service.TransferHistoryPage;
 import salary.transfer.service.TransferResultService;
+import salary.transfer.viewdto.TransferHistoryPage;
 
 // 급여이체 결과 조회 화면 핸들러.
 public class TransferResultHandler implements CommandHandler {
