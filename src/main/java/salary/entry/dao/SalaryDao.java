@@ -135,40 +135,6 @@ public class SalaryDao {
 		}
 	}
 
-	// 그 해 급여 데이터 전부. 급여대장에서 씀
-	public List<Salary> selectByPayYear(Connection conn, int payYear) throws SQLException {
-		String sql = "SELECT s.salary_id, s.salary_date_id, s.emp_id, s.total_pay, s.total_deduct, s.net_pay, "
-				+ "s.created_at, s.updated_at " + "FROM salary s "
-				+ "JOIN salary_date sd ON s.salary_date_id = sd.salary_date_id "
-				+ "JOIN employee e ON s.emp_id = e.emp_id " + "WHERE sd.pay_year = ? "
-				+ "AND e.employment_type <> '일용직' " + "ORDER BY sd.pay_month, sd.pay_seq, s.salary_id";
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setInt(1, payYear);
-			try (ResultSet rs = pstmt.executeQuery()) {
-				List<Salary> list = new ArrayList<>();
-				while (rs.next()) {
-					list.add(toSalary(rs));
-				}
-				return list;
-			}
-		}
-	}
-
-	// 급여가 있는 연도만 뽑아서 셀렉트박스에 씀
-	public List<Integer> selectDistinctPayYears(Connection conn) throws SQLException {
-		String sql = "SELECT DISTINCT sd.pay_year " + "FROM salary s "
-				+ "JOIN salary_date sd ON s.salary_date_id = sd.salary_date_id "
-				+ "JOIN employee e ON s.emp_id = e.emp_id " + "WHERE e.employment_type <> '일용직' "
-				+ "ORDER BY sd.pay_year DESC";
-		try (PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
-			List<Integer> years = new ArrayList<>();
-			while (rs.next()) {
-				years.add(rs.getInt("pay_year"));
-			}
-			return years;
-		}
-	}
-
 	// 이번 급여에 아직 안 넣은 사원 목록
 	public List<EmployeeSearchView> selectEmployeesForAdd(Connection conn, int salaryDateId) throws SQLException {
 		String sql = "SELECT e.emp_id, e.employment_type, e.name_kor, "
@@ -238,20 +204,6 @@ public class SalaryDao {
 		view.setTotalDeduct(rs.getLong("total_deduct"));
 		view.setNetPay(rs.getLong("net_pay"));
 		return view;
-	}
-
-	// salary 테이블 한 줄로 옮겨담기
-	private Salary toSalary(ResultSet rs) throws SQLException {
-		Salary salary = new Salary();
-		salary.setSalaryId(rs.getInt("salary_id"));
-		salary.setSalaryDateId(rs.getInt("salary_date_id"));
-		salary.setEmpId(rs.getInt("emp_id"));
-		salary.setTotalPay(rs.getLong("total_pay"));
-		salary.setTotalDeduct(rs.getLong("total_deduct"));
-		salary.setNetPay(rs.getLong("net_pay"));
-		salary.setCreatedAt(rs.getDate("created_at"));
-		salary.setUpdatedAt(rs.getDate("updated_at"));
-		return salary;
 	}
 
 	// 이체신청 한 줄로 옮겨담기
