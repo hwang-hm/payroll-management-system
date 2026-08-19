@@ -35,7 +35,7 @@ public class GetDayworkerSalaryDetailHandler implements CommandHandler {
 		try {
 			conn = ConnectionProvider.getConnection();
 
-			long empId = Long.parseLong(req.getParameter("empId"));
+			int empId = Integer.parseInt(req.getParameter("empId"));
 			int year = Integer.parseInt(req.getParameter("payYear"));
 			int month = Integer.parseInt(req.getParameter("payMonth"));
 			int seq = Integer.parseInt(req.getParameter("paySeq"));

@@ -356,8 +356,8 @@
 				type="hidden" name="totalDeduct" id="formTotalDeduct" value="0" />
 			<input type="hidden" name="netPay" id="formNetPay" value="0" />
 
-			<!-- 1. 상단 필터 영역 컴포넌트 Include -->
-			<jsp:include page="./components/_salaryFilter.jsp" />
+			<!-- 1. 상단 날짜 영역 컴포넌트 Include -->
+			<jsp:include page="./components/_salaryDate.jsp" />
 
 			<!-- 2. 메인 2열 레이아웃 (좌측: 사원목록 / 우측: 상세 급여 계산) -->
 			<div class="payroll-grid">
