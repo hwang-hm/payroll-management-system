@@ -3,7 +3,7 @@ package retirement.model;
 import java.sql.Date;
 import java.sql.Timestamp;
 
-public class taxDeferredAccount {
+public class TaxDeferredAccount {
 	private int taxDeferredAccountId;
 	private int severancePayId;
 	private String pensionProviderName;

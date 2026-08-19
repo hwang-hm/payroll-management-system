@@ -238,11 +238,11 @@
 		<div class="gnb-item">
 			<a href="#" class="gnb-link">퇴직관리 ▾</a>
 			<div class="sub-dropdown">
-				<a href="${pageContext.request.contextPath}/retire/process.do">사원
+				<a href="${pageContext.request.contextPath}/retirement/list.do">사원
 					퇴직처리</a> <a
-					href="${pageContext.request.contextPath}/retire/pay/entry.do">퇴직급여
+					href="${pageContext.request.contextPath}/retirement/severance.do">퇴직급여
 					입력/관리</a> <a
-					href="${pageContext.request.contextPath}/retire/payslip.do">퇴직급여명세서</a>
+					href="${pageContext.request.contextPath}/retirement/payslip.do">퇴직급여명세서</a>
 			</div>
 		</div>
 	</nav>
