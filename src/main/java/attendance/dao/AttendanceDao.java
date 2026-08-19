@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,6 +89,45 @@ public class AttendanceDao {
 
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, empId);
+
+			try (ResultSet rs = pstmt.executeQuery()) {
+				while (rs.next()) {
+					attendances.add(createAttendance(rs));
+				}
+			}
+		}
+
+		return attendances;
+	}
+
+	/**
+	 * 사원번호와 연월로 근태기록을 조회한다.
+	 * 社員番号と年月で勤怠記録を照会する。
+	 */
+	public List<Attendance> selectByEmpIdAndYearMonth(
+			Connection conn, int empId, int year, int month)
+			throws SQLException {
+
+		List<Attendance> attendances = new ArrayList<>();
+		LocalDate firstDay = LocalDate.of(year, month, 1);
+		java.sql.Date startDate = java.sql.Date.valueOf(firstDay);
+		java.sql.Date endDate = java.sql.Date.valueOf(
+				firstDay.plusMonths(1));
+
+		String sql = "SELECT attendance_id, input_date, "
+				+ "attendance_start_date, attendance_end_date, "
+				+ "attendance_days, allowance_amount, remarks, "
+				+ "emp_id, attendance_type_id "
+				+ "FROM attendance "
+				+ "WHERE emp_id = ? "
+				+ "AND attendance_start_date >= ? "
+				+ "AND attendance_start_date < ? "
+				+ "ORDER BY attendance_start_date, attendance_id";
+
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, empId);
+			pstmt.setDate(2, startDate);
+			pstmt.setDate(3, endDate);
 
 			try (ResultSet rs = pstmt.executeQuery()) {
 				while (rs.next()) {
