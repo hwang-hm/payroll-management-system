@@ -2,7 +2,6 @@ package employee.dao;
 
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,6 +10,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import employee.dto.EmployeeDetailData;
 import employee.list.service.EmpListData;
 import employee.model.Employee;
 import jdbc.JdbcUtil;
@@ -240,4 +240,118 @@ public class EmpDao {
 	            	     rs.getTimestamp("created_at")
 	             );
 	         }
+	       
+	       //사원번호로 사원 select - dept, position join
+	       public EmployeeDetailData selectByIdJoin(Connection conn, int empId) throws SQLException{
+	  		 PreparedStatement pstmt = null;
+	  		 ResultSet rs = null;
+	  		 
+	  		 try {
+	  			pstmt = conn.prepareStatement(
+	  							  "select e.emp_id, e.name_kor, e.hire_date, "
+	  			                + "e.dept_id, d.dept_name, "
+	  			                + "e.nationality, e.employment_type, e.name_eng, e.retire_date, "
+	  			                + "e.position_id, p.position_name, "
+	  			                + "e.resident_no, e.zip_code, e.address, e.phone_num, "
+	  			                + "e.mobile_num, e.email, e.sns, e.remarks, "
+	  			                + "e.status, e.photo_path "
+	  			                + "from employee e "
+	  			                + "left join department d on e.dept_id = d.dept_id "
+	  			                + "left join position p on e.position_id = p.position_id "
+	  			                + "where e.emp_id = ?");
+	  			pstmt.setInt(1, empId);
+	  			rs = pstmt.executeQuery();
+	  			EmployeeDetailData emp = null;
+	  			
+	  			if (rs.next()) {
+	  				emp = convertEmployeeDetailData(rs);
+	  			}
+	  			return emp;
+	  		} finally {
+	  			JdbcUtil.close(rs);
+	  			JdbcUtil.close(pstmt);
+	  		}
+	  	 }
+	     
+	       private EmployeeDetailData convertEmployeeDetailData(ResultSet rs)
+	    	        throws SQLException {
+
+	    	    int deptIdValue = rs.getInt("dept_id");
+	    	    Integer deptId = rs.wasNull() ? null : deptIdValue;
+
+	    	    int positionIdValue = rs.getInt("position_id");
+	    	    Integer positionId = rs.wasNull() ? null : positionIdValue;
+
+	    	    return new EmployeeDetailData(
+	    	            rs.getInt("emp_id"),
+	    	            rs.getString("name_kor"),
+	    	            rs.getDate("hire_date"),
+	    	            rs.getString("employment_type"),
+
+	    	            deptId,
+	    	            rs.getString("dept_name"),
+
+	    	            rs.getString("nationality"),
+	    	            rs.getString("name_eng"),
+	    	            rs.getDate("retire_date"),
+
+	    	            positionId,
+	    	            rs.getString("position_name"),
+
+	    	            rs.getString("resident_no"),
+	    	            rs.getString("zip_code"),
+	    	            rs.getString("address"),
+	    	            rs.getString("phone_num"),
+	    	            rs.getString("mobile_num"),
+	    	            rs.getString("email"),
+	    	            rs.getString("sns"),
+	    	            rs.getString("remarks"),
+	    	            rs.getString("status"),
+	    	            rs.getString("photo_path")
+	    	    );
+	    	}
+	       
+	       public List<EmployeeDetailData> selectAllJoin(Connection conn) throws SQLException {
+
+	    	    PreparedStatement pstmt = null;
+	    	    ResultSet rs = null;
+
+	    	    try {
+
+	    	        String sql = "select e.emp_id, e.name_kor, e.hire_date, "
+	    	        	  + "e.employment_type, "
+	    	              + "e.dept_id, d.dept_name, "
+	    	              + "e.nationality, e.name_eng, e.retire_date, "
+	    	              + "e.position_id, p.position_name, "
+	    	              + "e.resident_no, e.zip_code, e.address, "
+	    	              + "e.phone_num, e.mobile_num, e.email, "
+	    	              + "e.sns, e.remarks, e.status, e.photo_path "
+	    	              + "from employee e "
+	    	              + "left join department d "
+	    	              + "on e.dept_id = d.dept_id "
+	    	              + "left join position p "
+	    	              + "on e.position_id = p.position_id "
+	    	              + "order by e.emp_id desc";
+
+	    	        pstmt = conn.prepareStatement(sql);
+
+	    	        rs = pstmt.executeQuery();
+
+	    	        List<EmployeeDetailData> result =
+	    	                new ArrayList<>();
+
+	    	        while (rs.next()) {
+
+	    	            result.add(convertEmployeeDetailData(rs));
+	    	        }
+
+	    	        return result;
+
+	    	    } finally {
+
+	    	        JdbcUtil.close(rs);
+	    	        JdbcUtil.close(pstmt);
+	    	    }
+	    	}
+	     
 }
