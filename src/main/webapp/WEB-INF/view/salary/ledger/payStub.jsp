@@ -77,38 +77,65 @@
 
     /* 명세서 미리보기 */
     .payslip-doc {
-      border: 1px solid #cbd5e1; border-radius: 6px; padding: 24px 28px; background: #fff;
-      min-height: 520px;
+      border: 1px solid #b8c4d4; border-radius: 4px; padding: 22px 26px 18px; background: #fff;
+      min-height: 520px; max-width: 595px; margin: 0 auto;
     }
     .payslip-title {
-      text-align: center; font-size: 20px; font-weight: 800; margin: 0 0 18px 0;
-      letter-spacing: -0.02em;
+      text-align: center; font-size: 22px; font-weight: 800; margin: 0 0 20px 0;
+      letter-spacing: -0.02em; color: #1e293b;
     }
     .emp-info-table {
-      width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 16px;
+      width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 14px;
     }
     .emp-info-table th, .emp-info-table td {
-      border: 1px solid #cbd5e1; padding: 7px 10px; text-align: center;
+      border: 1px solid #b8c4d4; padding: 8px 10px; text-align: center;
     }
-    .emp-info-table th { background: #f1f5f9; font-weight: 700; width: 12%; color: #475569; }
+    .emp-info-table th { background: #f3f6fa; font-weight: 700; width: 14%; color: #334155; }
 
-    .detail-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .detail-table { width: 100%; border-collapse: collapse; font-size: 11px; table-layout: fixed; }
     .detail-table th, .detail-table td {
-      border: 1px solid #cbd5e1; padding: 7px 8px; text-align: center;
+      border: 1px solid #b8c4d4; padding: 4px 6px; vertical-align: middle;
     }
-    .detail-table thead th { background: #f1f5f9; font-weight: 700; color: #475569; }
-    .detail-table .pay-head { color: var(--pay-color); }
-    .detail-table .deduct-head { color: var(--deduct-color); }
-    .detail-table .amount { text-align: right; font-weight: 600; }
-    .detail-table .calc { text-align: left; color: #64748b; font-size: 11px; }
-    .detail-table tfoot td {
-      background: #f8fafc; font-weight: 700; padding: 10px 8px;
+    .detail-table tbody td { height: 16px; line-height: 1.1; }
+    .detail-table thead th {
+      background: #f3f6fa; font-weight: 700; color: #334155; text-align: center;
+      padding: 8px 6px;
+      font-size: 12.5px;
     }
-    .detail-table .net-pay {
-      background: #eff6ff; color: var(--primary); font-size: 14px; font-weight: 800;
+    .detail-table .col-section {
+      width: 9%; background: #f3f6fa; font-weight: 700; text-align: center;
+      writing-mode: vertical-rl; text-orientation: mixed; letter-spacing: 0.08em;
+      padding: 4px 2px;
+      font-size: 14px;
     }
+    .detail-table .col-section.pay { color: #1d4ed8; }
+    .detail-table .col-section.deduct { color: #be123c; }
+    .detail-table .col-item { width: 26%; text-align: center; }
+    /* 산출식(3) : 금액(2) 비율 느낌 */
+    .detail-table .col-calc { width: 39%; text-align: center; color: #475569; font-size: 10px; }
+    .detail-table .col-amount { width: 26%; text-align: center; font-weight: 600; }
+    .detail-table .section-head td {
+      background: #eef2f7; font-weight: 700; text-align: center; color: #1e293b;
+      padding: 4px 6px;
+    }
+    .detail-table .section-head.pay td { color: #1d4ed8; }
+    .detail-table .section-head.deduct td { color: #be123c; }
+    .detail-table .summary-row td {
+      background: #fef9c3; font-weight: 700; text-align: center;
+      padding: 3px 6px;
+    }
+    .detail-table .summary-row .col-amount { text-align: center; }
+    .detail-table .net-pay-row td {
+      background: #f8fafc; font-weight: 800; font-size: 14px;
+      padding: 6px 6px;
+    }
+    .detail-table .net-pay-row .label { text-align: center; color: #1e293b; }
+    .detail-table .net-pay-row .col-amount {
+      text-align: center; color: #1d4ed8; font-size: 14px;
+    }
+    .detail-table .empty-row td { text-align: center; color: #94a3b8; padding: 16px; }
     .payslip-footer {
-      margin-top: 18px; text-align: center; font-size: 13px; color: #64748b;
+      margin-top: 20px; text-align: center; font-size: 13px; color: #64748b;
     }
   </style>
 </head>
@@ -209,12 +236,14 @@
                   <td>${payStubData.form.nameKor}</td>
                   <th>생년월일</th>
                   <td>${payStubData.form.birthDate}</td>
-                  <th>부서</th>
-                  <td>${payStubData.form.deptName}</td>
                 </tr>
                 <tr>
+                  <th>부서</th>
+                  <td>${payStubData.form.deptName}</td>
                   <th>직급</th>
                   <td>${payStubData.form.positionName}</td>
+                </tr>
+                <tr>
                   <th>입사일</th>
                   <td>${payStubData.form.hireDate}</td>
                   <th>급여지급일</th>
@@ -225,52 +254,62 @@
               <table class="detail-table">
                 <thead>
                   <tr>
-                    <th class="pay-head" colspan="3">지급항목</th>
-                    <th class="deduct-head" colspan="2">공제항목</th>
-                  </tr>
-                  <tr>
-                    <th>항목</th>
-                    <th>금액</th>
-                    <th>계산방법</th>
-                    <th>항목</th>
-                    <th>금액</th>
+                    <th class="col-section"></th>
+                    <th class="col-item">항목명</th>
+                    <th class="col-amount">금액</th>
+                    <th class="col-calc">산출식 또는 산출방법</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <c:forEach var="line" items="${payStubData.form.detailLines}">
+                  <c:set var="payRowCount" value="${payStubData.form.paySectionLines.size() + 1}"/>
+                  <c:forEach var="line" items="${payStubData.form.paySectionLines}" varStatus="paySt">
                     <tr>
-                      <td>${line.payItemName}</td>
-                      <td class="amount">
+                      <c:if test="${paySt.first}">
+                        <td rowspan="${payRowCount}" class="col-section pay">지급항목</td>
+                      </c:if>
+                      <td class="col-item">${line.payItemName}</td>
+                      <td class="col-amount">
                         <c:if test="${line.payAmount != null}">
                           <fmt:formatNumber value="${line.payAmount}" pattern="#,###"/>
                         </c:if>
                       </td>
-                      <td class="calc">${line.payCalcMethod}</td>
-                      <td>${line.deductItemName}</td>
-                      <td class="amount">
+                      <td class="col-calc">${line.payCalcMethod}</td>
+                    </tr>
+                  </c:forEach>
+                  <tr class="summary-row">
+                    <td class="col-item">합계</td>
+                    <td class="col-amount"><fmt:formatNumber value="${payStubData.form.totalPay}" pattern="#,###"/> 원</td>
+                    <td class="col-calc"></td>
+                  </tr>
+
+                  <c:set var="deductRowCount" value="${payStubData.form.deductSectionLines.size() + 1}"/>
+                  <c:forEach var="line" items="${payStubData.form.deductSectionLines}" varStatus="deductSt">
+                    <tr>
+                      <c:if test="${deductSt.first}">
+                        <td rowspan="${deductRowCount}" class="col-section deduct">공제항목</td>
+                      </c:if>
+                      <td class="col-item">${line.deductItemName}</td>
+                      <td class="col-amount">
                         <c:if test="${line.deductAmount != null}">
                           <fmt:formatNumber value="${line.deductAmount}" pattern="#,###"/>
                         </c:if>
                       </td>
+                      <td class="col-calc">${line.payCalcMethod}</td>
                     </tr>
                   </c:forEach>
-                  <c:if test="${empty payStubData.form.detailLines}">
-                    <tr><td colspan="5" class="empty-msg" style="padding:20px;">등록된 급여 상세 항목이 없습니다.</td></tr>
-                  </c:if>
+                  <tr class="summary-row">
+                    <td class="col-item">합계</td>
+                    <td class="col-amount"><fmt:formatNumber value="${payStubData.form.totalDeduct}" pattern="#,###"/> 원</td>
+                    <td class="col-calc"></td>
+                  </tr>
+
+                  <tr class="net-pay-row">
+                    <td class="col-section"></td>
+                    <td class="col-item">실수령액</td>
+                    <td class="col-amount"><fmt:formatNumber value="${payStubData.form.netPay}" pattern="#,###"/> 원</td>
+                    <td class="col-calc"></td>
+                  </tr>
                 </tbody>
-                <tfoot>
-                  <tr>
-                    <td>합계</td>
-                    <td class="amount" colspan="2"><fmt:formatNumber value="${payStubData.form.totalPay}" pattern="#,###"/> 원</td>
-                    <td>공제액</td>
-                    <td class="amount"><fmt:formatNumber value="${payStubData.form.totalDeduct}" pattern="#,###"/> 원</td>
-                  </tr>
-                  <tr>
-                    <td colspan="3"></td>
-                    <td class="net-pay">실수령액</td>
-                    <td class="amount net-pay"><fmt:formatNumber value="${payStubData.form.netPay}" pattern="#,###"/> 원</td>
-                  </tr>
-                </tfoot>
               </table>
 
               <p class="payslip-footer">귀하의 노고에 감사드리며, 수고 많으셨습니다.</p>

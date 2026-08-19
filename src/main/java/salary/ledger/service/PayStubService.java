@@ -82,7 +82,33 @@ public class PayStubService {
 		form.setPayDetails(payDetails);
 		form.setDeductDetails(deductDetails);
 		form.setDetailLines(toDetailLines(payDetails, deductDetails));
+		form.setPaySectionLines(toFixedSectionLines(payDetails, 10, true));
+		form.setDeductSectionLines(toFixedSectionLines(deductDetails, 10, false));
 		return form;
+	}
+
+	// 지급/공제 섹션은 최소 10줄을 항상 그려서 A4 느낌의 고정 레이아웃을 유지
+	private List<PayStubDetailLine> toFixedSectionLines(List<SalaryDetail> details, int minRows,
+			boolean isPaySection) {
+		int targetSize = Math.max(minRows, details == null ? 0 : details.size());
+		List<PayStubDetailLine> lines = new ArrayList<>();
+		for (int i = 0; i < targetSize; i++) {
+			PayStubDetailLine line = new PayStubDetailLine();
+			if (details != null && i < details.size()) {
+				SalaryDetail d = details.get(i);
+				if (isPaySection) {
+					line.setPayItemName(d.getItemName());
+					line.setPayAmount(d.getAmount());
+					line.setPayCalcMethod(d.getCalcMethod());
+				} else {
+					line.setDeductItemName(d.getItemName());
+					line.setDeductAmount(d.getAmount());
+					line.setPayCalcMethod(d.getCalcMethod()); // 미사용이지만 null 방지용
+				}
+			}
+			lines.add(line);
+		}
+		return lines;
 	}
 
 	private List<PayStubDetailLine> toDetailLines(List<SalaryDetail> payDetails, List<SalaryDetail> deductDetails) {

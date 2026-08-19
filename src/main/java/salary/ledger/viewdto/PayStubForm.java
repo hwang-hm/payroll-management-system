@@ -17,6 +17,9 @@ public class PayStubForm {
 	private List<SalaryDetail> payDetails = new ArrayList<>();
 	private List<SalaryDetail> deductDetails = new ArrayList<>();
 	private List<PayStubDetailLine> detailLines = new ArrayList<>();
+	// A4에 맞춘 고정 높이용: 지급/공제 각각 최소 10줄
+	private List<PayStubDetailLine> paySectionLines = new ArrayList<>();
+	private List<PayStubDetailLine> deductSectionLines = new ArrayList<>();
 	private long totalPay;
 	private long totalDeduct;
 	private long netPay;
@@ -91,6 +94,22 @@ public class PayStubForm {
 
 	public void setDetailLines(List<PayStubDetailLine> detailLines) {
 		this.detailLines = detailLines == null ? new ArrayList<>() : detailLines;
+	}
+
+	public List<PayStubDetailLine> getPaySectionLines() {
+		return paySectionLines;
+	}
+
+	public void setPaySectionLines(List<PayStubDetailLine> paySectionLines) {
+		this.paySectionLines = paySectionLines == null ? new ArrayList<>() : paySectionLines;
+	}
+
+	public List<PayStubDetailLine> getDeductSectionLines() {
+		return deductSectionLines;
+	}
+
+	public void setDeductSectionLines(List<PayStubDetailLine> deductSectionLines) {
+		this.deductSectionLines = deductSectionLines == null ? new ArrayList<>() : deductSectionLines;
 	}
 
 	public long getTotalPay() {
