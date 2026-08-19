@@ -1,4 +1,4 @@
-package salary.transfer.service;
+package salary.transfer.viewdto;
 
 import java.util.Collections;
 import java.util.Date;
