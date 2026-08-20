@@ -11,6 +11,7 @@ import jdbc.JdbcUtil;
 import jdbc.connection.ConnectionProvider;
 import salary.model.TransferHistory;
 import salary.transfer.dao.TransferHistoryDao;
+import salary.transfer.viewdto.TransferHistoryPage;
 
 public class TransferResultService {
 

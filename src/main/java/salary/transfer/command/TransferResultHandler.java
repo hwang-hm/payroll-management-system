@@ -8,8 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import mvc.command.CommandHandler;
-import salary.transfer.service.TransferHistoryPage;
 import salary.transfer.service.TransferResultService;
+import salary.transfer.viewdto.TransferHistoryPage;
+import salary.util.RequestParamParser;
 
 // 급여이체 결과 조회 화면 핸들러.
 public class TransferResultHandler implements CommandHandler {
@@ -23,7 +24,7 @@ public class TransferResultHandler implements CommandHandler {
 	public String process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		Date startDate = parseDate(req.getParameter("startDate"));
 		Date endDate = parseDate(req.getParameter("endDate"));
-		int pageNo = parseInt(req.getParameter("pageNo"), 1);
+		int pageNo = RequestParamParser.parseInt(req, "pageNo", 1);
 
 		if (startDate == null || endDate == null) {
 			Date[] defaults = TransferResultService.defaultPeriod();
@@ -51,17 +52,6 @@ public class TransferResultHandler implements CommandHandler {
 			return format.parse(value.trim());
 		} catch (ParseException e) {
 			return null;
-		}
-	}
-
-	private int parseInt(String value, int defaultValue) {
-		if (value == null || value.trim().isEmpty()) {
-			return defaultValue;
-		}
-		try {
-			return Integer.parseInt(value.trim());
-		} catch (NumberFormatException e) {
-			return defaultValue;
 		}
 	}
 }

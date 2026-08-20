@@ -10,7 +10,6 @@ import java.util.List;
 import salary.entry.viewdto.EmployeeSearchView;
 import salary.entry.viewdto.SalaryView;
 import salary.model.Salary;
-import salary.transfer.viewdto.TransferApplyRow;
 
 public class SalaryDao {
 
@@ -101,74 +100,6 @@ public class SalaryDao {
 		}
 	}
 
-	// 이체신청 화면에 뿌릴 사원+계좌+금액 목록
-	public List<TransferApplyRow> selectTransferApplyRowsByPeriod(Connection conn,
-			int payYear, int payMonth, int paySeq) throws SQLException {
-		String sql = "SELECT s.salary_id, s.emp_id, e.employment_type, e.name_kor, e.name_eng, "
-				+ "NVL(d.dept_name, '-') AS dept_name, NVL(p.position_name, '-') AS position_name, "
-				+ "e.hire_date, e.mobile_num, e.email, "
-				+ "eis.salary_bank, eis.salary_account, "
-				+ "pi.salary_bank AS withdraw_bank, pi.salary_account AS withdraw_account, "
-				+ "s.total_pay, s.total_deduct, s.net_pay "
-				+ "FROM salary s "
-				+ "JOIN salary_date sd ON s.salary_date_id = sd.salary_date_id "
-				+ "JOIN employee e ON s.emp_id = e.emp_id "
-				+ "LEFT JOIN department d ON e.dept_id = d.dept_id "
-				+ "LEFT JOIN position p ON e.position_id = p.position_id "
-				+ "LEFT JOIN employee_information_salary eis ON e.emp_id = eis.emp_id "
-				+ "LEFT JOIN (SELECT salary_bank, salary_account FROM payroll_information WHERE ROWNUM = 1) pi "
-				+ "ON 1 = 1 "
-				+ "WHERE sd.pay_year = ? AND sd.pay_month = ? AND sd.pay_seq = ? "
-				+ "AND e.employment_type <> '일용직' "
-				+ "ORDER BY s.salary_id";
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setInt(1, payYear);
-			pstmt.setInt(2, payMonth);
-			pstmt.setInt(3, paySeq);
-			try (ResultSet rs = pstmt.executeQuery()) {
-				List<TransferApplyRow> list = new ArrayList<>();
-				while (rs.next()) {
-					list.add(toTransferApplyRow(rs));
-				}
-				return list;
-			}
-		}
-	}
-
-	// 그 해 급여 데이터 전부. 급여대장에서 씀
-	public List<Salary> selectByPayYear(Connection conn, int payYear) throws SQLException {
-		String sql = "SELECT s.salary_id, s.salary_date_id, s.emp_id, s.total_pay, s.total_deduct, s.net_pay, "
-				+ "s.created_at, s.updated_at " + "FROM salary s "
-				+ "JOIN salary_date sd ON s.salary_date_id = sd.salary_date_id "
-				+ "JOIN employee e ON s.emp_id = e.emp_id " + "WHERE sd.pay_year = ? "
-				+ "AND e.employment_type <> '일용직' " + "ORDER BY sd.pay_month, sd.pay_seq, s.salary_id";
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setInt(1, payYear);
-			try (ResultSet rs = pstmt.executeQuery()) {
-				List<Salary> list = new ArrayList<>();
-				while (rs.next()) {
-					list.add(toSalary(rs));
-				}
-				return list;
-			}
-		}
-	}
-
-	// 급여가 있는 연도만 뽑아서 셀렉트박스에 씀
-	public List<Integer> selectDistinctPayYears(Connection conn) throws SQLException {
-		String sql = "SELECT DISTINCT sd.pay_year " + "FROM salary s "
-				+ "JOIN salary_date sd ON s.salary_date_id = sd.salary_date_id "
-				+ "JOIN employee e ON s.emp_id = e.emp_id " + "WHERE e.employment_type <> '일용직' "
-				+ "ORDER BY sd.pay_year DESC";
-		try (PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
-			List<Integer> years = new ArrayList<>();
-			while (rs.next()) {
-				years.add(rs.getInt("pay_year"));
-			}
-			return years;
-		}
-	}
-
 	// 이번 급여에 아직 안 넣은 사원 목록
 	public List<EmployeeSearchView> selectEmployeesForAdd(Connection conn, int salaryDateId) throws SQLException {
 		String sql = "SELECT e.emp_id, e.employment_type, e.name_kor, "
@@ -240,40 +171,4 @@ public class SalaryDao {
 		return view;
 	}
 
-	// salary 테이블 한 줄로 옮겨담기
-	private Salary toSalary(ResultSet rs) throws SQLException {
-		Salary salary = new Salary();
-		salary.setSalaryId(rs.getInt("salary_id"));
-		salary.setSalaryDateId(rs.getInt("salary_date_id"));
-		salary.setEmpId(rs.getInt("emp_id"));
-		salary.setTotalPay(rs.getLong("total_pay"));
-		salary.setTotalDeduct(rs.getLong("total_deduct"));
-		salary.setNetPay(rs.getLong("net_pay"));
-		salary.setCreatedAt(rs.getDate("created_at"));
-		salary.setUpdatedAt(rs.getDate("updated_at"));
-		return salary;
-	}
-
-	// 이체신청 한 줄로 옮겨담기
-	private TransferApplyRow toTransferApplyRow(ResultSet rs) throws SQLException {
-		TransferApplyRow row = new TransferApplyRow();
-		row.setSalaryId(rs.getInt("salary_id"));
-		row.setEmpId(rs.getInt("emp_id"));
-		row.setEmploymentType(rs.getString("employment_type"));
-		row.setNameKor(rs.getString("name_kor"));
-		row.setNameEng(rs.getString("name_eng"));
-		row.setDeptName(rs.getString("dept_name"));
-		row.setPositionName(rs.getString("position_name"));
-		row.setHireDate(rs.getDate("hire_date"));
-		row.setMobileNum(rs.getString("mobile_num"));
-		row.setEmail(rs.getString("email"));
-		row.setSalaryBank(rs.getString("salary_bank"));
-		row.setSalaryAccount(rs.getString("salary_account"));
-		row.setWithdrawBank(rs.getString("withdraw_bank"));
-		row.setWithdrawAccount(rs.getString("withdraw_account"));
-		row.setTotalPay(rs.getLong("total_pay"));
-		row.setTotalDeduct(rs.getLong("total_deduct"));
-		row.setNetPay(rs.getLong("net_pay"));
-		return row;
-	}
 }
