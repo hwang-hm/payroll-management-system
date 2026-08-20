@@ -4,7 +4,7 @@ public class GetSalaryListDTO {
 	Integer salaryId;
 	Integer salaryDateId;
 	Integer empId;
-	Long TotalPay;
+	Long totalPay;
 	Long totalDeduct;
 	Long netPay;
 	String nameKor;
@@ -19,7 +19,7 @@ public class GetSalaryListDTO {
 		this.salaryId = salaryId;
 		this.salaryDateId = salaryDateId;
 		this.empId = empId;
-		TotalPay = totalPay;
+		this.totalPay = totalPay;
 		this.totalDeduct = totalDeduct;
 		this.netPay = netPay;
 		this.nameKor = nameKor;
@@ -76,11 +76,11 @@ public class GetSalaryListDTO {
 	}
 
 	public Long getTotalPay() {
-		return TotalPay;
+		return totalPay;
 	}
 
 	public void setTotalPay(Long totalPay) {
-		TotalPay = totalPay;
+		this.totalPay = totalPay;
 	}
 
 	public Long getTotalDeduct() {

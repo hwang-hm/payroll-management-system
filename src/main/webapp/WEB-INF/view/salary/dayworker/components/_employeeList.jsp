@@ -31,7 +31,11 @@
 				<c:choose>
 					<c:when test="${not empty savedWorkerList}">
 						<c:forEach var="worker" items="${savedWorkerList}">
+							<!-- [수정] 합산을 위한 data- total-pay, total-deduct, net-pay 속성 추가 -->
 							<tr data-emp-id="${worker.empId}"
+								data-total-pay="${worker.totalPay != null ? worker.totalPay : 0}"
+								data-total-deduct="${worker.totalDeduct != null ? worker.totalDeduct : 0}"
+								data-net-pay="${worker.netPay != null ? worker.netPay : 0}"
 								onclick="selectWorker(this, '${worker.empId}', '${worker.empName}')">
 								<td>${worker.workerType != null ? worker.workerType : '일용직'}</td>
 								<td>${worker.empName}</td>
@@ -276,28 +280,73 @@ tr.active {
 
 <!-- 4. 스크립트 정의 -->
 <script>
-//salary_date_id를 받아서 사원 급여 목록 HTML 조각을 비동기로 로드하는 함수
+// =========================================================
+// [핵심 추가] 목록 전체 데이터 합산 및 종합정보 갱신 함수
+// =========================================================
+function calculateGrandSummary() {
+	const rows = document.querySelectorAll('#workerListBody tr[data-emp-id]');
+	const count = rows.length;
+
+	let totalPaySum = 0;
+	let totalDeductSum = 0;
+	let netPaySum = 0;
+
+	rows.forEach(row => {
+		// 1. data- 속성값 추출 및 콤마(,) 제거
+		const rawTotalPay = String(row.dataset.totalPay || '0').replace(/,/g, '');
+		const rawTotalDeduct = String(row.dataset.totalDeduct || '0').replace(/,/g, '');
+		let rawNetPay = String(row.dataset.netPay || '0').replace(/,/g, '');
+
+		// 2. 정수 변환 (NaN 발생 시 0으로 처리)
+		const totalPay = parseInt(rawTotalPay, 10) || 0;
+		const totalDeduct = parseInt(rawTotalDeduct, 10) || 0;
+		let netPay = parseInt(rawNetPay, 10) || 0;
+
+		// 3. netPay가 dataset에 없는 경우 표의 4번째 열(td) 텍스트에서 보완
+		if (netPay === 0 && row.cells[3]) {
+			netPay = parseInt(row.cells[3].innerText.replace(/,/g, '') || '0', 10) || 0;
+		}
+
+		// 4. 총합 누적
+		totalPaySum += totalPay;
+		totalDeductSum += totalDeduct;
+		netPaySum += netPay;
+	});
+
+	// _salaryDetail.jsp에 정의해둔 하단 4개 카드 업데이트 함수 호출
+	if (typeof updateGrandSummary === 'function') {
+		updateGrandSummary(count, totalPaySum, totalDeductSum, netPaySum);
+	}
+}
+
+// 최초 페이지 로딩 시 합산 계산 실행
+document.addEventListener('DOMContentLoaded', function() {
+	calculateGrandSummary();
+});
+
+// salary_date_id를 받아서 사원 급여 목록 HTML 조각을 비동기로 로드하는 함수
 function loadSalaryWorkerList(salaryDateId) {
     const tbody = document.getElementById('workerListBody');
     
-    // salaryDateId가 없는 경우 (초기 상태 등) 예외 처리
     if (!salaryDateId) {
         tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:#888;">귀속연월 및 급여차수를 선택해주세요.</td></tr>';
+        calculateGrandSummary(); // 비어있을 때도 카드 0으로 초기화
         return;
     }
 
     tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">목록을 불러오는 중...</td></tr>';
 
-    // Handler 호출 (GET 방식, Query Parameter 전달)
     fetch('${pageContext.request.contextPath}/salary/dayworker/getSalaryList.do?salary_date_id=' + salaryDateId)
         .then(res => {
             if (!res.ok) throw new Error('응답 실패 (' + res.status + ')');
-            return res.text(); // employeeList.jsp의 <tr> 조각들을 받음
+            return res.text();
         })
         .then(html => {
             tbody.innerHTML = html;
             
-            // 데이터 로드 완료 후 첫 번째 사원 자동 선택 (상세 영역 연동)
+            // 데이터 로드 완료 후 하단 종합정보 카드 업데이트
+            calculateGrandSummary();
+            
             const firstRow = tbody.querySelector('tr');
             if (firstRow && firstRow.getAttribute('data-emp-id')) {
                 firstRow.click();
@@ -306,6 +355,7 @@ function loadSalaryWorkerList(salaryDateId) {
         .catch(err => {
             console.error("급여 목록 조회 실패:", err);
             tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:red;">목록을 가져올 수 없습니다.</td></tr>';
+            calculateGrandSummary();
         });
 }
 
@@ -415,6 +465,10 @@ function applySelectedWorkers() {
 		if (!exists) {
 			const tr = document.createElement('tr');
 			tr.setAttribute('data-emp-id', empId);
+			// [수정] 기본 합산용 data 속성 추가
+			tr.setAttribute('data-total-pay', '0');
+			tr.setAttribute('data-total-deduct', '0');
+			tr.setAttribute('data-net-pay', '0');
 			tr.onclick = function() { selectWorker(this, empId, empName); };
 			tr.innerHTML =
 				'<td>' + workerType + '</td>' +
@@ -428,7 +482,8 @@ function applySelectedWorkers() {
 
 	if (addedCount > 0) {
 		alert(addedCount + '명의 사원이 추가되었습니다.');
-		// 새로 추가된 사원 중 첫 번째 사원 자동 선택
+		calculateGrandSummary(); // [수정] 사원 추가 시 카드 업데이트
+		
 		const lastRow = mainTbody.lastElementChild;
 		if (lastRow) lastRow.click();
 	} else {
@@ -447,7 +502,8 @@ function deleteSelectedWorker() {
 	}
 	if (confirm('선택한 사원을 목록에서 삭제하시겠습니까?')) {
 		activeRow.remove();
-		// 첫 번째 행으로 재선택
+		calculateGrandSummary(); // [수정] 사원 삭제 시 카드 업데이트
+
 		const firstRow = document.querySelector('#workerListBody tr');
 		if (firstRow) {
 			firstRow.click();
@@ -463,6 +519,7 @@ function deleteAllWorkers() {
 		document.getElementById('workerListBody').innerHTML = '';
 		document.getElementById('targetEmpName').innerText = '-';
 		document.getElementById('selectedEmpId').value = '';
+		calculateGrandSummary(); // [수정] 전체 삭제 시 카드 업데이트
 	}
 }
 

@@ -6,7 +6,11 @@
 <c:choose>
 	<c:when test="${not empty salaryList}">
 		<c:forEach var="item" items="${salaryList}">
+			<!-- [수정] 합산을 위해 data-total-pay, data-total-deduct, data-net-pay 추가 -->
 			<tr data-emp-id="${item.empId}"
+				data-total-pay="${item.totalPay != null ? item.totalPay : 0}"
+				data-total-deduct="${item.totalDeduct != null ? item.totalDeduct : 0}"
+				data-net-pay="${item.netPay != null ? item.netPay : 0}"
 				onclick="selectWorker(this, '${item.empId}', '${item.nameKor}')">
 				<td>${item.employmentType}</td>
 				<td>${item.nameKor}</td>

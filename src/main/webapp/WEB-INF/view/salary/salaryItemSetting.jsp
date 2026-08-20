@@ -568,7 +568,7 @@ main {
 				<!-- 우측: 공제항목 상세 입력/수정 폼 -->
 				<div class="right-form-area">
 					<form id="deductItemForm"
-						action="${pageContext.request.contextPath}/salary/item/setting.do"
+						action="${pageContext.request.contextPath}/config/salaryItem.do"
 						method="post">
 						<!-- 구분 파라미터 (공제: DEDUCT) -->
 						<input type="hidden" name="itemType" value="DEDUCT" />
