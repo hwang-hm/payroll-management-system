@@ -35,7 +35,7 @@ public class CreateRequest2 {
 				request.getParameter("retirementType"), 
 				toDate(request.getParameter("retirementDate")), 
 				request.getParameter("retirementReason"),
-				request.getParameter("contactAftetRetirement")
+				request.getParameter("contactAfterRetirement")
 				);
 	}
 }
