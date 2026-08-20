@@ -8,18 +8,20 @@ import javax.servlet.http.HttpServletResponse;
 
 import employee.model.Employee;
 import employee.model.Retirement;
+import employee.modify2.service.Emp2InfoSelectService;
 import employee.register2.service.CreateRequest2;
 import employee.register2.service.EmpRegister2Request;
 import employee.register2.service.EmpRegister2Service;
 import employee.register2.service.RetirementRequest;
 import mvc.command.CommandHandler;
+import retirement.model.SeverancePay;
 
 public class Register2EmpHandler implements CommandHandler {
 
 	private static final String FORM_VIEW = "/WEB-INF/view/config/empRegister2.jsp";
 
 	private EmpRegister2Service empRegister2Service =new EmpRegister2Service();
-
+	private Emp2InfoSelectService emp2InfoSelectService = new Emp2InfoSelectService();
 	private CreateRequest2 createReq2 = new CreateRequest2();
 
 	@Override
@@ -54,9 +56,11 @@ public class Register2EmpHandler implements CommandHandler {
 	    int empId = Integer.parseInt(empIdParam);
 	    Employee emp = empRegister2Service.getEmp(empId);
 	    Retirement retirement = empRegister2Service.getRetirement(empId);
-	
+	    SeverancePay severancePay = emp2InfoSelectService.getSeverancePay(empId);
+	    
 	    request.setAttribute("emp", emp);
 	    request.setAttribute("retirement", retirement);
+	    request.setAttribute("severancePay", severancePay);
 
 	    return FORM_VIEW;
 	}
@@ -97,11 +101,13 @@ public class Register2EmpHandler implements CommandHandler {
 
         // 저장된 DB 값을 다시 조회
         Retirement retirement = empRegister2Service.getRetirement(empId);
+        SeverancePay severancePay = emp2InfoSelectService.getSeverancePay(empId);
 
         // JSP 전달
         request.setAttribute("emp", emp);
         request.setAttribute("retirement", retirement);
         request.setAttribute("register2Success",true);
+        request.setAttribute("severancePay", severancePay);
 
         return FORM_VIEW;
 	}

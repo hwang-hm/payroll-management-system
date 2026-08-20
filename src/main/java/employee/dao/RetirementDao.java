@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 
 import employee.model.Retirement;
 import jdbc.JdbcUtil;
@@ -77,4 +78,19 @@ public class RetirementDao {
 			}
 			return null;
 		 }
+	    
+	    public int updateRetirement(Connection conn, int empId, Retirement retirement) throws SQLException {
+	    	try (PreparedStatement pstmt = conn.prepareStatement(
+					"update retirement set retirement_type = ?, retirement_date = ?, retirement_reason = ?, "
+					+ "contact_after_retirement = ?, updated_at = sysdate where emp_id = ?")) {
+	    		
+	    		pstmt.setString(1, retirement.getRetirementType());
+	    		pstmt.setDate(2, retirement.getRetirementDate());
+	    		pstmt.setString(3, retirement.getRetirementReason());
+	    		pstmt.setString(4, retirement.getContactAfterRetirement());
+	    		pstmt.setInt(5, empId);
+				
+	    		return pstmt.executeUpdate();
+			}
+	    }
 }

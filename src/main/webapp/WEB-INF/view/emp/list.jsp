@@ -470,7 +470,7 @@ body {
         <c:forEach var="emp"
                    items="${empListPage.empListData}">
 
-          <tr onclick="location.href='${pageContext.request.contextPath}/emp/register.do?empId=${emp.empId}'">
+          <tr onclick="location.href='${pageContext.request.contextPath}/emp/modify.do?empId=${emp.empId}'">
 
             <td onclick="event.stopPropagation()">
 
@@ -494,7 +494,7 @@ body {
 
             <td>
 
-              <a href="${pageContext.request.contextPath}/emp/register.do?empId=${emp.empId}"
+              <a href="${pageContext.request.contextPath}/emp/modify.do?empId=${emp.empId}"
                  class="emp-link"
                  onclick="event.stopPropagation()">
 

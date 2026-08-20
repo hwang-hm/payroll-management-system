@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jdbc.JdbcUtil;
+import retirement.model.SeverancePay;
 import retirement.severancepay.service.SeveranceCalculateRequest;
 import retirement.severancepay.service.SeveranceCalculateResult;
 import retirement.severancepay.service.SeveranceSalaryData;
@@ -71,8 +72,8 @@ public class SeverancePayDao {
 					+ "daily_ordinary_wage, " + "retirement_income, " + "calculated_tax, " + "retirement_income_tax, "
 					+ "local_income_tax, " + "deferred_retirement_tax, " + "deferred_local_tax, "
 					+ "rural_special_tax, " + "other_deduction, " + "taxable_retirement_pay, " + "withholding_tax, "
-					+ "net_payment, " + "payment_date) "
-					+ "values (seq_severance_pay.nextval, ?, ?, ?, ?, ?, ?, ?, " + "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+					+ "net_payment, " + "payment_date) " + "values (seq_severance_pay.nextval, ?, ?, ?, ?, ?, ?, ?, "
+					+ "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 			pstmt = conn.prepareStatement(sql);
 
@@ -169,6 +170,36 @@ public class SeverancePayDao {
 		} finally {
 			JdbcUtil.close(rs);
 			JdbcUtil.close(stmt);
+			JdbcUtil.close(pstmt);
+		}
+	}
+
+	public SeverancePay selectById(Connection conn, int empId) throws SQLException {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			pstmt = conn.prepareStatement("select * from severance_pay where emp_id = ?");
+
+			pstmt.setInt(1, empId);
+
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				SeverancePay severancePay = new SeverancePay();
+
+				severancePay.setSeverancePayId(rs.getInt("severance_pay_id"));
+				severancePay.setEmpId(rs.getInt("emp_id"));
+				severancePay.setRetirementIncome(rs.getInt("retirement_income"));
+				severancePay.setNetPayment(rs.getInt("net_payment"));
+
+				return severancePay;
+			}
+
+			return null;
+
+		} finally {
+			JdbcUtil.close(rs);
 			JdbcUtil.close(pstmt);
 		}
 	}
