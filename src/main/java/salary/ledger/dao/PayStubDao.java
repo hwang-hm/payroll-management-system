@@ -19,8 +19,7 @@ public class PayStubDao {
 				"SELECT s.salary_id, e.employment_type, e.name_kor, s.net_pay "
 						+ "FROM salary s "
 						+ "JOIN employee e ON s.emp_id = e.emp_id "
-						+ "WHERE s.salary_date_id = ? "
-						+ "AND e.employment_type <> '일용직' ");
+						+ "WHERE s.salary_date_id = ? ");
 		boolean hasKeyword = searchKeyword != null && !searchKeyword.trim().isEmpty();
 		if (hasKeyword) {
 			sql.append("AND (e.employment_type LIKE ? OR e.name_kor LIKE ?) ");
@@ -54,8 +53,7 @@ public class PayStubDao {
 				+ "JOIN employee e ON s.emp_id = e.emp_id "
 				+ "LEFT JOIN department d ON e.dept_id = d.dept_id "
 				+ "LEFT JOIN position p ON e.position_id = p.position_id "
-				+ "WHERE s.salary_id = ? "
-				+ "AND e.employment_type <> '일용직'";
+				+ "WHERE s.salary_id = ?";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, salaryId);
 			try (ResultSet rs = pstmt.executeQuery()) {

@@ -17,7 +17,7 @@ public class SalaryLedgerDao {
 				+ "s.created_at, s.updated_at " + "FROM salary s "
 				+ "JOIN salary_date sd ON s.salary_date_id = sd.salary_date_id "
 				+ "JOIN employee e ON s.emp_id = e.emp_id " + "WHERE sd.pay_year = ? "
-				+ "AND e.employment_type <> '일용직' " + "ORDER BY sd.pay_month, sd.pay_seq, s.salary_id";
+				+ "ORDER BY sd.pay_month, sd.pay_seq, s.salary_id";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, payYear);
 			try (ResultSet rs = pstmt.executeQuery()) {
@@ -34,7 +34,7 @@ public class SalaryLedgerDao {
 	public List<Integer> selectDistinctPayYears(Connection conn) throws SQLException {
 		String sql = "SELECT DISTINCT sd.pay_year " + "FROM salary s "
 				+ "JOIN salary_date sd ON s.salary_date_id = sd.salary_date_id "
-				+ "JOIN employee e ON s.emp_id = e.emp_id " + "WHERE e.employment_type <> '일용직' "
+				+ "JOIN employee e ON s.emp_id = e.emp_id "
 				+ "ORDER BY sd.pay_year DESC";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
 			List<Integer> years = new ArrayList<>();
