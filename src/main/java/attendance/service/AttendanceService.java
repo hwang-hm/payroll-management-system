@@ -81,6 +81,31 @@ public class AttendanceService {
 		}
 	}
 
+	/**
+	 * 사원번호와 연월로 휴가 근태기록을 조회한다.
+	 * 社員番号と年月で休暇勤怠記録を照会する。
+	 */
+	public List<Attendance> getMonthlyVacationAttendances(
+			int empId, int year, int month) {
+
+		if (empId <= 0 || year <= 0 || month < 1 || month > 12) {
+			throw new IllegalArgumentException(
+					"올바른 사원번호와 조회 연월을 입력해 주세요.");
+		}
+
+		Connection conn = null;
+		try {
+			conn = ConnectionProvider.getConnection();
+			return attendanceDao.selectVacationByEmpIdAndYearMonth(
+					conn, empId, year, month);
+		} catch (SQLException e) {
+			throw new RuntimeException(
+					"월간 휴가기록 조회 중 오류가 발생했습니다.", e);
+		} finally {
+			JdbcUtil.close(conn);
+		}
+	}
+
 	public boolean addAttendance(Attendance attendance) {
 		Connection conn = null;
 

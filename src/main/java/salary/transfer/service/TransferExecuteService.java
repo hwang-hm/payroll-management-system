@@ -7,14 +7,14 @@ import java.util.List;
 
 import jdbc.JdbcUtil;
 import jdbc.connection.ConnectionProvider;
-import salary.entry.dao.SalaryDao;
+import salary.transfer.dao.TransferApplyDao;
 import salary.transfer.dao.TransferHistoryDao;
 import salary.model.TransferHistory;
 import salary.transfer.viewdto.TransferApplyRow;
 
 public class TransferExecuteService {
 
-	private final SalaryDao salaryDao = new SalaryDao();
+	private final TransferApplyDao transferApplyDao = new TransferApplyDao();
 	private final TransferHistoryDao transferHistoryDao = new TransferHistoryDao();
 
 	// 해당 귀속년월 대상으로 이체 돌림. 계좌없거나 이미 이체된 사람은 건너뜀
@@ -24,7 +24,7 @@ public class TransferExecuteService {
 			conn = ConnectionProvider.getConnection();
 			conn.setAutoCommit(false);
 
-			List<TransferApplyRow> rows = salaryDao.selectTransferApplyRowsByPeriod(conn, payYear, payMonth, paySeq);
+			List<TransferApplyRow> rows = transferApplyDao.selectTransferApplyRowsByPeriod(conn, payYear, payMonth, paySeq);
 			if (rows.isEmpty()) {
 				return "이체할 급여 대상이 없습니다.";
 			}

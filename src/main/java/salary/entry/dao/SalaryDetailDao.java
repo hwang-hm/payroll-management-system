@@ -72,6 +72,14 @@ public class SalaryDetailDao {
 		}
 	}
 
+	public void deleteBySalaryId(Connection conn, int salaryId) throws SQLException {
+		String sql = "DELETE FROM salary_detail WHERE salary_id = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, salaryId);
+			pstmt.executeUpdate();
+		}
+	}
+
 	// 조회결과를 급여상세로 옮겨담기
 	private SalaryDetail toDetail(ResultSet rs) throws SQLException {
 		SalaryDetail detail = new SalaryDetail();

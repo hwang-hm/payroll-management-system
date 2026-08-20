@@ -107,20 +107,33 @@
 
 		<c:if test="${not empty selectedEmpId}">
 			<c:set var="totalDays" value="0" />
+			<c:set var="totalHours" value="0" />
 			<c:set var="totalAllowance" value="0" />
 			<c:forEach var="attendance" items="${monthlyAttendances}">
-				<c:set var="totalDays" value="${totalDays + attendance.attendanceDays}" />
+				<c:forEach var="type" items="${attendanceTypes}">
+					<c:if test="${type.attendanceTypeId == attendance.attendanceTypeId}">
+						<c:choose>
+							<c:when test="${type.unit == '시간' || type.unit == '時間'}">
+								<c:set var="totalHours" value="${totalHours + attendance.attendanceDays}" />
+							</c:when>
+							<c:otherwise>
+								<c:set var="totalDays" value="${totalDays + attendance.attendanceDays}" />
+							</c:otherwise>
+						</c:choose>
+					</c:if>
+				</c:forEach>
 				<c:set var="totalAllowance" value="${totalAllowance + attendance.allowanceAmount}" />
 			</c:forEach>
 			<div class="summary">
 				<div>勤怠件数<br><strong>${monthlyAttendances.size()}</strong>件</div>
 				<div>勤怠日数合計<br><strong><fmt:formatNumber value="${totalDays}" pattern="#0.##" /></strong>日</div>
+				<div>勤怠時間合計<br><strong><fmt:formatNumber value="${totalHours}" pattern="#0.##" /></strong>時間</div>
 				<div>手当合計<br><strong><fmt:formatNumber value="${totalAllowance}" pattern="#,##0" /></strong>円</div>
 			</div>
 			<section class="panel records">
 				<h3>${selectedYear}年 ${selectedMonth}月 勤怠内訳</h3>
 				<table class="data-table">
-					<thead><tr><th>入力日</th><th>勤怠項目</th><th>期間</th><th>勤怠日数</th><th>手当</th><th>摘要</th></tr></thead>
+					<thead><tr><th>入力日</th><th>勤怠項目</th><th>期間</th><th>勤怠数量</th><th>手当</th><th>摘要</th></tr></thead>
 					<tbody>
 						<c:choose>
 							<c:when test="${empty monthlyAttendances}">
@@ -128,6 +141,13 @@
 							</c:when>
 							<c:otherwise>
 								<c:forEach var="attendance" items="${monthlyAttendances}">
+									<c:set var="attendanceUnit" value="日" />
+									<c:forEach var="type" items="${attendanceTypes}">
+										<c:if test="${type.attendanceTypeId == attendance.attendanceTypeId
+												&& (type.unit == '시간' || type.unit == '時間')}">
+											<c:set var="attendanceUnit" value="時間" />
+										</c:if>
+									</c:forEach>
 									<tr>
 										<td><fmt:formatDate value="${attendance.inputDate}" pattern="yyyy-MM-dd" /></td>
 										<td>
@@ -137,7 +157,7 @@
 										</td>
 										<td><fmt:formatDate value="${attendance.attendanceStartDate}" pattern="yyyy-MM-dd" /> ～
 											<fmt:formatDate value="${attendance.attendanceEndDate}" pattern="yyyy-MM-dd" /></td>
-										<td>${attendance.attendanceDays}日</td>
+										<td><fmt:formatNumber value="${attendance.attendanceDays}" pattern="#0.##" />${attendanceUnit}</td>
 										<td class="number"><fmt:formatNumber value="${attendance.allowanceAmount}" pattern="#,##0" /></td>
 										<td><c:out value="${attendance.remarks}" /></td>
 									</tr>

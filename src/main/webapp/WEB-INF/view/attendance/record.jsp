@@ -511,14 +511,14 @@
 								</tr>
 
 								<tr>
-									<th>勤怠日数</th>
+									<th>勤怠数量</th>
 									<td>
 										<input type="number"
 											name="attendanceDays"
 											min="0.1"
 											step="0.1"
 											required
-											oninvalid="this.setCustomValidity('勤怠日数を入力してください。')"
+											oninvalid="this.setCustomValidity('勤怠数量を入力してください。')"
 											oninput="this.setCustomValidity('')"
 											placeholder="例: 1、0.5"
 											value="${formItem.attendanceDays > 0
@@ -596,7 +596,7 @@
 							<th>入力日</th>
 							<th>勤怠項目</th>
 							<th>期間</th>
-							<th>勤怠日数</th>
+							<th>勤怠数量</th>
 							<th>金額</th>
 							<th>摘要</th>
 							<th>管理</th>
@@ -616,6 +616,16 @@
 							<c:otherwise>
 								<c:forEach var="attendance"
 									items="${employeeAttendances}">
+									<c:set var="attendanceUnit" value="日" />
+									<c:forEach var="attendanceType"
+										items="${attendanceTypes}">
+										<c:if test="${attendance.attendanceTypeId
+												== attendanceType.attendanceTypeId
+												&& (attendanceType.unit == '시간'
+														|| attendanceType.unit == '時間')}">
+											<c:set var="attendanceUnit" value="時間" />
+										</c:if>
+									</c:forEach>
 
 									<tr>
 										<td>
@@ -653,9 +663,11 @@
 												pattern="yyyy-MM-dd" />
 										</td>
 
-										<td>
-											<c:out value="${attendance.attendanceDays}" />日
-										</td>
+									<td>
+										<fmt:formatNumber
+											value="${attendance.attendanceDays}"
+											pattern="#0.##" />${attendanceUnit}
+									</td>
 
 										<td>
 											<fmt:formatNumber

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <!-- 1. 메인 패널 영역 -->
 <div class="panel">
@@ -8,8 +9,10 @@
 		<button type="button" class="btn btn-primary" onclick="addWorker()">➕
 			신규추가</button>
 		<div style="display: flex; gap: 6px;">
-			<button type="button" class="btn btn-danger-light">전체삭제</button>
-			<button type="button" class="btn btn-secondary">선택삭제</button>
+			<button type="button" class="btn btn-danger-light"
+				onclick="deleteAllWorkers()">전체삭제</button>
+			<button type="button" class="btn btn-secondary"
+				onclick="deleteSelectedWorker()">선택삭제</button>
 		</div>
 	</div>
 
@@ -24,23 +27,41 @@
 				</tr>
 			</thead>
 			<tbody id="workerListBody">
-				<!-- 모달에서 선택된 사원들이 들어오는 영역 -->
+				<!-- 페이지 진입 시 DB에 저장된 일용직 급여 목록 출력 -->
+				<c:choose>
+					<c:when test="${not empty savedWorkerList}">
+						<c:forEach var="worker" items="${savedWorkerList}">
+							<!-- [수정] 합산을 위한 data- total-pay, total-deduct, net-pay 속성 추가 -->
+							<tr data-emp-id="${worker.empId}"
+								data-total-pay="${worker.totalPay != null ? worker.totalPay : 0}"
+								data-total-deduct="${worker.totalDeduct != null ? worker.totalDeduct : 0}"
+								data-net-pay="${worker.netPay != null ? worker.netPay : 0}"
+								onclick="selectWorker(this, '${worker.empId}', '${worker.empName}')">
+								<td>${worker.workerType != null ? worker.workerType : '일용직'}</td>
+								<td>${worker.empName}</td>
+								<td>${worker.deptName}</td>
+								<td style="text-align: right; font-weight: 600;"><fmt:formatNumber
+										value="${worker.netPay}" pattern="#,##0" /></td>
+							</tr>
+						</c:forEach>
+					</c:when>
+					<c:otherwise>
+						<!-- 저장된 데이터가 없는 경우 자바스크립트/모달에서 동적으로 <tr> 추가 -->
+					</c:otherwise>
+				</c:choose>
 			</tbody>
 		</table>
 	</div>
 </div>
 
-<!-- 2. 급여지급 사원선택 모달 영역 (누락되었던 HTML 추가) -->
+<!-- 2. 급여지급 사원선택 모달 영역 -->
 <div id="workerSelectModal" class="modal-overlay" style="display: none;">
 	<div class="modal-content">
-		<!-- 모달 헤더 -->
 		<div class="modal-header">
 			<h3 class="modal-title">급여지급 사원선택</h3>
 		</div>
 
-		<!-- 모달 바디 -->
 		<div class="modal-body">
-			<!-- 검색 & 필터 바 -->
 			<div class="modal-filter-bar">
 				<div class="filter-left">
 					<div class="search-input-group">
@@ -61,7 +82,6 @@
 				</div>
 			</div>
 
-			<!-- 사원 목록 테이블 -->
 			<div class="modal-table-wrapper">
 				<table class="erp-modal-table">
 					<thead>
@@ -78,13 +98,12 @@
 						</tr>
 					</thead>
 					<tbody id="modalWorkerListBody">
-						<!-- _modalWorkerList.jsp의 <tr> HTML 조각이 비동기로 들어옵니다 -->
+						<!-- 비동기 로드 영역 -->
 					</tbody>
 				</table>
 			</div>
 		</div>
 
-		<!-- 모달 하단 버튼 -->
 		<div class="modal-footer">
 			<button type="button" class="btn-erp-blue"
 				onclick="applySelectedWorkers()">사원선택</button>
@@ -94,7 +113,6 @@
 	</div>
 </div>
 
-<!-- 3. 모달 스타일 정의 -->
 <style>
 .modal-overlay {
 	position: fixed;
@@ -253,10 +271,94 @@
 .btn-erp-gray:hover {
 	background-color: #8c8c8c;
 }
+
+tr.active {
+	background-color: #e6f2ff !important;
+	font-weight: bold;
+}
 </style>
 
 <!-- 4. 스크립트 정의 -->
 <script>
+// =========================================================
+// [핵심 추가] 목록 전체 데이터 합산 및 종합정보 갱신 함수
+// =========================================================
+function calculateGrandSummary() {
+	const rows = document.querySelectorAll('#workerListBody tr[data-emp-id]');
+	const count = rows.length;
+
+	let totalPaySum = 0;
+	let totalDeductSum = 0;
+	let netPaySum = 0;
+
+	rows.forEach(row => {
+		// 1. data- 속성값 추출 및 콤마(,) 제거
+		const rawTotalPay = String(row.dataset.totalPay || '0').replace(/,/g, '');
+		const rawTotalDeduct = String(row.dataset.totalDeduct || '0').replace(/,/g, '');
+		let rawNetPay = String(row.dataset.netPay || '0').replace(/,/g, '');
+
+		// 2. 정수 변환 (NaN 발생 시 0으로 처리)
+		const totalPay = parseInt(rawTotalPay, 10) || 0;
+		const totalDeduct = parseInt(rawTotalDeduct, 10) || 0;
+		let netPay = parseInt(rawNetPay, 10) || 0;
+
+		// 3. netPay가 dataset에 없는 경우 표의 4번째 열(td) 텍스트에서 보완
+		if (netPay === 0 && row.cells[3]) {
+			netPay = parseInt(row.cells[3].innerText.replace(/,/g, '') || '0', 10) || 0;
+		}
+
+		// 4. 총합 누적
+		totalPaySum += totalPay;
+		totalDeductSum += totalDeduct;
+		netPaySum += netPay;
+	});
+
+	// _salaryDetail.jsp에 정의해둔 하단 4개 카드 업데이트 함수 호출
+	if (typeof updateGrandSummary === 'function') {
+		updateGrandSummary(count, totalPaySum, totalDeductSum, netPaySum);
+	}
+}
+
+// 최초 페이지 로딩 시 합산 계산 실행
+document.addEventListener('DOMContentLoaded', function() {
+	calculateGrandSummary();
+});
+
+// salary_date_id를 받아서 사원 급여 목록 HTML 조각을 비동기로 로드하는 함수
+function loadSalaryWorkerList(salaryDateId) {
+    const tbody = document.getElementById('workerListBody');
+    
+    if (!salaryDateId) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:#888;">귀속연월 및 급여차수를 선택해주세요.</td></tr>';
+        calculateGrandSummary(); // 비어있을 때도 카드 0으로 초기화
+        return;
+    }
+
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">목록을 불러오는 중...</td></tr>';
+
+    fetch('${pageContext.request.contextPath}/salary/dayworker/getSalaryList.do?salary_date_id=' + salaryDateId)
+        .then(res => {
+            if (!res.ok) throw new Error('응답 실패 (' + res.status + ')');
+            return res.text();
+        })
+        .then(html => {
+            tbody.innerHTML = html;
+            
+            // 데이터 로드 완료 후 하단 종합정보 카드 업데이트
+            calculateGrandSummary();
+            
+            const firstRow = tbody.querySelector('tr');
+            if (firstRow && firstRow.getAttribute('data-emp-id')) {
+                firstRow.click();
+            }
+        })
+        .catch(err => {
+            console.error("급여 목록 조회 실패:", err);
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:red;">목록을 가져올 수 없습니다.</td></tr>';
+            calculateGrandSummary();
+        });
+}
+
 // 메인 테이블의 사원 행 클릭 시 실행
 function selectWorker(element, empId, empName) {
 	const rows = document.querySelectorAll('#workerListBody tr');
@@ -309,7 +411,7 @@ function fetchWorkerMasterList() {
 	fetch('${pageContext.request.contextPath}/emp/dayworker/list.do')
 		.then(res => {
 			if (!res.ok) throw new Error('응답 실패 (' + res.status + ')');
-			return res.text(); // _modalWorkerList.jsp의 <tr> 조각들을 받음
+			return res.text();
 		})
 		.then(html => {
 			tbody.innerHTML = html;
@@ -353,9 +455,8 @@ function applySelectedWorkers() {
 		const empId = chk.dataset.empId;
 		const empName = chk.dataset.empName;
 		const deptName = chk.dataset.deptName;
-		const workerType = chk.dataset.workerType;
+		const workerType = chk.dataset.workerType || '일용직';
 
-		// 메인 테이블에 이미 존재하는지 중복 검사
 		let exists = false;
 		mainTbody.querySelectorAll('tr').forEach(r => {
 			if (r.getAttribute('data-emp-id') === empId) exists = true;
@@ -364,12 +465,16 @@ function applySelectedWorkers() {
 		if (!exists) {
 			const tr = document.createElement('tr');
 			tr.setAttribute('data-emp-id', empId);
+			// [수정] 기본 합산용 data 속성 추가
+			tr.setAttribute('data-total-pay', '0');
+			tr.setAttribute('data-total-deduct', '0');
+			tr.setAttribute('data-net-pay', '0');
 			tr.onclick = function() { selectWorker(this, empId, empName); };
 			tr.innerHTML =
 				'<td>' + workerType + '</td>' +
-		        '<td>' + empName + '</td>' +
-		        '<td>' + deptName + '</td>' +
-		        '<td style="text-align: right; font-weight: 600;">0</td>';
+				'<td>' + empName + '</td>' +
+				'<td>' + deptName + '</td>' +
+				'<td style="text-align: right; font-weight: 600;">0</td>';
 			mainTbody.appendChild(tr);
 			addedCount++;
 		}
@@ -377,6 +482,10 @@ function applySelectedWorkers() {
 
 	if (addedCount > 0) {
 		alert(addedCount + '명의 사원이 추가되었습니다.');
+		calculateGrandSummary(); // [수정] 사원 추가 시 카드 업데이트
+		
+		const lastRow = mainTbody.lastElementChild;
+		if (lastRow) lastRow.click();
 	} else {
 		alert('선택한 사원이 이미 목록에 있습니다.');
 	}
@@ -384,7 +493,37 @@ function applySelectedWorkers() {
 	closeWorkerModal();
 }
 
-// 7. 검색 및 필터링 기능
+// 7. 삭제 관련 기능
+function deleteSelectedWorker() {
+	const activeRow = document.querySelector('#workerListBody tr.active');
+	if (!activeRow) {
+		alert('삭제할 사원을 선택해주세요.');
+		return;
+	}
+	if (confirm('선택한 사원을 목록에서 삭제하시겠습니까?')) {
+		activeRow.remove();
+		calculateGrandSummary(); // [수정] 사원 삭제 시 카드 업데이트
+
+		const firstRow = document.querySelector('#workerListBody tr');
+		if (firstRow) {
+			firstRow.click();
+		} else {
+			document.getElementById('targetEmpName').innerText = '-';
+			document.getElementById('selectedEmpId').value = '';
+		}
+	}
+}
+
+function deleteAllWorkers() {
+	if (confirm('전체 사원 목록을 비우시겠습니까?')) {
+		document.getElementById('workerListBody').innerHTML = '';
+		document.getElementById('targetEmpName').innerText = '-';
+		document.getElementById('selectedEmpId').value = '';
+		calculateGrandSummary(); // [수정] 전체 삭제 시 카드 업데이트
+	}
+}
+
+// 8. 검색 및 필터링 기능
 function filterModalWorkers() {
 	const keyword = document.getElementById('modalSearchKeyword').value.toLowerCase().trim();
 	const statusFilter = document.getElementById('filterStatus').value;

@@ -140,6 +140,49 @@ public class AttendanceDao {
 	}
 
 	/**
+	 * 사원번호와 연월로 휴가 근태기록을 조회한다.
+	 * 社員番号と年月で休暇勤怠記録を照会する。
+	 */
+	public List<Attendance> selectVacationByEmpIdAndYearMonth(
+			Connection conn, int empId, int year, int month)
+			throws SQLException {
+
+		List<Attendance> attendances = new ArrayList<>();
+		LocalDate firstDay = LocalDate.of(year, month, 1);
+		java.sql.Date startDate = java.sql.Date.valueOf(firstDay);
+		java.sql.Date endDate = java.sql.Date.valueOf(
+				firstDay.plusMonths(1));
+
+		String sql = "SELECT a.attendance_id, a.input_date, "
+				+ "a.attendance_start_date, a.attendance_end_date, "
+				+ "a.attendance_days, a.allowance_amount, a.remarks, "
+				+ "a.emp_id, a.attendance_type_id "
+				+ "FROM attendance a "
+				+ "JOIN attendance_type t "
+				+ "ON t.attendance_type_id = a.attendance_type_id "
+				+ "WHERE a.emp_id = ? "
+				+ "AND t.vacation_type_id IS NOT NULL "
+				+ "AND a.attendance_start_date < ? "
+				+ "AND NVL(a.attendance_end_date, "
+				+ "a.attendance_start_date) >= ? "
+				+ "ORDER BY a.attendance_start_date, a.attendance_id";
+
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, empId);
+			pstmt.setDate(2, endDate);
+			pstmt.setDate(3, startDate);
+
+			try (ResultSet rs = pstmt.executeQuery()) {
+				while (rs.next()) {
+					attendances.add(createAttendance(rs));
+				}
+			}
+		}
+
+		return attendances;
+	}
+
+	/**
 	 * 근태기록을 등록한다.
 	 * 勤怠記録を登録する。
 	 */

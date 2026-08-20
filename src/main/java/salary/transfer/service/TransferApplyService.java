@@ -9,7 +9,7 @@ import java.util.List;
 
 import jdbc.JdbcUtil;
 import jdbc.connection.ConnectionProvider;
-import salary.entry.dao.SalaryDao;
+import salary.transfer.dao.TransferApplyDao;
 import salary.transfer.dao.TransferFormDao;
 import salary.model.TransferForm;
 import salary.model.TransferFormItem;
@@ -19,7 +19,7 @@ import salary.transfer.viewdto.TransferApplyRow;
 
 public class TransferApplyService {
 
-	private final SalaryDao salaryDao = new SalaryDao();
+	private final TransferApplyDao transferApplyDao = new TransferApplyDao();
 	private final TransferFormDao transferFormDao = new TransferFormDao();
 
 	// 이체신청 화면에 뿌릴 양식이랑 대상자 목록 모아줌
@@ -65,7 +65,7 @@ public class TransferApplyService {
 			}
 			data.setVisibleColumns(visible);
 
-			List<TransferApplyRow> rows = salaryDao.selectTransferApplyRowsByPeriod(conn, payYear, payMonth, paySeq);
+			List<TransferApplyRow> rows = transferApplyDao.selectTransferApplyRowsByPeriod(conn, payYear, payMonth, paySeq);
 			data.setRows(rows);
 
 			long sumPay = 0;
