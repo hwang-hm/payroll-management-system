@@ -353,5 +353,48 @@ public class EmpDao {
 	    	        JdbcUtil.close(pstmt);
 	    	    }
 	    	}
-	     
+	       
+	       //사원 정보 수정
+			public int updateEmp(Connection conn, int empId, Employee emp) throws SQLException {
+				try (PreparedStatement pstmt = conn.prepareStatement(
+						"update employee set name_kor = ?, hire_date = ?, dept_id = ?, nationality = ?, "
+						+ "employment_type = ?, name_eng = ?, retire_date = ?, position_id = ?, resident_no = ?, zip_code = ?,"
+						+ "address = ?, phone_num = ?, mobile_num = ?, email = ?, sns = ?, remarks = ?, "
+						+ "photo_path = ?, updated_at = sysdate where emp_id = ?")) {
+
+			        pstmt.setString(1, emp.getNameKor());
+			        pstmt.setDate(2, emp.getHireDate());
+
+			        if (emp.getDeptId() != null) {
+			            pstmt.setInt(3, emp.getDeptId());
+			        } else {
+			            pstmt.setNull(3, Types.INTEGER);
+			        }
+
+			        pstmt.setString(4, emp.getNationality());
+			        pstmt.setString(5, emp.getEmploymentType());
+			        pstmt.setString(6, emp.getNameEng());
+			        pstmt.setDate(7, emp.getRetireDate());
+
+			        if (emp.getPositionId() != null) {
+			            pstmt.setInt(8, emp.getPositionId());
+			        } else {
+			            pstmt.setNull(8, Types.INTEGER);
+			        }
+
+			        pstmt.setString(9, emp.getResidentNo());
+			        pstmt.setString(10, emp.getZipCode());
+			        pstmt.setString(11, emp.getAddress());
+			        pstmt.setString(12, emp.getPhoneNum());
+			        pstmt.setString(13, emp.getMobileNum());
+			        pstmt.setString(14, emp.getEmail());
+			        pstmt.setString(15, emp.getSns());
+			        pstmt.setString(16, emp.getRemarks());
+			        pstmt.setString(17, emp.getPhotoPath());
+
+			        pstmt.setInt(18, empId);
+			
+					return pstmt.executeUpdate();
+				}
+			}
 }

@@ -24,6 +24,17 @@ public class TransferHistoryDao {
 		}
 	}
 
+	// 그 급여건에 이체 이력이 있는지 확인
+	public boolean existsBySalaryId(Connection conn, int salaryId) throws SQLException {
+		String sql = "SELECT 1 FROM transfer_history WHERE salary_id = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, salaryId);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				return rs.next();
+			}
+		}
+	}
+
 	// 이체 한 건 이력 저장
 	public int insert(Connection conn, TransferHistory history) throws SQLException {
 		String seqSql = "SELECT seq_transfer_history.NEXTVAL FROM dual";

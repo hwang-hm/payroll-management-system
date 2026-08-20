@@ -462,7 +462,9 @@ html {
 								<button type="button" class="btn btn-outline btn-sm">삭제</button>
 							</div>
 							<button type="button" class="btn btn-outline btn-sm"
-								style="width: 100%;">인사기록카드 보기</button>
+								style="width: 100%;"
+								onclick="location.href='${pageContext.request.contextPath}/emp/empCard.do?empId=${emp.empId}'">
+								인사기록카드 보기</button>
 						</div>
 
 						<div class="side-menu">
@@ -512,49 +514,141 @@ html {
 							<div class="section-head">
 								<h3>📌 기본정보</h3>
 							</div>
+
 							<table class="form-table">
 								<tr>
 									<th>사원번호</th>
-									<td><input type="text" value="${savedEmpNo}" readonly></td>
+									<td><input type="text" value="${emp.empId}" readonly>
+									</td>
+
 									<th>고용형태</th>
-									<td><input type="text"
-										value="${not empty emp ? emp.employmentType : empReq.employmentType}"
-										readonly></td>
+									<td><select disabled>
+											<option value="">선택</option>
+											<option value="정규직"
+												${emp.employmentType == '정규직' ? 'selected' : ''}>정규직</option>
+											<option value="계약직"
+												${emp.employmentType == '계약직' ? 'selected' : ''}>계약직</option>
+											<option value="임시직"
+												${emp.employmentType == '임시직' ? 'selected' : ''}>임시직</option>
+											<option value="파견직"
+												${emp.employmentType == '파견직' ? 'selected' : ''}>파견직</option>
+											<option value="위촉직"
+												${emp.employmentType == '위촉직' ? 'selected' : ''}>위촉직</option>
+											<option value="일용직"
+												${emp.employmentType == '일용직' ? 'selected' : ''}>일용직</option>
+									</select></td>
 								</tr>
+
 								<tr>
 									<th>성명(한글)</th>
-									<td><input type="text"
-										value="${not empty emp ? emp.nameKor : empReq.nameKor}"
-										readonly></td>
+									<td><input type="text" value="${emp.nameKor}" readonly>
+									</td>
+
 									<th>성명(영문)</th>
-									<td><input type="text"
-										value="${not empty emp ? emp.nameEng : empReq.nameEng}"
-										readonly></td>
+									<td><input type="text" value="${emp.nameEng}" readonly>
+									</td>
 								</tr>
+
 								<tr>
 									<th>입사일</th>
-									<td><input type="text"
-										value="${not empty emp ? emp.hireDate : empReq.hireDate}"
-										readonly></td>
+									<td><input type="date" value="${emp.hireDate}" readonly>
+									</td>
+
 									<th>퇴사일</th>
-									<td><input type="text"
-										value="${not empty emp ? emp.retireDate : empReq.retireDate}"
-										readonly></td>
+									<td><input type="date" value="${emp.retireDate}" readonly>
+									</td>
 								</tr>
+
 								<tr>
 									<th>부서</th>
-									<td><c:forEach var="dept" items="${deptList}">
-											<c:if test="${dept.deptId == emp.deptId}">
-												<input type="text" value="${dept.deptName}" readonly>
-											</c:if>
-										</c:forEach></td>
+									<td>
+										<div class="inline-inputs">
+											<select disabled>
+												<option value="">선택</option>
+												<option value="1" ${emp.deptId == 1 ? 'selected' : ''}>사장실</option>
+												<option value="2" ${emp.deptId == 2 ? 'selected' : ''}>개발팀</option>
+												<option value="3" ${emp.deptId == 3 ? 'selected' : ''}>콘텐츠팀</option>
+												<option value="4" ${emp.deptId == 4 ? 'selected' : ''}>업무지원팀</option>
+												<option value="5" ${emp.deptId == 5 ? 'selected' : ''}>디자인팀</option>
+												<option value="6" ${emp.deptId == 6 ? 'selected' : ''}>관리팀</option>
+												<option value="7" ${emp.deptId == 7 ? 'selected' : ''}>기획전략팀</option>
+											</select>
+											<button type="button" class="btn btn-outline btn-sm"
+												style="white-space: nowrap;" disabled>관리</button>
+										</div>
+									</td>
 
 									<th>직위</th>
-									<td><c:forEach var="position" items="${positionList}">
-											<c:if test="${position.positionId == emp.positionId}">
-												<input type="text" value="${position.positionName}" readonly>
-											</c:if>
-										</c:forEach></td>
+									<td>
+										<div class="inline-inputs">
+											<select disabled>
+												<option value="">선택</option>
+												<option value="1" ${emp.positionId == 1 ? 'selected' : ''}>이사</option>
+												<option value="2" ${emp.positionId == 2 ? 'selected' : ''}>사장</option>
+												<option value="3" ${emp.positionId == 3 ? 'selected' : ''}>부장</option>
+												<option value="4" ${emp.positionId == 4 ? 'selected' : ''}>차장</option>
+												<option value="5" ${emp.positionId == 5 ? 'selected' : ''}>과장</option>
+												<option value="6" ${emp.positionId == 6 ? 'selected' : ''}>대리</option>
+												<option value="7" ${emp.positionId == 7 ? 'selected' : ''}>주임</option>
+												<option value="8" ${emp.positionId == 8 ? 'selected' : ''}>사원</option>
+											</select>
+											<button type="button" class="btn btn-outline btn-sm"
+												style="white-space: nowrap;" disabled>관리</button>
+										</div>
+									</td>
+								</tr>
+
+								<tr>
+									<th>내/외국인</th>
+									<td><select disabled>
+											<option value="">선택</option>
+											<option value="내국인"
+												${emp.nationality == '내국인' ? 'selected' : ''}>내국인</option>
+											<option value="외국인"
+												${emp.nationality == '외국인' ? 'selected' : ''}>외국인</option>
+									</select></td>
+
+									<th>주민번호</th>
+									<td><input type="text" value="${emp.residentNo}" readonly>
+									</td>
+								</tr>
+
+								<tr>
+									<th>주소</th>
+									<td colspan="3">
+										<div class="inline-inputs" style="margin-bottom: 6px;">
+											<input type="text" value="${emp.zipCode}"
+												style="width: 150px;" readonly>
+											<button type="button" class="btn btn-outline btn-sm" disabled>
+												우편번호 검색</button>
+										</div> <input type="text" value="${emp.address}" readonly>
+									</td>
+								</tr>
+
+								<tr>
+									<th>전화번호</th>
+									<td><input type="text" value="${emp.phoneNum}" readonly>
+									</td>
+
+									<th>휴대폰</th>
+									<td><input type="text" value="${emp.mobileNum}" readonly>
+									</td>
+								</tr>
+
+								<tr>
+									<th>이메일</th>
+									<td><input type="text" value="${emp.email}" readonly>
+									</td>
+
+									<th>SNS</th>
+									<td><input type="text" value="${emp.sns}" readonly>
+									</td>
+								</tr>
+
+								<tr>
+									<th>기타사항</th>
+									<td colspan="3"><textarea rows="3" readonly>${emp.remarks}</textarea>
+									</td>
 								</tr>
 							</table>
 						</div>
@@ -948,8 +1042,8 @@ html {
 
 										<td>
 											<div class="money-box">
-												<input type="text" id="retirementPay" name="retirementPay"
-													value="${retirement.retirementPay}" readonly
+												<input type="text" id="netPayment" name="netPayment"
+													value="${empty severancePay ? '' : severancePay.netPayment}"
 													onclick="showRetirementPayAlert()" style="cursor: pointer;">
 												<span>원</span>
 											</div>
@@ -967,12 +1061,8 @@ html {
 								style="padding: 10px 24px; font-size: 15px;">취소</button>
 							<a href="${pageContext.request.contextPath}/emp/list.do"
 								class="btn btn-outline"
-								style="padding: 10px 24px; font-size: 15px;">📋 리스트</a> <a
-								href="${pageContext.request.contextPath}/emp/register.do"
-								class="btn btn-primary"
-								style="padding: 10px 24px; font-size: 15px;">신규사원 등록</a>
+								style="padding: 10px 24px; font-size: 15px;">📋 리스트</a>
 						</div>
-
 					</div>
 				</div>
 			</form>

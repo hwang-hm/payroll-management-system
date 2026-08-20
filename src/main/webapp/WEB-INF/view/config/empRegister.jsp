@@ -1105,7 +1105,7 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 							style="padding: 10px 30px; font-size: 15px;">💾 저장</button>
 						<button type="reset" class="btn btn-secondary"
 							style="padding: 10px 24px; font-size: 15px;">취소</button>
-						<a href="${pageContext.request.contextPath}/index.jsp"
+						<a href="${pageContext.request.contextPath}/emp/list.do"
 							class="btn btn-outline"
 							style="padding: 10px 24px; font-size: 15px;">📋 목록으로</a>
 					</div>
