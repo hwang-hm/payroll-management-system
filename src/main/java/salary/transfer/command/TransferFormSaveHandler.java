@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import mvc.command.CommandHandler;
 import salary.transfer.service.TransferApplyService;
+import salary.util.PayPeriodParams;
+import salary.util.RequestParamParser;
 
 // 이체양식 저장 버튼 핸들러.
 public class TransferFormSaveHandler implements CommandHandler {
@@ -22,41 +24,16 @@ public class TransferFormSaveHandler implements CommandHandler {
 			return null;
 		}
 
-		Integer formId = parseNullableInt(req.getParameter("formId"));
+		Integer formId = RequestParamParser.parseNullableIntOrZero(req, "formId");
 		String formName = req.getParameter("formName");
 		String[] itemCodes = req.getParameterValues("itemCodes");
 
 		int savedFormId = applyService.saveForm(formId, formName, itemCodes);
-
-		int payYear = parseInt(req.getParameter("payYear"), TransferApplyService.currentYear());
-		int payMonth = parseInt(req.getParameter("payMonth"), TransferApplyService.currentMonth());
-		int paySeq = parseInt(req.getParameter("paySeq"), 1);
+		PayPeriodParams period = PayPeriodParams.fromRequest(req);
 
 		String message = URLEncoder.encode("양식이 저장되었습니다.", StandardCharsets.UTF_8.name());
-		res.sendRedirect(req.getContextPath() + "/salary/transfer/apply.do?payYear=" + payYear + "&payMonth="
-				+ payMonth + "&paySeq=" + paySeq + "&formId=" + savedFormId + "&message=" + message);
+		res.sendRedirect(req.getContextPath() + "/salary/transfer/apply.do?" + period.toQueryString()
+				+ "&formId=" + savedFormId + "&message=" + message);
 		return null;
-	}
-
-	private int parseInt(String value, int defaultValue) {
-		if (value == null || value.trim().isEmpty()) {
-			return defaultValue;
-		}
-		try {
-			return Integer.parseInt(value.trim());
-		} catch (NumberFormatException e) {
-			return defaultValue;
-		}
-	}
-
-	private Integer parseNullableInt(String value) {
-		if (value == null || value.trim().isEmpty() || "0".equals(value.trim())) {
-			return null;
-		}
-		try {
-			return Integer.parseInt(value.trim());
-		} catch (NumberFormatException e) {
-			return null;
-		}
 	}
 }
