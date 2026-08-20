@@ -20,8 +20,7 @@ public class SalaryEntryHandler implements CommandHandler {
 		PayPeriodParams period = PayPeriodParams.fromRequest(req);
 		int salaryId = RequestParamParser.parseInt(req, "salaryId", 0);
 
-		SalaryEntryData entryData = entryService.getEntryData(period.getPayYear(), period.getPayMonth(),
-				period.getPaySeq(), salaryId);
+		SalaryEntryData entryData = entryService.getEntryData(period, salaryId);
 		req.setAttribute("entryData", entryData);
 		return "/WEB-INF/view/salary/entry/entry.jsp";
 	}

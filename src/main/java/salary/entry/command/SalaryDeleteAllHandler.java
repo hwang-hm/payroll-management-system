@@ -31,8 +31,7 @@ public class SalaryDeleteAllHandler implements CommandHandler {
 		Connection conn = null;
 		try {
 			conn = ConnectionProvider.getConnection();
-			SalaryDate salaryDate = salaryDateService.ensureByPeriod(conn, period.getPayYear(), period.getPayMonth(),
-					period.getPaySeq());
+			SalaryDate salaryDate = salaryDateService.ensureByPeriod(conn, period);
 			deleteService.deleteAll(salaryDate.getSalaryDateId());
 		} catch (SQLException e) {
 			throw new RuntimeException(e);

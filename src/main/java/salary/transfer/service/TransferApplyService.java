@@ -16,6 +16,7 @@ import salary.model.TransferFormItem;
 import salary.transfer.TransferColumn;
 import salary.transfer.viewdto.TransferApplyData;
 import salary.transfer.viewdto.TransferApplyRow;
+import salary.util.PayPeriodParams;
 
 public class TransferApplyService {
 
@@ -23,16 +24,16 @@ public class TransferApplyService {
 	private final TransferFormDao transferFormDao = new TransferFormDao();
 
 	// 이체신청 화면에 뿌릴 양식이랑 대상자 목록 모아줌
-	public TransferApplyData getApplyData(int payYear, int payMonth, int paySeq, Integer formId) {
+	public TransferApplyData getApplyData(PayPeriodParams period, Integer formId) {
 		Connection conn = null;
 		try {
 			conn = ConnectionProvider.getConnection();
 			TransferApplyData data = new TransferApplyData();
-			data.setPayYear(payYear);
-			data.setPayMonth(payMonth);
-			data.setPaySeq(paySeq);
+			data.setPayYear(period.getPayYear());
+			data.setPayMonth(period.getPayMonth());
+			data.setPaySeq(period.getPaySeq());
 			data.setAllColumns(Arrays.asList(TransferColumn.values()));
-			data.setYearOptions(buildYearOptions(payYear));
+			data.setYearOptions(buildYearOptions(period.getPayYear()));
 
 			List<TransferForm> forms = transferFormDao.selectAllForms(conn);
 			data.setForms(forms);
@@ -65,7 +66,8 @@ public class TransferApplyService {
 			}
 			data.setVisibleColumns(visible);
 
-			List<TransferApplyRow> rows = transferApplyDao.selectTransferApplyRowsByPeriod(conn, payYear, payMonth, paySeq);
+			List<TransferApplyRow> rows = transferApplyDao.selectTransferApplyRowsByPeriod(conn, period.getPayYear(),
+					period.getPayMonth(), period.getPaySeq());
 			data.setRows(rows);
 
 			long sumPay = 0;

@@ -16,6 +16,7 @@ import salary.ledger.viewdto.PayStubForm;
 import salary.ledger.viewdto.PayStubRow;
 import salary.model.SalaryDate;
 import salary.model.SalaryDetail;
+import salary.util.PayPeriodParams;
 
 public class PayStubService {
 
@@ -24,16 +25,16 @@ public class PayStubService {
 	private final SalaryDetailDao salaryDetailDao = new SalaryDetailDao();
 
 	// 귀속연월·차수 기준으로 급여명세서 화면 데이터를 모아줌
-	public PayStubData getPayStubData(int payYear, int payMonth, int paySeq, int selectedSalaryId,
-			String searchKeyword) {
+	public PayStubData getPayStubData(PayPeriodParams period, int selectedSalaryId, String searchKeyword) {
 		try (Connection conn = ConnectionProvider.getConnection()) {
 			PayStubData data = new PayStubData();
-			data.setPayYear(payYear);
-			data.setPayMonth(payMonth);
-			data.setPaySeq(paySeq);
+			data.setPayYear(period.getPayYear());
+			data.setPayMonth(period.getPayMonth());
+			data.setPaySeq(period.getPaySeq());
 			data.setSearchKeyword(normalizeKeyword(searchKeyword));
 
-			SalaryDate salaryDate = salaryDateDao.selectByPeriod(conn, payYear, payMonth, paySeq);
+			SalaryDate salaryDate = salaryDateDao.selectByPeriod(conn, period.getPayYear(), period.getPayMonth(),
+					period.getPaySeq());
 			if (salaryDate == null) {
 				data.setRows(new ArrayList<>());
 				return data;

@@ -20,8 +20,7 @@ public class TransferApplyHandler implements CommandHandler {
 		PayPeriodParams period = PayPeriodParams.fromRequest(req);
 		Integer formId = RequestParamParser.parseNullableInt(req, "formId");
 
-		TransferApplyData applyData = applyService.getApplyData(period.getPayYear(), period.getPayMonth(),
-				period.getPaySeq(), formId);
+		TransferApplyData applyData = applyService.getApplyData(period, formId);
 		String message = req.getParameter("message");
 		if (message != null && !message.trim().isEmpty()) {
 			applyData.setMessage(message);

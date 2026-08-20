@@ -14,6 +14,7 @@ import salary.entry.viewdto.SalarySummary;
 import salary.entry.viewdto.SalaryView;
 import salary.model.SalaryDate;
 import salary.model.SalaryDetail;
+import salary.util.PayPeriodParams;
 
 public class SalaryEntryService {
 
@@ -22,9 +23,9 @@ public class SalaryEntryService {
 	private final SalaryDateService salaryDateService = new SalaryDateService();
 
 	// 귀속년월/차수 기준으로 급여입력 화면에 뿌릴 데이터를 모아줌
-	public SalaryEntryData getEntryData(int payYear, int payMonth, int paySeq, int selectedSalaryId) {
+	public SalaryEntryData getEntryData(PayPeriodParams period, int selectedSalaryId) {
 		try (Connection conn = ConnectionProvider.getConnection()) {
-			SalaryDate salaryDate = salaryDateService.ensureByPeriod(conn, payYear, payMonth, paySeq);
+			SalaryDate salaryDate = salaryDateService.ensureByPeriod(conn, period);
 			int salaryDateId = salaryDate.getSalaryDateId();
 			List<SalaryView> salaryList = salaryDao.selectViewListBySalaryDateId(conn, salaryDateId);
 
@@ -34,9 +35,9 @@ public class SalaryEntryService {
 
 			SalaryEntryData data = new SalaryEntryData();
 			data.setSalaryDateId(salaryDateId);
-			data.setPayYear(payYear);
-			data.setPayMonth(payMonth);
-			data.setPaySeq(paySeq);
+			data.setPayYear(period.getPayYear());
+			data.setPayMonth(period.getPayMonth());
+			data.setPaySeq(period.getPaySeq());
 			data.setSalaryList(salaryList);
 			data.setSummary(toSummary(salaryList));
 			data.setSelectedSalaryId(selectedSalaryId);

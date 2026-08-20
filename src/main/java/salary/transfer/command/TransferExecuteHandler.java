@@ -27,7 +27,7 @@ public class TransferExecuteHandler implements CommandHandler {
 		PayPeriodParams period = PayPeriodParams.fromRequest(req);
 		Integer formId = RequestParamParser.parseNullableInt(req, "formId");
 
-		String resultMessage = executeService.execute(period.getPayYear(), period.getPayMonth(), period.getPaySeq());
+		String resultMessage = executeService.execute(period);
 		String message = URLEncoder.encode(resultMessage, StandardCharsets.UTF_8.name());
 
 		StringBuilder redirect = new StringBuilder();

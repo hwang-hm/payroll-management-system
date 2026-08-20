@@ -12,22 +12,24 @@ import salary.ledger.viewdto.EmpSalaryHistoryData;
 import salary.ledger.viewdto.EmpSalaryHistoryDept;
 import salary.ledger.viewdto.EmpSalaryHistoryEmployee;
 import salary.ledger.viewdto.EmpSalaryHistoryRow;
+import salary.util.PeriodRangeParams;
 
 public class EmpSalaryHistoryService {
 
 	private final EmpSalaryHistoryDao empSalaryHistoryDao = new EmpSalaryHistoryDao();
 
-	public EmpSalaryHistoryData getHistoryData(int startYear, int startMonth, int endYear, int endMonth, int empId) {
+	public EmpSalaryHistoryData getHistoryData(PeriodRangeParams period, int empId) {
 		try (Connection conn = ConnectionProvider.getConnection()) {
-			int[] period = normalizePeriod(startYear, startMonth, endYear, endMonth);
+			int[] normalized = normalizePeriod(period.getStartYear(), period.getStartMonth(), period.getEndYear(),
+					period.getEndMonth());
 
 			EmpSalaryHistoryData data = new EmpSalaryHistoryData();
-			data.setStartYear(period[0]);
-			data.setStartMonth(period[1]);
-			data.setEndYear(period[2]);
-			data.setEndMonth(period[3]);
+			data.setStartYear(normalized[0]);
+			data.setStartMonth(normalized[1]);
+			data.setEndYear(normalized[2]);
+			data.setEndMonth(normalized[3]);
 			data.setEmpId(empId);
-			data.setYearOptions(buildYearOptions(period[0], period[2]));
+			data.setYearOptions(buildYearOptions(normalized[0], normalized[2]));
 			data.setDepartments(empSalaryHistoryDao.selectDepartments(conn));
 
 			if (empId <= 0) {
@@ -40,8 +42,8 @@ public class EmpSalaryHistoryService {
 			String empName = empSalaryHistoryDao.selectEmpNameById(conn, empId);
 			data.setEmpName(empName == null ? "" : empName);
 
-			int startYm = period[0] * 100 + period[1];
-			int endYm = period[2] * 100 + period[3];
+			int startYm = normalized[0] * 100 + normalized[1];
+			int endYm = normalized[2] * 100 + normalized[3];
 			List<EmpSalaryHistoryRow> rows = empSalaryHistoryDao.selectHistoryByEmpAndPeriod(conn, empId, startYm,
 					endYm);
 			data.setRows(rows);

@@ -18,8 +18,7 @@ public class ItemLedgerHandler implements CommandHandler {
 		PeriodRangeParams period = PeriodRangeParams.fromRequest(req);
 		String itemName = req.getParameter("itemName");
 
-		ItemLedgerData itemLedgerData = itemLedgerService.getItemLedgerData(period.getStartYear(),
-				period.getStartMonth(), period.getEndYear(), period.getEndMonth(), itemName);
+		ItemLedgerData itemLedgerData = itemLedgerService.getItemLedgerData(period, itemName);
 		req.setAttribute("itemLedgerData", itemLedgerData);
 		return "/WEB-INF/view/salary/ledger/itemLedger.jsp";
 	}
