@@ -462,7 +462,9 @@ html {
 								<button type="button" class="btn btn-outline btn-sm">삭제</button>
 							</div>
 							<button type="button" class="btn btn-outline btn-sm"
-								style="width: 100%;">인사기록카드 보기</button>
+								style="width: 100%;"
+								onclick="location.href='${pageContext.request.contextPath}/emp/empCard.do?empId=${emp.empId}'">
+								인사기록카드 보기</button>
 						</div>
 
 						<div class="side-menu">
