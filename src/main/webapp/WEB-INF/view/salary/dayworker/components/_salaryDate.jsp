@@ -63,7 +63,7 @@
 </div>
 
 <script>
-//페이지 초기 로딩 시 기본 설정값으로 날짜 자동 세팅
+// 페이지 초기 로딩 시 기본 설정값으로 날짜 자동 세팅
 document.addEventListener("DOMContentLoaded", function() {
 	loadOrSetSalaryDate();
 });
@@ -77,13 +77,16 @@ function loadOrSetSalaryDate() {
 	// 세 항목 중 하나라도 미선택 시 실행 안 함
 	if (!year || !month || !degree) return;
 
-	// 1. DB 조회 AJAX 호출
+	// DB 조회 AJAX 호출
 	fetch('${pageContext.request.contextPath}/salary/salaryDate.do?payYear=' + year + '&payMonth=' + month + '&paySeq=' + degree)
 		.then(response => response.json())
 		.then(data => {
+			let currentSalaryDateId = '';
+
 			if (data.status === 'found') {
 				// DB에 데이터가 존재하는 경우 : DB값 적용
-				document.getElementById('salaryDateId').value = data.salaryDateId || '';
+				currentSalaryDateId = data.salaryDateId || '';
+				document.getElementById('salaryDateId').value = currentSalaryDateId;
 				document.getElementById('startDate').value = data.startDate;
 				document.getElementById('endDate').value = data.endDate;
 				document.getElementById('payDate').value = data.payDate;
@@ -92,12 +95,21 @@ function loadOrSetSalaryDate() {
 				document.getElementById('salaryDateId').value = '';
 				autoCalculateDates(parseInt(year, 10), parseInt(month, 10));
 			}
+
+			// ★ [수정 핵심] DB 조회가 끝난 뒤, 구해온 salaryDateId로 목록 조회 함수 호출
+			if (typeof loadSalaryWorkerList === 'function') {
+				loadSalaryWorkerList(currentSalaryDateId);
+			}
 		})
 		.catch(error => {
 			console.error('Date fetch error:', error);
-			// 통신 에러 발생 시에도 계산 로직으로 셋팅
 			document.getElementById('salaryDateId').value = '';
 			autoCalculateDates(parseInt(year, 10), parseInt(month, 10));
+
+			// 예외 발생 시 빈 값 전달하여 목록 초기화
+			if (typeof loadSalaryWorkerList === 'function') {
+				loadSalaryWorkerList('');
+			}
 		});
 }
 
@@ -108,7 +120,7 @@ function autoCalculateDates(year, month) {
 	// 1. 시작일: 해당 년월의 01일
 	const startDateStr = year + '-' + monthStr + '-01';
 
-	// 2. 종료일: 해당 년월의 마지막 날 (Date 객체의 month는 0-indexed이므로 new Date(year, month, 0) 이용)
+	// 2. 종료일: 해당 년월의 마지막 날
 	const lastDay = new Date(year, month, 0).getDate();
 	const endDateStr = year + '-' + monthStr + '-' + String(lastDay).padStart(2, '0');
 
@@ -147,7 +159,6 @@ function saveSalaryDate() {
 		return;
 	}
 
-	// 서버로 전달할 FormData 생성
 	const params = new URLSearchParams();
 	params.append('payYear', payYear);
 	params.append('payMonth', payMonth);
@@ -156,7 +167,6 @@ function saveSalaryDate() {
 	params.append('endDate', endDate);
 	params.append('payDate', payDate);
 
-	// AJAX 요청
 	fetch('${pageContext.request.contextPath}/salary/salaryDate.do', {
 		method: 'POST',
 		headers: {
@@ -167,6 +177,8 @@ function saveSalaryDate() {
 	.then(response => response.json())
 	.then(data => {
 		alert(data.message);
+		// ★ 신규 생성/수정 완료 후 DB에서 발급된 salaryDateId를 다시 적용하기 위해 재호출
+		loadOrSetSalaryDate();
 	})
 	.catch(error => {
 		console.error('Error:', error);
