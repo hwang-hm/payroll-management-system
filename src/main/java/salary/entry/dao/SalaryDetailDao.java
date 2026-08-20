@@ -13,6 +13,7 @@ import salary.model.SalaryDetail;
 
 public class SalaryDetailDao {
 
+	// 그 사원 급여상세 전부 가져오기
 	public List<SalaryDetail> selectBySalaryId(Connection conn, int salaryId) throws SQLException {
 		String sql = "SELECT * FROM salary_detail WHERE salary_id = ? ORDER BY detail_id";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -27,6 +28,7 @@ public class SalaryDetailDao {
 		}
 	}
 
+	// 급여상세 한 줄 새로 넣음
 	public void insert(Connection conn, SalaryDetail detail) throws SQLException {
 		String sql = "INSERT INTO salary_detail (detail_id, salary_id, salary_item_id, attendance_type_id, "
 				+ "item_type, item_name, tax_yn, tax_free_name, tax_free_limit, calc_method, round_unit, "
@@ -58,6 +60,7 @@ public class SalaryDetailDao {
 		}
 	}
 
+	// 화면에서 고친 금액이랑 계산방법이랑 저장
 	public void updateAmountAndCalcMethod(Connection conn, int detailId, long amount, String calcMethod)
 			throws SQLException {
 		String sql = "UPDATE salary_detail SET amount = ?, calc_method = ? WHERE detail_id = ?";
@@ -69,6 +72,15 @@ public class SalaryDetailDao {
 		}
 	}
 
+	public void deleteBySalaryId(Connection conn, int salaryId) throws SQLException {
+		String sql = "DELETE FROM salary_detail WHERE salary_id = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, salaryId);
+			pstmt.executeUpdate();
+		}
+	}
+
+	// 조회결과를 급여상세로 옮겨담기
 	private SalaryDetail toDetail(ResultSet rs) throws SQLException {
 		SalaryDetail detail = new SalaryDetail();
 		detail.setDetailId(rs.getInt("detail_id"));

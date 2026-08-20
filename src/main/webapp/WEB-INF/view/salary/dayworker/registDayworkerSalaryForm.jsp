@@ -356,8 +356,8 @@
 				type="hidden" name="totalDeduct" id="formTotalDeduct" value="0" />
 			<input type="hidden" name="netPay" id="formNetPay" value="0" />
 
-			<!-- 1. 상단 필터 영역 컴포넌트 Include -->
-			<jsp:include page="./components/_salaryFilter.jsp" />
+			<!-- 1. 상단 날짜 영역 컴포넌트 Include -->
+			<jsp:include page="./components/_salaryDate.jsp" />
 
 			<!-- 2. 메인 2열 레이아웃 (좌측: 사원목록 / 우측: 상세 급여 계산) -->
 			<div class="payroll-grid">
@@ -366,8 +366,111 @@
 			</div>
 
 		</form>
-	</main>
+		<!-- 급여 종합정보 스타일 및 HTML -->
+		<style>
+.grand-summary-section {
+	margin-top: 25px;
+	font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui,
+		Roboto, sans-serif;
+}
 
+.grand-summary-title {
+	font-size: 16px;
+	font-weight: 700;
+	color: #333;
+	margin-bottom: 12px;
+}
+
+.grand-summary-container {
+	display: flex;
+	gap: 12px;
+	width: 100%;
+}
+
+.summary-card {
+	flex: 1;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 16px 20px;
+	border-radius: 8px;
+	color: #ffffff;
+	font-weight: 700;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+/* 카드별 색상 정의 */
+.card-grey {
+	background-color: #82888e;
+}
+
+.card-blue {
+	background-color: #51b2d6;
+}
+
+.card-red {
+	background-color: #f16d72;
+}
+
+.card-dark {
+	background-color: #4a525d;
+}
+
+.card-label {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 15px;
+}
+
+.card-value {
+	font-size: 18px;
+	letter-spacing: -0.5px;
+}
+
+.icon-badge {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background-color: rgba(255, 255, 255, 0.3);
+	font-size: 13px;
+	font-weight: bold;
+	line-height: 1;
+}
+</style>
+
+		<div class="grand-summary-section">
+			<div class="grand-summary-title">급여 종합정보</div>
+			<div class="grand-summary-container">
+				<!-- 1. 월 합계 -->
+				<div class="summary-card card-grey">
+					<span class="card-label">월 합계</span> <span class="card-value"><span
+						id="grandEmpCount">0</span> 건</span>
+				</div>
+				<!-- 2. 지급 총액 -->
+				<div class="summary-card card-blue">
+					<span class="card-label"> <span class="icon-badge">+</span>
+						지급 총액
+					</span> <span class="card-value"><span id="grandTotalPay">0</span>
+						원</span>
+				</div>
+				<!-- 3. 공제 총액 -->
+				<div class="summary-card card-red">
+					<span class="card-label"> <span class="icon-badge">-</span>
+						공제 총액
+					</span> <span class="card-value"><span id="grandTotalDeduct">0</span>
+						원</span>
+				</div>
+				<!-- 4. 실지급액 -->
+				<div class="summary-card card-dark">
+					<span class="card-label">실지급액</span> <span class="card-value"><span
+						id="grandNetPay">0</span> 원</span>
+				</div>
+			</div>
+		</div>
+	</main>
 	<!-- 푸터 Include -->
 	<layout:footer />
 
@@ -477,6 +580,14 @@
 			    console.error('AJAX Error:', error);
 			    alert(error.message);
 			});
+		}
+		
+		// 급여 종합정보(하단 4개 카드) 값 업데이트 함수
+		function updateGrandSummary(count, totalPay, totalDeduct, netPay) {
+			document.getElementById('grandEmpCount').innerText = (count || 0).toLocaleString();
+			document.getElementById('grandTotalPay').innerText = (totalPay || 0).toLocaleString();
+			document.getElementById('grandTotalDeduct').innerText = (totalDeduct || 0).toLocaleString();
+			document.getElementById('grandNetPay').innerText = (netPay || 0).toLocaleString();
 		}
 		
 	</script>

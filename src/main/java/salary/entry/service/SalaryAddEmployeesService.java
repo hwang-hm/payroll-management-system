@@ -19,6 +19,7 @@ public class SalaryAddEmployeesService {
 	private final SalaryDetailDao salaryDetailDao = new SalaryDetailDao();
 	private final SalaryItemDao salaryItemDao = new SalaryItemDao();
 
+	// 선택한 사원들을 이번 급여에 추가. 이미 들어가 있으면 건너뜀
 	public void add(int salaryDateId, List<Integer> empIds) {
 		if (empIds == null || empIds.isEmpty()) {
 			return;
@@ -61,6 +62,7 @@ public class SalaryAddEmployeesService {
 		}
 	}
 
+	// 상세항목 만들 때, 같은 달에 이미 있는 사람이 있으면 그거 복사하고 없으면 급여항목에서 새로 만듦
 	private void createDetails(Connection conn, int salaryId, Integer templateSalaryId) throws SQLException {
 		if (templateSalaryId != null) {
 			createDetailsFromTemplate(conn, salaryId, templateSalaryId);
@@ -69,6 +71,7 @@ public class SalaryAddEmployeesService {
 		createDetailsFromSalaryItems(conn, salaryId);
 	}
 
+	// 급여항목 설정값으로 상세 한줄씩 새로 만듦
 	private void createDetailsFromSalaryItems(Connection conn, int salaryId) throws SQLException {
 		for (SalaryItem item : salaryItemDao.selectActiveItems(conn)) {
 			SalaryDetail detail = new SalaryDetail();
@@ -89,6 +92,7 @@ public class SalaryAddEmployeesService {
 		}
 	}
 
+	// 이미 있는 사람 상세를 그대로 복사. 금액은 0으로 시작
 	private void createDetailsFromTemplate(Connection conn, int salaryId, int templateSalaryId) throws SQLException {
 		for (SalaryDetail template : salaryDetailDao.selectBySalaryId(conn, templateSalaryId)) {
 			SalaryDetail detail = new SalaryDetail();
@@ -109,6 +113,7 @@ public class SalaryAddEmployeesService {
 		}
 	}
 
+	// 기본금액 있으면 그거 쓰고, 없거나 0이면 그냥 0
 	private long resolveInitialAmount(Long defaultAmount) {
 		if (defaultAmount != null && defaultAmount > 0) {
 			return defaultAmount;
@@ -116,6 +121,7 @@ public class SalaryAddEmployeesService {
 		return 0L;
 	}
 
+	// 상세 금액 다시 더해서 salary 총합 맞춰줌
 	private void recalculateTotals(Connection conn, int salaryId) throws SQLException {
 		long totalPay = 0;
 		long totalDeduct = 0;

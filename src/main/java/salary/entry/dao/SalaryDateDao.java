@@ -5,14 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import salary.model.SalaryDate;
 
 public class SalaryDateDao {
 
+	// 귀속년월+차수로 salary_date 한 건 찾기
 	public SalaryDate selectByPeriod(Connection conn, int payYear, int payMonth, int paySeq) throws SQLException {
 		String sql = "SELECT * FROM salary_date WHERE pay_year = ? AND pay_month = ? AND pay_seq = ?";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -28,20 +27,7 @@ public class SalaryDateDao {
 		}
 	}
 
-	public List<SalaryDate> selectByYear(Connection conn, int payYear) throws SQLException {
-		String sql = "SELECT * FROM salary_date WHERE pay_year = ? ORDER BY pay_month, pay_seq";
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setInt(1, payYear);
-			try (ResultSet rs = pstmt.executeQuery()) {
-				List<SalaryDate> list = new ArrayList<>();
-				while (rs.next()) {
-					list.add(toSalaryDate(rs));
-				}
-				return list;
-			}
-		}
-	}
-
+	// 정산기간/지급일이랑 같이 salary_date 새로 넣음
 	public void insert(Connection conn, SalaryDate salaryDate) throws SQLException {
 		String sql = "INSERT INTO salary_date (salary_date_id, pay_year, pay_month, pay_seq, start_date, end_date, pay_date) "
 				+ "VALUES (seq_salary_date.NEXTVAL, ?, ?, ?, ?, ?, ?)";
@@ -56,6 +42,7 @@ public class SalaryDateDao {
 		}
 	}
 
+	// 조회결과를 salary_date로 옮겨담기
 	private SalaryDate toSalaryDate(ResultSet rs) throws SQLException {
 		SalaryDate salaryDate = new SalaryDate();
 		salaryDate.setSalaryDateId(rs.getInt("salary_date_id"));
@@ -68,6 +55,7 @@ public class SalaryDateDao {
 		return salaryDate;
 	}
 
+	// Date를 DB에 넣을 수 있게 Timestamp로 바꿈
 	private Timestamp toTimestamp(Date date) {
 		return new Timestamp(date.getTime());
 	}

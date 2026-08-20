@@ -248,7 +248,7 @@
     <!-- 3. 자주 찾는 메뉴 (Quick Links) -->
     <h2 class="section-title">빠른 실행 메뉴</h2>
     <div class="quick-menu-grid">
-      <a href="${pageContext.request.contextPath}/emp/register.do" class="quick-btn">
+      <a href="${pageContext.request.contextPath}/config/register.do" class="quick-btn">
         <span class="icon">👤</span>
         <span>신규 사원 등록</span>
       </a>
@@ -256,19 +256,19 @@
         <span class="icon">📋</span>
         <span>사원 현황 조회</span>
       </a>
-      <a href="${pageContext.request.contextPath}/attendance/list.do" class="quick-btn">
+      <a href="${pageContext.request.contextPath}/attendance/record/list.do" class="quick-btn">
         <span class="icon">⏰</span>
         <span>근태 관리</span>
       </a>
-      <a href="${pageContext.request.contextPath}/salary/list.do" class="quick-btn">
+      <a href="${pageContext.request.contextPath}/salary/entry.do" class="quick-btn">
         <span class="icon">💳</span>
         <span>급여 계산/지급</span>
       </a>
-      <a href="${pageContext.request.contextPath}/stats/salary.do" class="quick-btn">
+      <a href="${pageContext.request.contextPath}/salary/stats/yearlyTotal.do" class="quick-btn">
         <span class="icon">📊</span>
         <span>급여 통계 분석</span>
       </a>
-      <a href="${pageContext.request.contextPath}/retire/list.do" class="quick-btn">
+      <a href="${pageContext.request.contextPath}/retirement/list.do" class="quick-btn">
         <span class="icon">🏖️</span>
         <span>퇴직 관리</span>
       </a>

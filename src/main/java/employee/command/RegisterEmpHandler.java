@@ -7,12 +7,12 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import employee.service.CreateRequest;
-import employee.service.DependentRequest;
-import employee.service.EmpInfoSalaryRequest;
-import employee.service.EmpRegisterRequest;
-import employee.service.EmpRegisterService;
-import employee.service.EmpRequest;
+import employee.register.service.CreateRequest;
+import employee.register.service.DependentRequest;
+import employee.register.service.EmpInfoSalaryRequest;
+import employee.register.service.EmpRegisterRequest;
+import employee.register.service.EmpRegisterService;
+import employee.register.service.EmpRequest;
 import mvc.command.CommandHandler;
 
 public class RegisterEmpHandler implements CommandHandler {

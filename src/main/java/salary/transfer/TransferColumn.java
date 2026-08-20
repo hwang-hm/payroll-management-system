@@ -37,6 +37,7 @@ public enum TransferColumn {
 		return label;
 	}
 
+	// 저장된 코드값으로 컬럼 찾아줌. 없으면 null
 	public static TransferColumn fromCode(String code) {
 		if (code == null) {
 			return null;

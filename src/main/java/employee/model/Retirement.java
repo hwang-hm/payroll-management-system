@@ -14,51 +14,82 @@ public class Retirement {
 	private Timestamp createdAt;
 	private Timestamp updatedAt;
 	
+	public Retirement() {
+	}
+
+	public Retirement(Integer empId, String retirementType, Date retirementDate, String retirementReason,
+			String contactAfterRetirement, Integer retirementPay, Timestamp createdAt, Timestamp updatedAt) {
+		super();
+		this.empId = empId;
+		this.retirementType = retirementType;
+		this.retirementDate = retirementDate;
+		this.retirementReason = retirementReason;
+		this.contactAfterRetirement = contactAfterRetirement;
+		this.retirementPay = retirementPay;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
+
 	public Integer getEmpId() {
 		return empId;
 	}
-	public void setEmpId(int empId) {
+
+	public void setEmpId(Integer empId) {
 		this.empId = empId;
 	}
+
 	public String getRetirementType() {
 		return retirementType;
 	}
+
 	public void setRetirementType(String retirementType) {
 		this.retirementType = retirementType;
 	}
+
 	public Date getRetirementDate() {
 		return retirementDate;
 	}
+
 	public void setRetirementDate(Date retirementDate) {
 		this.retirementDate = retirementDate;
 	}
+
 	public String getRetirementReason() {
 		return retirementReason;
 	}
+
 	public void setRetirementReason(String retirementReason) {
 		this.retirementReason = retirementReason;
 	}
+
 	public String getContactAfterRetirement() {
 		return contactAfterRetirement;
 	}
+
 	public void setContactAfterRetirement(String contactAfterRetirement) {
 		this.contactAfterRetirement = contactAfterRetirement;
 	}
+
 	public Integer getRetirementPay() {
 		return retirementPay;
 	}
+
 	public void setRetirementPay(Integer retirementPay) {
 		this.retirementPay = retirementPay;
 	}
+
 	public Timestamp getCreatedAt() {
 		return createdAt;
 	}
+
 	public void setCreatedAt(Timestamp createdAt) {
 		this.createdAt = createdAt;
 	}
+
 	public Timestamp getUpdatedAt() {
 		return updatedAt;
 	}
+
 	public void setUpdatedAt(Timestamp updatedAt) {
 		this.updatedAt = updatedAt;
 	}

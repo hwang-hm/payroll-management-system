@@ -21,6 +21,7 @@ public class SalaryEntryService {
 	private final SalaryDetailDao salaryDetailDao = new SalaryDetailDao();
 	private final SalaryDateService salaryDateService = new SalaryDateService();
 
+	// 귀속년월/차수 기준으로 급여입력 화면에 뿌릴 데이터를 모아줌
 	public SalaryEntryData getEntryData(int payYear, int payMonth, int paySeq, int selectedSalaryId) {
 		try (Connection conn = ConnectionProvider.getConnection()) {
 			SalaryDate salaryDate = salaryDateService.ensureByPeriod(conn, payYear, payMonth, paySeq);
@@ -52,6 +53,7 @@ public class SalaryEntryService {
 		}
 	}
 
+	// 왼쪽 사원목록의 인원수, 지급/공제/실지급 합계 계산
 	private SalarySummary toSummary(List<SalaryView> salaryList) {
 		SalarySummary summary = new SalarySummary();
 		summary.setCount(salaryList.size());
@@ -69,6 +71,7 @@ public class SalaryEntryService {
 		return summary;
 	}
 
+	// 급여상세를 지급항목이랑 공제항목으로 나눠서 담아줌
 	private void splitDetails(Connection conn, int salaryId, SalaryEntryData data) throws SQLException {
 		List<SalaryDetail> payDetails = new ArrayList<>();
 		List<SalaryDetail> deductDetails = new ArrayList<>();
@@ -83,6 +86,7 @@ public class SalaryEntryService {
 		data.setDeductDetails(deductDetails);
 	}
 
+	// 목록에서 지금 클릭한 사원 한 명 찾아줌
 	private SalaryView findSalaryView(List<SalaryView> salaryList, int salaryId) {
 		for (SalaryView view : salaryList) {
 			if (view.getSalaryId() == salaryId) {
@@ -92,6 +96,7 @@ public class SalaryEntryService {
 		return null;
 	}
 
+	// 정산기간/지급일을 화면용 날짜문자열로 바꿔줌
 	private void setPeriodDates(SalaryEntryData data, SalaryDate salaryDate) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		data.setStartDate(sdf.format(salaryDate.getStartDate()));

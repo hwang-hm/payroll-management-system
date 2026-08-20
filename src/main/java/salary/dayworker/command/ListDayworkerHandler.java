@@ -27,7 +27,7 @@ public class ListDayworkerHandler implements CommandHandler {
 
 		// 2. request 영역에 데이터 저장
 		req.setAttribute("dayWorkerList", workerList);
-		
+
 		// 3. HTML 조각 JSP로 포워딩
 		return FORM_VIEW;
 	}

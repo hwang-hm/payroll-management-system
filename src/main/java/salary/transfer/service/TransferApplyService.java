@@ -9,8 +9,8 @@ import java.util.List;
 
 import jdbc.JdbcUtil;
 import jdbc.connection.ConnectionProvider;
-import salary.entry.dao.SalaryDao;
-import salary.entry.dao.TransferFormDao;
+import salary.transfer.dao.TransferApplyDao;
+import salary.transfer.dao.TransferFormDao;
 import salary.model.TransferForm;
 import salary.model.TransferFormItem;
 import salary.transfer.TransferColumn;
@@ -19,9 +19,10 @@ import salary.transfer.viewdto.TransferApplyRow;
 
 public class TransferApplyService {
 
-	private final SalaryDao salaryDao = new SalaryDao();
+	private final TransferApplyDao transferApplyDao = new TransferApplyDao();
 	private final TransferFormDao transferFormDao = new TransferFormDao();
 
+	// 이체신청 화면에 뿌릴 양식이랑 대상자 목록 모아줌
 	public TransferApplyData getApplyData(int payYear, int payMonth, int paySeq, Integer formId) {
 		Connection conn = null;
 		try {
@@ -64,7 +65,7 @@ public class TransferApplyService {
 			}
 			data.setVisibleColumns(visible);
 
-			List<TransferApplyRow> rows = salaryDao.selectTransferApplyRowsByPeriod(conn, payYear, payMonth, paySeq);
+			List<TransferApplyRow> rows = transferApplyDao.selectTransferApplyRowsByPeriod(conn, payYear, payMonth, paySeq);
 			data.setRows(rows);
 
 			long sumPay = 0;
@@ -86,6 +87,7 @@ public class TransferApplyService {
 		}
 	}
 
+	// 이체양식 이름/표시항목 저장. 없으면 새로 만들고 있으면 항목 갈아끼움
 	public int saveForm(Integer formId, String formName, String[] itemCodes) {
 		Connection conn = null;
 		try {
@@ -125,14 +127,17 @@ public class TransferApplyService {
 		}
 	}
 
+	// 올해
 	public static int currentYear() {
 		return Calendar.getInstance().get(Calendar.YEAR);
 	}
 
+	// 이번 달
 	public static int currentMonth() {
 		return Calendar.getInstance().get(Calendar.MONTH) + 1;
 	}
 
+	// 셀렉트박스용 연도 목록. 올해 기준으로 5년치
 	private List<Integer> buildYearOptions(int payYear) {
 		List<Integer> years = new ArrayList<>();
 		int base = Math.max(payYear, currentYear());

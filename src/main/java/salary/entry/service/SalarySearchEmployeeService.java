@@ -12,6 +12,7 @@ public class SalarySearchEmployeeService {
 
 	private final SalaryDao salaryDao = new SalaryDao();
 
+	// 이번 급여에 아직 안 넣은 사원 찾기. 검색어 없으면 그냥 전체
 	public List<EmployeeSearchView> search(int salaryDateId, String searchKeyword) {
 		try (Connection conn = ConnectionProvider.getConnection()) {
 			if (searchKeyword == null || searchKeyword.trim().isEmpty()) {

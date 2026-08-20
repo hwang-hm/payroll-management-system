@@ -6,6 +6,7 @@ import java.util.List;
 import salary.model.TransferForm;
 import salary.transfer.TransferColumn;
 
+// 이체신청 화면에 뿌릴 전체 데이터
 public class TransferApplyData {
 
 	private int payYear;
