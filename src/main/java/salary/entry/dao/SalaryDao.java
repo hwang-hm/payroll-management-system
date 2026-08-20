@@ -69,6 +69,46 @@ public class SalaryDao {
 		return newSalaryId;
 	}
 
+	public Salary selectById(Connection conn, int salaryId) throws SQLException {
+		String sql = "SELECT salary_id, salary_date_id, emp_id, total_pay, total_deduct, net_pay "
+				+ "FROM salary WHERE salary_id = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, salaryId);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+					return toSalary(rs);
+				}
+				return null;
+			}
+		}
+	}
+
+	// 해당 귀속년월 급여 헤더. 일용직은 빼둠
+	public List<Salary> selectBySalaryDateIdExcludingDayworkers(Connection conn, int salaryDateId)
+			throws SQLException {
+		String sql = "SELECT s.salary_id, s.salary_date_id, s.emp_id, s.total_pay, s.total_deduct, s.net_pay "
+				+ "FROM salary s JOIN employee e ON s.emp_id = e.emp_id "
+				+ "WHERE s.salary_date_id = ? AND e.employment_type <> '일용직' ORDER BY s.salary_id";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, salaryDateId);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				List<Salary> list = new ArrayList<>();
+				while (rs.next()) {
+					list.add(toSalary(rs));
+				}
+				return list;
+			}
+		}
+	}
+
+	public void deleteById(Connection conn, int salaryId) throws SQLException {
+		String sql = "DELETE FROM salary WHERE salary_id = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, salaryId);
+			pstmt.executeUpdate();
+		}
+	}
+
 	// 지급합계/공제합계/실지급액 다시 저장
 	public void updateTotals(Connection conn, int salaryId, long totalPay, long totalDeduct, long netPay)
 			throws SQLException {
@@ -169,6 +209,17 @@ public class SalaryDao {
 		view.setTotalDeduct(rs.getLong("total_deduct"));
 		view.setNetPay(rs.getLong("net_pay"));
 		return view;
+	}
+
+	private Salary toSalary(ResultSet rs) throws SQLException {
+		Salary salary = new Salary();
+		salary.setSalaryId(rs.getInt("salary_id"));
+		salary.setSalaryDateId(rs.getInt("salary_date_id"));
+		salary.setEmpId(rs.getInt("emp_id"));
+		salary.setTotalPay(rs.getLong("total_pay"));
+		salary.setTotalDeduct(rs.getLong("total_deduct"));
+		salary.setNetPay(rs.getLong("net_pay"));
+		return salary;
 	}
 
 }
