@@ -40,9 +40,3 @@
     </tbody>
   </table>
 </div>
-
-<script>
-  function toggleEmpAll(el) {
-    document.querySelectorAll('.emp-chk').forEach(cb => cb.checked = el.checked);
-  }
-</script>
