@@ -34,8 +34,12 @@ public class SalaryAddEmployeesHandler implements CommandHandler {
 			}
 		}
 
-		addEmployeesService.add(salaryDateId, empIds);
+		Integer addedSalaryId = addEmployeesService.add(salaryDateId, empIds);
 
-		return "redirect:/salary/entry.do?" + period.toQueryString();
+		String redirect = "redirect:/salary/entry.do?" + period.toQueryString();
+		if (addedSalaryId != null) {
+			redirect += "&salaryId=" + addedSalaryId;
+		}
+		return redirect;
 	}
 }
