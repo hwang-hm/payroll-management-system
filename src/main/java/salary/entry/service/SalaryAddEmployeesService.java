@@ -2,9 +2,11 @@ package salary.entry.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import employee.dao.EmpInfoSalaryDao;
 import employee.model.EmpInfoSalary;
@@ -20,6 +22,7 @@ import salary.model.SalaryDate;
 import salary.model.SalaryDetail;
 import salary.model.SalaryItem;
 import salary.util.SalaryAutoCalcRates;
+import salary.util.SalaryTotals;
 
 public class SalaryAddEmployeesService {
 
@@ -47,29 +50,45 @@ public class SalaryAddEmployeesService {
 				throw new IllegalArgumentException("salary_date not found: " + salaryDateId);
 			}
 
-			Integer templateSalaryId = salaryDao.selectFirstSalaryIdBySalaryDateId(conn, salaryDateId);
-			Integer lastAddedSalaryId = null;
-
+			Set<Integer> existingEmpIds = salaryDao.selectEmpIdsBySalaryDateId(conn, salaryDateId);
+			List<Integer> toAdd = new ArrayList<>();
 			for (Integer empId : empIds) {
-				if (empId == null || salaryDao.existsBySalaryDateIdAndEmpId(conn, salaryDateId, empId)) {
-					continue;
+				if (empId != null && !existingEmpIds.contains(empId)) {
+					toAdd.add(empId);
 				}
+			}
+			if (toAdd.isEmpty()) {
+				conn.commit();
+				return null;
+			}
+
+			Integer templateSalaryId = salaryDao.selectFirstSalaryIdBySalaryDateId(conn, salaryDateId);
+			List<SalaryDetail> structureTemplates = loadStructureTemplates(conn, templateSalaryId);
+
+			Map<Integer, EmpInfoSalary> empInfoMap = empInfoSalaryDao.selectByEmpIds(conn, toAdd);
+			Map<Integer, Map<Integer, Long>> attendanceByEmp = salaryAttendanceDao.selectAllowanceSumByEmpIds(
+					conn, toAdd, salaryDate.getPayYear(), salaryDate.getPayMonth());
+
+			Integer lastAddedSalaryId = null;
+			for (Integer empId : toAdd) {
+				EmpInfoSalary empInfo = empInfoMap.get(empId);
+				Map<Integer, Long> attendanceSums = attendanceByEmp.getOrDefault(empId, Collections.emptyMap());
+				List<SalaryDetail> details = buildDetailsWithAmounts(structureTemplates, empInfo, attendanceSums);
+				long[] totals = SalaryTotals.fromDetails(details);
 
 				Salary salary = new Salary();
 				salary.setSalaryDateId(salaryDateId);
 				salary.setEmpId(empId);
-				salary.setTotalPay(0L);
-				salary.setTotalDeduct(0L);
-				salary.setNetPay(0L);
+				salary.setTotalPay(totals[0]);
+				salary.setTotalDeduct(totals[1]);
+				salary.setNetPay(totals[2]);
 
 				int salaryId = salaryDao.insert(conn, salary);
-				createDetails(conn, salaryId, empId, templateSalaryId, salaryDate);
-				recalculateTotals(conn, salaryId);
-				lastAddedSalaryId = salaryId;
-
-				if (templateSalaryId == null) {
-					templateSalaryId = salaryId;
+				for (SalaryDetail detail : details) {
+					detail.setSalaryId(salaryId);
 				}
+				salaryDetailDao.insertBatch(conn, details);
+				lastAddedSalaryId = salaryId;
 			}
 
 			conn.commit();
@@ -82,21 +101,14 @@ public class SalaryAddEmployeesService {
 		}
 	}
 
-	// 구조는 템플릿(또는 salary_item), 금액은 근태·사원정보·항목 기본값에서 채움
-	private void createDetails(Connection conn, int salaryId, int empId, Integer templateSalaryId,
-			SalaryDate salaryDate) throws SQLException {
+	private List<SalaryDetail> loadStructureTemplates(Connection conn, Integer templateSalaryId)
+			throws SQLException {
 		if (templateSalaryId != null) {
-			createDetailsFromTemplate(conn, salaryId, templateSalaryId);
-		} else {
-			createDetailsFromSalaryItems(conn, salaryId);
+			return salaryDetailDao.selectBySalaryId(conn, templateSalaryId);
 		}
-		applyExternalAmounts(conn, salaryId, empId, salaryDate);
-	}
-
-	private void createDetailsFromSalaryItems(Connection conn, int salaryId) throws SQLException {
+		List<SalaryDetail> templates = new ArrayList<>();
 		for (SalaryItem item : salaryItemDao.selectActiveItems(conn)) {
 			SalaryDetail detail = new SalaryDetail();
-			detail.setSalaryId(salaryId);
 			detail.setSalaryItemId(item.getSalaryItemId());
 			detail.setAttendanceTypeId(item.getAttendanceTypeId());
 			detail.setItemType(item.getItemType());
@@ -109,15 +121,16 @@ public class SalaryAddEmployeesService {
 			detail.setDefaultAmount(item.getDefaultAmount());
 			detail.setMemo(item.getRemark());
 			detail.setAmount(0L);
-			salaryDetailDao.insert(conn, detail);
+			templates.add(detail);
 		}
+		return templates;
 	}
 
-	// 첫째 사원 상세 구조만 복사. 금액은 나중에 외부값으로 채움
-	private void createDetailsFromTemplate(Connection conn, int salaryId, int templateSalaryId) throws SQLException {
-		for (SalaryDetail template : salaryDetailDao.selectBySalaryId(conn, templateSalaryId)) {
+	private List<SalaryDetail> buildDetailsWithAmounts(List<SalaryDetail> templates, EmpInfoSalary empInfo,
+			Map<Integer, Long> attendanceSums) {
+		List<SalaryDetail> details = new ArrayList<>(templates.size());
+		for (SalaryDetail template : templates) {
 			SalaryDetail detail = new SalaryDetail();
-			detail.setSalaryId(salaryId);
 			detail.setSalaryItemId(template.getSalaryItemId());
 			detail.setAttendanceTypeId(template.getAttendanceTypeId());
 			detail.setItemType(template.getItemType());
@@ -129,25 +142,10 @@ public class SalaryAddEmployeesService {
 			detail.setRoundUnit(template.getRoundUnit());
 			detail.setDefaultAmount(template.getDefaultAmount());
 			detail.setMemo(template.getMemo());
-			detail.setAmount(0L);
-			salaryDetailDao.insert(conn, detail);
+			detail.setAmount(resolveInitialAmount(detail, empInfo, attendanceSums));
+			details.add(detail);
 		}
-	}
-
-	// 근태수당 → 기본급·고정지급, 공제 6종은 0 유지(자동계산 버튼에서 채움)
-	private void applyExternalAmounts(Connection conn, int salaryId, int empId, SalaryDate salaryDate)
-			throws SQLException {
-		EmpInfoSalary empInfo = empInfoSalaryDao.selectById(conn, empId);
-		Map<Integer, Long> attendanceSums = salaryAttendanceDao.selectAllowanceSumByType(
-				conn, empId, salaryDate.getPayYear(), salaryDate.getPayMonth());
-		if (attendanceSums == null) {
-			attendanceSums = Collections.emptyMap();
-		}
-
-		for (SalaryDetail detail : salaryDetailDao.selectBySalaryId(conn, salaryId)) {
-			long amount = resolveInitialAmount(detail, empInfo, attendanceSums);
-			salaryDetailDao.updateAmountAndCalcMethod(conn, detail.getDetailId(), amount, detail.getCalcMethod());
-		}
+		return details;
 	}
 
 	private long resolveInitialAmount(SalaryDetail detail, EmpInfoSalary empInfo,
@@ -172,19 +170,5 @@ public class SalaryAddEmployeesService {
 			return detail.getDefaultAmount();
 		}
 		return 0L;
-	}
-
-	private void recalculateTotals(Connection conn, int salaryId) throws SQLException {
-		long totalPay = 0;
-		long totalDeduct = 0;
-		for (SalaryDetail detail : salaryDetailDao.selectBySalaryId(conn, salaryId)) {
-			long amount = detail.getAmount() != null ? detail.getAmount() : 0L;
-			if ("PAY".equals(detail.getItemType())) {
-				totalPay += amount;
-			} else {
-				totalDeduct += amount;
-			}
-		}
-		salaryDao.updateTotals(conn, salaryId, totalPay, totalDeduct, totalPay - totalDeduct);
 	}
 }

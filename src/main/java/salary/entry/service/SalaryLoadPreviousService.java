@@ -3,6 +3,7 @@ package salary.entry.service;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 
 import jdbc.JdbcUtil;
 import jdbc.connection.ConnectionProvider;
@@ -11,7 +12,6 @@ import salary.entry.dao.SalaryDateDao;
 import salary.entry.dao.SalaryDetailDao;
 import salary.model.Salary;
 import salary.model.SalaryDate;
-import salary.model.SalaryDetail;
 import salary.util.PayPeriodParams;
 
 public class SalaryLoadPreviousService {
@@ -41,10 +41,12 @@ public class SalaryLoadPreviousService {
 				return;
 			}
 
+			Set<Integer> existingEmpIds = salaryDao.selectEmpIdsBySalaryDateId(conn, targetDate.getSalaryDateId());
 			List<Salary> sourceSalaries = salaryDao.selectBySalaryDateIdExcludingDayworkers(conn,
 					sourceDate.getSalaryDateId());
+
 			for (Salary sourceSalary : sourceSalaries) {
-				if (salaryDao.existsBySalaryDateIdAndEmpId(conn, targetDate.getSalaryDateId(), sourceSalary.getEmpId())) {
+				if (existingEmpIds.contains(sourceSalary.getEmpId())) {
 					continue;
 				}
 				Salary copied = new Salary();
@@ -54,7 +56,8 @@ public class SalaryLoadPreviousService {
 				copied.setTotalDeduct(sourceSalary.getTotalDeduct());
 				copied.setNetPay(sourceSalary.getNetPay());
 				int newSalaryId = salaryDao.insert(conn, copied);
-				copyDetails(conn, sourceSalary.getSalaryId(), newSalaryId);
+				salaryDetailDao.copyFromSalary(conn, sourceSalary.getSalaryId(), newSalaryId);
+				existingEmpIds.add(sourceSalary.getEmpId());
 			}
 
 			conn.commit();
@@ -63,26 +66,6 @@ public class SalaryLoadPreviousService {
 			throw new RuntimeException(e);
 		} finally {
 			JdbcUtil.close(conn);
-		}
-	}
-
-	private void copyDetails(Connection conn, int sourceSalaryId, int targetSalaryId) throws SQLException {
-		for (SalaryDetail sourceDetail : salaryDetailDao.selectBySalaryId(conn, sourceSalaryId)) {
-			SalaryDetail detail = new SalaryDetail();
-			detail.setSalaryId(targetSalaryId);
-			detail.setSalaryItemId(sourceDetail.getSalaryItemId());
-			detail.setAttendanceTypeId(sourceDetail.getAttendanceTypeId());
-			detail.setItemType(sourceDetail.getItemType());
-			detail.setItemName(sourceDetail.getItemName());
-			detail.setTaxYn(sourceDetail.getTaxYn());
-			detail.setTaxFreeName(sourceDetail.getTaxFreeName());
-			detail.setTaxFreeLimit(sourceDetail.getTaxFreeLimit());
-			detail.setCalcMethod(sourceDetail.getCalcMethod());
-			detail.setRoundUnit(sourceDetail.getRoundUnit());
-			detail.setDefaultAmount(sourceDetail.getDefaultAmount());
-			detail.setMemo(sourceDetail.getMemo());
-			detail.setAmount(sourceDetail.getAmount());
-			salaryDetailDao.insert(conn, detail);
 		}
 	}
 }

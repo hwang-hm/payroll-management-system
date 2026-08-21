@@ -31,15 +31,24 @@ public class SalaryItemDao {
 	private SalaryItem toSalaryItem(ResultSet rs) throws SQLException {
 		SalaryItem item = new SalaryItem();
 		item.setSalaryItemId(rs.getInt("salary_item_id"));
-		item.setAttendanceTypeId(rs.getInt("attendance_type_id"));
+		int attendanceTypeId = rs.getInt("attendance_type_id");
+		if (!rs.wasNull()) {
+			item.setAttendanceTypeId(attendanceTypeId);
+		}
 		item.setItemType(rs.getString("item_type"));
 		item.setItemName(rs.getString("item_name"));
 		item.setTaxYn(rs.getString("tax_yn"));
 		item.setTaxFreeName(rs.getString("tax_free_name"));
-		item.setTaxFreeLimit(rs.getLong("tax_free_limit"));
+		long taxFreeLimit = rs.getLong("tax_free_limit");
+		if (!rs.wasNull()) {
+			item.setTaxFreeLimit(taxFreeLimit);
+		}
 		item.setCalcMethod(rs.getString("calc_method"));
 		item.setRoundUnit(rs.getString("round_unit"));
-		item.setDefaultAmount(rs.getLong("default_amount"));
+		long defaultAmount = rs.getLong("default_amount");
+		if (!rs.wasNull()) {
+			item.setDefaultAmount(defaultAmount);
+		}
 		item.setRemark(rs.getString("remark"));
 		item.setUseYn(rs.getString("use_yn"));
 		return item;

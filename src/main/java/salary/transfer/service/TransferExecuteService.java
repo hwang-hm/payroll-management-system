@@ -2,14 +2,16 @@ package salary.transfer.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import jdbc.JdbcUtil;
 import jdbc.connection.ConnectionProvider;
+import salary.model.TransferHistory;
 import salary.transfer.dao.TransferApplyDao;
 import salary.transfer.dao.TransferHistoryDao;
-import salary.model.TransferHistory;
 import salary.transfer.viewdto.TransferApplyRow;
 import salary.util.PayPeriodParams;
 
@@ -36,18 +38,27 @@ public class TransferExecuteService {
 				return "회사 출금계좌(payroll_information)가 없습니다.";
 			}
 
+			List<Integer> candidateIds = new ArrayList<>();
+			for (TransferApplyRow row : rows) {
+				if (!isBlank(row.getSalaryBank()) && !isBlank(row.getSalaryAccount())) {
+					candidateIds.add(row.getSalaryId());
+				}
+			}
+			Set<Integer> alreadySuccess = transferHistoryDao.selectSuccessSalaryIds(conn, candidateIds);
+
 			int successCount = 0;
 			int skipNoAccount = 0;
 			int skipAlready = 0;
 			String memo = String.format("급여%04d-%02d", period.getPayYear(), period.getPayMonth());
 			Date today = new Date();
+			List<TransferHistory> toInsert = new ArrayList<>();
 
 			for (TransferApplyRow row : rows) {
 				if (isBlank(row.getSalaryBank()) || isBlank(row.getSalaryAccount())) {
 					skipNoAccount++;
 					continue;
 				}
-				if (transferHistoryDao.existsSuccessBySalaryId(conn, row.getSalaryId())) {
+				if (alreadySuccess.contains(row.getSalaryId())) {
 					skipAlready++;
 					continue;
 				}
@@ -63,10 +74,11 @@ public class TransferExecuteService {
 				history.setTransferAmount(row.getNetPay());
 				history.setDepositMemo(memo);
 				history.setTransferResult("성공");
-				transferHistoryDao.insert(conn, history);
+				toInsert.add(history);
 				successCount++;
 			}
 
+			transferHistoryDao.insertBatch(conn, toInsert);
 			conn.commit();
 			return String.format("이체 완료: 성공 %d건, 계좌없음 %d건, 기이체 %d건", successCount, skipNoAccount,
 					skipAlready);
