@@ -18,7 +18,7 @@ import retirement.model.SeverancePay;
 
 public class Register2EmpHandler implements CommandHandler {
 
-	private static final String FORM_VIEW = "/WEB-INF/view/config/empRegister2.jsp";
+	private static final String FORM_VIEW = "/WEB-INF/view/config/register/empRegister2.jsp";
 
 	private EmpRegister2Service empRegister2Service =new EmpRegister2Service();
 	private Emp2InfoSelectService emp2InfoSelectService = new Emp2InfoSelectService();

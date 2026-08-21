@@ -21,7 +21,7 @@ import mvc.command.CommandHandler;
 
 public class ModifyEmpHandler implements CommandHandler {
 
-	private static final String FORM_VIEW = "/WEB-INF/view/emp/modify.jsp";
+	private static final String FORM_VIEW = "/WEB-INF/view/emp/modify/modify.jsp";
 
 	private EmpModifyService empModifyService = new EmpModifyService();
 	private EmpInfoSelectService empInfoSelectService = new EmpInfoSelectService();

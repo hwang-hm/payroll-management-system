@@ -16,7 +16,7 @@ import employee.register.service.EmpRequest;
 import mvc.command.CommandHandler;
 
 public class RegisterEmpHandler implements CommandHandler {
-	private static final String FORM_VIEW = "/WEB-INF/view/config/empRegister.jsp";
+	private static final String FORM_VIEW = "/WEB-INF/view/config/register/empRegister.jsp";
 	private EmpRegisterService empRegisterService = new EmpRegisterService();
 	private CreateRequest createReq = new CreateRequest();
 	
