@@ -25,8 +25,8 @@ public class SalaryLoadPreviousHandler implements CommandHandler {
 		int sourceMonth = RequestParamParser.parseInt(req, "sourceMonth", period.getPayMonth());
 		int sourceSeq = RequestParamParser.parseInt(req, "sourceSeq", 1);
 
-		loadPreviousService.load(period.getPayYear(), period.getPayMonth(), period.getPaySeq(), sourceYear,
-				sourceMonth, sourceSeq);
+		PayPeriodParams source = new PayPeriodParams(sourceYear, sourceMonth, sourceSeq);
+		loadPreviousService.load(period, source);
 
 		return "redirect:/salary/entry.do?" + period.toQueryString();
 	}

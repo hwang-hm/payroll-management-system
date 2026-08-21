@@ -20,8 +20,7 @@ public class PayStubHandler implements CommandHandler {
 		int salaryId = RequestParamParser.parseInt(req, "salaryId", 0);
 		String searchKeyword = req.getParameter("searchKeyword");
 
-		PayStubData payStubData = payStubService.getPayStubData(period.getPayYear(), period.getPayMonth(),
-				period.getPaySeq(), salaryId, searchKeyword);
+		PayStubData payStubData = payStubService.getPayStubData(period, salaryId, searchKeyword);
 		req.setAttribute("payStubData", payStubData);
 		return "/WEB-INF/view/salary/ledger/payStub.jsp";
 	}

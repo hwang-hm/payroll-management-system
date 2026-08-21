@@ -19,8 +19,7 @@ public class EmpSalaryHistoryHandler implements CommandHandler {
 		PeriodRangeParams period = PeriodRangeParams.fromRequest(req);
 		int empId = RequestParamParser.parseInt(req, "empId", 0);
 
-		EmpSalaryHistoryData historyData = empSalaryHistoryService.getHistoryData(period.getStartYear(),
-				period.getStartMonth(), period.getEndYear(), period.getEndMonth(), empId);
+		EmpSalaryHistoryData historyData = empSalaryHistoryService.getHistoryData(period, empId);
 		req.setAttribute("historyData", historyData);
 		return "/WEB-INF/view/salary/ledger/empSalaryHistory.jsp";
 	}

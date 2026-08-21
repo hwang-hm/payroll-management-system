@@ -15,6 +15,7 @@ import salary.ledger.dao.ItemLedgerDao.ItemAmount;
 import salary.ledger.viewdto.ItemLedgerData;
 import salary.ledger.viewdto.ItemLedgerMonth;
 import salary.ledger.viewdto.ItemLedgerRow;
+import salary.util.PeriodRangeParams;
 
 public class ItemLedgerService {
 
@@ -23,27 +24,28 @@ public class ItemLedgerService {
 
 	private final ItemLedgerDao itemLedgerDao = new ItemLedgerDao();
 
-	public ItemLedgerData getItemLedgerData(int startYear, int startMonth, int endYear, int endMonth, String itemName) {
+	public ItemLedgerData getItemLedgerData(PeriodRangeParams period, String itemName) {
 		try (Connection conn = ConnectionProvider.getConnection()) {
-			int[] period = normalizePeriod(startYear, startMonth, endYear, endMonth);
-			boolean capped = capToTwelveMonths(period);
+			int[] normalized = normalizePeriod(period.getStartYear(), period.getStartMonth(), period.getEndYear(),
+					period.getEndMonth());
+			boolean capped = capToTwelveMonths(normalized);
 			String selectedItem = resolveItemName(itemName);
 
 			ItemLedgerData data = new ItemLedgerData();
-			data.setStartYear(period[0]);
-			data.setStartMonth(period[1]);
-			data.setEndYear(period[2]);
-			data.setEndMonth(period[3]);
+			data.setStartYear(normalized[0]);
+			data.setStartMonth(normalized[1]);
+			data.setEndYear(normalized[2]);
+			data.setEndMonth(normalized[3]);
 			data.setItemName(selectedItem);
 			data.setPeriodCapped(capped);
-			data.setYearOptions(buildYearOptions(period[0], period[2]));
+			data.setYearOptions(buildYearOptions(normalized[0], normalized[2]));
 			data.setItemOptions(FIXED_ITEMS);
 
-			List<ItemLedgerMonth> months = buildMonths(period[0], period[1], period[2], period[3]);
+			List<ItemLedgerMonth> months = buildMonths(normalized[0], normalized[1], normalized[2], normalized[3]);
 			data.setMonths(months);
 
-			int startYm = period[0] * 100 + period[1];
-			int endYm = period[2] * 100 + period[3];
+			int startYm = normalized[0] * 100 + normalized[1];
+			int endYm = normalized[2] * 100 + normalized[3];
 			List<ItemAmount> amounts = itemLedgerDao.selectItemAmountsByPeriod(conn, selectedItem, startYm, endYm);
 			List<ItemLedgerRow> rows = toRows(amounts, months);
 			data.setRows(rows);

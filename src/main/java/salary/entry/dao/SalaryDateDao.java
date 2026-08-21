@@ -11,6 +11,20 @@ import salary.model.SalaryDate;
 
 public class SalaryDateDao {
 
+	// salary_date_id로 한 건 찾기
+	public SalaryDate selectById(Connection conn, int salaryDateId) throws SQLException {
+		String sql = "SELECT * FROM salary_date WHERE salary_date_id = ?";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, salaryDateId);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+					return toSalaryDate(rs);
+				}
+				return null;
+			}
+		}
+	}
+
 	// 귀속년월+차수로 salary_date 한 건 찾기
 	public SalaryDate selectByPeriod(Connection conn, int payYear, int payMonth, int paySeq) throws SQLException {
 		String sql = "SELECT * FROM salary_date WHERE pay_year = ? AND pay_month = ? AND pay_seq = ?";
