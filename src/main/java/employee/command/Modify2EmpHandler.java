@@ -20,7 +20,7 @@ import retirement.model.SeverancePay;
 
 public class Modify2EmpHandler implements CommandHandler {
 
-	private static final String FORM_VIEW = "/WEB-INF/view/emp/modify2.jsp";
+	private static final String FORM_VIEW = "/WEB-INF/view/emp/modify/modify2.jsp";
 
 	private EmpModify2Service empModify2Service = new EmpModify2Service();
 	private EmpInfoSelectService empInfoSelectService = new EmpInfoSelectService();
