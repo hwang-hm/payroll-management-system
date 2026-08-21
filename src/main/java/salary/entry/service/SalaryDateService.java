@@ -7,6 +7,7 @@ import java.util.Calendar;
 
 import salary.entry.dao.SalaryDateDao;
 import salary.model.SalaryDate;
+import salary.util.PayPeriodParams;
 
 public class SalaryDateService {
 
@@ -14,7 +15,10 @@ public class SalaryDateService {
 
 	// 귀속년월 최초선택시 salarydate를 생성해버림. 지급기간과 지급일 데이터가 들어가야 하기 때문.
 	// 차후에 더미성 최초 데이터를 한방에 넣는 방식으로 변경 가능성 있음
-	public SalaryDate ensureByPeriod(Connection conn, int payYear, int payMonth, int paySeq) throws SQLException {
+	public SalaryDate ensureByPeriod(Connection conn, PayPeriodParams period) throws SQLException {
+		int payYear = period.getPayYear();
+		int payMonth = period.getPayMonth();
+		int paySeq = period.getPaySeq();
 		SalaryDate salaryDate = salaryDateDao.selectByPeriod(conn, payYear, payMonth, paySeq);
 		if (salaryDate != null) {
 			return salaryDate;

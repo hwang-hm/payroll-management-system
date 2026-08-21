@@ -112,10 +112,11 @@
     .calc-method-input::placeholder { color: #94a3b8; }
 
     .detail-toolbar {
-      display: flex; justify-content: flex-end; align-items: center;
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
       margin-bottom: 12px; padding: 8px 12px;
       background: #f1f5f9; border: 1px solid var(--border); border-radius: 6px;
     }
+    .detail-toolbar-actions { display: flex; align-items: center; gap: 8px; }
     .calc-toggle-wrap {
       display: flex; align-items: center; gap: 10px;
       font-size: 13px; font-weight: 600; color: #334155;
@@ -296,6 +297,9 @@
               <input type="hidden" name="paySeq" value="${entryData.paySeq}">
 
               <div class="detail-toolbar">
+                <div class="detail-toolbar-actions">
+                  <button type="button" class="btn btn-primary btn-sm" onclick="autoCalc()">자동계산</button>
+                </div>
                 <div class="calc-toggle-wrap">
                   <span class="required">*</span> 계산방법
                   <label class="toggle-switch" title="계산방법 표시/숨기기">
@@ -511,6 +515,36 @@
     calcTotals();
   }
 
+  function autoCalc() {
+    const form = document.getElementById('detailForm');
+    if (!form) return;
+    const salaryId = form.salaryId.value;
+    const body = new URLSearchParams();
+    body.set('salaryId', salaryId);
+    body.set('payYear', payYear);
+    body.set('payMonth', payMonth);
+    body.set('paySeq', paySeq);
+    fetch(ctx + '/salary/entry/autoCalc.do', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+      body: body.toString()
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (!data || !data.ok || !data.details) return;
+        data.details.forEach(item => {
+          const row = form.querySelector('input[name="detailId"][value="' + item.detailId + '"]');
+          if (!row) return;
+          const amountInput = row.closest('.item-row')?.querySelector('.amount-input');
+          if (amountInput) {
+            amountInput.value = formatAmount(item.amount);
+          }
+        });
+        calcTotals();
+      })
+      .catch(() => { /* ignore */ });
+  }
+
   document.getElementById('checkAll')?.addEventListener('change', function() {
     document.querySelectorAll('.salary-chk').forEach(cb => cb.checked = this.checked);
   });
@@ -555,6 +589,10 @@
     searchEmployees(true);
   }
   function closeEmpModal() { document.getElementById('empModal').classList.remove('show'); }
+
+  function toggleEmpAll(el) {
+    document.querySelectorAll('#empSearchResult .emp-chk').forEach(cb => { cb.checked = el.checked; });
+  }
 
   function searchEmployees(showAll) {
     const keyword = showAll ? '' : document.getElementById('empSearchKeyword').value;

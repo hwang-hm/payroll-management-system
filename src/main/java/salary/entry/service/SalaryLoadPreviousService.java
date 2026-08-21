@@ -12,6 +12,7 @@ import salary.entry.dao.SalaryDetailDao;
 import salary.model.Salary;
 import salary.model.SalaryDate;
 import salary.model.SalaryDetail;
+import salary.util.PayPeriodParams;
 
 public class SalaryLoadPreviousService {
 
@@ -21,19 +22,20 @@ public class SalaryLoadPreviousService {
 	private final SalaryDetailDao salaryDetailDao = new SalaryDetailDao();
 
 	// 선택한 지난 귀속년월 급여를 이번 달로 복사. 이미 있는 사원은 건너뜀
-	public void load(int targetYear, int targetMonth, int targetSeq, int sourceYear, int sourceMonth, int sourceSeq) {
+	public void load(PayPeriodParams target, PayPeriodParams source) {
 		Connection conn = null;
 		try {
 			conn = ConnectionProvider.getConnection();
 			conn.setAutoCommit(false);
 
-			SalaryDate sourceDate = salaryDateDao.selectByPeriod(conn, sourceYear, sourceMonth, sourceSeq);
+			SalaryDate sourceDate = salaryDateDao.selectByPeriod(conn, source.getPayYear(), source.getPayMonth(),
+					source.getPaySeq());
 			if (sourceDate == null) {
 				conn.commit();
 				return;
 			}
 
-			SalaryDate targetDate = salaryDateService.ensureByPeriod(conn, targetYear, targetMonth, targetSeq);
+			SalaryDate targetDate = salaryDateService.ensureByPeriod(conn, target);
 			if (sourceDate.getSalaryDateId() == targetDate.getSalaryDateId()) {
 				conn.commit();
 				return;
@@ -41,18 +43,18 @@ public class SalaryLoadPreviousService {
 
 			List<Salary> sourceSalaries = salaryDao.selectBySalaryDateIdExcludingDayworkers(conn,
 					sourceDate.getSalaryDateId());
-			for (Salary source : sourceSalaries) {
-				if (salaryDao.existsBySalaryDateIdAndEmpId(conn, targetDate.getSalaryDateId(), source.getEmpId())) {
+			for (Salary sourceSalary : sourceSalaries) {
+				if (salaryDao.existsBySalaryDateIdAndEmpId(conn, targetDate.getSalaryDateId(), sourceSalary.getEmpId())) {
 					continue;
 				}
 				Salary copied = new Salary();
 				copied.setSalaryDateId(targetDate.getSalaryDateId());
-				copied.setEmpId(source.getEmpId());
-				copied.setTotalPay(source.getTotalPay());
-				copied.setTotalDeduct(source.getTotalDeduct());
-				copied.setNetPay(source.getNetPay());
+				copied.setEmpId(sourceSalary.getEmpId());
+				copied.setTotalPay(sourceSalary.getTotalPay());
+				copied.setTotalDeduct(sourceSalary.getTotalDeduct());
+				copied.setNetPay(sourceSalary.getNetPay());
 				int newSalaryId = salaryDao.insert(conn, copied);
-				copyDetails(conn, source.getSalaryId(), newSalaryId);
+				copyDetails(conn, sourceSalary.getSalaryId(), newSalaryId);
 			}
 
 			conn.commit();
@@ -65,21 +67,21 @@ public class SalaryLoadPreviousService {
 	}
 
 	private void copyDetails(Connection conn, int sourceSalaryId, int targetSalaryId) throws SQLException {
-		for (SalaryDetail source : salaryDetailDao.selectBySalaryId(conn, sourceSalaryId)) {
+		for (SalaryDetail sourceDetail : salaryDetailDao.selectBySalaryId(conn, sourceSalaryId)) {
 			SalaryDetail detail = new SalaryDetail();
 			detail.setSalaryId(targetSalaryId);
-			detail.setSalaryItemId(source.getSalaryItemId());
-			detail.setAttendanceTypeId(source.getAttendanceTypeId());
-			detail.setItemType(source.getItemType());
-			detail.setItemName(source.getItemName());
-			detail.setTaxYn(source.getTaxYn());
-			detail.setTaxFreeName(source.getTaxFreeName());
-			detail.setTaxFreeLimit(source.getTaxFreeLimit());
-			detail.setCalcMethod(source.getCalcMethod());
-			detail.setRoundUnit(source.getRoundUnit());
-			detail.setDefaultAmount(source.getDefaultAmount());
-			detail.setMemo(source.getMemo());
-			detail.setAmount(source.getAmount());
+			detail.setSalaryItemId(sourceDetail.getSalaryItemId());
+			detail.setAttendanceTypeId(sourceDetail.getAttendanceTypeId());
+			detail.setItemType(sourceDetail.getItemType());
+			detail.setItemName(sourceDetail.getItemName());
+			detail.setTaxYn(sourceDetail.getTaxYn());
+			detail.setTaxFreeName(sourceDetail.getTaxFreeName());
+			detail.setTaxFreeLimit(sourceDetail.getTaxFreeLimit());
+			detail.setCalcMethod(sourceDetail.getCalcMethod());
+			detail.setRoundUnit(sourceDetail.getRoundUnit());
+			detail.setDefaultAmount(sourceDetail.getDefaultAmount());
+			detail.setMemo(sourceDetail.getMemo());
+			detail.setAmount(sourceDetail.getAmount());
 			salaryDetailDao.insert(conn, detail);
 		}
 	}

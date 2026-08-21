@@ -191,7 +191,7 @@
 				<a href="${pageContext.request.contextPath}/salary/transfer/apply.do">급여이체신청</a> 
 				<a href="${pageContext.request.contextPath}/salary/transfer/result.do">급여이체결과조회</a> 
 				<a href="${pageContext.request.contextPath}/salary/itemRegister.do">항목별대장</a> 
-				<a href="${pageContext.request.contextPath}/salary/insurance.do">4대보험공제내역</a>
+				<a href="${pageContext.request.contextPath}/salary/socialInsurance.do">4대보험공제내역</a>
 			</div>
 		</div>
 

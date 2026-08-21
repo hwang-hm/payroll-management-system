@@ -11,6 +11,7 @@ import salary.transfer.dao.TransferApplyDao;
 import salary.transfer.dao.TransferHistoryDao;
 import salary.model.TransferHistory;
 import salary.transfer.viewdto.TransferApplyRow;
+import salary.util.PayPeriodParams;
 
 public class TransferExecuteService {
 
@@ -18,13 +19,14 @@ public class TransferExecuteService {
 	private final TransferHistoryDao transferHistoryDao = new TransferHistoryDao();
 
 	// 해당 귀속년월 대상으로 이체 돌림. 계좌없거나 이미 이체된 사람은 건너뜀
-	public String execute(int payYear, int payMonth, int paySeq) {
+	public String execute(PayPeriodParams period) {
 		Connection conn = null;
 		try {
 			conn = ConnectionProvider.getConnection();
 			conn.setAutoCommit(false);
 
-			List<TransferApplyRow> rows = transferApplyDao.selectTransferApplyRowsByPeriod(conn, payYear, payMonth, paySeq);
+			List<TransferApplyRow> rows = transferApplyDao.selectTransferApplyRowsByPeriod(conn, period.getPayYear(),
+					period.getPayMonth(), period.getPaySeq());
 			if (rows.isEmpty()) {
 				return "이체할 급여 대상이 없습니다.";
 			}
@@ -37,7 +39,7 @@ public class TransferExecuteService {
 			int successCount = 0;
 			int skipNoAccount = 0;
 			int skipAlready = 0;
-			String memo = String.format("급여%04d-%02d", payYear, payMonth);
+			String memo = String.format("급여%04d-%02d", period.getPayYear(), period.getPayMonth());
 			Date today = new Date();
 
 			for (TransferApplyRow row : rows) {
