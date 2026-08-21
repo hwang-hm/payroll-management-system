@@ -5,11 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import salary.entry.viewdto.EmployeeSearchView;
 import salary.entry.viewdto.SalaryView;
 import salary.model.Salary;
+import salary.util.SqlIn;
 
 public class SalaryDao {
 
@@ -23,6 +26,21 @@ public class SalaryDao {
 				return rs.next();
 			}
 		}
+	}
+
+	// 해당 귀속년월에 이미 들어간 사원번호 전부
+	public Set<Integer> selectEmpIdsBySalaryDateId(Connection conn, int salaryDateId) throws SQLException {
+		String sql = "SELECT emp_id FROM salary WHERE salary_date_id = ?";
+		Set<Integer> empIds = new HashSet<>();
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, salaryDateId);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				while (rs.next()) {
+					empIds.add(rs.getInt("emp_id"));
+				}
+			}
+		}
+		return empIds;
 	}
 
 	// 같은 달 급여 중 제일 앞에 있는 사람 salary_id. 상세항목 복사할 때 씀
@@ -83,6 +101,21 @@ public class SalaryDao {
 		}
 	}
 
+	// 해당 귀속년월 급여 id 전부 (일용직 포함)
+	public List<Integer> selectIdsBySalaryDateId(Connection conn, int salaryDateId) throws SQLException {
+		String sql = "SELECT salary_id FROM salary WHERE salary_date_id = ? ORDER BY salary_id";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, salaryDateId);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				List<Integer> list = new ArrayList<>();
+				while (rs.next()) {
+					list.add(rs.getInt("salary_id"));
+				}
+				return list;
+			}
+		}
+	}
+
 	// 해당 귀속년월 급여 헤더. 일용직은 빼둠
 	public List<Salary> selectBySalaryDateIdExcludingDayworkers(Connection conn, int salaryDateId)
 			throws SQLException {
@@ -106,6 +139,39 @@ public class SalaryDao {
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, salaryId);
 			pstmt.executeUpdate();
+		}
+	}
+
+	// 여러 salary 한 번에 삭제
+	public void deleteByIds(Connection conn, List<Integer> salaryIds) throws SQLException {
+		if (salaryIds == null || salaryIds.isEmpty()) {
+			return;
+		}
+		String sql = "DELETE FROM salary WHERE salary_id IN (" + SqlIn.placeholders(salaryIds.size()) + ")";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			SqlIn.setInts(pstmt, 1, salaryIds);
+			pstmt.executeUpdate();
+		}
+	}
+
+	// 이번 귀속년월·목록에 속한 salary만 골라 반환 (삭제 검증용)
+	public List<Integer> selectIdsBySalaryDateIdAndIds(Connection conn, int salaryDateId, List<Integer> salaryIds)
+			throws SQLException {
+		if (salaryIds == null || salaryIds.isEmpty()) {
+			return new ArrayList<>();
+		}
+		String sql = "SELECT salary_id FROM salary WHERE salary_date_id = ? AND salary_id IN ("
+				+ SqlIn.placeholders(salaryIds.size()) + ")";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, salaryDateId);
+			SqlIn.setInts(pstmt, 2, salaryIds);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				List<Integer> list = new ArrayList<>();
+				while (rs.next()) {
+					list.add(rs.getInt("salary_id"));
+				}
+				return list;
+			}
 		}
 	}
 

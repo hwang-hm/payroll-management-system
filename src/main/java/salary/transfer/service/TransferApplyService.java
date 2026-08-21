@@ -46,9 +46,11 @@ public class TransferApplyService {
 			String selectedFormName = "";
 			List<TransferColumn> visible = new ArrayList<>();
 			if (formId != null) {
-				TransferForm selected = transferFormDao.selectFormById(conn, formId);
-				if (selected != null) {
-					selectedFormName = selected.getFormName();
+				for (TransferForm form : forms) {
+					if (formId.equals(form.getFormId())) {
+						selectedFormName = form.getFormName();
+						break;
+					}
 				}
 				for (TransferFormItem item : transferFormDao.selectItemsByFormId(conn, formId)) {
 					TransferColumn column = TransferColumn.fromCode(item.getItemCode());
@@ -111,12 +113,13 @@ public class TransferApplyService {
 			}
 
 			if (itemCodes != null) {
-				int order = 1;
+				List<String> validCodes = new ArrayList<>();
 				for (String code : itemCodes) {
 					if (TransferColumn.fromCode(code) != null) {
-						transferFormDao.insertItem(conn, savedFormId, code, order++);
+						validCodes.add(code);
 					}
 				}
+				transferFormDao.insertItemsBatch(conn, savedFormId, validCodes);
 			}
 
 			conn.commit();

@@ -114,4 +114,23 @@ public class TransferFormDao {
 			pstmt.executeUpdate();
 		}
 	}
+
+	// 양식 표시항목 batch insert
+	public void insertItemsBatch(Connection conn, int formId, List<String> itemCodes) throws SQLException {
+		if (itemCodes == null || itemCodes.isEmpty()) {
+			return;
+		}
+		String sql = "INSERT INTO transfer_form_item (item_id, form_id, item_code, display_order) "
+				+ "VALUES (seq_transfer_form_item.NEXTVAL, ?, ?, ?)";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			int order = 1;
+			for (String itemCode : itemCodes) {
+				pstmt.setInt(1, formId);
+				pstmt.setString(2, itemCode);
+				pstmt.setInt(3, order++);
+				pstmt.addBatch();
+			}
+			pstmt.executeBatch();
+		}
+	}
 }

@@ -39,13 +39,12 @@ public class EmpSalaryHistoryService {
 				return data;
 			}
 
-			String empName = empSalaryHistoryDao.selectEmpNameById(conn, empId);
-			data.setEmpName(empName == null ? "" : empName);
-
 			int startYm = normalized[0] * 100 + normalized[1];
 			int endYm = normalized[2] * 100 + normalized[3];
+			String empName = empSalaryHistoryDao.selectEmpNameById(conn, empId);
 			List<EmpSalaryHistoryRow> rows = empSalaryHistoryDao.selectHistoryByEmpAndPeriod(conn, empId, startYm,
 					endYm);
+			data.setEmpName(empName == null ? "" : empName);
 			data.setRows(rows);
 			data.setSummary(toSummary(rows));
 			return data;
