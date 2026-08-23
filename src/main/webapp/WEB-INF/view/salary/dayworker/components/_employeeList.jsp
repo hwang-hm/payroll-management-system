@@ -37,7 +37,7 @@
 								data-total-deduct="${worker.totalDeduct != null ? worker.totalDeduct : 0}"
 								data-net-pay="${worker.netPay != null ? worker.netPay : 0}"
 								onclick="selectWorker(this, '${worker.empId}', '${worker.empName}')">
-								<td>${worker.workerType != null ? worker.workerType : '일용직'}</td>
+								<td>${worker.workerType != null ? worker.workerType : '-'}</td>
 								<td>${worker.empName}</td>
 								<td>${worker.deptName}</td>
 								<td style="text-align: right; font-weight: 600;"><fmt:formatNumber
