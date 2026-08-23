@@ -1,0 +1,463 @@
+@charset "UTF-8";
+:root { 
+	-primary-color: #64748b; 
+	-primary-hover: #475569; 
+	-bg-gray: #f8fafc; 
+	-border-color: #e2e8f0; 
+	-text-main: #1e293b; 
+	-text-muted: #64748b; 
+	-danger-color: #ef4444; 
+	-yellow-bg: #fffde7;
+}
+
+body {
+	font-family: 'Pretendard Variable', Pretendard, sans-serif;
+	background-color: var(- -bg-gray);
+	color: var(- -text-main);
+	margin: 0;
+	padding: 0;
+}
+
+.container {
+	max-width: 1450px;
+	margin: 0 auto 60px auto;
+	padding: 0 20px;
+}
+
+/* =========================
+   페이지 제목
+========================= */
+.page-header {
+	margin-bottom: 24px;
+	border-bottom: 2px solid var(- -border-color);
+	padding-bottom: 16px;
+}
+
+.page-header h2 {
+	font-size: 24px;
+	font-weight: 700;
+	margin: 0 0 6px 0;
+}
+
+.page-header p {
+	margin: 0;
+	font-size: 13px;
+	color: var(- -text-muted);
+}
+
+/* =========================
+   기본 카드
+========================= */
+.section-card {
+	background: #ffffff;
+	border: 1px solid var(- -border-color);
+	border-radius: 12px;
+	padding: 22px;
+	margin-bottom: 22px;
+	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, .04);
+}
+
+.section-title {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 14px;
+}
+
+.section-title h3 {
+	margin: 0;
+	font-size: 19px;
+}
+
+.section-title .description {
+	font-size: 12px;
+	color: var(- -text-muted);
+}
+
+/* =========================
+   버튼
+========================= */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 8px 15px;
+	border: none;
+	border-radius: 6px;
+	font-family: inherit;
+	font-size: 13px;
+	font-weight: 700;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.btn-primary {
+	background-color: var(- -primary-color);
+	color: #ffffff;
+}
+
+.btn-primary:hover {
+	background-color: var(- -primary-hover);
+}
+
+.btn:disabled, .btn.disabled {
+	background-color: #94a3b8;
+	border-color: #94a3b8;
+	color: #ffffff;
+	opacity: 1;
+	cursor: not-allowed;
+}
+
+.btn-outline {
+	background-color: #ffffff;
+	border: 1px solid #cbd5e1;
+	color: #334155;
+}
+
+.btn-outline:hover {
+	background-color: #f1f5f9;
+}
+
+.btn-calculate {
+	min-width: 180px;
+	height: 46px;
+	font-size: 16px;
+	background-color: #f97316;
+	color: #ffffff;
+}
+
+.btn-calculate:hover {
+	background-color: #ea580c;
+}
+
+.btn-save {
+	width: 130px;
+	height: 44px;
+	font-size: 15px;
+}
+
+.btn-cancel {
+	width: 130px;
+	height: 44px;
+	background-color: #94a3b8;
+	color: #ffffff;
+}
+
+/* =========================
+   지급년도 / 신규추가
+========================= */
+.top-control {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 12px;
+}
+
+.year-area {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 14px;
+	font-weight: 700;
+}
+
+.year-area select {
+	height: 34px;
+	border: 1px solid #cbd5e1;
+	border-radius: 5px;
+	padding: 4px 8px;
+}
+
+/* =========================
+   공통 테이블
+========================= */
+.data-table {
+	width: 100%;
+	border-collapse: collapse;
+	table-layout: fixed;
+	font-size: 13px;
+}
+
+.data-table th {
+	padding: 11px 8px;
+	border: 1px solid var(- -border-color);
+	background-color: #f1f5f9;
+	color: #334155;
+	font-weight: 700;
+	text-align: center;
+}
+
+.data-table td {
+	padding: 8px;
+	border: 1px solid var(- -border-color);
+	background-color: #ffffff;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.result-cell {
+	background-color: var(- -yellow-bg) !important;
+}
+
+.data-table input, .data-table select {
+	width: 100%;
+	height: 30px;
+	padding: 4px 7px;
+	box-sizing: border-box;
+	border: 1px solid #d6d9df;
+	font-family: inherit;
+	text-align: right;
+	outline: none;
+}
+
+.data-table input[type="date"] {
+	text-align: center;
+}
+
+.data-table input[type="text"] {
+	text-align: left;
+}
+
+.readonly-input {
+	background-color: #f8fafc;
+}
+
+.period-range {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	width: 100%;
+}
+
+.period-range input[type="date"] {
+	width: calc(50% - 14px);
+	min-width: 0;
+	text-align: center;
+}
+
+.period-separator {
+	flex: 0 0 auto;
+	color: #64748b;
+	font-weight: 600;
+}
+
+.selected-pay-row td {
+	background-color: #f8fbff;
+}
+
+.selected-pay-row .selected-name {
+	font-weight: 700;
+	color: #1e293b;
+}
+
+/* =========================
+   선택 사원 정보
+========================= */
+.employee-bar {
+	display: flex;
+	align-items: center;
+	gap: 22px;
+	padding: 13px 18px;
+	margin-bottom: 20px;
+	border-radius: 8px;
+	color: #ffffff;
+	background: linear-gradient(90deg, #1e293b, #334155);
+}
+
+.employee-name {
+	min-width: 215px;
+	font-size: 17px;
+	font-weight: 800;
+}
+
+.employee-info {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	font-size: 13px;
+}
+
+.employee-info strong {
+	color: #ffffff;
+}
+
+.employee-value {
+	min-width: 78px;
+	padding: 6px 9px;
+	background-color: #ffffff;
+	color: #111827;
+	text-align: center;
+	border-radius: 3px;
+}
+
+.employee-highlight {
+	min-width: 72px;
+	padding: 7px 10px;
+	background: #fff600;
+	color: #111827;
+	font-weight: 800;
+	text-align: center;
+}
+
+/* =========================
+   급여/기타과세 2열
+========================= */
+.two-column {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 24px;
+}
+
+.input-summary {
+	margin-top: 14px;
+}
+
+.notice {
+	margin-top: 7px;
+	color: #ef4444;
+	font-size: 12px;
+}
+
+/* =========================
+   계산 버튼
+========================= */
+.calculate-area {
+	text-align: center;
+	padding: 22px 0;
+}
+
+/* =========================
+   계산 결과
+========================= */
+.result-table {
+	margin-top: 15px;
+}
+
+.result-value {
+	font-weight: 700;
+	color: #334155;
+}
+
+.final-result-table th {
+	background-color: #111827;
+	color: #ffffff;
+	font-size: 14px;
+}
+
+.final-result-table td {
+	height: 42px;
+	background-color: #fffde7;
+}
+
+.final-price {
+	color: #ef4444;
+	font-size: 20px;
+	font-weight: 700;
+}
+
+.bottom-buttons {
+	display: flex;
+	justify-content: center;
+	gap: 14px;
+	margin-top: 26px;
+}
+
+/* =========================
+   사원선택 모달
+========================= */
+.employee-modal {
+	display: none;
+	position: fixed;
+	z-index: 3000;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, .35);
+	align-items: center;
+	justify-content: center;
+}
+
+.employee-modal-content {
+	width: 800px;
+	max-height: 78vh;
+	padding: 24px;
+	background: #ffffff;
+	border-radius: 12px;
+	box-sizing: border-box;
+	box-shadow: 0 12px 40px rgba(15, 23, 42, .28);
+}
+
+.employee-modal-content h2 {
+	margin: 0 0 18px;
+	color: #475569;
+	font-size: 22px;
+}
+
+.modal-search {
+	display: flex;
+	gap: 8px;
+	margin-bottom: 12px;
+}
+
+.modal-search input {
+	width: 240px;
+	height: 34px;
+	border: 1px solid #cbd5e1;
+	border-radius: 5px;
+	padding: 5px 9px;
+	box-sizing: border-box;
+}
+
+.modal-table-wrap {
+	max-height: 430px;
+	overflow-y: auto;
+}
+
+.modal-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 13px;
+}
+
+.modal-table th, .modal-table td {
+	padding: 10px 7px;
+	border: 1px solid var(- -border-color);
+	text-align: center;
+}
+
+.modal-table th {
+	background-color: #f1f5f9;
+}
+
+.modal-table tbody tr {
+	cursor: pointer;
+}
+
+.modal-table tbody tr:hover td {
+	background-color: #eff6ff;
+}
+
+.modal-table tbody tr.selected td {
+	background-color: #dbeafe;
+}
+
+.modal-button-area {
+	display: flex;
+	justify-content: center;
+	gap: 12px;
+	margin-top: 16px;
+}
+
+/* =========================
+   반응형
+========================= */
+@media ( max-width : 1000px) {
+	.two-column {
+		grid-template-columns: 1fr;
+	}
+	.employee-bar {
+		flex-wrap: wrap;
+	}
+}

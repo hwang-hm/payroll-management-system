@@ -1,0 +1,157 @@
+@charset "UTF-8";
+.specification-paper {
+	width: 760px;
+	min-height: 1000px;
+	background: #fff;
+	padding: 35px 45px;
+	box-sizing: border-box;
+	font-family: 'Pretendard', sans-serif;
+}
+
+.spec-title {
+	text-align: center;
+	font-size: 26px;
+	font-weight: 700;
+	margin-bottom: 30px;
+}
+
+.spec-section {
+	margin-bottom: 25px;
+}
+
+.spec-section-title {
+	display: inline-block;
+	min-width: 125px;
+	padding: 6px 12px;
+	background: #969696;
+	color: #fff;
+	border: 1px solid #555;
+	text-align: center;
+	font-weight: 600;
+	box-sizing: border-box;
+}
+
+.spec-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 14px;
+}
+
+.spec-table th, .spec-table td {
+	border: 1px solid #555;
+	padding: 6px 8px;
+	text-align: center;
+	font-weight: 400;
+}
+
+.spec-table th {
+	background: #fff;
+}
+
+.spec-table .label {
+	width: 105px;
+}
+
+.spec-table .result {
+	background: #fffec4;
+	font-weight: 600;
+}
+
+.salary-period {
+	line-height: 1.7;
+}
+
+.salary-period div:first-child {
+	border-bottom: 1px dotted #999;
+	padding-bottom: 2px;
+	margin-bottom: 2px;
+}
+
+.extra-income-table td {
+	height: 28px;
+}
+
+.allowance-table {
+	margin-top: 10px;
+}
+
+.allowance-table th {
+	width: 20%;
+}
+
+.allowance-table td {
+	width: 30%;
+}
+
+.retirement-income-table .formula {
+	text-align: left;
+	padding-left: 12px;
+}
+
+.deduction-table th {
+	width: 25%;
+}
+
+.net-payment-table th {
+	background: #969696;
+	color: #fff;
+	width: 125px;
+	font-weight: 600;
+}
+
+.net-payment-table .description {
+	text-align: left;
+	padding-left: 15px;
+}
+
+.net-payment-table .result {
+	font-size: 16px;
+}
+
+.empty-specification {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 700px;
+	color: #777;
+	font-size: 16px;
+}
+
+.spec-footer-message {
+	margin-top: 45px;
+	text-align: center;
+	font-size: 14px;
+}
+
+.spec-date {
+	text-align: center;
+	margin-top: 30px;
+	font-size: 14px;
+}
+
+.spec-company {
+	margin-top: 15px;
+	text-align: center;
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 1.5;
+}
+
+@media print {
+	body * {
+		visibility: hidden;
+	}
+	.specification-paper, .specification-paper * {
+		visibility: visible;
+	}
+	.specification-paper {
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		padding: 20px;
+	}
+	.no-print {
+		display: none !important;
+	}
+}

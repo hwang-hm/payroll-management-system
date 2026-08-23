@@ -231,7 +231,7 @@
 			<div class="sub-dropdown">
 				<a href="${pageContext.request.contextPath}/retirement/list.do">사원 퇴직처리</a> 
 				<a href="${pageContext.request.contextPath}/retirement/severance.do">퇴직급여 입력/관리</a> 
-				<a href="${pageContext.request.contextPath}/retirement/payslip.do">퇴직급여명세서</a>
+				<a href="${pageContext.request.contextPath}/retirement/specification.do">퇴직급여명세서</a>
 			</div>
 		</div>
 	</nav>
