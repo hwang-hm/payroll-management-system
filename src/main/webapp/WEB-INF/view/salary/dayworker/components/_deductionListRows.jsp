@@ -1,10 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%-- <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <c:choose>
-	<%-- 1. 기존에 저장된 급여 상세 내역이 있는 경우 --%>
+	1. 기존에 저장된 급여 상세 내역이 있는 경우
 	<c:when test="${isSaved}">
 		<c:forEach var="detail" items="${deductionList}">
 			<c:if test="${detail.itemType eq 'DEDUCT'}">
@@ -20,7 +20,7 @@
 		</c:forEach>
 	</c:when>
 
-	<%-- 2. 저장된 내역이 없어 DB의 활성화된 공제 항목(SalaryItem)을 불러온 경우 --%>
+	2. 저장된 내역이 없어 DB의 활성화된 공제 항목(SalaryItem)을 불러온 경우
 	<c:when test="${not empty itemList}">
 		<c:forEach var="item" items="${itemList}">
 			<tr>
@@ -41,4 +41,4 @@
 				항목이 없습니다.</td>
 		</tr>
 	</c:otherwise>
-</c:choose>
+</c:choose> --%>

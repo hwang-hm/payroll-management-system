@@ -104,8 +104,8 @@ function loadOrSetSalaryDate() {
 				autoCalculateDates(parseInt(year, 10), parseInt(month, 10));
 			}
 
-			// ★ [수정 핵심] DB 조회가 끝난 뒤, 구해온 salaryDateId로 목록 조회 함수 호출
-			// ★ [修正のポイント] DB照会が終了した後、取得した salaryDateId でリスト照会関数を呼び出し
+			// DB 조회가 끝난 뒤, 구해온 salaryDateId로 목록 조회 함수 호출
+			// DB照会が終了した後、取得した salaryDateId でリスト照会関数を呼び出し
 			if (typeof loadSalaryWorkerList === 'function') {
 				loadSalaryWorkerList(currentSalaryDateId);
 			}
