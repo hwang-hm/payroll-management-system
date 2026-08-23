@@ -13,7 +13,7 @@
 
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/certificate.css"/>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/certificate.css" />
 
 </head>
 
@@ -33,8 +33,10 @@
 				<div class="search-area">
 					<input type="text" id="searchKeyword" placeholder="사원명 검색"
 						onkeyup="if(event.key === 'Enter') searchEmployee();">
-					<button type="button" class="btn btn-search" onclick="searchEmployee();">검색</button>
-					<button type="button" class="btn btn-all" onclick="showAllEmployee();">전체보기</button>
+					<button type="button" class="btn btn-search"
+						onclick="searchEmployee();">검색</button>
+					<button type="button" class="btn btn-all"
+						onclick="showAllEmployee();">전체보기</button>
 				</div>
 
 
@@ -77,7 +79,8 @@
 						<c:forEach var="page" begin="${empListPage.startPage}"
 							end="${empListPage.endPage}">
 
-							<a href="${pageContext.request.contextPath}/emp/certificate/working.do?pageNo=${page}"
+							<a
+								href="${pageContext.request.contextPath}/emp/certificate/working.do?pageNo=${page}"
 								class="${empListPage.currentPage == page ? 'active' : ''}">
 								${page} </a>
 
@@ -94,206 +97,207 @@
 				<!-- 증명서 선택 -->
 				<div class="certificate-tabs">
 
-					<a href="${pageContext.request.contextPath}/emp/certificate/working.do"
-						class="certificate-tab active"> 재직증명서 </a> 
-					<a href="${pageContext.request.contextPath}/emp/certificate/retirement.do"
+					<a
+						href="${pageContext.request.contextPath}/emp/certificate/working.do"
+						class="certificate-tab active"> 재직증명서 </a> <a
+						href="${pageContext.request.contextPath}/emp/certificate/retirement.do"
 						class="certificate-tab"> 퇴직증명서 </a>
 
 				</div>
 
 				<div class="certificate-preview-area">
 					<div class="certificate-paper">
-			
-							<div class="cert-top">
-								<div class="cert-logo">HEXAGON ZONE</div>
-								<div class="cert-title">재직증명서</div>
-								<div class="cert-option">
-									<label> <input type="checkbox" id="hideResidentNo"
-										onchange="toggleResidentNo();"> 주민등록번호 숨김
-									</label>
-								</div>
+
+						<div class="cert-top">
+							<div class="cert-logo">HEXAGON ZONE</div>
+							<div class="cert-title">재직증명서</div>
+							<div class="cert-option">
+								<label> <input type="checkbox" id="hideResidentNo"
+									onchange="toggleResidentNo();"> 주민등록번호 숨김
+								</label>
 							</div>
+						</div>
 
 
-							<!-- ==================================================
+						<!-- ==================================================
 						     사원 정보
 						================================================== -->
-							<table class="cert-table">
+						<table class="cert-table">
 
 
-								<tr>
+							<tr>
 
-									<th rowspan="2" class="section-head">인적<br>사항
-									</th>
-									<th>성명</th>
-									<td><c:out value="${emp.nameKor}" /></td>
-									<th>주민등록번호</th>
-									<td id="residentNoCell"><c:out value="${emp.residentNo}" />
-									</td>
-								</tr>
-								<tr>
-									<th>주소</th>
-									<td colspan="3"><c:out value="${emp.address}" /></td>
-								</tr>
-								<tr>
-									<th rowspan="3" class="section-head">재직<br>사항
-									</th>
-
-
-									<th>회사명</th>
-									<td>(주)헥사곤존</td>
-									<th>사업자번호</th>
-									<td>1234-5648</td>
-								</tr>
-								<tr>
-									<th>부서</th>
-									<td><c:out value="${emp.deptName}" /></td>
-									<th>직위</th>
-									<td><c:out value="${emp.positionName}" /></td>
-								</tr>
-								<tr>
-									<th>입사일</th>
-									<td><fmt:formatDate value="${emp.hireDate}"
-											pattern="yyyy-MM-dd" /></td>
-									<th>근속기간</th>
-									<td id="servicePeriod">-</td>
-								</tr>
-							</table>
-
-							<div class="usage-row">
-								<div class="usage-label">발급용도</div>
-								<div class="usage-input-area">
-									<select id="issuePurpose" class="cert-select"
-										onchange="changeIssuePurpose();">
-										<option value="">선택</option>
-										<option value="비자 신청용">비자 신청용</option>
-										<option value="은행 제출용">은행 제출용</option>
-										<option value="관공서 제출용">관공서 제출용</option>
-										<option value="학교 제출용">학교 제출용</option>
-										<option value="회사 제출용">회사 제출용</option>
-										<option value="병무청 제출용">병무청 제출용</option>
-										<option value="관련과제 제출용">관련과제 제출용</option>
-										<option value="직접입력">직접입력</option>
-									</select> <input type="text" id="directPurpose" class="direct-purpose"
-										placeholder="발급용도를 입력해주세요.">
+								<th rowspan="2" class="section-head">인적<br>사항
+								</th>
+								<th>성명</th>
+								<td><c:out value="${emp.nameKor}" /></td>
+								<th>주민등록번호</th>
+								<td id="residentNoCell"><c:out value="${emp.residentNo}" />
+								</td>
+							</tr>
+							<tr>
+								<th>주소</th>
+								<td colspan="3"><c:out value="${emp.address}" /></td>
+							</tr>
+							<tr>
+								<th rowspan="3" class="section-head">재직<br>사항
+								</th>
 
 
-								</div>
+								<th>회사명</th>
+								<td>(주)헥사곤존</td>
+								<th>사업자번호</th>
+								<td>1234-5648</td>
+							</tr>
+							<tr>
+								<th>부서</th>
+								<td><c:out value="${emp.deptName}" /></td>
+								<th>직위</th>
+								<td><c:out value="${emp.positionName}" /></td>
+							</tr>
+							<tr>
+								<th>입사일</th>
+								<td><fmt:formatDate value="${emp.hireDate}"
+										pattern="yyyy-MM-dd" /></td>
+								<th>근속기간</th>
+								<td id="servicePeriod">-</td>
+							</tr>
+						</table>
+
+						<div class="usage-row">
+							<div class="usage-label">발급용도</div>
+							<div class="usage-input-area">
+								<select id="issuePurpose" class="cert-select"
+									onchange="changeIssuePurpose();">
+									<option value="">선택</option>
+									<option value="비자 신청용">비자 신청용</option>
+									<option value="은행 제출용">은행 제출용</option>
+									<option value="관공서 제출용">관공서 제출용</option>
+									<option value="학교 제출용">학교 제출용</option>
+									<option value="회사 제출용">회사 제출용</option>
+									<option value="병무청 제출용">병무청 제출용</option>
+									<option value="관련과제 제출용">관련과제 제출용</option>
+									<option value="직접입력">직접입력</option>
+								</select> <input type="text" id="directPurpose" class="direct-purpose"
+									placeholder="발급용도를 입력해주세요.">
+
 
 							</div>
 
+						</div>
 
 
-							<!-- ==================================================
+
+						<!-- ==================================================
 						     증명 문구
 						================================================== -->
-							<div class="cert-content">상기인은 현재 위와 같이 당사에 재직하고 있음을 증명합니다.
+						<div class="cert-content">상기인은 현재 위와 같이 당사에 재직하고 있음을 증명합니다.
 
-							</div>
+						</div>
 
 
 
-							<!-- ==================================================
+						<!-- ==================================================
 						     발급 날짜
 						================================================== -->
-							<div class="cert-date">
+						<div class="cert-date">
 
-								<span id="todayYear"></span>년 <span id="todayMonth"></span>월 <span
-									id="todayDay"></span>일
+							<span id="todayYear"></span>년 <span id="todayMonth"></span>월 <span
+								id="todayDay"></span>일
 
-							</div>
+						</div>
 
 
 
-							<!-- ==================================================
+						<!-- ==================================================
 						     발급부서 / 연락처
 						================================================== -->
-							<table class="issue-info-table">
+						<table class="issue-info-table">
 
-								<tr>
-
-
-									<th>발급부서</th>
+							<tr>
 
 
-									<td class="issue-dept-cell"><select id="issueDepartment">
+								<th>발급부서</th>
 
 
-											<option value="">선택</option>
+								<td class="issue-dept-cell"><select id="issueDepartment">
 
 
-											<option value="사장실">사장실</option>
+										<option value="">선택</option>
 
 
-											<option value="개발팀">개발팀</option>
+										<option value="사장실">사장실</option>
 
 
-											<option value="콘텐츠팀">콘텐츠팀</option>
+										<option value="개발팀">개발팀</option>
 
 
-											<option value="업무지원팀">업무지원팀</option>
+										<option value="콘텐츠팀">콘텐츠팀</option>
 
 
-											<option value="디자인팀">디자인팀</option>
+										<option value="업무지원팀">업무지원팀</option>
 
 
-											<option value="관리팀">관리팀</option>
+										<option value="디자인팀">디자인팀</option>
 
 
-											<option value="기획전략팀">기획전략팀</option>
+										<option value="관리팀">관리팀</option>
 
 
-									</select></td>
+										<option value="기획전략팀">기획전략팀</option>
 
 
-									<th class="contact-label">연락처</th>
+								</select></td>
 
 
-									<td class="contact-value">[전국] 1588-2390</td>
+								<th class="contact-label">연락처</th>
 
 
-								</tr>
-
-							</table>
+								<td class="contact-value">[전국] 1588-2390</td>
 
 
+							</tr>
 
-							<!-- ==================================================
+						</table>
+
+
+
+						<!-- ==================================================
 						     대표자 / 직인
 						================================================== -->
-							<div class="cert-company-bottom">
+						<div class="cert-company-bottom">
 
 
-								<div class="representative-option">
+							<div class="representative-option">
 
-									<label> <input type="checkbox" id="showRepresentative"
-										checked> 대표자 표기
+								<label> <input type="checkbox" id="showRepresentative"
+									checked> 대표자 표기
 
-									</label>
-
-								</div>
-
-
-								<div class="company-sign" id="representativeArea">
-
-
-									<div class="company-name">
-
-										(주)헥사곤존 <br> 대표이사
-
-									</div>
-
-
-									<div class="company-seal">
-
-										회사 <br> 직인
-
-									</div>
-
-
-								</div>
+								</label>
 
 							</div>
+
+
+							<div class="company-sign" id="representativeArea">
+
+
+								<div class="company-name">
+
+									(주)헥사곤존 <br> 대표이사
+
+								</div>
+
+
+								<div class="company-seal">
+
+									회사 <br> 직인
+
+								</div>
+
+
+							</div>
+
+						</div>
 
 					</div>
 
@@ -602,54 +606,73 @@
 
 		function printCertificate() {
 
-			const emptyMessage = document.querySelector(".empty-message");
+		    const emptyMessage = document.querySelector(".empty-message");
 
-			if (emptyMessage) {
+		    if (emptyMessage) {
+		        alert("먼저 재직증명서를 발급할 사원을 선택해주세요.");
+		        return;
+		    }
 
-				alert("먼저 재직증명서를 발급할 사원을 선택해주세요.");
+		    const issuePurpose = document.getElementById("issuePurpose");
 
-				return;
+		    if (issuePurpose && !issuePurpose.value) {
+		        alert("발급용도를 선택해주세요.");
+		        return;
+		    }
 
-			}
+		    let purposeValue = issuePurpose.value;
 
-			const issuePurpose = document.getElementById("issuePurpose");
+		    if (issuePurpose.value === "직접입력") {
 
-			if (issuePurpose && !issuePurpose.value) {
+		        const directPurpose =
+		                document.getElementById("directPurpose");
 
-				alert("발급용도를 선택해주세요.");
+		        if (!directPurpose.value.trim()) {
+		            alert("발급용도를 입력해주세요.");
+		            directPurpose.focus();
+		            return;
+		        }
 
-				return;
+		        purposeValue = directPurpose.value.trim();
+		    }
 
-			}
+		    const issueDepartment =
+		            document.getElementById("issueDepartment");
 
-			if (issuePurpose && issuePurpose.value === "직접입력") {
+		    if (issueDepartment && !issueDepartment.value) {
+		        alert("발급부서를 선택해주세요.");
+		        return;
+		    }
 
-				const directPurpose = document.getElementById("directPurpose");
+		    // 발급대장 저장
+		    const form = document.createElement("form");
 
-				if (!directPurpose.value.trim()) {
+		    form.method = "post";
+		    form.action =
+		        "${pageContext.request.contextPath}/emp/certificate/working.do";
 
-					alert("발급용도를 입력해주세요.");
+		    const empIdInput = document.createElement("input");
+		    empIdInput.type = "hidden";
+		    empIdInput.name = "empId";
+		    empIdInput.value = "${emp.empId}";
 
-					directPurpose.focus();
+		    const purposeInput = document.createElement("input");
+		    purposeInput.type = "hidden";
+		    purposeInput.name = "purpose";
+		    purposeInput.value = purposeValue;
 
-					return;
+		    const departmentInput = document.createElement("input");
+		    departmentInput.type = "hidden";
+		    departmentInput.name = "issueDepartment";
+		    departmentInput.value = issueDepartment.value;
 
-				}
+		    form.appendChild(empIdInput);
+		    form.appendChild(purposeInput);
+		    form.appendChild(departmentInput);
 
-			}
+		    document.body.appendChild(form);
 
-			const issueDepartment = document.getElementById("issueDepartment");
-
-			if (issueDepartment && !issueDepartment.value) {
-
-				alert("발급부서를 선택해주세요.");
-
-				return;
-
-			}
-
-			window.print();
-
+		    form.submit();
 		}
 
 		/* ==================================================
@@ -664,7 +687,5 @@
 
 		});
 	</script>
-
-
 </body>
 </html>

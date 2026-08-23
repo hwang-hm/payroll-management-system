@@ -22,6 +22,9 @@ public class PrintRetirementHandler implements CommandHandler {
 		if (request.getMethod().equalsIgnoreCase("GET")) {
 			return processForm(request, response);
 		}
+		if (request.getMethod().equalsIgnoreCase("POST")) {
+			return processSubmit(request, response);
+		}
 		response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 		return null;
 	}
@@ -29,6 +32,7 @@ public class PrintRetirementHandler implements CommandHandler {
 	private String processForm(HttpServletRequest request, HttpServletResponse response) {
 
 		String pageNoVal = request.getParameter("pageNo");
+
 		int pageNo = 1;
 		if (pageNoVal != null && !pageNoVal.trim().isEmpty()) {
 			pageNo = Integer.parseInt(pageNoVal);
@@ -40,7 +44,6 @@ public class PrintRetirementHandler implements CommandHandler {
 		request.setAttribute("certificateType", "retirement");
 
 		String empIdParam = request.getParameter("empId");
-
 		if (empIdParam == null || empIdParam.trim().isEmpty()) {
 			return FORM_VIEW;
 		}
@@ -48,7 +51,34 @@ public class PrintRetirementHandler implements CommandHandler {
 		int empId = Integer.parseInt(empIdParam);
 
 		EmployeeDetailData emp = printCertificateService.selectEmp(empId);
+		if (emp == null) {
+			request.setAttribute("employeeNotFound", true);
+			return FORM_VIEW;
+		}
 
+		// 재직자는 퇴직증명서 발급 불가
+		if ("Y".equals(emp.getStatus())) {
+			request.setAttribute("workingEmployee", true);
+			return FORM_VIEW;
+		}
+
+		request.setAttribute("selectedEmpId", empId);
+		request.setAttribute("emp", emp);
+
+		return FORM_VIEW;
+	}
+
+	// 실제 발급
+	private String processSubmit(HttpServletRequest request, HttpServletResponse response) {
+
+		String empIdParam = request.getParameter("empId");
+		if (empIdParam == null || empIdParam.trim().isEmpty()) {
+			return "redirect:/emp/certificate/retirement.do";
+		}
+
+		int empId = Integer.parseInt(empIdParam);
+
+		EmployeeDetailData emp = printCertificateService.selectEmp(empId);
 		if (emp == null) {
 			request.setAttribute("employeeNotFound", true);
 			return FORM_VIEW;
@@ -59,9 +89,10 @@ public class PrintRetirementHandler implements CommandHandler {
 			return FORM_VIEW;
 		}
 
-		request.setAttribute("selectedEmpId", empId);
-		request.setAttribute("emp", emp);
+		String purpose = request.getParameter("purpose");
+		String issueDepartment = request.getParameter("issueDepartment");
+		printCertificateService.issueCertificate(empId, "RETIREMENT", purpose, issueDepartment);
 
-		return FORM_VIEW;
+		return "redirect:/emp/certificate/retirement.do?empId=" + empId;
 	}
 }

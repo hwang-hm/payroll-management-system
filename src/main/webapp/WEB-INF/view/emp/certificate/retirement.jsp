@@ -13,7 +13,7 @@
 
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/certificate.css"/>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/certificate.css" />
 
 </head>
 <body>
@@ -1109,110 +1109,73 @@ document.addEventListener(
 
 function printCertificate() {
 
+    if (!employeeSelected) {
+        alert("먼저 퇴직증명서를 발급할 사원을 선택해주세요.");
+        return;
+    }
 
-	/*
-	 * 양식은 항상 보여주지만
-	 * 사원을 선택하지 않으면 인쇄 불가
-	 */
-	if (!employeeSelected) {
+    const issuePurpose =
+            document.getElementById("issuePurpose");
 
+    if (issuePurpose && !issuePurpose.value) {
+        alert("발급용도를 선택해주세요.");
+        return;
+    }
 
-		alert(
-			"먼저 퇴직증명서를 발급할 사원을 선택해주세요."
-		);
+    let purposeValue = issuePurpose.value;
 
+    if (issuePurpose.value === "직접입력") {
 
-		return;
+        const directPurpose =
+                document.getElementById("directPurpose");
 
-	}
+        if (!directPurpose.value.trim()) {
+            alert("발급용도를 입력해주세요.");
+            directPurpose.focus();
+            return;
+        }
 
+        purposeValue = directPurpose.value.trim();
+    }
 
-	const issuePurpose =
-		document.getElementById(
-			"issuePurpose"
-		);
+    const issueDepartment =
+            document.getElementById("issueDepartment");
 
+    if (issueDepartment && !issueDepartment.value) {
+        alert("발급부서를 선택해주세요.");
+        return;
+    }
 
-	if (
-		issuePurpose
-		&& !issuePurpose.value
-	) {
+    // 발급대장 저장
+    const form = document.createElement("form");
 
+    form.method = "post";
+    form.action =
+        "${pageContext.request.contextPath}/emp/certificate/retirement.do";
 
-		alert(
-			"발급용도를 선택해주세요."
-		);
+    const empIdInput = document.createElement("input");
+    empIdInput.type = "hidden";
+    empIdInput.name = "empId";
+    empIdInput.value = "${emp.empId}";
 
+    const purposeInput = document.createElement("input");
+    purposeInput.type = "hidden";
+    purposeInput.name = "purpose";
+    purposeInput.value = purposeValue;
 
-		return;
+    const departmentInput = document.createElement("input");
+    departmentInput.type = "hidden";
+    departmentInput.name = "issueDepartment";
+    departmentInput.value = issueDepartment.value;
 
-	}
+    form.appendChild(empIdInput);
+    form.appendChild(purposeInput);
+    form.appendChild(departmentInput);
 
+    document.body.appendChild(form);
 
-	if (
-		issuePurpose
-		&& issuePurpose.value
-			=== "직접입력"
-	) {
-
-
-		const directPurpose =
-			document.getElementById(
-				"directPurpose"
-			);
-
-
-		if (
-			!directPurpose.value
-				.trim()
-		) {
-
-
-			alert(
-				"발급용도를 입력해주세요."
-			);
-
-
-			directPurpose.focus();
-
-
-			return;
-
-		}
-
-
-	}
-
-
-	const issueDepartment =
-		document.getElementById(
-			"issueDepartment"
-		);
-
-
-	if (
-		issueDepartment
-		&& !issueDepartment.value
-	) {
-
-
-		alert(
-			"발급부서를 선택해주세요."
-		);
-
-
-		return;
-
-	}
-
-
-	window.print();
-
-
+    form.submit();
 }
-
-
-
 /* ==================================================
    최초 실행
 ================================================== */
@@ -1234,7 +1197,5 @@ window.addEventListener(
 
 
 </script>
-
-
 </body>
 </html>
