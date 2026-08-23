@@ -5,20 +5,24 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 일용직 급여 등록 요청 DTO
+ * 日雇い給与登録リクエストDTO
+ */
 public class RegistSalaryRequest {
-	private int payYear;
-	private int payMonth;
-	private int paySeq;
-	private Date startDate;
-	private Date endDate;
-	private Date payDate;
-	private int empId = 0;
-	private Long totalPay = 0L;
-	private Long totalDeduct = 0L;
-	private Long netPay = 0L;
-	private List<SalaryDetailRequest> details = new ArrayList<>();
+	private int payYear; // 귀속년도 / 帰属年度
+	private int payMonth; // 귀속월 / 帰属月
+	private int paySeq; // 정산 차수 / 精算回数
+	private Date startDate; // 급여 산정 시작일 / 給与計算開始日
+	private Date endDate; // 급여 산정 종료일 / 給与計算終了日
+	private Date payDate; // 지급일 / 支給日
+	private int empId = 0; // 사원 ID / 社員ID
+	private Long totalPay = 0L; // 총지급액 / 支給総額
+	private Long totalDeduct = 0L; // 총공제액 / 控除総額
+	private Long netPay = 0L; // 실지급액 / 差引支給額
+	private List<SalaryDetailRequest> details = new ArrayList<>(); // 급여 상세 내역 목록 / 給与詳細履歴リスト
 
-	// --- Constructors ---
+	// --- Constructors / コンストラクタ ---
 	public RegistSalaryRequest() {
 	}
 
@@ -37,7 +41,12 @@ public class RegistSalaryRequest {
 		setDetails(details);
 	}
 
-	// --- Validation ---
+	/**
+	 * 필수 입력 데이터 유효성 검증
+	 * 必須入力データの妥当性検証
+	 * 
+	 * @param errors 에러 항목 수집 맵 / エラー項目収集マップ
+	 */
 	public void validate(Map<String, Boolean> errors) {
 		if (empId <= 0) {
 			errors.put("empId", Boolean.TRUE);
@@ -62,7 +71,7 @@ public class RegistSalaryRequest {
 		}
 	}
 
-	// --- Getters & Setters (Null-Safe 적용) ---
+	// --- Getters & Setters (Null-Safe 적용 / Null-Safe適用) ---
 	public int getPayYear() {
 		return payYear;
 	}
@@ -151,14 +160,17 @@ public class RegistSalaryRequest {
 		this.details = (details != null) ? details : new ArrayList<>();
 	}
 
-	// --- Inner Class (상세 항목 요청 DTO) ---
+	/**
+	 * 급여 상세 항목 요청 DTO (정산 항목별 금액/메모)
+	 * 給与詳細項目リクエストDTO (精算項目別金額/メモ)
+	 */
 	public static class SalaryDetailRequest {
-		private Integer salaryItemId;
-		private String itemType;
-		private String itemName;
-		private String taxYn;
-		private Long amount;
-		private String memo;
+		private Integer salaryItemId; // 급여 항목 마스터 ID (직접 입력 항목일 경우 Null) / 給与項目マスターID (直接入力項目の場合はNull)
+		private String itemType; // 항목 구분 (PAY: 지급, DEDUCT: 공제) / 項目区分 (PAY: 支給, DEDUCT: 控除)
+		private String itemName; // 항목명 / 項目名
+		private String taxYn; // 과세 여부 (Y/N) / 課税有無 (Y/N)
+		private Long amount; // 금액 / 金額
+		private String memo; // 메모 / メモ
 
 		public SalaryDetailRequest() {
 		}
@@ -178,7 +190,8 @@ public class RegistSalaryRequest {
 		}
 
 		public void setSalaryItemId(Integer salaryItemId) {
-			this.salaryItemId = salaryItemId; // 신규 항목일 수 있으므로 null 허용
+			// 신규 직접 입력 항목일 수 있으므로 null 허용 / 新規直接入力項目の可能性があるためnull許容
+			this.salaryItemId = salaryItemId;
 		}
 
 		public String getItemType() {
@@ -210,7 +223,8 @@ public class RegistSalaryRequest {
 		}
 
 		public void setAmount(Long amount) {
-			this.amount = (amount != null) ? amount : 0L; // null 입력 시 0L로 자동 변환
+			// null 입력 시 0L로 자동 변환 / null入力時に0Lへ自動変換
+			this.amount = (amount != null) ? amount : 0L;
 		}
 
 		public String getMemo() {
