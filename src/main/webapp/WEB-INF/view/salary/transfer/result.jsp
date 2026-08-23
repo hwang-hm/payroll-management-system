@@ -4,10 +4,10 @@
 <%@ taglib prefix="layout" tagdir="/WEB-INF/tags" %>
 
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>급여이체 결과 조회</title>
+  <title>給与振込結果照会</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
   <style>
     :root {
@@ -104,15 +104,15 @@
         <path d="M15 3v5h5"/>
         <path d="M8 13h8M8 17h5"/>
       </svg>
-      급여이체 결과 조회
+      給与振込結果照会
     </h2>
-    <p>KB국민은행을 통한 급여이체 결과를 조회할 수 있습니다. 최대 1년까지 조회가 가능합니다.</p>
+    <p>KB国民銀行による給与振込結果を照会できます。最大1年まで照会可能です。</p>
   </div>
 
   <form id="filterForm" action="${pageContext.request.contextPath}/salary/transfer/result.do" method="get">
     <input type="hidden" name="pageNo" value="1"/>
     <div class="filter-bar">
-      <label><span class="required">*</span> 조회 기간</label>
+      <label><span class="required">*</span> 照会期間</label>
       <span class="date-field">
         <input type="text" name="startDate" value="${startDateText}" placeholder="yyyy-MM-dd"
                maxlength="10" pattern="\d{4}-\d{2}-\d{2}" required/>
@@ -126,7 +126,7 @@
         <input type="date" value="${endDateText}" tabindex="-1" aria-hidden="true"
                onchange="this.previousElementSibling.value = this.value"/>
       </span>
-      <button type="submit" class="btn btn-primary" title="조회">
+      <button type="submit" class="btn btn-primary" title="照会">
         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
           <circle cx="11" cy="11" r="7"/>
           <path d="M20 20l-3.5-3.5"/>
@@ -139,15 +139,15 @@
     <table class="list-table">
       <thead>
         <tr>
-          <th>이체일자</th>
-          <th>출금은행</th>
-          <th>출금계좌</th>
-          <th>입금은행</th>
-          <th>입금계좌</th>
-          <th>예금주</th>
-          <th>이체금액</th>
-          <th>받는분 통장 표시</th>
-          <th>처리결과</th>
+          <th>振込日</th>
+          <th>出金銀行</th>
+          <th>出金口座</th>
+          <th>入金銀行</th>
+          <th>入金口座</th>
+          <th>口座名義</th>
+          <th>振込金額</th>
+          <th>受取人通帳表示</th>
+          <th>処理結果</th>
         </tr>
       </thead>
       <tbody>
@@ -161,21 +161,12 @@
             <td>${row.depositorName}</td>
             <td class="amount"><fmt:formatNumber value="${row.transferAmount}" pattern="#,###"/></td>
             <td>${row.depositMemo}</td>
-            <td>
-              <c:choose>
-                <c:when test="${row.transferResult eq '성공'}">
-                  <span class="result-ok">${row.transferResult}</span>
-                </c:when>
-                <c:otherwise>
-                  <span class="result-fail">${row.transferResult}</span>
-                </c:otherwise>
-              </c:choose>
-            </td>
+            <td>${row.transferResult}</td>
           </tr>
         </c:forEach>
         <c:if test="${empty resultPage.content}">
           <tr>
-            <td colspan="9" class="empty-msg">급여이체 데이터가 없습니다.</td>
+            <td colspan="9" class="empty-msg">給与振込データがありません。</td>
           </tr>
         </c:if>
       </tbody>
@@ -186,11 +177,11 @@
     <c:choose>
       <c:when test="${resultPage.currentPage > 1}">
         <a href="${pageContext.request.contextPath}/salary/transfer/result.do?pageNo=${resultPage.currentPage - 1}&startDate=${startDateText}&endDate=${endDateText}">
-          ‹ 이전페이지
+          ‹ 前のページ
         </a>
       </c:when>
       <c:otherwise>
-        <span class="page-disabled">‹ 이전페이지</span>
+        <span class="page-disabled">‹ 前のページ</span>
       </c:otherwise>
     </c:choose>
 
@@ -217,11 +208,11 @@
     <c:choose>
       <c:when test="${resultPage.currentPage < resultPage.totalPage}">
         <a href="${pageContext.request.contextPath}/salary/transfer/result.do?pageNo=${resultPage.currentPage + 1}&startDate=${startDateText}&endDate=${endDateText}">
-          다음페이지 ›
+          次のページ ›
         </a>
       </c:when>
       <c:otherwise>
-        <span class="page-disabled">다음페이지 ›</span>
+        <span class="page-disabled">次のページ ›</span>
       </c:otherwise>
     </c:choose>
   </div>
@@ -240,13 +231,13 @@
       var start = new Date(startValue);
       var end = new Date(endValue);
       if (start > end) {
-        alert('시작일은 종료일보다 이후일 수 없습니다.');
+        alert('開始日は終了日より後にできません。');
         e.preventDefault();
         return;
       }
       var diffDays = (end - start) / (1000 * 60 * 60 * 24);
       if (diffDays > 365) {
-        alert('조회 기간은 최대 1년까지 가능합니다.');
+        alert('照会期間は最大1年まで可能です。');
         e.preventDefault();
       }
     });

@@ -78,7 +78,7 @@ public class EmpSalaryHistoryDao {
 		StringBuilder sql = new StringBuilder();
 		sql.append("SELECT e.emp_id, e.employment_type, e.name_kor, ")
 				.append("NVL(d.dept_name, '-') AS dept_name, NVL(p.position_name, '-') AS position_name, ")
-				.append("CASE WHEN e.status = 'Y' THEN '재직' WHEN e.status = 'N' THEN '퇴직' ELSE '재직' END AS status_label ")
+				.append("CASE WHEN e.status = 'Y' THEN '在職' WHEN e.status = 'N' THEN '退職' ELSE '在職' END AS status_label ")
 				.append("FROM employee e ")
 				.append("LEFT JOIN department d ON e.dept_id = d.dept_id ")
 				.append("LEFT JOIN position p ON e.position_id = p.position_id ")

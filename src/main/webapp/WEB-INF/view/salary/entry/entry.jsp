@@ -4,10 +4,10 @@
 <%@ taglib prefix="layout" tagdir="/WEB-INF/tags" %>
 
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>급여입력/관리</title>
+  <title>給与入力/管理</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
   <style>
     :root {
@@ -198,32 +198,32 @@
 
 <div class="container">
   <div class="page-header">
-    <h2>💳 급여입력/관리</h2>
-    <p>귀속연월별로 사원 급여를 입력·수정·삭제할 수 있습니다.</p>
+    <h2>💳 給与入力/管理</h2>
+    <p>帰属年月ごとに社員の給与を入力・修正・削除できます。</p>
   </div>
 
   <!-- 필터 바 -->
   <form id="filterForm" action="${pageContext.request.contextPath}/salary/entry.do" method="get">
     <div class="filter-bar">
-      <label>귀속연월</label>
+      <label>帰属年月</label>
       <select name="payYear" onchange="this.form.submit()">
         <c:forEach var="y" begin="2024" end="2027">
-          <option value="${y}" ${y eq entryData.payYear ? 'selected' : ''}>${y}년</option>
+          <option value="${y}" ${y eq entryData.payYear ? 'selected' : ''}>${y}年</option>
         </c:forEach>
       </select>
       <select name="payMonth" onchange="this.form.submit()">
         <c:forEach var="m" begin="1" end="12">
-          <option value="${m}" ${m eq entryData.payMonth ? 'selected' : ''}>${m}월</option>
+          <option value="${m}" ${m eq entryData.payMonth ? 'selected' : ''}>${m}月</option>
         </c:forEach>
       </select>
-      <label>급여차수</label>
+      <label>給与回数</label>
       <select name="paySeq" onchange="this.form.submit()">
-        <option value="1" ${entryData.paySeq eq 1 ? 'selected' : ''}>급여-01</option>
-        <option value="2" ${entryData.paySeq eq 2 ? 'selected' : ''}>급여-02</option>
+        <option value="1" ${entryData.paySeq eq 1 ? 'selected' : ''}>給与-01</option>
+        <option value="2" ${entryData.paySeq eq 2 ? 'selected' : ''}>給与-02</option>
       </select>
       <span class="filter-info">
-        정산기간: <strong>${entryData.startDate} ~ ${entryData.endDate}</strong> &nbsp;|&nbsp;
-        급여지급일: <strong>${entryData.payDate}</strong>
+        精算期間: <strong>${entryData.startDate} ~ ${entryData.endDate}</strong> &nbsp;|&nbsp;
+        給与支給日: <strong>${entryData.payDate}</strong>
       </span>
     </div>
   </form>
@@ -232,26 +232,26 @@
     <!-- 좌측: 사원 목록 -->
     <div class="panel">
       <div class="panel-head">
-        <h3>급여 대상 사원</h3>
-        <span style="font-size:12px;color:#64748b;">${entryData.summary.count}건</span>
+        <h3>給与対象社員</h3>
+        <span style="font-size:12px;color:#64748b;">${entryData.summary.count}件</span>
       </div>
       <div class="panel-body">
         <div class="action-bar">
-          <button type="button" class="btn btn-outline btn-sm" onclick="openLoadModal()">지난급여 불러오기</button>
-          <button type="button" class="btn btn-primary btn-sm" onclick="openEmpModal()">+ 신규추가</button>
-          <button type="button" class="btn btn-danger btn-sm" onclick="deleteSelected()">선택삭제</button>
-          <button type="button" class="btn btn-warning btn-sm" onclick="deleteAll()">전체삭제</button>
+          <button type="button" class="btn btn-outline btn-sm" onclick="openLoadModal()">前回給与を読み込む</button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="openEmpModal()">+ 新規追加</button>
+          <button type="button" class="btn btn-danger btn-sm" onclick="deleteSelected()">選択削除</button>
+          <button type="button" class="btn btn-warning btn-sm" onclick="deleteAll()">一括削除</button>
         </div>
         <table class="list-table">
           <thead>
             <tr>
               <th width="30"><input type="checkbox" id="checkAll"></th>
-              <th>구분</th>
-              <th>성명</th>
-              <th>부서</th>
-              <th>지급총액</th>
-              <th>공제총액</th>
-              <th>실지급액</th>
+              <th>区分</th>
+              <th>氏名</th>
+              <th>部署</th>
+              <th>支給総額</th>
+              <th>控除総額</th>
+              <th>実支給額</th>
             </tr>
           </thead>
           <tbody>
@@ -270,7 +270,7 @@
               </tr>
             </c:forEach>
             <c:if test="${empty entryData.salaryList}">
-              <tr><td colspan="7" class="empty-msg">등록된 급여 대상 사원이 없습니다.</td></tr>
+              <tr><td colspan="7" class="empty-msg">登録された給与対象社員がいません。</td></tr>
             </c:if>
           </tbody>
         </table>
@@ -282,8 +282,8 @@
       <div class="panel-head">
         <h3>
           <c:choose>
-            <c:when test="${not empty entryData.selectedSalary}">${entryData.selectedSalary.nameKor} 급여 상세</c:when>
-            <c:otherwise>급여 상세 입력</c:otherwise>
+            <c:when test="${not empty entryData.selectedSalary}">${entryData.selectedSalary.nameKor} 給与詳細</c:when>
+            <c:otherwise>給与詳細入力</c:otherwise>
           </c:choose>
         </h3>
       </div>
@@ -298,11 +298,11 @@
 
               <div class="detail-toolbar">
                 <div class="detail-toolbar-actions">
-                  <button type="button" class="btn btn-primary btn-sm" onclick="autoCalc()">자동계산</button>
+                  <button type="button" class="btn btn-primary btn-sm" onclick="autoCalc()">自動計算</button>
                 </div>
                 <div class="calc-toggle-wrap">
-                  <span class="required">*</span> 계산방법
-                  <label class="toggle-switch" title="계산방법 표시/숨기기">
+                  <span class="required">*</span> 計算方法
+                  <label class="toggle-switch" title="計算方法の表示/非表示">
                     <input type="checkbox" id="calcMethodToggle" onchange="toggleCalcMethod(this.checked)">
                     <span class="toggle-slider"></span>
                     <span class="toggle-label off">off</span>
@@ -314,7 +314,7 @@
               <div class="detail-columns">
                 <!-- 지급항목 -->
                 <div class="detail-section pay">
-                  <h4>지급항목</h4>
+                  <h4>支給項目</h4>
                   <c:forEach var="item" items="${entryData.payDetails}">
                     <div class="item-row">
                       <input type="hidden" name="detailId" value="${item.detailId}">
@@ -326,14 +326,14 @@
                       </div>
                       <div class="calc-method-row hidden">
                         <input type="text" name="calcMethod" class="calc-method-input"
-                               value="${item.calcMethod}" placeholder="계산방법">
+                               value="${item.calcMethod}" placeholder="計算方法">
                       </div>
                     </div>
                   </c:forEach>
                 </div>
                 <!-- 공제항목 -->
                 <div class="detail-section deduct">
-                  <h4>공제항목</h4>
+                  <h4>控除項目</h4>
                   <c:forEach var="item" items="${entryData.deductDetails}">
                     <div class="item-row">
                       <input type="hidden" name="detailId" value="${item.detailId}">
@@ -345,7 +345,7 @@
                       </div>
                       <div class="calc-method-row hidden">
                         <input type="text" name="calcMethod" class="calc-method-input"
-                               value="${item.calcMethod}" placeholder="계산방법">
+                               value="${item.calcMethod}" placeholder="計算方法">
                       </div>
                     </div>
                   </c:forEach>
@@ -353,16 +353,16 @@
               </div>
 
               <div class="net-pay-bar" id="netPayBar">
-                실지급액 : <span id="netPayValue">0</span> 원
+                実支給額 : <span id="netPayValue">0</span> 円
               </div>
               <div class="detail-actions">
-                <button type="submit" class="btn btn-primary">저장</button>
-                <button type="button" class="btn btn-outline" onclick="clearAmounts()">내용 지우기</button>
+                <button type="submit" class="btn btn-primary">保存</button>
+                <button type="button" class="btn btn-outline" onclick="clearAmounts()">内容をクリア</button>
               </div>
             </form>
           </c:when>
           <c:otherwise>
-            <div class="empty-msg">좌측에서 사원을 선택하거나 신규 사원을 추가해 주세요.</div>
+            <div class="empty-msg">左側で社員を選択するか、新規社員を追加してください。</div>
           </c:otherwise>
         </c:choose>
       </div>
@@ -371,22 +371,22 @@
 
   <!-- 하단 종합정보 -->
   <div class="summary-bar">
-    <div class="summary-label">급여 종합정보</div>
+    <div class="summary-label">給与総合情報</div>
     <div class="summary-box summary-count">
-      <div class="label">월 합계</div>
-      <div class="value">${entryData.summary.count} 건</div>
+      <div class="label">月合計</div>
+      <div class="value">${entryData.summary.count} 件</div>
     </div>
     <div class="summary-box summary-pay">
-      <div class="label">지급 총액</div>
-      <div class="value"><fmt:formatNumber value="${entryData.summary.totalPay}" pattern="#,###"/> 원</div>
+      <div class="label">支給総額</div>
+      <div class="value"><fmt:formatNumber value="${entryData.summary.totalPay}" pattern="#,###"/> 円</div>
     </div>
     <div class="summary-box summary-deduct">
-      <div class="label">공제 총액</div>
-      <div class="value"><fmt:formatNumber value="${entryData.summary.totalDeduct}" pattern="#,###"/> 원</div>
+      <div class="label">控除総額</div>
+      <div class="value"><fmt:formatNumber value="${entryData.summary.totalDeduct}" pattern="#,###"/> 円</div>
     </div>
     <div class="summary-box summary-net">
-      <div class="label">실지급액</div>
-      <div class="value"><fmt:formatNumber value="${entryData.summary.netPay}" pattern="#,###"/> 원</div>
+      <div class="label">実支給額</div>
+      <div class="value"><fmt:formatNumber value="${entryData.summary.netPay}" pattern="#,###"/> 円</div>
     </div>
   </div>
 </div>
@@ -395,7 +395,7 @@
 <div class="modal-overlay" id="loadModal">
   <div class="modal-box">
     <div class="modal-header">
-      <span>급여년월 선택</span>
+      <span>給与年月選択</span>
       <button class="close-btn" onclick="closeLoadModal()">&times;</button>
     </div>
     <form action="${pageContext.request.contextPath}/salary/entry/loadPrevious.do" method="post">
@@ -403,27 +403,27 @@
       <input type="hidden" name="payMonth" value="${entryData.payMonth}">
       <input type="hidden" name="paySeq" value="${entryData.paySeq}">
       <div class="modal-body">
-        <p style="font-size:13px;color:#64748b;margin-bottom:12px;">불러올 급여 귀속연월을 선택하세요.</p>
+        <p style="font-size:13px;color:#64748b;margin-bottom:12px;">読み込む給与の帰属年月を選択してください。</p>
         <div style="display:flex;gap:10px;align-items:center;">
           <select name="sourceYear" style="padding:7px;border-radius:6px;border:1px solid #cbd5e1;">
             <c:forEach var="y" begin="2024" end="2027">
-              <option value="${y}">${y}년</option>
+              <option value="${y}">${y}年</option>
             </c:forEach>
           </select>
           <select name="sourceMonth" style="padding:7px;border-radius:6px;border:1px solid #cbd5e1;">
             <c:forEach var="m" begin="1" end="12">
-              <option value="${m}">${m}월</option>
+              <option value="${m}">${m}月</option>
             </c:forEach>
           </select>
           <select name="sourceSeq" style="padding:7px;border-radius:6px;border:1px solid #cbd5e1;">
-            <option value="1">급여-01</option>
-            <option value="2">급여-02</option>
+            <option value="1">給与-01</option>
+            <option value="2">給与-02</option>
           </select>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary">급여정보 불러오기</button>
-        <button type="button" class="btn btn-outline" onclick="closeLoadModal()">취소</button>
+        <button type="submit" class="btn btn-primary">給与情報を読み込む</button>
+        <button type="button" class="btn btn-outline" onclick="closeLoadModal()">キャンセル</button>
       </div>
     </form>
   </div>
@@ -433,7 +433,7 @@
 <div class="modal-overlay" id="empModal">
   <div class="modal-box" style="max-width:800px;">
     <div class="modal-header">
-      <span>급여지급 사원선택</span>
+      <span>給与支給 社員選択</span>
       <button class="close-btn" onclick="closeEmpModal()">&times;</button>
     </div>
     <form id="addEmpForm" action="${pageContext.request.contextPath}/salary/entry/addEmployees.do" method="post">
@@ -443,17 +443,17 @@
       <input type="hidden" name="paySeq" value="${entryData.paySeq}">
       <div class="modal-body" id="empModalBody">
         <div class="modal-search">
-          <input type="text" id="empSearchKeyword" placeholder="사원검색 (성명)">
-          <button type="button" class="btn btn-primary btn-sm" onclick="searchEmployees()">검색</button>
-          <button type="button" class="btn btn-outline btn-sm" onclick="searchEmployees(true)">전체보기</button>
+          <input type="text" id="empSearchKeyword" placeholder="社員検索（氏名）">
+          <button type="button" class="btn btn-primary btn-sm" onclick="searchEmployees()">検索</button>
+          <button type="button" class="btn btn-outline btn-sm" onclick="searchEmployees(true)">全体表示</button>
         </div>
         <div id="empSearchResult">
-          <p class="empty-msg">검색 버튼을 눌러 사원을 조회하세요.</p>
+          <p class="empty-msg">検索ボタンを押して社員を照会してください。</p>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary">사원선택</button>
-        <button type="button" class="btn btn-outline" onclick="closeEmpModal()">선택취소</button>
+        <button type="submit" class="btn btn-primary">社員選択</button>
+        <button type="button" class="btn btn-outline" onclick="closeEmpModal()">選択取消</button>
       </div>
     </form>
   </div>
@@ -478,7 +478,7 @@
   }
 
   function formatAmount(num) {
-    return num.toLocaleString('ko-KR');
+    return num.toLocaleString('ja-JP');
   }
 
   function calcTotals() {
@@ -551,8 +551,8 @@
 
   function deleteSelected() {
     const checked = document.querySelectorAll('.salary-chk:checked');
-    if (checked.length === 0) { alert('삭제할 사원을 선택해 주세요.'); return; }
-    if (!confirm('선택한 ' + checked.length + '명의 급여를 삭제하시겠습니까?')) return;
+    if (checked.length === 0) { alert('削除する社員を選択してください。'); return; }
+    if (!confirm('選択した ' + checked.length + '名の給与を削除しますか？')) return;
     const form = document.createElement('form');
     form.method = 'POST';
     form.action = ctx + '/salary/entry/delete.do';
@@ -565,7 +565,7 @@
   }
 
   function deleteAll() {
-    if (!confirm('현재 귀속연월의 모든 급여 데이터를 삭제하시겠습니까?')) return;
+    if (!confirm('現在の帰属年月のすべての給与データを削除しますか？')) return;
     const form = document.createElement('form');
     form.method = 'POST';
     form.action = ctx + '/salary/entry/deleteAll.do';
@@ -604,7 +604,7 @@
         const doc = parser.parseFromString(html, 'text/html');
         const table = doc.getElementById('empTableContent');
         document.getElementById('empSearchResult').innerHTML = table ? table.outerHTML
-          : '<p class="empty-msg">검색 결과가 없습니다.</p>';
+          : '<p class="empty-msg">検索結果がありません。</p>';
       });
   }
 

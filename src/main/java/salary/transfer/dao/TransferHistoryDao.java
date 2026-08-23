@@ -17,36 +17,6 @@ import salary.util.SqlIn;
 
 public class TransferHistoryDao {
 
-	// 그 급여건이 이미 이체 성공했는지 확인. 중복이체 막으려고
-	public boolean existsSuccessBySalaryId(Connection conn, int salaryId) throws SQLException {
-		String sql = "SELECT 1 FROM transfer_history WHERE salary_id = ? AND transfer_result = '성공'";
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setInt(1, salaryId);
-			try (ResultSet rs = pstmt.executeQuery()) {
-				return rs.next();
-			}
-		}
-	}
-
-	// 이체 성공 이력이 있는 salary_id 집합
-	public Set<Integer> selectSuccessSalaryIds(Connection conn, List<Integer> salaryIds) throws SQLException {
-		if (salaryIds == null || salaryIds.isEmpty()) {
-			return Collections.emptySet();
-		}
-		String sql = "SELECT DISTINCT salary_id FROM transfer_history WHERE transfer_result = '성공' "
-				+ "AND salary_id IN (" + SqlIn.placeholders(salaryIds.size()) + ")";
-		Set<Integer> ids = new HashSet<>();
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			SqlIn.setInts(pstmt, 1, salaryIds);
-			try (ResultSet rs = pstmt.executeQuery()) {
-				while (rs.next()) {
-					ids.add(rs.getInt("salary_id"));
-				}
-			}
-		}
-		return ids;
-	}
-
 	// 그 급여건에 이체 이력이 있는지 확인
 	public boolean existsBySalaryId(Connection conn, int salaryId) throws SQLException {
 		String sql = "SELECT 1 FROM transfer_history WHERE salary_id = ?";

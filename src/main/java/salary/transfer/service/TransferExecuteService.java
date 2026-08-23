@@ -44,11 +44,11 @@ public class TransferExecuteService {
 					candidateIds.add(row.getSalaryId());
 				}
 			}
-			Set<Integer> alreadySuccess = transferHistoryDao.selectSuccessSalaryIds(conn, candidateIds);
+			Set<Integer> alreadyTransferred = transferHistoryDao.selectSalaryIdsHavingHistory(conn, candidateIds);
 
 			int successCount = 0;
 			int skipNoAccount = 0;
-			int skipAlready = 0;
+			int skipAlreadyTransferred = 0;
 			String memo = String.format("급여%04d-%02d", period.getPayYear(), period.getPayMonth());
 			Date today = new Date();
 			List<TransferHistory> toInsert = new ArrayList<>();
@@ -58,8 +58,8 @@ public class TransferExecuteService {
 					skipNoAccount++;
 					continue;
 				}
-				if (alreadySuccess.contains(row.getSalaryId())) {
-					skipAlready++;
+				if (alreadyTransferred.contains(row.getSalaryId())) {
+					skipAlreadyTransferred++;
 					continue;
 				}
 
@@ -80,8 +80,8 @@ public class TransferExecuteService {
 
 			transferHistoryDao.insertBatch(conn, toInsert);
 			conn.commit();
-			return String.format("이체 완료: 성공 %d건, 계좌없음 %d건, 기이체 %d건", successCount, skipNoAccount,
-					skipAlready);
+			return String.format("이체 완료: %d건, 계좌없음 %d건, 기이체 %d건", successCount, skipNoAccount,
+					skipAlreadyTransferred);
 		} catch (SQLException e) {
 			JdbcUtil.rollback(conn);
 			throw new RuntimeException(e);

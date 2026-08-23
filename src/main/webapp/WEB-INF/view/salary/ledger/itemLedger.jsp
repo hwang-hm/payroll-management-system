@@ -4,10 +4,10 @@
 <%@ taglib prefix="layout" tagdir="/WEB-INF/tags" %>
 
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>항목별 대장</title>
+  <title>項目別台帳</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
   <style>
     :root {
@@ -74,66 +74,72 @@
 
 <div class="ItemLedger-container">
   <div class="ItemLedger-header">
-    <h2>항목별 대장</h2>
-    <p>기간과 항목을 선택하면 해당 기간의 사원별 급여항목 또는 공제항목 내역을 확인할 수 있습니다.</p>
+    <h2>項目別台帳</h2>
+    <p>期間と項目を選択すると、該当期間の社員別給与項目または控除項目内訳を確認できます。</p>
   </div>
 
   <form id="ItemLedgerFilterForm" action="${pageContext.request.contextPath}/salary/itemRegister.do" method="get">
     <div class="ItemLedger-filter">
-      <label>기간선택</label>
+      <label>期間選択</label>
       <select name="startYear">
         <c:forEach var="y" items="${itemLedgerData.yearOptions}">
-          <option value="${y}" ${y eq itemLedgerData.startYear ? 'selected' : ''}>${y}년</option>
+          <option value="${y}" ${y eq itemLedgerData.startYear ? 'selected' : ''}>${y}年</option>
         </c:forEach>
       </select>
       <select name="startMonth">
         <c:forEach var="m" begin="1" end="12">
           <option value="${m}" ${m eq itemLedgerData.startMonth ? 'selected' : ''}>
-            <fmt:formatNumber value="${m}" minIntegerDigits="2"/>월
+            <fmt:formatNumber value="${m}" minIntegerDigits="2"/>月
           </option>
         </c:forEach>
       </select>
       <span>~</span>
       <select name="endYear">
         <c:forEach var="y" items="${itemLedgerData.yearOptions}">
-          <option value="${y}" ${y eq itemLedgerData.endYear ? 'selected' : ''}>${y}년</option>
+          <option value="${y}" ${y eq itemLedgerData.endYear ? 'selected' : ''}>${y}年</option>
         </c:forEach>
       </select>
       <select name="endMonth">
         <c:forEach var="m" begin="1" end="12">
           <option value="${m}" ${m eq itemLedgerData.endMonth ? 'selected' : ''}>
-            <fmt:formatNumber value="${m}" minIntegerDigits="2"/>월
+            <fmt:formatNumber value="${m}" minIntegerDigits="2"/>月
           </option>
         </c:forEach>
       </select>
 
-      <label>항목선택</label>
+      <label>項目選択</label>
       <select name="itemName">
-        <c:forEach var="item" items="${itemLedgerData.itemOptions}">
-          <option value="${item}" ${item eq itemLedgerData.itemName ? 'selected' : ''}>${item}</option>
-        </c:forEach>
+        <option value="基本給" ${itemLedgerData.itemName eq '基本給' ? 'selected' : ''}>基本給</option>
+        <option value="食費" ${itemLedgerData.itemName eq '食費' ? 'selected' : ''}>食費</option>
+        <option value="国民年金" ${itemLedgerData.itemName eq '国民年金' ? 'selected' : ''}>国民年金</option>
+        <option value="健康保険" ${itemLedgerData.itemName eq '健康保険' ? 'selected' : ''}>健康保険</option>
+        <option value="介護保険" ${itemLedgerData.itemName eq '介護保険' ? 'selected' : ''}>介護保険</option>
+        <option value="雇用保険" ${itemLedgerData.itemName eq '雇用保険' ? 'selected' : ''}>雇用保険</option>
+        <option value="所得税" ${itemLedgerData.itemName eq '所得税' ? 'selected' : ''}>所得税</option>
+        <option value="住民税" ${itemLedgerData.itemName eq '住民税' ? 'selected' : ''}>住民税</option>
+        <option value="共済会費" ${itemLedgerData.itemName eq '共済会費' ? 'selected' : ''}>共済会費</option>
       </select>
-      <button type="submit" class="btn btn-primary">조회</button>
+      <button type="submit" class="btn btn-primary">照会</button>
     </div>
   </form>
 
   <div class="ItemLedger-panel">
     <div class="ItemLedger-panel-head">
-      <h3>${itemLedgerData.itemName} 내역</h3>
-      <span style="font-size:12px;color:#64748b;">${itemLedgerData.rows.size()}명</span>
+      <h3>${itemLedgerData.itemName} 内訳</h3>
+      <span style="font-size:12px;color:#64748b;">${itemLedgerData.rows.size()}名</span>
     </div>
     <div class="ItemLedger-panel-body">
       <table class="ItemLedger-table">
         <thead>
           <tr>
-            <th>구분</th>
-            <th>성명</th>
-            <th>부서</th>
-            <th>직위</th>
+            <th>区分</th>
+            <th>氏名</th>
+            <th>部署</th>
+            <th>役職</th>
             <c:forEach var="month" items="${itemLedgerData.months}">
               <th>${month.label}</th>
             </c:forEach>
-            <th>합계</th>
+            <th>合計</th>
           </tr>
         </thead>
         <tbody>
@@ -152,7 +158,7 @@
           <c:if test="${empty itemLedgerData.rows}">
             <tr>
               <td colspan="${4 + itemLedgerData.months.size() + 1}" class="empty-msg">
-                해당 기간에 등록된 급여 내역이 없습니다.
+                該当期間に登録された給与内訳がありません。
               </td>
             </tr>
           </c:if>
@@ -160,7 +166,7 @@
         <c:if test="${not empty itemLedgerData.rows}">
           <tfoot>
             <tr>
-              <td>합계</td>
+              <td>合計</td>
               <td></td>
               <td></td>
               <td></td>
@@ -176,7 +182,7 @@
   </div>
 
   <div class="ItemLedger-actions">
-    <a class="btn btn-muted" href="${pageContext.request.contextPath}/salary/ledger.do">급여대장 가기</a>
+    <a class="btn btn-muted" href="${pageContext.request.contextPath}/salary/ledger.do">給与台帳へ</a>
   </div>
 </div>
 
@@ -184,7 +190,7 @@
 
 <script>
   <c:if test="${itemLedgerData.periodCapped}">
-  alert('조회 기간은 최대 12개월까지입니다.\n시작월부터 12개월 분량만 표시합니다.');
+  alert('照会期間は最大12か月までです。\n開始月から12か月分のみ表示します。');
   </c:if>
 </script>
 

@@ -8,12 +8,12 @@
         <th style="padding:8px;border-bottom:2px solid #e2e8f0;width:30px;">
           <input type="checkbox" id="empCheckAll" onclick="toggleEmpAll(this)">
         </th>
-        <th style="padding:8px;border-bottom:2px solid #e2e8f0;">구분</th>
-        <th style="padding:8px;border-bottom:2px solid #e2e8f0;">사원번호</th>
-        <th style="padding:8px;border-bottom:2px solid #e2e8f0;">성명</th>
-        <th style="padding:8px;border-bottom:2px solid #e2e8f0;">부서</th>
-        <th style="padding:8px;border-bottom:2px solid #e2e8f0;">직위</th>
-        <th style="padding:8px;border-bottom:2px solid #e2e8f0;">상태</th>
+        <th style="padding:8px;border-bottom:2px solid #e2e8f0;">区分</th>
+        <th style="padding:8px;border-bottom:2px solid #e2e8f0;">社員番号</th>
+        <th style="padding:8px;border-bottom:2px solid #e2e8f0;">氏名</th>
+        <th style="padding:8px;border-bottom:2px solid #e2e8f0;">部署</th>
+        <th style="padding:8px;border-bottom:2px solid #e2e8f0;">役職</th>
+        <th style="padding:8px;border-bottom:2px solid #e2e8f0;">状態</th>
       </tr>
     </thead>
     <tbody>
@@ -33,7 +33,7 @@
       <c:if test="${empty employeeList}">
         <tr>
           <td colspan="7" style="padding:30px;text-align:center;color:#94a3b8;">
-            추가 가능한 사원이 없습니다.
+            追加可能な社員がいません。
           </td>
         </tr>
       </c:if>

@@ -3,7 +3,6 @@ package salary.ledger.service;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -19,8 +18,7 @@ import salary.util.PeriodRangeParams;
 
 public class ItemLedgerService {
 
-	private static final List<String> FIXED_ITEMS = Arrays.asList(
-			"기본급", "식비", "국민연금", "건강보험", "장기요양보험", "고용보험", "소득세", "지방소득세", "상조회비");
+	private static final String DEFAULT_ITEM_NAME = "基本給";
 
 	private final ItemLedgerDao itemLedgerDao = new ItemLedgerDao();
 
@@ -39,7 +37,6 @@ public class ItemLedgerService {
 			data.setItemName(selectedItem);
 			data.setPeriodCapped(capped);
 			data.setYearOptions(buildYearOptions(normalized[0], normalized[2]));
-			data.setItemOptions(FIXED_ITEMS);
 
 			List<ItemLedgerMonth> months = buildMonths(normalized[0], normalized[1], normalized[2], normalized[3]);
 			data.setMonths(months);
@@ -57,10 +54,10 @@ public class ItemLedgerService {
 	}
 
 	private String resolveItemName(String itemName) {
-		if (itemName != null && FIXED_ITEMS.contains(itemName.trim())) {
+		if (itemName != null && !itemName.trim().isEmpty()) {
 			return itemName.trim();
 		}
-		return FIXED_ITEMS.get(0);
+		return DEFAULT_ITEM_NAME;
 	}
 
 	private int[] normalizePeriod(int startYear, int startMonth, int endYear, int endMonth) {

@@ -16,6 +16,6 @@
 </c:forEach>
 <c:if test="${empty employeeList}">
   <tr>
-    <td colspan="6" class="empty-msg">조회된 사원이 없습니다.</td>
+    <td colspan="6" class="empty-msg">照会された社員がいません。</td>
   </tr>
 </c:if>
