@@ -17,9 +17,8 @@
 	</c:when>
 	<c:otherwise>
 		<tr>
-			<td colspan="7"
-				style="padding: 20px; text-align: center; color: #888;">조회 가능한
-				사원 목록 없습니다.</td>
+			<td colspan="6"
+				style="padding: 20px; text-align: center; color: #888;">表示可能な社員一覧がありません。</td>
 		</tr>
 	</c:otherwise>
 </c:choose>
