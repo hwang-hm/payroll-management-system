@@ -109,9 +109,15 @@
 
       <label>項目選択</label>
       <select name="itemName">
-        <c:forEach var="item" items="${itemLedgerData.itemOptions}">
-          <option value="${item}" ${item eq itemLedgerData.itemName ? 'selected' : ''}>${item}</option>
-        </c:forEach>
+        <option value="基本給" ${itemLedgerData.itemName eq '基本給' ? 'selected' : ''}>基本給</option>
+        <option value="食費" ${itemLedgerData.itemName eq '食費' ? 'selected' : ''}>食費</option>
+        <option value="国民年金" ${itemLedgerData.itemName eq '国民年金' ? 'selected' : ''}>国民年金</option>
+        <option value="健康保険" ${itemLedgerData.itemName eq '健康保険' ? 'selected' : ''}>健康保険</option>
+        <option value="介護保険" ${itemLedgerData.itemName eq '介護保険' ? 'selected' : ''}>介護保険</option>
+        <option value="雇用保険" ${itemLedgerData.itemName eq '雇用保険' ? 'selected' : ''}>雇用保険</option>
+        <option value="所得税" ${itemLedgerData.itemName eq '所得税' ? 'selected' : ''}>所得税</option>
+        <option value="住民税" ${itemLedgerData.itemName eq '住民税' ? 'selected' : ''}>住民税</option>
+        <option value="共済会費" ${itemLedgerData.itemName eq '共済会費' ? 'selected' : ''}>共済会費</option>
       </select>
       <button type="submit" class="btn btn-primary">照会</button>
     </div>

@@ -161,16 +161,7 @@
             <td>${row.depositorName}</td>
             <td class="amount"><fmt:formatNumber value="${row.transferAmount}" pattern="#,###"/></td>
             <td>${row.depositMemo}</td>
-            <td>
-              <c:choose>
-                <c:when test="${row.transferResult eq '成功'}">
-                  <span class="result-ok">${row.transferResult}</span>
-                </c:when>
-                <c:otherwise>
-                  <span class="result-fail">${row.transferResult}</span>
-                </c:otherwise>
-              </c:choose>
-            </td>
+            <td>${row.transferResult}</td>
           </tr>
         </c:forEach>
         <c:if test="${empty resultPage.content}">

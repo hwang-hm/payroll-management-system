@@ -210,7 +210,7 @@ public class SalaryDao {
 	public List<EmployeeSearchView> selectEmployeesForAdd(Connection conn, int salaryDateId) throws SQLException {
 		String sql = "SELECT e.emp_id, e.employment_type, e.name_kor, "
 				+ "NVL(d.dept_name, '-') AS dept_name, NVL(p.position_name, '-') AS position_name, "
-				+ "CASE WHEN e.status = 'Y' THEN '재직' WHEN e.status = 'N' THEN '퇴직' ELSE '재직' END AS status_label "
+				+ "CASE WHEN e.status = 'Y' THEN '在職' WHEN e.status = 'N' THEN '退職' ELSE '在職' END AS status_label "
 				+ "FROM employee e " + "LEFT JOIN department d ON e.dept_id = d.dept_id "
 				+ "LEFT JOIN position p ON e.position_id = p.position_id " + "WHERE e.employment_type <> '일용직' "
 				+ "AND e.emp_id NOT IN (SELECT emp_id FROM salary WHERE salary_date_id = ?) " + "ORDER BY e.emp_id";
@@ -231,7 +231,7 @@ public class SalaryDao {
 			String searchKeyword) throws SQLException {
 		String sql = "SELECT e.emp_id, e.employment_type, e.name_kor, "
 				+ "NVL(d.dept_name, '-') AS dept_name, NVL(p.position_name, '-') AS position_name, "
-				+ "CASE WHEN e.status = 'Y' THEN '재직' WHEN e.status = 'N' THEN '퇴직' ELSE '재직' END AS status_label "
+				+ "CASE WHEN e.status = 'Y' THEN '在職' WHEN e.status = 'N' THEN '退職' ELSE '在職' END AS status_label "
 				+ "FROM employee e " + "LEFT JOIN department d ON e.dept_id = d.dept_id "
 				+ "LEFT JOIN position p ON e.position_id = p.position_id " + "WHERE e.employment_type <> '일용직' "
 				+ "AND e.emp_id NOT IN (SELECT emp_id FROM salary WHERE salary_date_id = ?) "
