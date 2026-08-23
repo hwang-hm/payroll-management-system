@@ -11,7 +11,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>급여항목 구성 통계</title>
+<title>給与項目構成統計</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
@@ -20,7 +20,7 @@
 .stat-container {
 	width: 1060px;
 	margin: 20px auto;
-	font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+	font-family: 'Pretendard', 'Malgun Gothic', '맑은 고딕', sans-serif;
 	color: #333;
 }
 
@@ -105,7 +105,7 @@
 	position: relative;
 }
 
-/* 테이블 레이아웃 고정 및 라인 정렬 */
+/* 테이블 레이아웃 고정 및 라인 정렬 / テーブルレイアウト固定およびライン整列 */
 .stat-table-wrapper {
 	width: 100%;
 	margin-bottom: 20px;
@@ -116,7 +116,7 @@
 	border-collapse: collapse;
 	font-size: 12px;
 	text-align: center;
-	table-layout: fixed; /* 동일 분할 폭 고정 */
+	table-layout: fixed; /* 동일 분할 폭 고정 / 均等分割幅固定 */
 }
 
 .stat-table th, .stat-table td {
@@ -156,7 +156,7 @@
 	margin-top: 15px;
 }
 
-/* 모달 CSS */
+/* 모달 CSS / モーダルCSS */
 .modal-overlay {
 	position: fixed;
 	top: 0;
@@ -272,12 +272,11 @@
 
 	<div class="stat-container">
 		<div class="stat-title">
-			<span>📊</span> 급여항목 구성 통계
+			<span>📊</span> 給与項目構成統計
 		</div>
-		<div class="stat-subtitle">귀속년월과 사원을 검색하시면 해당사원의 급여항목 구성표를 확인하실
-			수 있습니다.</div>
+		<div class="stat-subtitle">帰属年月と社員を検索すると、該当社員の給与項目構成表を確認できます。</div>
 
-		<!-- 검색 폼 -->
+		<!-- 검색 폼 / 検索フォーム -->
 		<form id="searchForm"
 			action="${pageContext.request.contextPath}/salary/stats/itemComposition.do"
 			method="get">
@@ -286,36 +285,36 @@
 
 			<div class="filter-box">
 				<div>
-					* 귀속년월을 선택해 주세요. &nbsp; <select name="year" id="selectedYear">
+					* 帰属年月を選択してください。 &nbsp; <select name="year" id="selectedYear">
 						<c:forEach var="y" begin="2015" end="${nowYear}">
 							<option value="${y}" ${y == selectedYear ? 'selected' : ''}>${y}
-								년</option>
+								年</option>
 						</c:forEach>
 					</select> <select name="month" id="selectedMonth">
 						<c:forEach var="m" begin="1" end="12">
 							<fmt:formatNumber var="mm" value="${m}" pattern="00" />
 							<option value="${m}" ${m == selectedMonth ? 'selected' : ''}>${mm}
-								월</option>
+								月</option>
 						</c:forEach>
 					</select>
 				</div>
 
 				<div style="display: flex; align-items: center; gap: 6px;">
-					대상자를 선택해 주세요.
+					対象者を選択してください。
 					<div class="search-input-group">
 						<input type="text" id="targetEmpName" name="empName"
-							value="${selectedEmpName}" placeholder="사원선택" readonly
+							value="${selectedEmpName}" placeholder="社員選択" readonly
 							onclick="openWorkerModal()" />
 						<button type="button" class="btn-search-icon"
 							onclick="openWorkerModal()">🔍</button>
 					</div>
 				</div>
 
-				<button type="button" class="btn-submit" onclick="submitSearch()">조회</button>
+				<button type="button" class="btn-submit" onclick="submitSearch()">検索</button>
 			</div>
 		</form>
 
-		<!-- 차트 3개 영역 -->
+		<!-- 차트 3개 영역 / チャート3個エリア -->
 		<div class="charts-flex-wrapper">
 			<div class="chart-card">
 				<canvas id="chartTotal"></canvas>
@@ -328,9 +327,9 @@
 			</div>
 		</div>
 
-		<!-- 동적 테이블 영역 -->
+		<!-- 동적 테이블 영역 / 動的テーブルエリア -->
 		<div class="stat-table-wrapper">
-			<!-- 지급항목 테이블 -->
+			<!-- 지급항목 테이블 / 支給項目テーブル -->
 			<table class="stat-table">
 				<colgroup>
 					<col style="width: 110px;" />
@@ -342,7 +341,7 @@
 				</colgroup>
 				<thead>
 					<tr>
-						<th>지급항목</th>
+						<th>支給項目</th>
 						<c:choose>
 							<c:when
 								test="${not empty statData and not empty statData.payList}">
@@ -361,14 +360,14 @@
 								</c:forEach>
 							</c:otherwise>
 						</c:choose>
-						<th class="highlight-bg">합계</th>
+						<th class="highlight-bg">合計</th>
 						<th
 							style="background: #fff; border-top: none; border-right: none; border-bottom: none;"></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<th>ㄴ 금액 (원)</th>
+						<th>└ 金額 (円)</th>
 						<c:choose>
 							<c:when
 								test="${not empty statData and not empty statData.payList}">
@@ -395,7 +394,7 @@
 							style="background: #fff; border-top: none; border-right: none; border-bottom: none;"></td>
 					</tr>
 					<tr class="sub-row">
-						<th>ㄴ 구성비율</th>
+						<th>└ 構成比率</th>
 						<c:choose>
 							<c:when
 								test="${not empty statData and not empty statData.payList}">
@@ -424,7 +423,7 @@
 
 			<div style="height: 15px;"></div>
 
-			<!-- 공제항목 테이블 -->
+			<!-- 공제항목 테이블 / 控除項目テーブル -->
 			<table class="stat-table">
 				<colgroup>
 					<col style="width: 110px;" />
@@ -436,7 +435,7 @@
 				</colgroup>
 				<thead>
 					<tr>
-						<th>공제항목</th>
+						<th>控除項目</th>
 						<c:choose>
 							<c:when
 								test="${not empty statData and not empty statData.deductList}">
@@ -455,13 +454,13 @@
 								</c:forEach>
 							</c:otherwise>
 						</c:choose>
-						<th class="highlight-bg">합계</th>
-						<th class="net-pay-header">실지급액</th>
+						<th class="highlight-bg">合計</th>
+						<th class="net-pay-header">手取り額</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<th>ㄴ 금액 (원)</th>
+						<th>└ 金額 (円)</th>
 						<c:choose>
 							<c:when
 								test="${not empty statData and not empty statData.deductList}">
@@ -489,7 +488,7 @@
 						</c:choose>
 					</tr>
 					<tr class="sub-row">
-						<th>ㄴ 구성비율</th>
+						<th>└ 構成比率</th>
 						<c:choose>
 							<c:when
 								test="${not empty statData and not empty statData.deductList}">
@@ -517,34 +516,33 @@
 			</table>
 		</div>
 
-		<div class="notice-text">※ 통계차트는 별도의 인쇄화면을 제공하지 않습니다. 회원님께서
-			윈도우즈에서 제공하는 스크린샷(ScreenShot) 기능을 이용하여 인쇄(Ctrl + P)하여 주시길 바랍니다.</div>
+		<div class="notice-text">※ 統計チャートは別途の印刷画面を提供しておりません。Windowsで提供するスクリーンショット(ScreenShot)機能を利用して印刷(Ctrl + P)を行ってください。</div>
 	</div>
 
-	<!-- 사원 선택 모달 -->
+	<!-- 사원 선택 모달 / 社員選択モーダル -->
 	<div id="workerSelectModal" class="modal-overlay"
 		style="display: none;">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h3 class="modal-title">전체 사원 선택</h3>
+				<h3 class="modal-title">全社員選択</h3>
 			</div>
 			<div class="modal-body">
 				<div class="modal-filter-bar">
 					<div class="filter-left">
 						<div class="search-input-group">
-							<input type="text" id="modalSearchKeyword" placeholder="사원검색"
+							<input type="text" id="modalSearchKeyword" placeholder="社員検索"
 								onkeyup="filterModalWorkers()" />
 							<button type="button" class="btn-search-icon"
 								onclick="filterModalWorkers()">🔍</button>
 						</div>
 						<button type="button" class="btn-reset-filter"
-							onclick="resetModalFilter()">전체보기</button>
+							onclick="resetModalFilter()">全体表示</button>
 					</div>
 					<div class="filter-right">
 						<select id="filterStatus" onchange="filterModalWorkers()">
-							<option value="">상태별</option>
-							<option value="재직">재직</option>
-							<option value="퇴직">퇴직</option>
+							<option value="">ステータス別</option>
+							<option value="재직">在職</option>
+							<option value="퇴직">退職</option>
 						</select>
 					</div>
 				</div>
@@ -552,12 +550,12 @@
 					<table class="erp-modal-table">
 						<thead>
 							<tr>
-								<th style="width: 70px;">구분</th>
-								<th style="width: 110px;">사원번호</th>
-								<th style="width: 90px;">성명</th>
-								<th style="width: 100px;">부서</th>
-								<th style="width: 80px;">직위</th>
-								<th style="width: 70px;">상태</th>
+								<th style="width: 70px;">区分</th>
+								<th style="width: 110px;">社員番号</th>
+								<th style="width: 90px;">氏名</th>
+								<th style="width: 100px;">部署</th>
+								<th style="width: 80px;">役職</th>
+								<th style="width: 70px;">ステータス</th>
 							</tr>
 						</thead>
 						<tbody id="modalWorkerListBody"></tbody>
@@ -565,7 +563,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn-erp-gray"
-						onclick="closeWorkerModal()">닫기</button>
+						onclick="closeWorkerModal()">閉じる</button>
 				</div>
 			</div>
 		</div>
@@ -576,7 +574,7 @@
 	<script>
 Chart.register(ChartDataLabels);
 
-// 도넛 중앙 텍스트 플러그인
+// 도넛 중앙 텍스트 플러그인 / ドーナツ中央テキストプラグイン
 const centerTextPlugin = {
 	id: 'centerText',
 	beforeDraw(chart) {
@@ -584,7 +582,7 @@ const centerTextPlugin = {
 		const { ctx, chartArea: { top, bottom, left, right } } = chart;
 		const textLines = chart.config.options.plugins.centerText.text || [];
 		ctx.save();
-		ctx.font = 'bold 13px "Malgun Gothic", sans-serif';
+		ctx.font = 'bold 13px "Pretendard", sans-serif';
 		ctx.fillStyle = '#333';
 		ctx.textAlign = 'center';
 		ctx.textBaseline = 'middle';
@@ -611,19 +609,19 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function renderAllCharts() {
-	// 데이터 존재 여부 동적 체크
+	// 데이터 존재 여부 동적 체크 / 데이터 존재 여부 동적 체크
 	const hasPayData = <c:out value="${not empty statData and not empty statData.payList}" default="false"/>;
 	const hasDeductData = <c:out value="${not empty statData and not empty statData.deductList}" default="false"/>;
 	const hasTotalData = <c:out value="${not empty statData and (statData.totalPay > 0 or statData.totalDeduct > 0)}" default="false"/>;
 
-	// 1. 전체 비율 차트 (데이터 없을 시 50%:50% 표시)
+	// 1. 전체 비율 차트 (데이터 없을 시 50%:50% 표시) / 1. 全体比率チャート (データがない場合は50%:50%表示)
 	const totalPay = hasTotalData ? ${empty statData.totalPay ? 0 : statData.totalPay} : 50;
 	const totalDeduct = hasTotalData ? ${empty statData.totalDeduct ? 0 : statData.totalDeduct} : 50;
 
 	new Chart(document.getElementById('chartTotal').getContext('2d'), {
 		type: 'doughnut',
 		data: {
-			labels: ['지급항목', '공제항목'],
+			labels: ['支給項目', '控除項目'],
 			datasets: [{
 				data: [totalPay, totalDeduct],
 				backgroundColor: ['#0077cc', '#f37021']
@@ -633,13 +631,13 @@ function renderAllCharts() {
 			responsive: true,
 			maintainAspectRatio: false,
 			plugins: {
-				centerText: { text: ['지급항목', '+', '공제항목'] },
+				centerText: { text: ['支給項目', '+', '控除項目'] },
 				legend: { position: 'bottom', labels: { boxWidth: 12, padding: 15 } },
 				datalabels: {
 					color: '#fff',
 					font: { weight: 'bold', size: 10 },
 					formatter: (val, ctx) => {
-						if (!hasTotalData) return '50.0%'; // 기본 50:50 표시
+						if (!hasTotalData) return '50.0%'; // 기본 50:50 표시 / 基本50:50表示
 						let sum = ctx.dataset.data.reduce((a, b) => a + b, 0);
 						return sum > 0 ? (val / sum * 100).toFixed(1) + '%' : '';
 					}
@@ -649,8 +647,8 @@ function renderAllCharts() {
 		plugins: [centerTextPlugin]
 	});
 
-	// 2. 지급 세부항목 차트 (데이터 없을 시 100% 단일 파란링)
-	let payLabels = ['저장된 급여가 없습니다.'];
+	// 2. 지급 세부항목 차트 (데이터 없을 시 100% 단일 파란링) / 2. 支給詳細項目チャート (データがない場合は100%単一ブルーリング)
+	let payLabels = ['保存された給与がありません。'];
 	let payData = [1];
 	let payColors = ['#0077cc'];
 
@@ -673,13 +671,13 @@ function renderAllCharts() {
 			responsive: true,
 			maintainAspectRatio: false,
 			plugins: {
-				centerText: { text: ['지급', '세부항목'] },
+				centerText: { text: ['支給', '詳細項目'] },
 				legend: { position: 'bottom', labels: { boxWidth: 10, padding: 8, font: { size: 11 } } },
 				datalabels: {
 					color: '#fff',
 					font: { weight: 'bold', size: 10 },
 					formatter: (val, ctx) => {
-						if (!hasPayData) return '100%'; // 데이터 없을 때 100% 표기
+						if (!hasPayData) return '100%'; // 데이터 없을 때 100% 표기 / データがないとき100%表記
 						let sum = ctx.dataset.data.reduce((a, b) => a + b, 0);
 						let pct = sum > 0 ? (val / sum * 100).toFixed(1) : 0;
 						return pct >= 3 ? pct + '%' : '';
@@ -690,8 +688,8 @@ function renderAllCharts() {
 		plugins: [centerTextPlugin]
 	});
 
-	// 3. 공제 세부항목 차트 (데이터 없을 시 100% 단일 주황링)
-	let deductLabels = ['저장된 급여가 없습니다.'];
+	// 3. 공제 세부항목 차트 (데이터 없을 시 100% 단일 주황링) / 3. 控除詳細項目チャート (データがない場合は100%単一オレンジリング)
+	let deductLabels = ['保存された給与가ありません。'];
 	let deductData = [1];
 	let deductColors = ['#f37021'];
 
@@ -714,13 +712,13 @@ function renderAllCharts() {
 			responsive: true,
 			maintainAspectRatio: false,
 			plugins: {
-				centerText: { text: ['공제', '세부항목'] },
+				centerText: { text: ['控除', '詳細項目'] },
 				legend: { position: 'bottom', labels: { boxWidth: 10, padding: 8, font: { size: 11 } } },
 				datalabels: {
 					color: '#fff',
 					font: { weight: 'bold', size: 10 },
 					formatter: (val, ctx) => {
-						if (!hasDeductData) return '100%'; // 데이터 없을 때 100% 표기
+						if (!hasDeductData) return '100%'; // 데이터 없을 때 100% 표기 / 데이터がないとき100%表記
 						let sum = ctx.dataset.data.reduce((a, b) => a + b, 0);
 						let pct = sum > 0 ? (val / sum * 100).toFixed(1) : 0;
 						return pct >= 3 ? pct + '%' : '';
@@ -732,7 +730,7 @@ function renderAllCharts() {
 	});
 }
 
-// 모달 및 비동기 검색 스크립트
+// 모달 및 비동기 검색 스크립트 / モーダルおよび非同期検索スクリプト
 function openWorkerModal() {
 	const modal = document.getElementById('workerSelectModal');
 	if (modal) {
@@ -752,17 +750,17 @@ function closeWorkerModal() {
 
 function fetchWorkerMasterList() {
 	const tbody = document.getElementById('modalWorkerListBody');
-	tbody.innerHTML = '<tr><td colspan="6" style="padding:20px; text-align:center;">목록을 불러오는 중...</td></tr>';
+	tbody.innerHTML = '<tr><td colspan="6" style="padding:20px; text-align:center;">一覧を読み込んでいます...</td></tr>';
 
 	fetch('${pageContext.request.contextPath}/emp/getAllList.do')
 		.then(res => {
-			if (!res.ok) throw new Error('응답 실패');
+			if (!res.ok) throw new Error('応答失敗');
 			return res.text();
 		})
 		.then(html => { tbody.innerHTML = html; })
 		.catch(err => {
 			console.error(err);
-			tbody.innerHTML = '<tr><td colspan="6" style="color:red; padding:20px; text-align:center;">사원 목록을 불러올 수 없습니다.</td></tr>';
+			tbody.innerHTML = '<tr><td colspan="6" style="color:red; padding:20px; text-align:center;">社員一覧を読み込めませんでした。</td></tr>';
 		});
 }
 
@@ -775,7 +773,7 @@ function selectModalEmp(empId, empName) {
 function submitSearch() {
 	const empId = document.getElementById('selectedEmpId').value;
 	if (!empId) {
-		alert('대상 사원을 선택해 주세요.');
+		alert('対象社員を選択してください。');
 		openWorkerModal();
 		return;
 	}
