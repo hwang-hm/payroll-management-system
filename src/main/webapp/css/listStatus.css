@@ -1,0 +1,559 @@
+@charset "UTF-8";
+
+:root {
+    --primary-color: #2563eb;
+    --primary-hover: #1d4ed8;
+    --bg-gray: #f8fafc;
+    --border-color: #e2e8f0;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --danger-color: #ef4444;
+}
+
+body {
+    font-family: 'Pretendard Variable', Pretendard, sans-serif;
+    background-color: var(--bg-gray);
+    color: var(--text-main);
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1450px;
+    margin: 0 auto 60px auto;
+    padding: 0 20px;
+}
+
+
+/* =========================
+   페이지 제목
+========================= */
+
+.page-header {
+    margin-bottom: 24px;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 16px;
+}
+
+.page-header h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 0 0 6px 0;
+}
+
+.page-header p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+
+/* =========================
+   메인 카드
+========================= */
+
+.list-section {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 24px;
+
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+
+/* =========================
+   검색 영역
+========================= */
+
+.search-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 18px;
+    gap: 12px;
+}
+
+.search-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+.search-area select,
+.search-area input[type="text"] {
+
+    height: 36px;
+    padding: 7px 10px;
+    font-size: 13px;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+
+    box-sizing: border-box;
+    outline: none;
+
+    background-color: #ffffff;
+}
+
+
+.search-area select:focus,
+.search-area input[type="text"]:focus {
+
+    border-color: var(--primary-color);
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+
+.search-type {
+    width: 120px;
+}
+
+.search-input {
+    width: 260px;
+}
+
+.status-select {
+    width: 120px;
+}
+
+
+/* =========================
+   버튼
+========================= */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 7px 14px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    border: none;
+
+    transition: all 0.2s ease;
+
+    text-decoration: none;
+}
+
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+
+.btn-outline {
+
+    background-color: #ffffff;
+
+    border: 1px solid #cbd5e1;
+
+    color: #334155;
+}
+
+.btn-outline:hover {
+    background-color: #f1f5f9;
+}
+
+
+.btn-search {
+
+    width: 38px;
+    height: 36px;
+
+    padding: 0;
+
+    font-size: 15px;
+}
+
+
+/* =========================
+   테이블
+========================= */
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+
+.emp-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    font-size: 13px;
+
+    text-align: center;
+
+    table-layout: fixed;
+}
+
+
+.emp-table th {
+
+    background-color: #f1f5f9;
+
+    padding: 12px 8px;
+
+    border: 1px solid var(--border-color);
+
+    color: #334155;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+.emp-table td {
+
+    padding: 11px 8px;
+
+    border: 1px solid var(--border-color);
+
+    color: #475569;
+
+    background-color: #ffffff;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+.emp-table tbody tr:hover td {
+    background-color: #f8fafc;
+}
+
+
+/* =========================
+   사원번호
+========================= */
+
+.emp-link {
+
+    color: var(--primary-color);
+
+    text-decoration: none;
+
+    font-weight: 600;
+}
+
+.emp-link:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================
+   재직 / 퇴직 상태
+========================= */
+
+.status-working {
+    color: #475569;
+    font-weight: 600;
+}
+
+.status-retired {
+    color: #ef4444;
+    font-weight: 700;
+}
+
+
+/* =========================
+   정산 상태
+========================= */
+
+.calc-icon {
+
+    display: inline-flex;
+
+    width: 21px;
+    height: 21px;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 4px;
+
+    font-size: 12px;
+
+    color: #ffffff;
+
+    font-weight: 700;
+}
+
+.calc-no {
+    background-color: #93c5fd;
+}
+
+.calc-yes {
+    background-color: #fb7185;
+}
+
+
+/* =========================
+   결과 없음
+========================= */
+
+.empty-row {
+
+    height: 120px;
+
+    color: var(--text-muted);
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   페이징
+========================= */
+
+.pagination {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 5px;
+
+    margin-top: 20px;
+}
+
+
+.page-link {
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 32px;
+    height: 32px;
+
+    padding: 0 8px;
+
+    border: 1px solid var(--border-color);
+
+    border-radius: 5px;
+
+    background-color: #ffffff;
+
+    color: #475569;
+
+    font-size: 12px;
+
+    text-decoration: none;
+
+    box-sizing: border-box;
+}
+
+
+.page-link:hover {
+    background-color: #f1f5f9;
+}
+
+
+.page-link.active {
+
+    background-color: var(--primary-color);
+
+    border-color: var(--primary-color);
+
+    color: #ffffff;
+
+    font-weight: 700;
+}
+
+
+/* =========================
+   하단 정보
+========================= */
+
+.list-info {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-top: 14px;
+
+    font-size: 12px;
+
+    color: var(--text-muted);
+}
+
+
+
+/* =========================
+   퇴직처리 모달
+========================= */
+
+.calc-button {
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.retire-modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.35);
+    justify-content: center;
+    align-items: center;
+}
+
+.retire-modal-content {
+    position: relative;
+    width: 510px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 24px 24px 26px;
+    box-sizing: border-box;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.22);
+}
+
+.retire-modal-content h2 {
+    margin: 0 0 18px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #555555;
+}
+
+.retire-modal-close {
+    position: absolute;
+    right: 18px;
+    top: 12px;
+    border: none;
+    background: transparent;
+    color: #777777;
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.retire-form-box {
+    border: 1px solid #dddddd;
+    padding: 6px 18px;
+    box-sizing: border-box;
+}
+
+.retire-form-row {
+    display: flex;
+    align-items: center;
+    min-height: 50px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.retire-form-row:first-child {
+    border-top: 2px solid #222222;
+}
+
+.retire-form-row label {
+    width: 140px;
+    flex-shrink: 0;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #666666;
+}
+
+.retire-form-row input,
+.retire-form-row select {
+    width: 230px;
+    height: 30px;
+    padding: 4px 8px;
+    border: 1px solid #d6d9df;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 13px;
+    background-color: #ffffff;
+    outline: none;
+}
+
+.retire-form-row input:focus,
+.retire-form-row select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.08);
+}
+
+.retire-button-area {
+    margin-top: 14px;
+    text-align: center;
+}
+
+.retire-save-btn {
+    width: 90px;
+    height: 40px;
+    border: none;
+    border-radius: 6px;
+    background-color: #3d7dca;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.retire-save-btn:hover {
+    background-color: #326eb6;
+}
+
+
+/* =========================
+   반응형
+========================= */
+
+@media (max-width: 1100px) {
+
+    .search-area {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-left,
+    .search-right {
+        width: 100%;
+    }
+
+    .search-input {
+        flex: 1;
+    }
+}

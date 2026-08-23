@@ -2,10 +2,14 @@ package retirement.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 
 import jdbc.JdbcUtil;
+import retirement.model.OtherTaxableIncome;
 import retirement.severancepay.service.OtherTaxableIncomeRequest;
 
 public class OtherTaxableIncomeDao {
@@ -14,6 +18,7 @@ public class OtherTaxableIncomeDao {
     public void insertOtherTaxableIncome(Connection conn, int severancePayId, OtherTaxableIncomeRequest request) throws SQLException {
 
         PreparedStatement pstmt = null;
+        ResultSet rs= null;
 
         try {
             pstmt = conn.prepareStatement(
@@ -38,4 +43,38 @@ public class OtherTaxableIncomeDao {
             JdbcUtil.close(pstmt);
         }
     }
+    
+    public List<OtherTaxableIncome> selectById(Connection conn, int severancePayId) throws SQLException {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			pstmt = conn.prepareStatement("select * from other_taxable_income where severance_pay_id = ?");
+
+			pstmt.setInt(1, severancePayId);
+			rs = pstmt.executeQuery();
+
+			List<OtherTaxableIncome> otherTaxableIncome = new ArrayList<>();
+			
+			while (rs.next()) {
+				otherTaxableIncome.add(convertOtherTaxableIncome(rs));
+			}
+
+			return otherTaxableIncome;
+
+		} finally {
+			JdbcUtil.close(rs);
+			JdbcUtil.close(pstmt);
+		}
+    }
+    
+    private OtherTaxableIncome convertOtherTaxableIncome(ResultSet rs) throws SQLException {
+    	OtherTaxableIncome otherTaxableIncome = new OtherTaxableIncome();
+		
+    	otherTaxableIncome.setPaymentItem(rs.getString("payment_item"));
+    	otherTaxableIncome.setAmount(rs.getInt("amount"));
+    	
+    	return otherTaxableIncome;
+    	
+	}
 }
