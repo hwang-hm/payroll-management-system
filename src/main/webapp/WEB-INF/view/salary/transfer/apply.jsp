@@ -4,10 +4,10 @@
 <%@ taglib prefix="layout" tagdir="/WEB-INF/tags" %>
 
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>급여이체 신청</title>
+  <title>給与振込申請</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
   <style>
     :root {
@@ -107,8 +107,8 @@
 
 <div class="container">
   <div class="page-header">
-    <h2>급여이체 신청</h2>
-    <p>귀속연월·차수 대상자를 확인하고 급여이체를 실행합니다.</p>
+    <h2>給与振込申請</h2>
+    <p>帰属年月・回数の対象者を確認し、給与振込を実行します。</p>
   </div>
 
   <c:if test="${not empty applyData.message}">
@@ -117,28 +117,28 @@
 
   <form id="filterForm" action="${pageContext.request.contextPath}/salary/transfer/apply.do" method="get">
     <div class="filter-bar">
-      <label>귀속연도</label>
+      <label>帰属年度</label>
       <select name="payYear" onchange="this.form.submit()">
         <c:forEach var="y" items="${applyData.yearOptions}">
-          <option value="${y}" ${y eq applyData.payYear ? 'selected' : ''}>${y}년</option>
+          <option value="${y}" ${y eq applyData.payYear ? 'selected' : ''}>${y}年</option>
         </c:forEach>
       </select>
-      <label>월</label>
+      <label>月</label>
       <select name="payMonth" onchange="this.form.submit()">
         <c:forEach var="m" begin="1" end="12">
-          <option value="${m}" ${m eq applyData.payMonth ? 'selected' : ''}>${m}월</option>
+          <option value="${m}" ${m eq applyData.payMonth ? 'selected' : ''}>${m}月</option>
         </c:forEach>
       </select>
-      <label>차수</label>
+      <label>回数</label>
       <select name="paySeq" onchange="this.form.submit()">
         <c:forEach var="s" begin="1" end="5">
-          <option value="${s}" ${s eq applyData.paySeq ? 'selected' : ''}>급여-${s}</option>
+          <option value="${s}" ${s eq applyData.paySeq ? 'selected' : ''}>給与-${s}</option>
         </c:forEach>
       </select>
-      <label>이체양식</label>
+      <label>振込様式</label>
       <select name="formId" onchange="this.form.submit()">
         <c:if test="${empty applyData.forms}">
-          <option value="">양식 없음</option>
+          <option value="">様式なし</option>
         </c:if>
         <c:forEach var="f" items="${applyData.forms}">
           <option value="${f.formId}" ${f.formId eq applyData.selectedFormId ? 'selected' : ''}>${f.formName}</option>
@@ -150,7 +150,7 @@
   <div class="main-split">
     <div class="panel">
       <div class="panel-head">
-        <h3>이체양식 설정</h3>
+        <h3>振込様式設定</h3>
       </div>
       <div class="panel-body">
         <form id="formSaveForm" action="${pageContext.request.contextPath}/salary/transfer/form/save.do" method="post">
@@ -161,8 +161,8 @@
           <div id="itemHiddenFields"></div>
 
           <div class="form-row">
-            <label>양식명</label>
-            <input type="text" name="formName" id="formName" value="${applyData.selectedFormName}" maxlength="100" placeholder="예: 기본 이체양식">
+            <label>様式名</label>
+            <input type="text" name="formName" id="formName" value="${applyData.selectedFormName}" maxlength="100" placeholder="例: 基本振込様式">
           </div>
 
           <div class="item-tools">
@@ -171,14 +171,14 @@
                 <option value="${col.code}">${col.label}</option>
               </c:forEach>
             </select>
-            <button type="button" class="btn btn-outline btn-sm" onclick="addSelectedColumn()">추가</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="addSelectedColumn()">追加</button>
           </div>
 
           <ul class="selected-list" id="selectedList"></ul>
 
           <div class="form-actions">
-            <button type="button" class="btn btn-outline btn-sm" onclick="startNewForm()">신규</button>
-            <button type="submit" class="btn btn-primary btn-sm">양식 저장</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="startNewForm()">新規</button>
+            <button type="submit" class="btn btn-primary btn-sm">様式保存</button>
           </div>
         </form>
       </div>
@@ -186,14 +186,14 @@
 
     <div class="panel">
       <div class="panel-head">
-        <h3>이체 대상 목록</h3>
-        <span style="font-size:12px;color:#64748b;">${applyData.rows.size()}명</span>
+        <h3>振込対象一覧</h3>
+        <span style="font-size:12px;color:#64748b;">${applyData.rows.size()}名</span>
       </div>
       <div class="panel-body">
         <div class="table-wrap">
           <c:choose>
             <c:when test="${empty applyData.rows}">
-              <div class="empty-msg">해당 연월·차수의 급여 대상이 없습니다.</div>
+              <div class="empty-msg">該当年月・回数の給与対象がありません。</div>
             </c:when>
             <c:otherwise>
               <table class="list-table">
@@ -220,7 +220,7 @@
                     <c:forEach var="col" items="${applyData.visibleColumns}" varStatus="st">
                       <td>
                         <c:choose>
-                          <c:when test="${st.first}">합계</c:when>
+                          <c:when test="${st.first}">合計</c:when>
                           <c:when test="${col.code eq 'TOTAL_PAY'}"><span class="amount-pay"><fmt:formatNumber value="${applyData.sumTotalPay}" pattern="#,###"/></span></c:when>
                           <c:when test="${col.code eq 'TOTAL_DEDUCT'}"><span class="amount-deduct"><fmt:formatNumber value="${applyData.sumTotalDeduct}" pattern="#,###"/></span></c:when>
                           <c:when test="${col.code eq 'NET_PAY'}"><span class="amount-pay"><fmt:formatNumber value="${applyData.sumNetPay}" pattern="#,###"/></span></c:when>
@@ -237,12 +237,12 @@
 
         <div class="execute-bar">
           <form action="${pageContext.request.contextPath}/salary/transfer/execute.do" method="post"
-                onsubmit="return confirm('선택한 귀속연월·차수 대상으로 급여이체를 실행할까요?');">
+                onsubmit="return confirm('選択した帰属年月・回数の対象で給与振込を実行しますか？');">
             <input type="hidden" name="payYear" value="${applyData.payYear}">
             <input type="hidden" name="payMonth" value="${applyData.payMonth}">
             <input type="hidden" name="paySeq" value="${applyData.paySeq}">
             <input type="hidden" name="formId" value="${applyData.selectedFormId}">
-            <button type="submit" class="btn btn-danger" ${empty applyData.rows ? 'disabled' : ''}>급여이체하기</button>
+            <button type="submit" class="btn btn-danger" ${empty applyData.rows ? 'disabled' : ''}>給与振込する</button>
           </form>
         </div>
       </div>
@@ -278,7 +278,7 @@
         '<span class="ops">' +
         '<button type="button" class="btn btn-outline btn-sm" onclick="moveItem(' + index + ', -1)">▲</button>' +
         '<button type="button" class="btn btn-outline btn-sm" onclick="moveItem(' + index + ', 1)">▼</button>' +
-        '<button type="button" class="btn btn-outline btn-sm" onclick="removeItem(' + index + ')">삭제</button>' +
+        '<button type="button" class="btn btn-outline btn-sm" onclick="removeItem(' + index + ')">削除</button>' +
         '</span>';
       list.appendChild(li);
 
@@ -295,7 +295,7 @@
     const code = select.value;
     if (!code) return;
     if (selectedCodes.indexOf(code) >= 0) {
-      alert('이미 추가된 항목입니다.');
+      alert('すでに追加された項目です。');
       return;
     }
     selectedCodes.push(code);
@@ -325,12 +325,12 @@
 
   document.getElementById('formSaveForm').addEventListener('submit', function (e) {
     if (!document.getElementById('formName').value.trim()) {
-      alert('양식명을 입력하세요.');
+      alert('様式名を入力してください。');
       e.preventDefault();
       return;
     }
     if (selectedCodes.length === 0) {
-      alert('표시할 항목을 1개 이상 추가하세요.');
+      alert('表示する項目を1つ以上追加してください。');
       e.preventDefault();
     }
   });
