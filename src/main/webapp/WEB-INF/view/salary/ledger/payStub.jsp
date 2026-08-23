@@ -4,10 +4,10 @@
 <%@ taglib prefix="layout" tagdir="/WEB-INF/tags" %>
 
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>급여명세서</title>
+  <title>給与明細書</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
   <style>
     :root {
@@ -145,34 +145,34 @@
 
 <div class="container">
   <div class="page-header">
-    <h2>급여명세서</h2>
-    <p>귀속연월별 사원 급여명세서를 조회할 수 있습니다.</p>
+    <h2>給与明細書</h2>
+    <p>帰属年月別の社員給与明細書を照会できます。</p>
   </div>
 
   <form id="filterForm" action="${pageContext.request.contextPath}/salary/payslip.do" method="get">
     <input type="hidden" name="searchKeyword" id="hiddenSearchKeyword" value="${payStubData.searchKeyword}">
     <input type="hidden" name="salaryId" id="hiddenSalaryId" value="${payStubData.selectedSalaryId}">
     <div class="filter-bar">
-      <label>귀속연월</label>
+      <label>帰属年月</label>
       <select name="payYear" onchange="submitFilter()">
         <c:forEach var="y" begin="2024" end="2027">
-          <option value="${y}" ${y eq payStubData.payYear ? 'selected' : ''}>${y}년</option>
+          <option value="${y}" ${y eq payStubData.payYear ? 'selected' : ''}>${y}年</option>
         </c:forEach>
       </select>
       <select name="payMonth" onchange="submitFilter()">
         <c:forEach var="m" begin="1" end="12">
-          <option value="${m}" ${m eq payStubData.payMonth ? 'selected' : ''}>${m}월</option>
+          <option value="${m}" ${m eq payStubData.payMonth ? 'selected' : ''}>${m}月</option>
         </c:forEach>
       </select>
-      <label>급여차수</label>
+      <label>給与回数</label>
       <select name="paySeq" onchange="submitFilter()">
-        <option value="1" ${payStubData.paySeq eq 1 ? 'selected' : ''}>급여-01</option>
-        <option value="2" ${payStubData.paySeq eq 2 ? 'selected' : ''}>급여-02</option>
+        <option value="1" ${payStubData.paySeq eq 1 ? 'selected' : ''}>給与-01</option>
+        <option value="2" ${payStubData.paySeq eq 2 ? 'selected' : ''}>給与-02</option>
       </select>
       <c:if test="${not empty payStubData.startDate}">
         <span class="filter-info">
-          정산기간: <strong>${payStubData.startDate} ~ ${payStubData.endDate}</strong> &nbsp;|&nbsp;
-          급여지급일: <strong>${payStubData.payDate}</strong>
+          精算期間: <strong>${payStubData.startDate} ~ ${payStubData.endDate}</strong> &nbsp;|&nbsp;
+          給与支給日: <strong>${payStubData.payDate}</strong>
         </span>
       </c:if>
     </div>
@@ -182,22 +182,22 @@
     <!-- 좌측: 사원 목록 -->
     <div class="panel">
       <div class="panel-head">
-        <h3>급여 대상 사원</h3>
-        <span style="font-size:12px;color:#64748b;">${payStubData.rows.size()}건</span>
+        <h3>給与対象社員</h3>
+        <span style="font-size:12px;color:#64748b;">${payStubData.rows.size()}件</span>
       </div>
       <div class="panel-body">
         <div class="search-bar">
-          <input type="text" id="searchKeyword" placeholder="검색어 입력 (구분, 성명)"
+          <input type="text" id="searchKeyword" placeholder="検索語入力（区分、氏名）"
                  value="${payStubData.searchKeyword}">
-          <button type="button" class="btn btn-primary btn-sm" onclick="searchRows()">검색</button>
-          <button type="button" class="btn btn-outline btn-sm" onclick="showAll()">전체보기</button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="searchRows()">検索</button>
+          <button type="button" class="btn btn-outline btn-sm" onclick="showAll()">全体表示</button>
         </div>
         <table class="list-table">
           <thead>
             <tr>
-              <th>구분</th>
-              <th>성명</th>
-              <th>실지급액</th>
+              <th>区分</th>
+              <th>氏名</th>
+              <th>実支給額</th>
             </tr>
           </thead>
           <tbody>
@@ -210,7 +210,7 @@
               </tr>
             </c:forEach>
             <c:if test="${empty payStubData.rows}">
-              <tr><td colspan="3" class="empty-msg">등록된 급여 대상 사원이 없습니다.</td></tr>
+              <tr><td colspan="3" class="empty-msg">登録された給与対象社員がいません。</td></tr>
             </c:if>
           </tbody>
         </table>
@@ -220,33 +220,33 @@
     <!-- 우측: 급여명세서 미리보기 -->
     <div class="panel">
       <div class="panel-head">
-        <h3>급여명세서 미리보기</h3>
+        <h3>給与明細書プレビュー</h3>
       </div>
       <div class="panel-body">
         <c:choose>
           <c:when test="${not empty payStubData.form}">
             <div class="payslip-doc">
               <h3 class="payslip-title">
-                ${payStubData.payYear}년 <fmt:formatNumber value="${payStubData.payMonth}" minIntegerDigits="2"/>월 급여명세서
+                ${payStubData.payYear}年 <fmt:formatNumber value="${payStubData.payMonth}" minIntegerDigits="2"/>月 給与明細書
               </h3>
 
               <table class="emp-info-table">
                 <tr>
-                  <th>성명</th>
+                  <th>氏名</th>
                   <td>${payStubData.form.nameKor}</td>
-                  <th>생년월일</th>
+                  <th>生年月日</th>
                   <td>${payStubData.form.birthDate}</td>
                 </tr>
                 <tr>
-                  <th>부서</th>
+                  <th>部署</th>
                   <td>${payStubData.form.deptName}</td>
-                  <th>직급</th>
+                  <th>役職</th>
                   <td>${payStubData.form.positionName}</td>
                 </tr>
                 <tr>
-                  <th>입사일</th>
+                  <th>入社日</th>
                   <td>${payStubData.form.hireDate}</td>
-                  <th>급여지급일</th>
+                  <th>給与支給日</th>
                   <td>${payStubData.form.payDate}</td>
                 </tr>
               </table>
@@ -255,9 +255,9 @@
                 <thead>
                   <tr>
                     <th class="col-section"></th>
-                    <th class="col-item">항목명</th>
-                    <th class="col-amount">금액</th>
-                    <th class="col-calc">산출식 또는 산출방법</th>
+                    <th class="col-item">項目名</th>
+                    <th class="col-amount">金額</th>
+                    <th class="col-calc">算定式または算定方法</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -265,7 +265,7 @@
                   <c:forEach var="line" items="${payStubData.form.paySectionLines}" varStatus="paySt">
                     <tr>
                       <c:if test="${paySt.first}">
-                        <td rowspan="${payRowCount}" class="col-section pay">지급항목</td>
+                        <td rowspan="${payRowCount}" class="col-section pay">支給項目</td>
                       </c:if>
                       <td class="col-item">${line.payItemName}</td>
                       <td class="col-amount">
@@ -277,8 +277,8 @@
                     </tr>
                   </c:forEach>
                   <tr class="summary-row">
-                    <td class="col-item">합계</td>
-                    <td class="col-amount"><fmt:formatNumber value="${payStubData.form.totalPay}" pattern="#,###"/> 원</td>
+                    <td class="col-item">合計</td>
+                    <td class="col-amount"><fmt:formatNumber value="${payStubData.form.totalPay}" pattern="#,###"/> 円</td>
                     <td class="col-calc"></td>
                   </tr>
 
@@ -286,7 +286,7 @@
                   <c:forEach var="line" items="${payStubData.form.deductSectionLines}" varStatus="deductSt">
                     <tr>
                       <c:if test="${deductSt.first}">
-                        <td rowspan="${deductRowCount}" class="col-section deduct">공제항목</td>
+                        <td rowspan="${deductRowCount}" class="col-section deduct">控除項目</td>
                       </c:if>
                       <td class="col-item">${line.deductItemName}</td>
                       <td class="col-amount">
@@ -298,25 +298,25 @@
                     </tr>
                   </c:forEach>
                   <tr class="summary-row">
-                    <td class="col-item">합계</td>
-                    <td class="col-amount"><fmt:formatNumber value="${payStubData.form.totalDeduct}" pattern="#,###"/> 원</td>
+                    <td class="col-item">合計</td>
+                    <td class="col-amount"><fmt:formatNumber value="${payStubData.form.totalDeduct}" pattern="#,###"/> 円</td>
                     <td class="col-calc"></td>
                   </tr>
 
                   <tr class="net-pay-row">
                     <td class="col-section"></td>
-                    <td class="col-item">실수령액</td>
-                    <td class="col-amount"><fmt:formatNumber value="${payStubData.form.netPay}" pattern="#,###"/> 원</td>
+                    <td class="col-item">実受取額</td>
+                    <td class="col-amount"><fmt:formatNumber value="${payStubData.form.netPay}" pattern="#,###"/> 円</td>
                     <td class="col-calc"></td>
                   </tr>
                 </tbody>
               </table>
 
-              <p class="payslip-footer">귀하의 노고에 감사드리며, 수고 많으셨습니다.</p>
+              <p class="payslip-footer">日頃のご尽力に感謝いたします。お疲れさまでした。</p>
             </div>
           </c:when>
           <c:otherwise>
-            <div class="empty-msg">좌측에서 사원을 선택하면 급여명세서가 표시됩니다.</div>
+            <div class="empty-msg">左側で社員を選択すると給与明細書が表示されます。</div>
           </c:otherwise>
         </c:choose>
       </div>

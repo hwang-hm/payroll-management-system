@@ -4,10 +4,10 @@
 <%@ taglib prefix="layout" tagdir="/WEB-INF/tags" %>
 
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>급여대장</title>
+  <title>給与台帳</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
   <style>
     :root {
@@ -76,40 +76,40 @@
 
 <div class="container">
   <div class="page-header">
-    <h2>급여대장</h2>
-    <p>귀속연월·차수별 급여 현황을 조회할 수 있습니다.</p>
+    <h2>給与台帳</h2>
+    <p>帰属年月・回数別の給与状況を照会できます。</p>
   </div>
 
   <form id="filterForm" action="${pageContext.request.contextPath}/salary/ledger.do" method="get">
     <div class="filter-bar">
-      <label>귀속연도</label>
+      <label>帰属年度</label>
       <select name="payYear" onchange="this.form.submit()">
         <c:forEach var="y" items="${ledgerData.yearOptions}">
-          <option value="${y}" ${y eq ledgerData.payYear ? 'selected' : ''}>${y} 년</option>
+          <option value="${y}" ${y eq ledgerData.payYear ? 'selected' : ''}>${y} 年</option>
         </c:forEach>
       </select>
-      <span class="filter-info">귀속연도를 선택하면 해당 연도의 급여대장 목록을 확인할 수 있습니다.</span>
+      <span class="filter-info">帰属年度を選択すると、該当年度の給与台帳一覧を確認できます。</span>
     </div>
   </form>
 
   <div class="panel">
     <div class="panel-head">
-      <h3>급여대장 목록</h3>
-      <span style="font-size:12px;color:#64748b;">${ledgerData.rows.size()}건</span>
+      <h3>給与台帳一覧</h3>
+      <span style="font-size:12px;color:#64748b;">${ledgerData.rows.size()}件</span>
     </div>
     <div class="panel-body">
       <table class="list-table">
         <thead>
           <tr>
-            <th>귀속연월</th>
-            <th>급여차수</th>
-            <th>정산기간</th>
-            <th>지급일</th>
-            <th>인원</th>
-            <th>지급총액</th>
-            <th>공제총액</th>
-            <th>실지급액</th>
-            <th>삭제</th>
+            <th>帰属年月</th>
+            <th>給与回数</th>
+            <th>精算期間</th>
+            <th>支給日</th>
+            <th>人数</th>
+            <th>支給総額</th>
+            <th>控除総額</th>
+            <th>実支給額</th>
+            <th>削除</th>
           </tr>
         </thead>
         <tbody>
@@ -119,7 +119,7 @@
                 ${row.payYear}-<fmt:formatNumber value="${row.payMonth}" minIntegerDigits="2"/>
               </td>
               <td>
-                급여-<fmt:formatNumber value="${row.paySeq}" minIntegerDigits="2"/>차
+                給与-<fmt:formatNumber value="${row.paySeq}" minIntegerDigits="2"/>回
               </td>
               <td>${row.startDate} ~ ${row.endDate}</td>
               <td>${row.payDate}</td>
@@ -130,22 +130,22 @@
               <td>
                 <form action="${pageContext.request.contextPath}/salary/ledger/delete.do" method="post"
                       style="display:inline;margin:0;"
-                      onsubmit="return confirm('해당 귀속년월·차수의 급여를 모두 삭제할까요?');">
+                      onsubmit="return confirm('該当帰属年月・回数の給与をすべて削除しますか？');">
                   <input type="hidden" name="salaryDateId" value="${row.salaryDateId}">
                   <input type="hidden" name="payYear" value="${ledgerData.payYear}">
-                  <button type="submit" class="btn btn-danger btn-sm">삭제</button>
+                  <button type="submit" class="btn btn-danger btn-sm">削除</button>
                 </form>
               </td>
             </tr>
           </c:forEach>
           <c:if test="${empty ledgerData.rows}">
-            <tr><td colspan="9" class="empty-msg">해당 연도에 등록된 급여 대장이 없습니다.</td></tr>
+            <tr><td colspan="9" class="empty-msg">該当年度に登録された給与台帳がありません。</td></tr>
           </c:if>
         </tbody>
         <c:if test="${not empty ledgerData.rows}">
           <tfoot>
             <tr>
-              <td>합계</td>
+              <td>合計</td>
               <td></td>
               <td></td>
               <td></td>
