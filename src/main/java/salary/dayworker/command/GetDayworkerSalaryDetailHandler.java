@@ -1,98 +1,113 @@
 package salary.dayworker.command;
 
 import java.io.PrintWriter;
-import java.sql.Connection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import jdbc.JdbcUtil;
-import jdbc.connection.ConnectionProvider;
 import mvc.command.CommandHandler;
-import salary.dayworker.dao.SalaryDao;
-import salary.dayworker.dao.SalaryDateDao;
-import salary.dayworker.dao.SalaryDetailDao;
-import salary.dayworker.dao.SalaryItemDao;
+import salary.dayworker.service.GetDayworkerSalaryDetailService;
+import salary.dayworker.service.request.SalaryDetailResult;
 import salary.model.Salary;
-import salary.model.SalaryDate;
 import salary.model.SalaryDetail;
 import salary.model.SalaryItem;
 
+/**
+ * 일용직 급여 상세 내역 조회 핸들러 (AJAX/JSON 응답)
+ * 日雇い給与詳細履歴照会ハンドラー (AJAX/JSONレスポンス)
+ */
 public class GetDayworkerSalaryDetailHandler implements CommandHandler {
 
-	private SalaryDateDao salaryDateDao = new SalaryDateDao();
-	private SalaryDao salaryDao = new SalaryDao();
-	private SalaryDetailDao salaryDetailDao = new SalaryDetailDao();
-	private SalaryItemDao salaryItemDao = new SalaryItemDao();
+	// 비즈니스 서비스 객체 생성 / ビジネスサービスオブジェクトの生成
+	private GetDayworkerSalaryDetailService detailService = new GetDayworkerSalaryDetailService();
 
 	@Override
 	public String process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		res.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = res.getWriter();
 
-		Connection conn = null;
 		try {
-			conn = ConnectionProvider.getConnection();
-
+			// 1. 요청 파라미터 파싱 / リクエストパラメータのパース
 			int empId = Integer.parseInt(req.getParameter("empId"));
 			int year = Integer.parseInt(req.getParameter("payYear"));
 			int month = Integer.parseInt(req.getParameter("payMonth"));
 			int seq = Integer.parseInt(req.getParameter("paySeq"));
 
-			SalaryDate salaryDate = salaryDateDao.selectByYearMonthSeq(conn, year, month, seq);
-			Salary salary = null;
-			if (salaryDate != null) {
-				salary = salaryDao.selectByDateAndEmp(conn, salaryDate.getSalaryDateId(), empId);
-			}
+			// 2. 서비스 호출 (비즈니스 로직 및 DB 처리 위임)
+			// 2. サービス呼び出し (ビジネスロジックおよびDB処理の委任)
+			SalaryDetailResult result = detailService.getSalaryDetail(empId, year, month, seq);
 
-			StringBuilder json = new StringBuilder();
-			json.append("{");
-
-			if (salary != null) {
-				// 1. 기존에 저장된 salary_detail 데이터가 있는 경우
-				List<SalaryDetail> details = salaryDetailDao.selectBySalaryId(conn, salary.getSalaryId());
-				json.append("\"isSaved\": true,");
-				json.append("\"totalPay\": ").append(salary.getTotalPay()).append(",");
-				json.append("\"totalDeduct\": ").append(salary.getTotalDeduct()).append(",");
-				json.append("\"netPay\": ").append(salary.getNetPay()).append(",");
-				json.append("\"items\": [");
-				for (int i = 0; i < details.size(); i++) {
-					SalaryDetail d = details.get(i);
-					json.append("{").append("\"salaryItemId\": ").append(d.getSalaryItemId()).append(",")
-							.append("\"itemType\": \"").append(d.getItemType()).append("\",").append("\"itemName\": \"")
-							.append(d.getItemName()).append("\",").append("\"taxYn\": \"").append(d.getTaxYn())
-							.append("\",").append("\"amount\": ").append(d.getAmount()).append(",")
-							.append("\"memo\": \"").append(d.getMemo() != null ? d.getMemo() : "").append("\"")
-							.append("}").append(i < details.size() - 1 ? "," : "");
-				}
-				json.append("]");
-			} else {
-				// 2. 저장된 데이터가 없는 경우 -> salary_item의 active 공제 항목 반환
-				List<SalaryItem> activeItems = salaryItemDao.selectActiveDeductionItems(conn);
-				json.append("\"isSaved\": false,");
-				json.append("\"items\": [");
-				for (int i = 0; i < activeItems.size(); i++) {
-					SalaryItem item = activeItems.get(i);
-					json.append("{").append("\"salaryItemId\": ").append(item.getSalaryItemId()).append(",")
-							.append("\"itemType\": \"DEDUCT\",").append("\"itemName\": \"").append(item.getItemName())
-							.append("\",").append("\"taxYn\": \"").append(item.getTaxYn()).append("\",")
-							.append("\"amount\": 0,").append("\"memo\": \"\"").append("}")
-							.append(i < activeItems.size() - 1 ? "," : "");
-				}
-				json.append("]");
-			}
-
-			json.append("}");
-			out.print(json.toString());
+			// 3. JSON 응답 생성 / JSONレスポンスの生成
+			String jsonResponse = buildJsonResponse(result);
+			out.print(jsonResponse);
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			out.print("{\"error\": \"" + e.getMessage() + "\"}");
-		} finally {
-			JdbcUtil.close(conn);
+			// 예외 발생 시 에러 JSON 응답 / 例外発生時エラーJSONレスポンス
+			String errMsg = e.getMessage() != null ? escapeJson(e.getMessage()) : "서버 오류 발생 / サーバーエラー発生";
+			out.print("{\"error\": \"" + errMsg + "\"}");
 		}
 
 		return null;
+	}
+
+	// Service 결과 DTO를 JSON 문자열로 변환하는 유틸 메서드
+	// Service結果DTOをJSON文字列に変換するユーティリティメソッド
+	private String buildJsonResponse(SalaryDetailResult result) {
+		StringBuilder json = new StringBuilder();
+		json.append("{");
+
+		if (result.isSaved()) {
+			// 1. 기존 데이터가 존재하는 경우 / 既存データが存在する場合
+			Salary salary = result.getSalary();
+			List<SalaryDetail> details = result.getDetails();
+
+			json.append("\"isSaved\": true,");
+			json.append("\"totalPay\": ").append(salary.getTotalPay()).append(",");
+			json.append("\"totalDeduct\": ").append(salary.getTotalDeduct()).append(",");
+			json.append("\"netPay\": ").append(salary.getNetPay()).append(",");
+			json.append("\"items\": [");
+			for (int i = 0; i < details.size(); i++) {
+				SalaryDetail d = details.get(i);
+				json.append("{")
+						.append("\"salaryItemId\": ").append(d.getSalaryItemId()).append(",")
+						.append("\"itemType\": \"").append(d.getItemType()).append("\",")
+						.append("\"itemName\": \"").append(escapeJson(d.getItemName())).append("\",")
+						.append("\"taxYn\": \"").append(d.getTaxYn()).append("\",")
+						.append("\"amount\": ").append(d.getAmount()).append(",")
+						.append("\"memo\": \"").append(d.getMemo() != null ? escapeJson(d.getMemo()) : "").append("\"")
+						.append("}").append(i < details.size() - 1 ? "," : "");
+			}
+			json.append("]");
+		} else {
+			// 2. 기존 데이터가 없어 기본 공제 항목을 반환하는 경우
+			// 2. 既存データがなく基本控除項目を返却する場合
+			List<SalaryItem> activeItems = result.getActiveDeductionItems();
+
+			json.append("\"isSaved\": false,");
+			json.append("\"items\": [");
+			for (int i = 0; i < activeItems.size(); i++) {
+				SalaryItem item = activeItems.get(i);
+				json.append("{")
+						.append("\"salaryItemId\": ").append(item.getSalaryItemId()).append(",")
+						.append("\"itemType\": \"DEDUCT\",")
+						.append("\"itemName\": \"").append(escapeJson(item.getItemName())).append("\",")
+						.append("\"taxYn\": \"").append(item.getTaxYn()).append("\",")
+						.append("\"amount\": 0,")
+						.append("\"memo\": \"\"")
+						.append("}").append(i < activeItems.size() - 1 ? "," : "");
+			}
+			json.append("]");
+		}
+
+		json.append("}");
+		return json.toString();
+	}
+
+	// JSON 특수문자 이스케이프 유틸 / JSON特殊文字エスケープユーティリティ
+	private String escapeJson(String input) {
+		if (input == null) return "";
+		return input.replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "\\r");
 	}
 }

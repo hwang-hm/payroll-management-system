@@ -12,6 +12,10 @@ import salary.dayworker.service.GetSalaryDateService;
 import salary.dayworker.service.SaveSalaryDateService;
 import salary.model.SalaryDate;
 
+/**
+ * 급여 정산일자 조회 및 저장을 처리하는 핸들러 클래스 (AJAX JSON 직접 응답 방식)
+ * 給与精算日時の照会および保存を処理するハンドラークラス (AJAX JSON直接レスポンス方式)
+ */
 public class SalaryDateHandler implements CommandHandler {
 
 	private GetSalaryDateService getService = new GetSalaryDateService();
@@ -29,13 +33,14 @@ public class SalaryDateHandler implements CommandHandler {
 		}
 	}
 
-	// 1. GET 요청 : 정산일자 조회 (AJAX)
+	/**
+	 * 1. GET 요청 : 정산일자 조회 (AJAX) 1. GETリクエスト : 精算日時の照会 (AJAX)
+	 */
 	private String processForm(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		res.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = res.getWriter();
 
 		try {
-			// belongYear / payYear 둘 다 수용 가능하도록 처리
 			String yearStr = req.getParameter("payYear");
 			String monthStr = req.getParameter("payMonth");
 			String seqStr = req.getParameter("paySeq");
@@ -72,7 +77,9 @@ public class SalaryDateHandler implements CommandHandler {
 		return null;
 	}
 
-	// 2. POST 요청 : 정산일자 저장 및 수정 (AJAX)
+	/**
+	 * 2. POST 요청 : 정산일자 저장 및 수정 (AJAX) 2. POSTリクエスト : 精算日時の保存および更新 (AJAX)
+	 */
 	private String processSubmit(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		res.setContentType("application/json; charset=UTF-8");
 		PrintWriter out = res.getWriter();
@@ -87,9 +94,10 @@ public class SalaryDateHandler implements CommandHandler {
 			String payDateStr = req.getParameter("payDate");
 
 			// 필수 입력값 검증
+			// 必須入力項目の検証
 			if (isEmpty(yearStr) || isEmpty(monthStr) || isEmpty(seqStr) || isEmpty(startDateStr) || isEmpty(endDateStr)
 					|| isEmpty(payDateStr)) {
-				out.print("{\"status\":\"error\", \"message\":\"모든 필드(귀속연월, 차수, 정산기간, 지급일)를 입력해주세요.\"}");
+				out.print("{\"status\":\"error\", \"message\":\"すべての項目(帰属年月、回数、精算期間、支給日)を入力してください。\"}");
 				return null;
 			}
 
@@ -110,6 +118,7 @@ public class SalaryDateHandler implements CommandHandler {
 			salaryDate.setPayDate(payDate);
 
 			// PK 값이 넘어왔다면 domain 객체에 세팅
+			// PK値が渡された場合はdomainオブジェクトにセット
 			if (!isEmpty(salaryDateIdStr)) {
 				salaryDate.setSalaryDateId(Integer.parseInt(salaryDateIdStr));
 			}
@@ -117,14 +126,14 @@ public class SalaryDateHandler implements CommandHandler {
 			boolean isSuccess = saveService.saveOrUpdate(salaryDate);
 
 			if (isSuccess) {
-				out.print("{\"status\":\"success\", \"message\":\"정산기간 및 급여지급일이 정상적으로 저장되었습니다.\"}");
+				out.print("{\"status\":\"success\", \"message\":\"精算期間および給与支給日が正常に保存されました。\"}");
 			} else {
-				out.print("{\"status\":\"fail\", \"message\":\"저장에 실패했습니다.\"}");
+				out.print("{\"status\":\"fail\", \"message\":\"保存に失敗しました。\"}");
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			out.print("{\"status\":\"error\", \"message\":\"서버 오류: " + e.getMessage() + "\"}");
+			out.print("{\"status\":\"error\", \"message\":\"サーバーエラー: " + e.getMessage() + "\"}");
 		}
 
 		return null;
