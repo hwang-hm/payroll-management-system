@@ -6,10 +6,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import salary.model.TransferHistory;
+import salary.util.SqlIn;
 
 public class TransferHistoryDao {
 
@@ -24,6 +28,25 @@ public class TransferHistoryDao {
 		}
 	}
 
+	// 이체 성공 이력이 있는 salary_id 집합
+	public Set<Integer> selectSuccessSalaryIds(Connection conn, List<Integer> salaryIds) throws SQLException {
+		if (salaryIds == null || salaryIds.isEmpty()) {
+			return Collections.emptySet();
+		}
+		String sql = "SELECT DISTINCT salary_id FROM transfer_history WHERE transfer_result = '성공' "
+				+ "AND salary_id IN (" + SqlIn.placeholders(salaryIds.size()) + ")";
+		Set<Integer> ids = new HashSet<>();
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			SqlIn.setInts(pstmt, 1, salaryIds);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				while (rs.next()) {
+					ids.add(rs.getInt("salary_id"));
+				}
+			}
+		}
+		return ids;
+	}
+
 	// 그 급여건에 이체 이력이 있는지 확인
 	public boolean existsBySalaryId(Connection conn, int salaryId) throws SQLException {
 		String sql = "SELECT 1 FROM transfer_history WHERE salary_id = ?";
@@ -35,36 +58,78 @@ public class TransferHistoryDao {
 		}
 	}
 
-	// 이체 한 건 이력 저장
-	public int insert(Connection conn, TransferHistory history) throws SQLException {
-		String seqSql = "SELECT seq_transfer_history.NEXTVAL FROM dual";
-		String insertSql = "INSERT INTO transfer_history (transfer_id, salary_id, transfer_date, withdraw_bank, "
-				+ "withdraw_account, deposit_bank, deposit_account, depositor_name, transfer_amount, "
-				+ "deposit_memo, transfer_result) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-		int transferId;
-		try (PreparedStatement seqPstmt = conn.prepareStatement(seqSql); ResultSet rs = seqPstmt.executeQuery()) {
-			if (!rs.next()) {
-				throw new SQLException("transfer_history 시퀀스 조회 실패");
-			}
-			transferId = rs.getInt(1);
+	// 이체 이력이 하나라도 있는 salary_id 집합
+	public Set<Integer> selectSalaryIdsHavingHistory(Connection conn, List<Integer> salaryIds) throws SQLException {
+		if (salaryIds == null || salaryIds.isEmpty()) {
+			return Collections.emptySet();
 		}
+		String sql = "SELECT DISTINCT salary_id FROM transfer_history WHERE salary_id IN ("
+				+ SqlIn.placeholders(salaryIds.size()) + ")";
+		Set<Integer> ids = new HashSet<>();
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			SqlIn.setInts(pstmt, 1, salaryIds);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				while (rs.next()) {
+					ids.add(rs.getInt("salary_id"));
+				}
+			}
+		}
+		return ids;
+	}
 
-		try (PreparedStatement pstmt = conn.prepareStatement(insertSql)) {
-			pstmt.setInt(1, transferId);
-			pstmt.setInt(2, history.getSalaryId());
-			pstmt.setTimestamp(3, toTimestamp(history.getTransferDate()));
-			pstmt.setString(4, history.getWithdrawBank());
-			pstmt.setString(5, history.getWithdrawAccount());
-			pstmt.setString(6, history.getDepositBank());
-			pstmt.setString(7, history.getDepositAccount());
-			pstmt.setString(8, history.getDepositorName());
-			pstmt.setLong(9, history.getTransferAmount());
-			pstmt.setString(10, history.getDepositMemo());
-			pstmt.setString(11, history.getTransferResult());
+	// 해당 salary들의 이체 이력 삭제
+	public void deleteBySalaryIds(Connection conn, List<Integer> salaryIds) throws SQLException {
+		if (salaryIds == null || salaryIds.isEmpty()) {
+			return;
+		}
+		String sql = "DELETE FROM transfer_history WHERE salary_id IN ("
+				+ SqlIn.placeholders(salaryIds.size()) + ")";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			SqlIn.setInts(pstmt, 1, salaryIds);
 			pstmt.executeUpdate();
 		}
-		return transferId;
+	}
+
+	// 이체 한 건 이력 저장
+	public int insert(Connection conn, TransferHistory history) throws SQLException {
+		String sql = "INSERT INTO transfer_history (transfer_id, salary_id, transfer_date, withdraw_bank, "
+				+ "withdraw_account, deposit_bank, deposit_account, depositor_name, transfer_amount, "
+				+ "deposit_memo, transfer_result) VALUES (seq_transfer_history.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			bindInsert(pstmt, history);
+			pstmt.executeUpdate();
+		}
+		return 0;
+	}
+
+	// 이체 이력 batch insert
+	public void insertBatch(Connection conn, List<TransferHistory> histories) throws SQLException {
+		if (histories == null || histories.isEmpty()) {
+			return;
+		}
+		String sql = "INSERT INTO transfer_history (transfer_id, salary_id, transfer_date, withdraw_bank, "
+				+ "withdraw_account, deposit_bank, deposit_account, depositor_name, transfer_amount, "
+				+ "deposit_memo, transfer_result) VALUES (seq_transfer_history.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			for (TransferHistory history : histories) {
+				bindInsert(pstmt, history);
+				pstmt.addBatch();
+			}
+			pstmt.executeBatch();
+		}
+	}
+
+	private void bindInsert(PreparedStatement pstmt, TransferHistory history) throws SQLException {
+		pstmt.setInt(1, history.getSalaryId());
+		pstmt.setTimestamp(2, toTimestamp(history.getTransferDate()));
+		pstmt.setString(3, history.getWithdrawBank());
+		pstmt.setString(4, history.getWithdrawAccount());
+		pstmt.setString(5, history.getDepositBank());
+		pstmt.setString(6, history.getDepositAccount());
+		pstmt.setString(7, history.getDepositorName());
+		pstmt.setLong(8, history.getTransferAmount());
+		pstmt.setString(9, history.getDepositMemo());
+		pstmt.setString(10, history.getTransferResult());
 	}
 
 	// 조회기간 안 이체건 몇 개인지. 페이지 계산용

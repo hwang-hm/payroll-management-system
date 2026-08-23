@@ -9,6 +9,7 @@ import jdbc.connection.ConnectionProvider;
 import salary.entry.dao.SalaryDao;
 import salary.entry.dao.SalaryDetailDao;
 import salary.model.SalaryDetail;
+import salary.util.SalaryTotals;
 
 public class SalarySaveDetailService {
 
@@ -22,14 +23,11 @@ public class SalarySaveDetailService {
 			conn = ConnectionProvider.getConnection();
 			conn.setAutoCommit(false);
 
-			for (int i = 0; i < detailIds.size(); i++) {
-				int detailId = detailIds.get(i);
-				long amount = amounts.get(i) != null ? amounts.get(i) : 0L;
-				String calcMethod = calcMethods.get(i);
-				salaryDetailDao.updateAmountAndCalcMethod(conn, detailId, amount, calcMethod);
-			}
+			salaryDetailDao.updateAmountAndCalcMethodBatch(conn, detailIds, amounts, calcMethods);
 
-			recalculateTotals(conn, salaryId);
+			List<SalaryDetail> details = salaryDetailDao.selectBySalaryId(conn, salaryId);
+			long[] totals = SalaryTotals.fromDetails(details);
+			salaryDao.updateTotals(conn, salaryId, totals[0], totals[1], totals[2]);
 			conn.commit();
 		} catch (SQLException e) {
 			JdbcUtil.rollback(conn);
@@ -37,20 +35,5 @@ public class SalarySaveDetailService {
 		} finally {
 			JdbcUtil.close(conn);
 		}
-	}
-
-	// 상세 금액 다시 더해서 salary 한 줄의 지급/공제/실지급 맞춰줌
-	private void recalculateTotals(Connection conn, int salaryId) throws SQLException {
-		long totalPay = 0;
-		long totalDeduct = 0;
-		for (SalaryDetail detail : salaryDetailDao.selectBySalaryId(conn, salaryId)) {
-			long amount = detail.getAmount() != null ? detail.getAmount() : 0L;
-			if ("PAY".equals(detail.getItemType())) {
-				totalPay += amount;
-			} else {
-				totalDeduct += amount;
-			}
-		}
-		salaryDao.updateTotals(conn, salaryId, totalPay, totalDeduct, totalPay - totalDeduct);
 	}
 }

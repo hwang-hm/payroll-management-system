@@ -128,7 +128,13 @@
               <td class="amount-deduct"><fmt:formatNumber value="${row.totalDeduct}" pattern="#,###"/></td>
               <td><fmt:formatNumber value="${row.netPay}" pattern="#,###"/></td>
               <td>
-                <button type="button" class="btn btn-danger btn-sm">삭제</button>
+                <form action="${pageContext.request.contextPath}/salary/ledger/delete.do" method="post"
+                      style="display:inline;margin:0;"
+                      onsubmit="return confirm('해당 귀속년월·차수의 급여를 모두 삭제할까요?');">
+                  <input type="hidden" name="salaryDateId" value="${row.salaryDateId}">
+                  <input type="hidden" name="payYear" value="${ledgerData.payYear}">
+                  <button type="submit" class="btn btn-danger btn-sm">삭제</button>
+                </form>
               </td>
             </tr>
           </c:forEach>

@@ -2,6 +2,7 @@ package salary.entry.service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import salary.model.Salary;
 import salary.model.SalaryDetail;
 import salary.util.SalaryAutoCalcRates;
 import salary.util.SalaryAutoCalcRates.DeductionAmounts;
+import salary.util.SalaryTotals;
 
 // 선택 사원 급여상세의 공제 6종을 가라 요율로 자동 계산
 public class SalaryAutoCalcService {
@@ -55,17 +57,27 @@ public class SalaryAutoCalcService {
 			DeductionAmounts amounts = SalaryAutoCalcRates.calc(baseAmount, np, hi, lt, ei);
 			Map<String, Long> amountMap = SalaryAutoCalcRates.toAmountMap(amounts);
 
+			List<Integer> detailIds = new ArrayList<>();
+			List<Long> amountList = new ArrayList<>();
+			List<String> calcMethods = new ArrayList<>();
+
 			for (SalaryDetail detail : details) {
 				String itemName = detail.getItemName();
 				if (!amountMap.containsKey(itemName)) {
 					continue;
 				}
 				long amount = amountMap.get(itemName);
-				salaryDetailDao.updateAmountAndCalcMethod(conn, detail.getDetailId(), amount, null);
+				detail.setAmount(amount);
+				detail.setCalcMethod(null);
+				detailIds.add(detail.getDetailId());
+				amountList.add(amount);
+				calcMethods.add(null);
 				updated.put(detail.getDetailId(), amount);
 			}
 
-			recalculateTotals(conn, salaryId);
+			salaryDetailDao.updateAmountAndCalcMethodBatch(conn, detailIds, amountList, calcMethods);
+			long[] totals = SalaryTotals.fromDetails(details);
+			salaryDao.updateTotals(conn, salaryId, totals[0], totals[1], totals[2]);
 			conn.commit();
 			return updated;
 		} catch (SQLException e) {
@@ -87,19 +99,5 @@ public class SalaryAutoCalcService {
 
 	private boolean isYn(String value) {
 		return "Y".equalsIgnoreCase(value);
-	}
-
-	private void recalculateTotals(Connection conn, int salaryId) throws SQLException {
-		long totalPay = 0;
-		long totalDeduct = 0;
-		for (SalaryDetail detail : salaryDetailDao.selectBySalaryId(conn, salaryId)) {
-			long amount = detail.getAmount() != null ? detail.getAmount() : 0L;
-			if ("PAY".equals(detail.getItemType())) {
-				totalPay += amount;
-			} else {
-				totalDeduct += amount;
-			}
-		}
-		salaryDao.updateTotals(conn, salaryId, totalPay, totalDeduct, totalPay - totalDeduct);
 	}
 }

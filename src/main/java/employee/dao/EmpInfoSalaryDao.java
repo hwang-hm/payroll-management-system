@@ -6,6 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import employee.model.EmpInfoSalary;
 import jdbc.JdbcUtil;
@@ -187,6 +190,39 @@ public class EmpInfoSalaryDao {
 			JdbcUtil.close(pstmt);
 		}
 	 }
+
+	// 여러 사원 급여정보 일괄 조회
+	public Map<Integer, EmpInfoSalary> selectByEmpIds(Connection conn, List<Integer> empIds) throws SQLException {
+		Map<Integer, EmpInfoSalary> map = new HashMap<>();
+		if (empIds == null || empIds.isEmpty()) {
+			return map;
+		}
+		StringBuilder sql = new StringBuilder("SELECT * FROM employee_information_salary WHERE emp_id IN (");
+		for (int i = 0; i < empIds.size(); i++) {
+			if (i > 0) {
+				sql.append(',');
+			}
+			sql.append('?');
+		}
+		sql.append(')');
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = conn.prepareStatement(sql.toString());
+			for (int i = 0; i < empIds.size(); i++) {
+				pstmt.setInt(i + 1, empIds.get(i));
+			}
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				EmpInfoSalary info = convertEmpInfoSalary(rs);
+				map.put(info.getEmpId(), info);
+			}
+			return map;
+		} finally {
+			JdbcUtil.close(rs);
+			JdbcUtil.close(pstmt);
+		}
+	}
     
 		// ResultSet 객체를 EmpInfoSalary로 변환
 		private EmpInfoSalary convertEmpInfoSalary(ResultSet rs) throws SQLException {

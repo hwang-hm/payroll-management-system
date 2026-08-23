@@ -41,19 +41,31 @@ public class SalaryDateDao {
 		}
 	}
 
-	// 정산기간/지급일이랑 같이 salary_date 새로 넣음
-	public void insert(Connection conn, SalaryDate salaryDate) throws SQLException {
+	// 정산기간/지급일이랑 같이 salary_date 새로 넣음. 생성된 id를 salaryDate에 세팅
+	public int insert(Connection conn, SalaryDate salaryDate) throws SQLException {
+		String seqSql = "SELECT seq_salary_date.NEXTVAL FROM dual";
+		int salaryDateId;
+		try (PreparedStatement seqPstmt = conn.prepareStatement(seqSql); ResultSet rs = seqPstmt.executeQuery()) {
+			if (!rs.next()) {
+				throw new SQLException("salary_date 시퀀스 조회 실패");
+			}
+			salaryDateId = rs.getInt(1);
+		}
+
 		String sql = "INSERT INTO salary_date (salary_date_id, pay_year, pay_month, pay_seq, start_date, end_date, pay_date) "
-				+ "VALUES (seq_salary_date.NEXTVAL, ?, ?, ?, ?, ?, ?)";
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setInt(1, salaryDate.getPayYear());
-			pstmt.setInt(2, salaryDate.getPayMonth());
-			pstmt.setInt(3, salaryDate.getPaySeq());
-			pstmt.setTimestamp(4, toTimestamp(salaryDate.getStartDate()));
-			pstmt.setTimestamp(5, toTimestamp(salaryDate.getEndDate()));
-			pstmt.setTimestamp(6, toTimestamp(salaryDate.getPayDate()));
+			pstmt.setInt(1, salaryDateId);
+			pstmt.setInt(2, salaryDate.getPayYear());
+			pstmt.setInt(3, salaryDate.getPayMonth());
+			pstmt.setInt(4, salaryDate.getPaySeq());
+			pstmt.setTimestamp(5, toTimestamp(salaryDate.getStartDate()));
+			pstmt.setTimestamp(6, toTimestamp(salaryDate.getEndDate()));
+			pstmt.setTimestamp(7, toTimestamp(salaryDate.getPayDate()));
 			pstmt.executeUpdate();
 		}
+		salaryDate.setSalaryDateId(salaryDateId);
+		return salaryDateId;
 	}
 
 	// 조회결과를 salary_date로 옮겨담기
