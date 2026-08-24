@@ -4,354 +4,32 @@
 <%@ taglib prefix="layout" tagdir="/WEB-INF/tags"%>
 
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>사원 등록 - 헥사곤존</title>
+<title>社員 登録 - ヘキサゴンゾーン</title>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/empRegister.css" />
 <style>
-:root { -
-	-primary-color: #2563eb; -
-	-primary-hover: #1d4ed8; -
-	-bg-gray: #f8fafc; -
-	-border-color: #e2e8f0; -
-	-text-main: #1e293b; -
-	-text-muted: #64748b;
-}
-
-body {
-	font-family: 'Pretendard Variable', Pretendard, sans-serif;
-	background-color: var(- -bg-gray);
-	color: var(- -text-main);
-	margin: 0;
-	padding: 0;
-}
-
-.container {
-	max-width: 1300px;
-	margin: 0 auto 60px auto;
-	padding: 0 20px;
-}
-
-/* Page Header */
-.page-header {
-	margin-bottom: 24px;
-	border-bottom: 2px solid var(- -border-color);
-	padding-bottom: 16px;
-}
-
-.page-header h2 {
-	font-size: 24px;
-	font-weight: 700;
-	color: var(- -text-main);
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	margin: 0 0 6px 0;
-}
-
-.page-header p {
-	margin: 0;
-	font-size: 13px;
-	color: var(- -text-muted);
-}
-
-.page-header .required-mark {
-	color: #ef4444;
-	font-weight: bold;
-}
-
-/* Layout Main Flex */
-.emp-layout {
-	display: flex;
-	gap: 24px;
-	align-items: flex-start;
-}
-
-/* Left Sidebar Navigation & Photo Profile */
-.side-panel {
-	width: 260px;
-	flex-shrink: 0;
-	position: sticky;
-	top: 20px;
-}
-
-.profile-card {
-	background: #ffffff;
-	border: 1px solid var(- -border-color);
-	border-radius: 12px;
-	padding: 20px;
-	text-align: center;
-	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-	margin-bottom: 20px;
-}
-
-.profile-img-box {
-	width: 120px;
-	height: 150px;
-	background-color: #f1f5f9;
-	border: 2px dashed #cbd5e1;
-	border-radius: 8px;
-	margin: 0 auto 12px auto;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	color: var(- -text-muted);
-	font-size: 12px;
-}
-
-.profile-btn-group {
-	display: flex;
-	gap: 6px;
-	justify-content: center;
-	margin-bottom: 12px;
-}
-
-.side-menu {
-	background: #ffffff;
-	border: 1px solid var(- -border-color);
-	border-radius: 12px;
-	overflow: hidden;
-	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-}
-
-.side-menu-title {
-	background: #f1f5f9;
-	padding: 12px 16px;
-	font-size: 13px;
-	font-weight: 700;
-	color: #475569;
-	border-bottom: 1px solid var(- -border-color);
-}
-
-.side-menu ul {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-}
-
-.side-menu li a {
-	display: block;
-	padding: 12px 16px;
-	font-size: 14px;
-	color: #334155;
-	text-decoration: none;
-	border-bottom: 1px solid #f1f5f9;
-	transition: all 0.2s ease;
-}
-
-.side-menu li a:hover {
-	background-color: #eff6ff;
-	color: var(- -primary-color);
-	font-weight: 600;
-}
-
-/* Right Main Content Form Section */
-.main-form-area {
-	flex-grow: 1;
-	display: flex;
-	flex-direction: column;
-	gap: 28px;
-}
-
-.form-section {
-	background: #ffffff;
-	border: 1px solid var(- -border-color);
-	border-radius: 12px;
-	padding: 24px;
-	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-}
-
-.section-head {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	border-bottom: 2px solid #f1f5f9;
-	padding-bottom: 12px;
-	margin-bottom: 20px;
-}
-
-.section-head h3 {
-	font-size: 17px;
-	font-weight: 700;
-	color: var(- -text-main);
-	margin: 0;
-	display: flex;
-	align-items: center;
-	gap: 8px;
-}
-
-/* Common Form Grid Table Design */
-.form-table {
-	width: 100%;
-	border-collapse: collapse;
-	font-size: 13px;
-}
-
-.form-table th {
-	background-color: #f8fafc;
-	width: 130px;
-	padding: 10px 12px;
-	text-align: left;
-	font-weight: 600;
-	color: #475569;
-	border: 1px solid var(- -border-color);
-}
-
-.form-table td {
-	padding: 8px 12px;
-	border: 1px solid var(- -border-color);
-}
-
-/* Inputs & Select Elements */
-input[type="text"], input[type="date"], input[type="number"], select,
-	textarea {
-	width: 100%;
-	padding: 7px 10px;
-	font-size: 13px;
-	border: 1px solid #cbd5e1;
-	border-radius: 6px;
-	box-sizing: border-box;
-	outline: none;
-	transition: border-color 0.2s ease;
-}
-
-input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
-	select:focus, textarea:focus {
-	border-color: var(- -primary-color);
-	box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-.inline-inputs {
-	display: flex;
-	gap: 6px;
-	align-items: center;
-}
-
-.radio-group, .check-group {
-	display: flex;
-	gap: 14px;
-	align-items: center;
-	flex-wrap: wrap;
-}
-
-.radio-group label, .check-group label {
-	cursor: pointer;
-	display: flex;
-	align-items: center;
-	gap: 4px;
-}
-
-/* Dynamic Data Tables */
-.data-table {
-	width: 100%;
-	border-collapse: collapse;
-	font-size: 13px;
-	text-align: center;
-}
-
-.data-table th {
-	background-color: #f1f5f9;
-	padding: 10px;
-	border: 1px solid var(- -border-color);
-	color: #334155;
-}
-
-.data-table td {
-	padding: 6px 8px;
-	border: 1px solid var(- -border-color);
-}
-
-/* Custom Buttons */
-.btn {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	padding: 7px 14px;
-	font-size: 13px;
-	font-weight: 600;
-	border-radius: 6px;
-	cursor: pointer;
-	border: none;
-	transition: all 0.2s ease;
-	text-decoration: none;
-}
-
-.btn-primary {
-	background-color: var(- -primary-color);
-	color: #fff;
-}
-
-.btn-primary:hover {
-	background-color: var(- -primary-hover);
-}
-
-.btn-secondary {
-	background-color: #64748b;
-	color: #fff;
-}
-
-.btn-secondary:hover {
-	background-color: #475569;
-}
-
-.btn-outline {
-	background-color: #fff;
-	border: 1px solid #cbd5e1;
-	color: #334155;
-}
-
-.btn-outline:hover {
-	background-color: #f1f5f9;
-}
-
-.btn-sm {
-	padding: 4px 8px;
-	font-size: 12px;
-}
-
-.success-message {
-	margin-bottom: 20px;
-	padding: 12px 16px;
-	border: 1px solid #bbf7d0;
-	background: #f0fdf4;
-	color: #166534;
-	border-radius: 8px;
-	font-size: 13px;
-	font-weight: 600;
-}
-
-/* Bottom Sticky Action Bar */
-.bottom-actions {
-	display: flex;
-	justify-content: center;
-	gap: 12px;
-	margin-top: 30px;
-	padding: 20px 0;
-}
 </style>
 </head>
 <body>
 
-	<!-- 헤더 태그 -->
 	<layout:headerNav />
 
 	<div class="container">
-		<!-- 페이지 상단 타투 및 설명 -->
+		<!-- 페이지 상단 제목 및 설명 / ページ上部タイトルおよび説明 -->
 		<div class="page-header">
-			<h2>👔 사원 등록</h2>
+			<h2>👔 社員 登録</h2>
 			<p>
-				신규 사원 정보를 등록하는 메뉴입니다. (<span class="required-mark">*</span> 표시는 필수
-				입력사항입니다)
+				新規社員情報を登録するメニューです。 (<span class="required-mark">*</span> は必須入力項目です)
 			</p>
 		</div>
 
 		<c:if test="${registerSuccess}">
-			<div class="success-message">사원 등록이 완료되었습니다. 사원번호: ${newEmpNo}
-			</div>
+			<div class="success-message">社員登録が完了しました。社員番号: ${newEmpNo}</div>
 		</c:if>
 
 		<form id="empForm"
@@ -359,85 +37,97 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 			method="post">
 			<div class="emp-layout">
 
-				<!-- 좌측 프로필 및 퀵 링크 패널 -->
+				<!-- 왼쪽 프로필 및 바로가기 패널 / 左側プロフィールおよびクイックリンクパネル -->
 				<div class="side-panel">
 					<div class="profile-card">
 						<div class="profile-img-box">
-							<span>📷</span> <span>사원사진을</span> <span>등록해주세요</span>
+							<span>📷</span> <span>社員写真を</span> <span>登録してください</span>
 						</div>
 						<div class="profile-btn-group">
-							<button type="button" class="btn btn-outline btn-sm">등록</button>
-							<button type="button" class="btn btn-outline btn-sm">삭제</button>
+							<button type="button" class="btn btn-outline btn-sm">登録</button>
+							<button type="button" class="btn btn-outline btn-sm">削除</button>
 						</div>
 						<button type="button" class="btn btn-outline btn-sm"
-							style="width: 100%;">인사기록카드 보기</button>
+							style="width: 100%;">人事記録カードを見る</button>
 					</div>
 
 					<div class="side-menu">
-						<div class="side-menu-title">바로가기 메뉴</div>
+						<div class="side-menu-title">ショートカットメニュー</div>
 						<ul>
-							<li><a href="#sec-basic">1. 기본정보</a></li>
-							<li><a href="#sec-salary">2. 급여</a></li>
-							<li><a href="#sec-insurance">3. 4대보험</a></li>
-							<li><a href="#sec-family">4. 부양가족</a></li>
-							<li><a href="#sec-edu">5. 학력</a></li>
-							<li><a href="#sec-career">6. 경력</a></li>
-							<li><a href="#sec-military">7. 병역</a></li>
-							<li><a href="#" onclick="return moveRegister2Section(event, 'sec-license');">8. 자격 면허</a></li>
-							<li><a href="#" onclick="return moveRegister2Section(event, 'sec-training');">9. 교육 훈련</a></li>
-							<li><a href="#" onclick="return moveRegister2Section(event, 'sec-reward');">10. 상벌</a></li>
-							<li><a href="#" onclick="return moveRegister2Section(event, 'sec-appointment');">11. 발령</a></li>
-							<li><a href="#" onclick="return moveRegister2Section(event, 'sec-guarantee');">12. 추천</a></li>
-							<li><a href="#" onclick="return moveRegister2Section(event, 'sec-retirement');">13. 퇴직</a></li>
+							<li><a href="#sec-basic">1. 基本情報</a></li>
+							<li><a href="#sec-salary">2. 給与</a></li>
+							<li><a href="#sec-insurance">3. 4大保険</a></li>
+							<li><a href="#sec-family">4. 扶養家族</a></li>
+							<li><a href="#sec-edu">5. 学歴</a></li>
+							<li><a href="#sec-career">6. 経歴</a></li>
+							<li><a href="#sec-military">7. 兵役</a></li>
+							<li><a href="#"
+								onclick="return moveRegister2Section(event, 'sec-license');">8.
+									資格・免許</a></li>
+							<li><a href="#"
+								onclick="return moveRegister2Section(event, 'sec-training');">9.
+									教育訓練</a></li>
+							<li><a href="#"
+								onclick="return moveRegister2Section(event, 'sec-reward');">10.
+									賞罰</a></li>
+							<li><a href="#"
+								onclick="return moveRegister2Section(event, 'sec-appointment');">11.
+									発令</a></li>
+							<li><a href="#"
+								onclick="return moveRegister2Section(event, 'sec-guarantee');">12.
+									推薦</a></li>
+							<li><a href="#"
+								onclick="return moveRegister2Section(event, 'sec-retirement');">13.
+									退職</a></li>
 						</ul>
 					</div>
 				</div>
 
-				<!-- 우측 입력 폼 영역 -->
+				<!-- 오른쪽 입력 폼 영역 / 右側入力フォーム領域 -->
 				<div class="main-form-area">
 
-					<!-- 1. 기본정보 -->
+					<!-- 1. 기본정보 / 基本情報 -->
 					<div class="form-section" id="sec-basic">
 						<div class="section-head">
-							<h3>📌 기본정보</h3>
+							<h3>📌 基本情報</h3>
 						</div>
 						<table class="form-table">
 							<tr>
-								<th>사원번호</th>
+								<th>社員番号</th>
 								<td><input type="text" value="${newEmpNo}" readonly
-									placeholder="저장 시 자동 생성"></td>
-								<th>고용형태 <span class="required-mark">*</span></th>
+									placeholder="保存時に自動生成"></td>
+								<th>雇用形態 <span class="required-mark">*</span></th>
 								<td><select name="employmentType" required>
-										<option value="">선택</option>
-										<option value="정규직"
-											${empReq.employmentType == '정규직' || param.employmentType == '정규직' ? 'selected' : ''}>정규직</option>
-										<option value="계약직"
-											${empReq.employmentType == '계약직' || param.employmentType == '계약직' ? 'selected' : ''}>계약직</option>
-										<option value="임시직"
-											${empReq.employmentType == '임시직' || param.employmentType == '임시직' ? 'selected' : ''}>임시직</option>
-										<option value="파견직"
-											${empReq.employmentType == '파견직' || param.employmentType == '파견직' ? 'selected' : ''}>파견직</option>
-										<option value="위촉직"
-											${empReq.employmentType == '위촉직' || param.employmentType == '위촉직' ? 'selected' : ''}>위촉직</option>
-										<option value="일용직"
-											${empReq.employmentType == '일용직' || param.employmentType == '일용직' ? 'selected' : ''}>일용직</option>
+										<option value="">選択</option>
+										<option value="正社員"
+											${empReq.employmentType == '正社員' || param.employmentType == '正社員' ? 'selected' : ''}>正社員</option>
+										<option value="契約社員"
+											${empReq.employmentType == '契約社員' || param.employmentType == '契約社員' ? 'selected' : ''}>契約社員</option>
+										<option value="臨時職"
+											${empReq.employmentType == '臨時職' || param.employmentType == '臨時職' ? 'selected' : ''}>臨時職</option>
+										<option value="派遣社員"
+											${empReq.employmentType == '派遣社員' || param.employmentType == '派遣社員' ? 'selected' : ''}>派遣社員</option>
+										<option value="委嘱職"
+											${empReq.employmentType == '委嘱職' || param.employmentType == '委嘱職' ? 'selected' : ''}>委嘱職</option>
+										<option value="日雇い"
+											${empReq.employmentType == '日雇い' || param.employmentType == '日雇い' ? 'selected' : ''}>日雇い</option>
 								</select></td>
 							</tr>
 							<tr>
-								<th>성명(한글) <span class="required-mark">*</span></th>
+								<th>氏名（韓国語） <span class="required-mark">*</span></th>
 								<td><input type="text" name="nameKor"
 									value="${not empty empReq ? empReq.nameKor : param.nameKor}"
 									required></td>
-								<th>성명(영문)</th>
+								<th>氏名（英語）</th>
 								<td><input type="text" name="nameEng"
 									value="${not empty empReq ? empReq.nameEng : param.nameEng}"></td>
 							</tr>
 							<tr>
-								<th>입사일 <span class="required-mark">*</span></th>
+								<th>入社日 <span class="required-mark">*</span></th>
 								<td><input type="date" name="hireDate"
 									value="${not empty empReq ? empReq.hireDate : param.hireDate}"
 									required></td>
-								<th>퇴사일</th>
+								<th>退職日</th>
 								<td onclick="${empty newEmpNo ? 'showRetireAlert()' : ''}">
 									<input type="date" name="retireDate"
 									value="${not empty empReq ? empReq.retireDate : param.retireDate}"
@@ -445,93 +135,93 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 								</td>
 							</tr>
 							<tr>
-								<th>부서</th>
+								<th>部署</th>
 								<td>
 									<div class="inline-inputs">
 										<select name="deptId">
-											<option value="">선택</option>
+											<option value="">選択</option>
 											<option value="1"
-												${empReq.deptId == 1 || param.deptId == '1' ? 'selected' : ''}>사장실</option>
+												${empReq.deptId == 1 || param.deptId == '1' ? 'selected' : ''}>社長室</option>
 											<option value="2"
-												${empReq.deptId == 2 || param.deptId == '2' ? 'selected' : ''}>개발팀</option>
+												${empReq.deptId == 2 || param.deptId == '2' ? 'selected' : ''}>開発チーム</option>
 											<option value="3"
-												${empReq.deptId == 3 || param.deptId == '3' ? 'selected' : ''}>콘텐츠팀</option>
+												${empReq.deptId == 3 || param.deptId == '3' ? 'selected' : ''}>コンテンツチーム</option>
 											<option value="4"
-												${empReq.deptId == 4 || param.deptId == '4' ? 'selected' : ''}>업무지원팀</option>
+												${empReq.deptId == 4 || param.deptId == '4' ? 'selected' : ''}>業務支援チーム</option>
 											<option value="5"
-												${empReq.deptId == 5 || param.deptId == '5' ? 'selected' : ''}>디자인팀</option>
+												${empReq.deptId == 5 || param.deptId == '5' ? 'selected' : ''}>デザインチーム</option>
 											<option value="6"
-												${empReq.deptId == 6 || param.deptId == '6' ? 'selected' : ''}>관리팀</option>
+												${empReq.deptId == 6 || param.deptId == '6' ? 'selected' : ''}>管理チーム</option>
 											<option value="7"
-												${empReq.deptId == 7 || param.deptId == '7' ? 'selected' : ''}>기획전략팀</option>
+												${empReq.deptId == 7 || param.deptId == '7' ? 'selected' : ''}>企画戦略チーム</option>
 										</select>
 										<button type="button" class="btn btn-outline btn-sm"
-											style="white-space: nowrap;">관리</button>
+											style="white-space: nowrap;">管理</button>
 									</div>
 								</td>
-								<th>직위</th>
+								<th>役職</th>
 								<td>
 									<div class="inline-inputs">
 										<select name="positionId">
-											<option value="">선택</option>
+											<option value="">選択</option>
 											<option value="1"
-												${empReq.positionId == 1 || param.positionId == '1' ? 'selected' : ''}>이사</option>
+												${empReq.positionId == 1 || param.positionId == '1' ? 'selected' : ''}>取締役</option>
 											<option value="2"
-												${empReq.positionId == 2 || param.positionId == '2' ? 'selected' : ''}>사장</option>
+												${empReq.positionId == 2 || param.positionId == '2' ? 'selected' : ''}>社長</option>
 											<option value="3"
-												${empReq.positionId == 3 || param.positionId == '3' ? 'selected' : ''}>부장</option>
+												${empReq.positionId == 3 || param.positionId == '3' ? 'selected' : ''}>部長</option>
 											<option value="4"
-												${empReq.positionId == 4 || param.positionId == '4' ? 'selected' : ''}>차장</option>
+												${empReq.positionId == 4 || param.positionId == '4' ? 'selected' : ''}>次長</option>
 											<option value="5"
-												${empReq.positionId == 5 || param.positionId == '5' ? 'selected' : ''}>과장</option>
+												${empReq.positionId == 5 || param.positionId == '5' ? 'selected' : ''}>課長</option>
 											<option value="6"
-												${empReq.positionId == 6 || param.positionId == '6' ? 'selected' : ''}>대리</option>
+												${empReq.positionId == 6 || param.positionId == '6' ? 'selected' : ''}>代理</option>
 											<option value="7"
-												${empReq.positionId == 7 || param.positionId == '7' ? 'selected' : ''}>주임</option>
+												${empReq.positionId == 7 || param.positionId == '7' ? 'selected' : ''}>主任</option>
 											<option value="8"
-												${empReq.positionId == 8 || param.positionId == '8' ? 'selected' : ''}>사원</option>
+												${empReq.positionId == 8 || param.positionId == '8' ? 'selected' : ''}>社員</option>
 										</select>
 										<button type="button" class="btn btn-outline btn-sm"
-											style="white-space: nowrap;">관리</button>
+											style="white-space: nowrap;">管理</button>
 									</div>
 								</td>
 							</tr>
 							<tr>
-								<th>내/외국인</th>
+								<th>内国人／外国人</th>
 								<td><select name="nationality">
-										<option value="">선택</option>
-										<option value="내국인"
-											${empReq.nationality == '내국인' || param.nationality == '내국인' ? 'selected' : ''}>내국인</option>
-										<option value="외국인"
-											${empReq.nationality == '외국인' || param.nationality == '외국인' ? 'selected' : ''}>외국인</option>
+										<option value="">選択</option>
+										<option value="内国人"
+											${empReq.nationality == '内国人' || param.nationality == '内国人' ? 'selected' : ''}>内国人</option>
+										<option value="外国人"
+											${empReq.nationality == '外国人' || param.nationality == '外国人' ? 'selected' : ''}>外国人</option>
 								</select></td>
-								<th>주민번호</th>
+								<th>住民登録番号</th>
 								<td><input type="text" name="residentNo"
 									value="${not empty empReq ? empReq.residentNo : param.residentNo}"></td>
 							</tr>
 							<tr>
-								<th>주소</th>
+								<th>住所</th>
 								<td colspan="3">
 									<div class="inline-inputs" style="margin-bottom: 6px;">
 										<input type="text" name="zipCode"
 											value="${not empty empReq ? empReq.zipCode : param.zipCode}"
 											style="width: 120px;">
-										<button type="button" class="btn btn-outline btn-sm">우편번호
-											검색</button>
+										<button type="button" class="btn btn-outline btn-sm">郵便番号
+											検索</button>
 									</div> <input type="text" name="address"
 									value="${not empty empReq ? empReq.address : param.address}">
 								</td>
 							</tr>
 							<tr>
-								<th>전화번호</th>
+								<th>電話番号</th>
 								<td><input type="text" name="phoneNum"
 									value="${not empty empReq ? empReq.phoneNum : param.phoneNum}"></td>
-								<th>휴대폰</th>
+								<th>携帯電話</th>
 								<td><input type="text" name="mobileNum"
 									value="${not empty empReq ? empReq.mobileNum : param.mobileNum}"></td>
 							</tr>
 							<tr>
-								<th>이메일</th>
+								<th>メール</th>
 								<td><input type="text" name="email"
 									value="${not empty empReq ? empReq.email : param.email}"></td>
 								<th>SNS</th>
@@ -539,7 +229,7 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 									value="${not empty empReq ? empReq.sns : param.sns}"></td>
 							</tr>
 							<tr>
-								<th>기타사항</th>
+								<th>その他事項</th>
 								<td colspan="3"><textarea name="remarks" rows="3">${not empty empReq ? empReq.remarks : param.remarks}</textarea></td>
 							</tr>
 						</table>
@@ -547,26 +237,26 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 							value="${not empty empReq ? empReq.photoPath : param.photoPath}">
 					</div>
 
-					<!-- 2. 급여 & 4대보험 -->
+					<!-- 2. 급여 & 4대보험 / 給与 & 4大保険 -->
 					<div class="form-section" id="sec-salary">
 						<div class="section-head">
-							<h3>💳 급여 & 4대보험</h3>
+							<h3>💳 給与 & 4大保険</h3>
 						</div>
 						<table class="form-table">
 							<tr>
-								<th>4대보험</th>
+								<th>4大保険</th>
 								<td colspan="3">
 									<div class="check-group">
 										<label><input type="checkbox" id="nationalPensionYN"
 											name="nationalPensionYN" value="Y"
 											${empInfoSalaryReq.nationalPensionYN == 'Y' || param.nationalPensionYN == 'Y' ? 'checked' : ''}>
-											국민연금</label> <label><input type="checkbox"
+											国民年金</label> <label><input type="checkbox"
 											id="healthInsuranceYN" name="healthInsuranceYN" value="Y"
 											${empInfoSalaryReq.healthInsuranceYN == 'Y' || param.healthInsuranceYN == 'Y' ? 'checked' : ''}>
-											건강보험</label> <span>(감면: <select name="healthDiscountRate"
+											健康保険</label> <span>(減免: <select name="healthDiscountRate"
 											style="width: 90px;">
 												<option value="0"
-													${empInfoSalaryReq.healthDiscountRate == 0 || param.healthDiscountRate == '0' ? 'selected' : ''}>선택</option>
+													${empInfoSalaryReq.healthDiscountRate == 0 || param.healthDiscountRate == '0' ? 'selected' : ''}>選択</option>
 												<option value="10"
 													${empInfoSalaryReq.healthDiscountRate == 10 || param.healthDiscountRate == '10' ? 'selected' : ''}>10%</option>
 												<option value="30"
@@ -579,10 +269,10 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 										</span> <span>/</span> <label><input type="checkbox"
 											id="longtermCareYN" name="longtermCareYN" value="Y"
 											${empInfoSalaryReq.longtermCareYN == 'Y' || param.longtermCareYN == 'Y' ? 'checked' : ''}>
-											노인장기요양보험 포함</label> <span>(감면: <select
+											老人長期療養保険を含む</label> <span>(減免: <select
 											name="longtermCareDiscountRate" style="width: 90px;">
 												<option value="0"
-													${empInfoSalaryReq.longtermCareDiscountRate == 0 || param.longtermCareDiscountRate == '0' ? 'selected' : ''}>선택</option>
+													${empInfoSalaryReq.longtermCareDiscountRate == 0 || param.longtermCareDiscountRate == '0' ? 'selected' : ''}>選択</option>
 												<option value="30"
 													${empInfoSalaryReq.longtermCareDiscountRate == 30 || param.longtermCareDiscountRate == '30' ? 'selected' : ''}>30%</option>
 										</select>)
@@ -590,20 +280,20 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 											id="employmentInsuranceYN" name="employmentInsuranceYN"
 											value="Y"
 											${empInfoSalaryReq.employmentInsuranceYN == 'Y' || param.employmentInsuranceYN == 'Y' ? 'checked' : ''}>
-											고용보험</label>
+											雇用保険</label>
 									</div>
 								</td>
 							</tr>
 							<tr>
-								<th>갑근세 <span class="required-mark">*</span></th>
+								<th>源泉所得税 <span class="required-mark">*</span></th>
 								<td colspan="3">
 									<div class="radio-group">
 										<label><input type="radio" id="incomeTaxWorker"
 											name="incomeTaxType" value="WORKER"
 											${empInfoSalaryReq.incomeTaxType == 'WORKER' || param.incomeTaxType == 'WORKER' ? 'checked' : ''}>
-											근로소득자(근로소득간이세액표)</label> <span>세액: <select id="incomeTaxRate"
+											給与所得者（簡易税額表）</label> <span>税額: <select id="incomeTaxRate"
 											name="incomeTaxRate" style="width: 110px;">
-												<option value="">선택</option>
+												<option value="">選択</option>
 												<option value="80">80%</option>
 												<option value="100">100%</option>
 												<option value="120">120%</option>
@@ -611,10 +301,10 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 										</span> <label><input type="checkbox"
 											name="youthTaxReductionYN" value="Y"
 											${empInfoSalaryReq.youthTaxReductionYN == 'Y' || param.youthTaxReductionYN == 'Y' ? 'checked' : ''}>
-											중소기업 청년 소득세 감면</label> <select name="youthTaxReductionRate"
+											中小企業若年者所得税減免</label> <select name="youthTaxReductionRate"
 											style="width: 90px;">
 											<option value="0"
-												${empInfoSalaryReq.youthTaxReductionRate == 0 || param.youthTaxReductionRate == '0' ? 'selected' : ''}>선택</option>
+												${empInfoSalaryReq.youthTaxReductionRate == 0 || param.youthTaxReductionRate == '0' ? 'selected' : ''}>選択</option>
 											<option value="50"
 												${empInfoSalaryReq.youthTaxReductionRate == 50 || param.youthTaxReductionRate == '50' ? 'selected' : ''}>50%</option>
 											<option value="70"
@@ -629,46 +319,46 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 										<label><input type="radio" name="incomeTaxType"
 											value="BUSINESS"
 											${empInfoSalaryReq.incomeTaxType == 'BUSINESS' || param.incomeTaxType == 'BUSINESS' ? 'checked' : ''}>
-											사업소득자(3.3%)</label> <label><input type="radio"
+											事業所得者（3.3%）</label> <label><input type="radio"
 											name="incomeTaxType" value="DAILY"
 											${empInfoSalaryReq.incomeTaxType == 'DAILY' || param.incomeTaxType == 'DAILY' ? 'checked' : ''}>
-											일용직(2.97%)</label> <label><input type="radio"
+											日雇い（2.97%）</label> <label><input type="radio"
 											name="incomeTaxType" value="OTHER"
 											${empInfoSalaryReq.incomeTaxType == 'OTHER' || param.incomeTaxType == 'OTHER' ? 'checked' : ''}>
-											기타소득자(8.8%)</label> <label><input type="radio"
+											その他所得者（8.8%）</label> <label><input type="radio"
 											name="incomeTaxType" value="WORK_BUSINESS"
 											${empInfoSalaryReq.incomeTaxType == 'WORK_BUSINESS' || param.incomeTaxType == 'WORK_BUSINESS' ? 'checked' : ''}>
-											근로/사업소득자</label> <label><input type="radio"
+											給与・事業所得者</label> <label><input type="radio"
 											name="incomeTaxType" value="EXEMPT"
 											${empInfoSalaryReq.incomeTaxType == 'EXEMPT' || param.incomeTaxType == 'EXEMPT' ? 'checked' : ''}>
-											면제</label>
+											免除</label>
 									</div>
 								</td>
 							</tr>
 							<tr>
-								<th>두루누리<br>사회보험 지원 <span class="required-mark">*</span></th>
+								<th>ドゥルヌリ<br>社会保険支援 <span class="required-mark">*</span></th>
 								<td colspan="3">
 									<div class="radio-group">
 										<label><input type="radio" name="durunuriType"
 											value="NONE"
 											${empty empInfoSalaryReq.durunuriType && empty param.durunuriType || empInfoSalaryReq.durunuriType == 'NONE' || param.durunuriType == 'NONE' ? 'checked' : ''}>
-											해당 없음</label> <label><input type="radio" name="durunuriType"
+											該当なし</label> <label><input type="radio" name="durunuriType"
 											value="NEW80"
 											${empInfoSalaryReq.durunuriType == 'NEW80' || param.durunuriType == 'NEW80' ? 'checked' : ''}>
-											신규가입자(80% 지원)</label> <label><input type="radio"
+											新規加入者（80%支援）</label> <label><input type="radio"
 											name="durunuriType" value="NEW90"
 											${empInfoSalaryReq.durunuriType == 'NEW90' || param.durunuriType == 'NEW90' ? 'checked' : ''}>
-											신규가입자(90% 지원)</label>
+											新規加入者（90%支援）</label>
 									</div>
 									<div style="margin-top: 8px;">
 										<label><input type="checkbox" name="durunuriSplitYN"
 											value="Y"
 											${empInfoSalaryReq.durunuriSplitYN == 'Y' || param.durunuriSplitYN == 'Y' ? 'checked' : ''}>
-											분리설정</label> <span style="margin-left: 15px;">국민연금 지원율 <input
+											個別設定</label> <span style="margin-left: 15px;">国民年金 支援率 <input
 											type="number" name="durunuriPensionRate"
 											value="${not empty empInfoSalaryReq ? empInfoSalaryReq.durunuriPensionRate : (empty param.durunuriPensionRate ? 0 : param.durunuriPensionRate)}"
 											min="0" max="100" style="width: 65px;"> %
-										</span> <span style="margin-left: 15px;">고용보험 지원율 <input
+										</span> <span style="margin-left: 15px;">雇用保険 支援率 <input
 											type="number" name="durunuriEmploymentRate"
 											value="${not empty empInfoSalaryReq ? empInfoSalaryReq.durunuriEmploymentRate : (empty param.durunuriEmploymentRate ? 0 : param.durunuriEmploymentRate)}"
 											min="0" max="100" style="width: 65px;"> %
@@ -677,69 +367,69 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 								</td>
 							</tr>
 							<tr>
-								<th>기본급 / 일급 <span class="required-mark">*</span></th>
+								<th>基本給／日給 <span class="required-mark">*</span></th>
 								<td><input type="text" name="baseSalary"
 									value="${not empty empInfoSalaryReq ? empInfoSalaryReq.baseSalary : param.baseSalary}"
 									required></td>
-								<td colspan="2">월급제의 경우 월 기본급, 일용직 근로자의 경우 일급을 입력합니다.</td>
+								<td colspan="2">月給制の場合は月額基本給、日雇い労働者の場合は日給を入力します。</td>
 							</tr>
 							<tr>
-								<th>국민연금 기준소득월액</th>
+								<th>国民年金 基準所得月額</th>
 								<td><input type="text" name="pensionSalary"
 									value="${not empty empInfoSalaryReq ? empInfoSalaryReq.pensionSalary : param.pensionSalary}"></td>
-								<td colspan="2" rowspan="3">입력 시 4대보험 공제시 우선 적용되며,<br>미입력
-									시 해당 근로일의 비과세를 제외한 과세합계로 적용됩니다.
+								<td colspan="2" rowspan="3">入力した場合、4大保険控除時に優先適用され、<br>未入力
+									の場合は該当勤務日の非課税分を除いた課税合計額が適用されます。
 								</td>
 							</tr>
 							<tr>
-								<th>건강보험 보수월액</th>
+								<th>健康保険 報酬月額</th>
 								<td><input type="text" name="healthSalary"
 									value="${not empty empInfoSalaryReq ? empInfoSalaryReq.healthSalary : param.healthSalary}"></td>
 							</tr>
 							<tr>
-								<th>고용보험 보수월액</th>
+								<th>雇用保険 報酬月額</th>
 								<td><input type="text" name="employmentSalary"
 									value="${not empty empInfoSalaryReq ? empInfoSalaryReq.employmentSalary : param.employmentSalary}"></td>
 							</tr>
 							<tr>
-								<th>급여계좌</th>
+								<th>給与口座</th>
 								<td colspan="3"><div class="inline-inputs">
 										<select name="salaryBank" style="width: 160px;">
-											<option value="">선택</option>
-											<option value="국민"
-												${empInfoSalaryReq.salaryBank == '국민' || param.salaryBank == '국민' ? 'selected' : ''}>국민은행</option>
-											<option value="신한"
-												${empInfoSalaryReq.salaryBank == '신한' || param.salaryBank == '신한' ? 'selected' : ''}>신한은행</option>
-											<option value="우리"
-												${empInfoSalaryReq.salaryBank == '우리' || param.salaryBank == '우리' ? 'selected' : ''}>우리은행</option>
-											<option value="하나"
-												${empInfoSalaryReq.salaryBank == '하나' || param.salaryBank == '하나' ? 'selected' : ''}>하나은행</option>
+											<option value="">選択</option>
+											<option value="KB国民"
+												${empInfoSalaryReq.salaryBank == 'KB国民' || param.salaryBank == 'KB国民' ? 'selected' : ''}>KB国民銀行</option>
+											<option value="新韓"
+												${empInfoSalaryReq.salaryBank == '新韓' || param.salaryBank == '新韓' ? 'selected' : ''}>新韓銀行</option>
+											<option value="ウリ"
+												${empInfoSalaryReq.salaryBank == 'ウリ' || param.salaryBank == 'ウリ' ? 'selected' : ''}>ウリ銀行</option>
+											<option value="ハナ"
+												${empInfoSalaryReq.salaryBank == 'ハナ' || param.salaryBank == 'ハナ' ? 'selected' : ''}>ハナ銀行</option>
 										</select> <input type="text" name="salaryAccount"
 											value="${not empty empInfoSalaryReq ? empInfoSalaryReq.salaryAccount : param.salaryAccount}">
 										<button type="button" class="btn btn-outline btn-sm"
-											style="white-space: nowrap;">예금주 조회</button>
+											style="white-space: nowrap;">口座名義人照会</button>
 									</div></td>
 							</tr>
 						</table>
 					</div>
 
-					<!-- 3. 4대보험 상세 정보 -->
+					<!-- 3. 4대보험 상세정보 / 4大保険 詳細情報 -->
 					<div class="form-section" id="sec-insurance">
 						<div class="section-head">
-							<h3>🛡️ 4대보험 취득/상실 정보</h3>
+							<h3>🛡️ 4大保険 取得・喪失情報</h3>
 						</div>
 						<table class="data-table">
 							<thead>
 								<tr>
-									<th>구분</th>
-									<th>기호번호</th>
-									<th>취득일자</th>
-									<th>상실일자</th>
+									<th>区分</th>
+									<th>記号番号</th>
+									<th>取得日</th>
+									<th>喪失日</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr>
-									<th>국민연금</th>
+									<th>国民年金</th>
 									<td><input type="text" name="nationalNo"
 										value="${not empty insuranceReq ? insuranceReq.nationalNo : param.nationalNo}"></td>
 									<td><input type="date" name="nationalAcqDate"
@@ -748,7 +438,7 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 										value="${not empty insuranceReq ? insuranceReq.nationalLossDate : param.nationalLossDate}"></td>
 								</tr>
 								<tr>
-									<th>건강보험</th>
+									<th>健康保険</th>
 									<td><input type="text" name="healthNo"
 										value="${not empty insuranceReq ? insuranceReq.healthNo : param.healthNo}"></td>
 									<td><input type="date" name="healthAcqDate"
@@ -757,7 +447,7 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 										value="${not empty insuranceReq ? insuranceReq.healthLossDate : param.healthLossDate}"></td>
 								</tr>
 								<tr>
-									<th>고용보험</th>
+									<th>雇用保険</th>
 									<td><input type="text" name="employmentNo"
 										value="${not empty insuranceReq ? insuranceReq.employmentNo : param.employmentNo}"></td>
 									<td><input type="date" name="employmentAcqDate"
@@ -766,7 +456,7 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 										value="${not empty insuranceReq ? insuranceReq.employmentLossDate : param.employmentLossDate}"></td>
 								</tr>
 								<tr>
-									<th>산재보험</th>
+									<th>労災保険</th>
 									<td><input type="text" name="industrialNo"
 										value="${not empty insuranceReq ? insuranceReq.industrialNo : param.industrialNo}"></td>
 									<td><input type="date" name="industrialAcqDate"
@@ -778,17 +468,17 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 						</table>
 					</div>
 
-					<!-- 4. 부양가족 -->
+					<!-- 4. 부양가족 / 扶養家族 -->
 					<div class="form-section" id="sec-family">
 						<div class="section-head">
-							<h3>👨‍👩‍👧‍👦 부양가족 정보</h3>
+							<h3>👨‍👩‍👧‍👦 扶養家族情報</h3>
 							<div>
 								<button type="button" class="btn btn-outline btn-sm"
-									onclick="addFamilyRow()">+ 행 추가</button>
+									onclick="addFamilyRow()">+ 行追加</button>
 
 								<button type="button" class="btn btn-outline btn-sm"
 									onclick="removeSelectedRows('familyTable', 'fam-chk')">
-									선택 행 삭제</button>
+									選択行削除</button>
 							</div>
 						</div>
 
@@ -799,16 +489,16 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 									<th width="40"><input type="checkbox"
 										onclick="toggleAll(this,'fam-chk')"></th>
 
-									<th>관계 <span class="required-mark">*</span></th>
-									<th>성명 <span class="required-mark">*</span></th>
-									<th>구분</th>
-									<th>주민등록번호</th>
-									<th>장애여부</th>
-									<th>인적공제</th>
-									<th>건강보험</th>
-									<th>동거</th>
-									<th>소득세</th>
-									<th>20세이하 자녀</th>
+									<th>続柄 <span class="required-mark">*</span></th>
+									<th>氏名 <span class="required-mark">*</span></th>
+									<th>区分</th>
+									<th>住民登録番号</th>
+									<th>障害有無</th>
+									<th>人的控除</th>
+									<th>健康保険</th>
+									<th>同居</th>
+									<th>所得税</th>
+									<th>20歳以下の子</th>
 								</tr>
 							</thead>
 
@@ -821,61 +511,60 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 										<c:forEach var="dep" items="${dependentReqs}" varStatus="st">
 											<tr>
 												<td><input type="checkbox" class="fam-chk"></td>
-												<!-- 관계 -->
+
 												<td><select name="relation">
-														<option value="" ${empty dep.relation ? 'selected' : ''}>선택</option>
-														<option value="배우자"
-															${dep.relation == '배우자' ? 'selected' : ''}>배우자</option>
-														<option value="아들"
-															${dep.relation == '아들' ? 'selected' : ''}>아들</option>
-														<option value="딸" ${dep.relation == '딸' ? 'selected' : ''}>딸</option>
-														<option value="부" ${dep.relation == '부' ? 'selected' : ''}>부</option>
-														<option value="모" ${dep.relation == '모' ? 'selected' : ''}>모</option>
-														<option value="형제"
-															${dep.relation == '형제' ? 'selected' : ''}>형제</option>
-														<option value="자매"
-															${dep.relation == '자매' ? 'selected' : ''}>자매</option>
-														<option value="조부"
-															${dep.relation == '조부' ? 'selected' : ''}>조부</option>
-														<option value="조모"
-															${dep.relation == '조모' ? 'selected' : ''}>조모</option>
-														<option value="손자"
-															${dep.relation == '손자' ? 'selected' : ''}>손자</option>
-														<option value="손녀"
-															${dep.relation == '손녀' ? 'selected' : ''}>손녀</option>
-														<option value="기타"
-															${dep.relation == '기타' ? 'selected' : ''}>기타</option>
+														<option value="" ${empty dep.relation ? 'selected' : ''}>選択</option>
+														<option value="配偶者"
+															${dep.relation == '配偶者' ? 'selected' : ''}>配偶者</option>
+														<option value="息子"
+															${dep.relation == '息子' ? 'selected' : ''}>息子</option>
+														<option value="娘" ${dep.relation == '娘' ? 'selected' : ''}>娘</option>
+														<option value="父" ${dep.relation == '父' ? 'selected' : ''}>父</option>
+														<option value="母" ${dep.relation == '母' ? 'selected' : ''}>母</option>
+														<option value="兄弟"
+															${dep.relation == '兄弟' ? 'selected' : ''}>兄弟</option>
+														<option value="姉妹"
+															${dep.relation == '姉妹' ? 'selected' : ''}>姉妹</option>
+														<option value="祖父"
+															${dep.relation == '祖父' ? 'selected' : ''}>祖父</option>
+														<option value="祖母"
+															${dep.relation == '祖母' ? 'selected' : ''}>祖母</option>
+														<option value="孫" ${dep.relation == '孫' ? 'selected' : ''}>孫</option>
+														<option value="孫娘"
+															${dep.relation == '孫娘' ? 'selected' : ''}>孫娘</option>
+														<option value="その他"
+															${dep.relation == 'その他' ? 'selected' : ''}>その他</option>
 												</select></td>
 
-												<!-- 성명 -->
+
 												<td><input type="text" name="familyName"
 													value="${dep.familyName}"></td>
 
 
-												<!-- 구분 -->
+
 												<td><select name="nationality">
 
 														<option value=""
 															${empty dep.nationality ? 'selected' : ''}>
-															선택해주세요</option>
+															選択してください</option>
 
-														<option value="내국인"
-															${dep.nationality == '내국인' ? 'selected' : ''}>
-															내국인</option>
+														<option value="内国人"
+															${dep.nationality == '内国人' ? 'selected' : ''}>
+															内国人</option>
 
-														<option value="외국인"
-															${dep.nationality == '외국인' ? 'selected' : ''}>
-															외국인</option>
+														<option value="外国人"
+															${dep.nationality == '外国人' ? 'selected' : ''}>
+															外国人</option>
 
 												</select></td>
 
 
-												<!-- 주민등록번호 -->
+
 												<td><input type="text" name="residentNo"
 													value="${dep.residentNo}"></td>
 
 
-												<!-- 체크박스는 행 번호를 붙임 -->
+
 
 												<td><input type="checkbox"
 													name="disabilityYN_${st.index}" value="Y"
@@ -917,29 +606,29 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 
 
 											<td><select name="relation">
-													<option value="" selected>선택</option>
-													<option value="배우자">배우자</option>
-													<option value="아들">아들</option>
-													<option value="딸">딸</option>
-													<option value="부">부</option>
-													<option value="모">모</option>
-													<option value="형제">형제</option>
-													<option value="자매">자매</option>
-													<option value="조부">조부</option>
-													<option value="조모">조모</option>
-													<option value="손자">손자</option>
-													<option value="손녀">손녀</option>
-													<option value="기타">기타</option>
+													<option value="" selected>選択</option>
+													<option value="配偶者">配偶者</option>
+													<option value="息子">息子</option>
+													<option value="娘">娘</option>
+													<option value="父">父</option>
+													<option value="母">母</option>
+													<option value="兄弟">兄弟</option>
+													<option value="姉妹">姉妹</option>
+													<option value="祖父">祖父</option>
+													<option value="祖母">祖母</option>
+													<option value="孫">孫</option>
+													<option value="孫娘">孫娘</option>
+													<option value="その他">その他</option>
 											</select></td>
 											<td><input type="text" name="familyName"></td>
 											<td><select name="nationality">
-													<option value="" selected>선택해주세요</option>
-													<option value="내국인">내국인</option>
-													<option value="외국인">외국인</option>
+													<option value="" selected>選択してください</option>
+													<option value="内国人">内国人</option>
+													<option value="外国人">外国人</option>
 											</select></td>
 											<td><input type="text" name="residentNo"></td>
 
-											<!-- 처음 행은 index 0 -->
+
 											<td><input type="checkbox" name="disabilityYN_0"
 												value="Y"></td>
 
@@ -969,16 +658,16 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 						</table>
 					</div>
 
-					<!-- 6. 경력 -->
+					<!-- 6. 경력 / 経歴 -->
 					<div class="form-section" id="sec-career">
 						<div class="section-head">
-							<h3>💼 경력 정보</h3>
+							<h3>💼 経歴情報</h3>
 							<div>
 								<button type="button" class="btn btn-outline btn-sm"
-									onclick="addCareerRow()">+ 행 추가</button>
+									onclick="addCareerRow()">+ 行追加</button>
 								<button type="button" class="btn btn-outline btn-sm"
-									onclick="removeSelectedRows('careerTable','career-chk')">선택
-									행 삭제</button>
+									onclick="removeSelectedRows('careerTable','career-chk')">選択
+									行削除</button>
 							</div>
 						</div>
 						<table class="data-table" id="careerTable">
@@ -986,13 +675,13 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 								<tr>
 									<th width="40"><input type="checkbox"
 										onclick="toggleAll(this,'career-chk')"></th>
-									<th>회사명</th>
-									<th>입사일자</th>
-									<th>퇴사일자</th>
-									<th>근무기간</th>
-									<th>최종직위</th>
-									<th>담당직무</th>
-									<th>퇴직사유</th>
+									<th>会社名</th>
+									<th>入社日</th>
+									<th>退職日</th>
+									<th>勤務期間</th>
+									<th>最終役職</th>
+									<th>担当業務</th>
+									<th>退職理由</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -1009,10 +698,10 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 													value="${career.retireDate}"></td>
 												<td><div class="inline-inputs">
 														<input type="number" name="workYear"
-															value="${career.workYear}" min="0" style="width: 60px;"><span>년</span><input
+															value="${career.workYear}" min="0" style="width: 60px;"><span>年</span><input
 															type="number" name="workMonth"
 															value="${career.workMonth}" min="0" max="11"
-															style="width: 60px;"><span>개월</span>
+															style="width: 60px;"><span>か月</span>
 													</div></td>
 												<td><input type="text" name="lastPosition"
 													value="${career.lastPosition}"></td>
@@ -1031,9 +720,9 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 											<td><input type="date" name="careerRetireDate"></td>
 											<td><div class="inline-inputs">
 													<input type="number" name="workYear" min="0"
-														style="width: 60px;"><span>년</span><input
+														style="width: 60px;"><span>年</span><input
 														type="number" name="workMonth" min="0" max="11"
-														style="width: 60px;"><span>개월</span>
+														style="width: 60px;"><span>か月</span>
 												</div></td>
 											<td><input type="text" name="lastPosition"></td>
 											<td><input type="text" name="careerPosition"></td>
@@ -1045,34 +734,34 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 						</table>
 					</div>
 
-					<!-- 7. 병역 -->
+					<!-- 7. 병역 / 兵役 -->
 					<div class="form-section" id="sec-military">
 						<div class="section-head">
-							<h3>🪖 병역 정보</h3>
+							<h3>🪖 兵役情報</h3>
 						</div>
 						<table class="form-table">
 							<tr>
-								<th>병역구분</th>
-								<td><select name="militaryType"><option value="">선택해주세요</option>
-										<option value="필"
-											${militaryReq.militaryType == '필' || param.militaryType == '필' ? 'selected' : ''}>군필</option>
-										<option value="미필"
-											${militaryReq.militaryType == '미필' || param.militaryType == '미필' ? 'selected' : ''}>미필</option>
-										<option value="면제"
-											${militaryReq.militaryType == '면제' || param.militaryType == '면제' ? 'selected' : ''}>면제</option></select></td>
-								<th>군별</th>
-								<td><select name="militaryBranch"><option value="">선택해주세요</option>
-										<option value="육군"
-											${militaryReq.militaryBranch == '육군' || param.militaryBranch == '육군' ? 'selected' : ''}>육군</option>
-										<option value="해군"
-											${militaryReq.militaryBranch == '해군' || param.militaryBranch == '해군' ? 'selected' : ''}>해군</option>
-										<option value="공군"
-											${militaryReq.militaryBranch == '공군' || param.militaryBranch == '공군' ? 'selected' : ''}>공군</option>
-										<option value="해병대"
-											${militaryReq.militaryBranch == '해병대' || param.militaryBranch == '해병대' ? 'selected' : ''}>해병대</option></select></td>
+								<th>兵役区分</th>
+								<td><select name="militaryType"><option value="">選択してください</option>
+										<option value="履行済"
+											${militaryReq.militaryType == '履行済' || param.militaryType == '履行済' ? 'selected' : ''}>兵役済</option>
+										<option value="未履行"
+											${militaryReq.militaryType == '未履行' || param.militaryType == '未履行' ? 'selected' : ''}>未履行</option>
+										<option value="免除"
+											${militaryReq.militaryType == '免除' || param.militaryType == '免除' ? 'selected' : ''}>免除</option></select></td>
+								<th>軍種</th>
+								<td><select name="militaryBranch"><option value="">選択してください</option>
+										<option value="陸軍"
+											${militaryReq.militaryBranch == '陸軍' || param.militaryBranch == '陸軍' ? 'selected' : ''}>陸軍</option>
+										<option value="海軍"
+											${militaryReq.militaryBranch == '海軍' || param.militaryBranch == '海軍' ? 'selected' : ''}>海軍</option>
+										<option value="空軍"
+											${militaryReq.militaryBranch == '空軍' || param.militaryBranch == '空軍' ? 'selected' : ''}>空軍</option>
+										<option value="海兵隊"
+											${militaryReq.militaryBranch == '海兵隊' || param.militaryBranch == '海兵隊' ? 'selected' : ''}>海兵隊</option></select></td>
 							</tr>
 							<tr>
-								<th>복무기간</th>
+								<th>服務期間</th>
 								<td colspan="3"><div class="inline-inputs"
 										style="width: 400px;">
 										<input type="date" name="startDate"
@@ -1082,32 +771,32 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 									</div></td>
 							</tr>
 							<tr>
-								<th>최종계급</th>
+								<th>最終階級</th>
 								<td><input type="text" name="finalRank"
 									value="${not empty militaryReq ? militaryReq.finalRank : param.finalRank}"
-									placeholder="예: 병장"></td>
-								<th>병과</th>
+									placeholder="例：兵長"></td>
+								<th>兵科</th>
 								<td><input type="text" name="specialty"
 									value="${not empty militaryReq ? militaryReq.specialty : param.specialty}"
-									placeholder="예: 보병"></td>
+									placeholder="例：歩兵"></td>
 							</tr>
 							<tr>
-								<th>미필/면제 사유</th>
+								<th>未履行・免除理由</th>
 								<td colspan="3"><input type="text" name="exemptionReason"
 									value="${not empty militaryReq ? militaryReq.exemptionReason : param.exemptionReason}"></td>
 							</tr>
 						</table>
 					</div>
 
-					<!-- 하단 액션 버튼 -->
+					<!-- 하단 작업 버튼 / 下部アクションボタン -->
 					<div class="bottom-actions">
 						<button type="submit" class="btn btn-primary"
-							style="padding: 10px 30px; font-size: 15px;">💾 저장</button>
+							style="padding: 10px 30px; font-size: 15px;">💾 保存</button>
 						<button type="reset" class="btn btn-secondary"
-							style="padding: 10px 24px; font-size: 15px;">취소</button>
+							style="padding: 10px 24px; font-size: 15px;">キャンセル</button>
 						<a href="${pageContext.request.contextPath}/emp/list.do"
 							class="btn btn-outline"
-							style="padding: 10px 24px; font-size: 15px;">📋 목록으로</a>
+							style="padding: 10px 24px; font-size: 15px;">📋 一覧へ</a>
 					</div>
 
 				</div>
@@ -1115,10 +804,9 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 		</form>
 	</div>
 
-	<!-- 푸터 태그 -->
 	<layout:footer />
 
-	<!-- 동적 행 추가/삭제 스크립트 -->
+	<!-- 동적 행 추가/삭제 스크립트 / 動的な行追加・削除スクリプト -->
 	<script>
     function removeSelectedRows(tableId, chkClass) {
       const rows = document.querySelectorAll('#' + tableId + ' tbody tr');
@@ -1139,15 +827,15 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 
           <td>
             <select name="relation">
-              <option value="">선택해주세요</option>
-              <option value="배우자">배우자</option>
-              <option value="아들">아들</option>
-              <option value="딸">딸</option>
-              <option value="부">부</option>
-              <option value="모">모</option>
-              <option value="형제">형제</option>
-              <option value="자매">자매</option>
-              <option value="기타">기타</option>
+              <option value="">選択</option>
+              <option value="配偶者">配偶者</option>
+              <option value="息子">息子</option>
+              <option value="娘">娘</option>
+              <option value="父">父</option>
+              <option value="母">母</option>
+              <option value="兄弟">兄弟</option>
+              <option value="姉妹">姉妹</option>
+              <option value="その他">その他</option>
             </select>
           </td>
 
@@ -1155,9 +843,9 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 
           <td>
             <select name="nationality">
-              <option value="">선택해주세요</option>
-              <option value="내국인">내국인</option>
-              <option value="외국인">외국인</option>
+              <option value="">選択してください</option>
+              <option value="内国人">内国人</option>
+              <option value="外国人">外国人</option>
             </select>
           </td>
 
@@ -1172,29 +860,6 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
         `;
 
         tbody.appendChild(row);
-    }
-
-    function addEduRow() {
-      const tbody = document.querySelector('#eduTable tbody');
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td><input type="checkbox" class="edu-chk"></td>
-        <td><select name="educationType"><option value="" selected>선택</option><option value="초등학교">초등학교</option><option value="중학교">중학교</option><option value="고등학교">고등학교</option><option value="대학교">대학교</option><option value="석사">석사</option><option value="박사">박사</option></select></td>
-        <td><input type="date" name="admissionDate"></td><td><input type="date" name="graduationDate"></td>
-        <td><input type="text" name="schoolName"></td><td><input type="text" name="major"></td>
-        <td><select name="educationStatus"><option value="" selected>선택해주세요</option><option value="졸업">졸업</option><option value="수료">수료</option><option value="자퇴">자퇴</option><option value="재학중">재학중</option></select></td>`;
-      tbody.appendChild(tr);
-    }
-
-    function addCareerRow() {
-      const tbody = document.querySelector('#careerTable tbody');
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td><input type="checkbox" class="career-chk"></td>
-        <td><input type="text" name="companyName"></td><td><input type="date" name="careerHireDate"></td><td><input type="date" name="careerRetireDate"></td>
-        <td><div class="inline-inputs"><input type="number" name="workYear" min="0" style="width:60px;"><span>년</span><input type="number" name="workMonth" min="0" max="11" style="width:60px;"><span>개월</span></div></td>
-        <td><input type="text" name="lastPosition"></td><td><input type="text" name="careerPosition"></td><td><input type="text" name="retireReason"></td>`;
-      tbody.appendChild(tr);
     }
 
     function toggleAll(master, chkClass) {
@@ -1226,7 +891,7 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
 
       const empNo = "${newEmpNo}";
       if (empNo == null || empNo.trim() === "") {
-        alert("사원등록 후 입력가능합니다.");
+        alert("社員登録後に入力できます。");
         return false;
       }
 
@@ -1236,7 +901,7 @@ input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus,
     }
 
     function showRetireAlert() {
-        alert("퇴사일 설정은\n\n사원정보 저장 후 이용해 주세요.");
+        alert("退職日の設定は\n\n社員情報を保存した後にご利用ください。");
     }
   </script>
 

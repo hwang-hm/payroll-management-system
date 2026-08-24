@@ -5,14 +5,15 @@
 <%@ taglib prefix="layout" tagdir="/WEB-INF/tags"%>
 
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>인사기록카드 - 헥사곤존</title>
+<title>人事記録カード - ヘキサゴンゾーン</title>
 
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/empCard.css"/>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/empCard.css" />
 
 </head>
 
@@ -22,38 +23,33 @@
 
 	<div class="page-wrap">
 
-		<!-- 상단 제목 및 버튼 -->
+		<!-- 상단 제목 및 작업 버튼 / 上部タイトル・操作ボタン -->
 		<div class="toolbar">
 
-			<h2>인사기록카드</h2>
+			<h2>人事記録カード</h2>
 
 			<div class="toolbar-actions">
 
 				<button type="button" class="btn btn-primary"
-					onclick="openEmployeeModal()">사원선택</button>
+					onclick="openEmployeeModal()">社員選択</button>
 
 				<button type="button" class="btn btn-print" onclick="window.print()">
-					인쇄</button>
+					印刷</button>
 
 			</div>
 
 		</div>
 
-		<!-- 인사기록카드 배경 -->
+		<!-- 인사기록카드 본문 / 人事記録カード本文 -->
 		<div class="card-background">
 
 			<div class="card-pages">
 
-				<!-- =====================================================
-				     왼쪽 페이지
-				===================================================== -->
-
+				<!-- 왼쪽 페이지 / 左ページ -->
 				<section class="card-page">
 
-					<!-- 기본정보 -->
 					<div class="left-top">
 
-						<!-- 사진 -->
 						<div class="photo-cell">
 
 							<c:choose>
@@ -62,13 +58,13 @@
 
 									<img
 										src="${pageContext.request.contextPath}/${empCardData.emp.photoPath}"
-										alt="사원 사진">
+										alt="社員写真">
 
 								</c:when>
 
 								<c:otherwise>
 
-									<div class="photo-placeholder">사진</div>
+									<div class="photo-placeholder">写真</div>
 
 								</c:otherwise>
 
@@ -76,7 +72,6 @@
 
 						</div>
 
-						<!-- 기본 사원정보 -->
 						<div class="basic-info">
 
 							<table>
@@ -90,9 +85,9 @@
 
 								<tr class="basic-title-row">
 
-									<th colspan="2">인사기록카드</th>
+									<th colspan="2">人事記録カード</th>
 
-									<th>사원번호</th>
+									<th>社員番号</th>
 
 									<td><c:out value="${empCardData.emp.empId}" default="" />
 									</td>
@@ -101,7 +96,7 @@
 
 								<tr>
 
-									<th>입사일</th>
+									<th>入社日</th>
 
 									<td colspan="3"><fmt:formatDate
 											value="${empCardData.emp.hireDate}" pattern="yyyy-MM-dd" />
@@ -112,7 +107,7 @@
 
 								<tr>
 
-									<th>퇴사일</th>
+									<th>退職日</th>
 
 									<td colspan="3"><fmt:formatDate
 											value="${empCardData.emp.retireDate}" pattern="yyyy-MM-dd" />
@@ -123,13 +118,13 @@
 
 								<tr>
 
-									<th>성명(한글)</th>
+									<th>氏名（韓国語）</th>
 
 									<td><c:out value="${empCardData.emp.nameKor}" default="" />
 
 									</td>
 
-									<th>성명(영문)</th>
+									<th>氏名（英語）</th>
 
 									<td><c:out value="${empCardData.emp.nameEng}" default="" />
 
@@ -139,12 +134,12 @@
 
 								<tr>
 
-									<th>주민등록번호</th>
+									<th>住民登録番号</th>
 
 									<td><c:out value="${empCardData.emp.residentNo}"
 											default="-" /></td>
 
-									<th>사원구분</th>
+									<th>雇用形態</th>
 
 									<td><c:out value="${empCardData.emp.employmentType}"
 											default="" /></td>
@@ -153,7 +148,7 @@
 
 								<tr>
 
-									<th>주소</th>
+									<th>住所</th>
 
 									<td colspan="3" style="text-align: left;"><c:out
 											value="${empCardData.emp.address}" default="" /></td>
@@ -162,13 +157,13 @@
 
 								<tr>
 
-									<th>휴대전화</th>
+									<th>携帯電話</th>
 
 									<td><c:out value="${empCardData.emp.mobileNum}" default="" />
 
 									</td>
 
-									<th>연락처</th>
+									<th>連絡先</th>
 
 									<td><c:out value="${empCardData.emp.phoneNum}" default="" />
 
@@ -191,14 +186,11 @@
 
 					</div>
 
-					<!-- =================================================
-					     가족사항
-					================================================= -->
-
 					<div class="section-block">
 
+						<!-- 가족사항 / 家族事項 -->
 						<div class="section-label">
-							가<br>족<br>사<br>항
+							家<br>族<br>事<br>項
 						</div>
 
 						<div class="section-content">
@@ -218,12 +210,12 @@
 
 								<tr class="section-header">
 
-									<th>관계</th>
-									<th>성명</th>
-									<th>주민등록번호</th>
-									<th>동거여부</th>
-									<th>국민연금</th>
-									<th>비고</th>
+									<th>続柄</th>
+									<th>氏名</th>
+									<th>住民登録番号</th>
+									<th>同居有無</th>
+									<th>国民年金</th>
+									<th>備考</th>
 
 								</tr>
 
@@ -284,14 +276,11 @@
 
 					</div>
 
-					<!-- =================================================
-					     학력
-					================================================= -->
-
 					<div class="section-block">
 
+						<!-- 학력 / 学歴 -->
 						<div class="section-label">
-							학<br>력
+							学<br>歴
 						</div>
 
 						<div class="section-content">
@@ -300,15 +289,13 @@
 
 								<tr class="section-header">
 
-									<th>학교명</th>
-									<th>입학년월</th>
-									<th>졸업년월</th>
-									<th>전공</th>
-									<th>이수</th>
+									<th>学校名</th>
+									<th>入学年月</th>
+									<th>卒業年月</th>
+									<th>専攻</th>
+									<th>修了区分</th>
 
 								</tr>
-
-								<!-- Education 조회 연결 후 교체 -->
 
 								<c:forEach begin="1" end="5">
 
@@ -330,14 +317,11 @@
 
 					</div>
 
-					<!-- =================================================
-					     병역
-					================================================= -->
-
 					<div class="section-block">
 
+						<!-- 병역 / 兵役 -->
 						<div class="section-label">
-							병<br>역
+							兵<br>役
 						</div>
 
 						<div class="section-content">
@@ -346,16 +330,16 @@
 
 								<tr class="section-header">
 
-									<th>제대구분</th>
-									<th colspan="2">미필사유</th>
+									<th>除隊区分</th>
+									<th colspan="2">未履行理由</th>
 
 								</tr>
 
 								<tr class="section-header">
 
-									<th>군별</th>
-									<th>최종계급</th>
-									<th>복무기간</th>
+									<th>軍種</th>
+									<th>最終階級</th>
+									<th>服務期間</th>
 
 								</tr>
 
@@ -373,14 +357,11 @@
 
 					</div>
 
-					<!-- =================================================
-					     경력
-					================================================= -->
-
 					<div class="section-block">
 
+						<!-- 경력 / 経歴 -->
 						<div class="section-label">
-							경<br>력
+							経<br>歴
 						</div>
 
 						<div class="section-content">
@@ -389,15 +370,13 @@
 
 								<tr class="section-header">
 
-									<th>회사명</th>
-									<th>입사일자</th>
-									<th>퇴사일자</th>
-									<th>최종직위</th>
-									<th>담당업무</th>
+									<th>会社名</th>
+									<th>入社日</th>
+									<th>退職日</th>
+									<th>最終役職</th>
+									<th>担当業務</th>
 
 								</tr>
-
-								<!-- PersonalHistory 조회 연결 후 교체 -->
 
 								<c:forEach begin="1" end="5">
 
@@ -419,14 +398,11 @@
 
 					</div>
 
-					<!-- =================================================
-					     자격 / 면허
-					================================================= -->
-
 					<div class="section-block">
 
+						<!-- 자격 및 면허 / 資格・免許 -->
 						<div class="section-label">
-							자<br>격<br>/<br>면<br>허
+							資<br>格<br>/<br>免<br>許
 						</div>
 
 						<div class="section-content">
@@ -435,14 +411,12 @@
 
 								<tr class="section-header">
 
-									<th>종류</th>
-									<th>취득일</th>
-									<th>발행기관</th>
-									<th>비고</th>
+									<th>種類</th>
+									<th>取得日</th>
+									<th>発行機関</th>
+									<th>備考</th>
 
 								</tr>
-
-								<!-- License 조회 연결 후 교체 -->
 
 								<c:forEach begin="1" end="4">
 
@@ -463,14 +437,11 @@
 
 					</div>
 
-					<!-- =================================================
-					     어학능력
-					================================================= -->
-
 					<div class="section-block">
 
+						<!-- 어학능력 / 語学能力 -->
 						<div class="section-label">
-							어<br>학<br>능<br>력
+							語<br>学<br>能<br>力
 						</div>
 
 						<div class="section-content">
@@ -479,17 +450,15 @@
 
 								<tr class="section-header">
 
-									<th>외국어명</th>
-									<th>시험</th>
-									<th>공인점수</th>
-									<th>취득일</th>
-									<th>독해</th>
-									<th>작문</th>
-									<th>회화</th>
+									<th>外国語名</th>
+									<th>試験</th>
+									<th>公認スコア</th>
+									<th>取得日</th>
+									<th>読解</th>
+									<th>作文</th>
+									<th>会話</th>
 
 								</tr>
-
-								<!-- LanguageSkill 조회 연결 후 교체 -->
 
 								<c:forEach begin="1" end="3">
 
@@ -515,22 +484,16 @@
 
 				</section>
 
-				<!-- =====================================================
-				     오른쪽 페이지
-				===================================================== -->
-
+				<!-- 오른쪽 페이지 / 右ページ -->
 				<section class="card-page">
 
-					<div class="card-title">인사기록카드</div>
-
-					<!-- =================================================
-					     교육사항
-					================================================= -->
+					<div class="card-title">人事記録カード</div>
 
 					<div class="section-block">
 
+						<!-- 교육사항 / 教育事項 -->
 						<div class="section-label">
-							교<br>육<br>사<br>항
+							教<br>育<br>事<br>項
 						</div>
 
 						<div class="section-content">
@@ -539,17 +502,15 @@
 
 								<tr class="section-header">
 
-									<th>교육구분</th>
-									<th>교육명</th>
-									<th>기간(부터)</th>
-									<th>기간(까지)</th>
-									<th>교육기관</th>
-									<th>교육비</th>
-									<th>환급교육비</th>
+									<th>教育区分</th>
+									<th>教育名</th>
+									<th>期間（開始）</th>
+									<th>期間（終了）</th>
+									<th>教育機関</th>
+									<th>教育費</th>
+									<th>還付教育費</th>
 
 								</tr>
-
-								<!-- EducationTraining 조회 연결 후 교체 -->
 
 								<c:forEach begin="1" end="10">
 
@@ -573,14 +534,11 @@
 
 					</div>
 
-					<!-- =================================================
-					     상벌사항
-					================================================= -->
-
 					<div class="section-block">
 
+						<!-- 상벌사항 / 賞罰事項 -->
 						<div class="section-label">
-							상<br>벌<br>사<br>항
+							賞<br>罰<br>事<br>項
 						</div>
 
 						<div class="section-content">
@@ -589,16 +547,14 @@
 
 								<tr class="section-header">
 
-									<th>구분</th>
-									<th>상벌명</th>
-									<th>상벌권자</th>
-									<th>상벌일자</th>
-									<th>상벌내용</th>
-									<th>비고</th>
+									<th>区分</th>
+									<th>賞罰名</th>
+									<th>賞罰権者</th>
+									<th>賞罰日</th>
+									<th>賞罰内容</th>
+									<th>備考</th>
 
 								</tr>
-
-								<!-- RewardPunishment 조회 연결 후 교체 -->
 
 								<c:forEach begin="1" end="8">
 
@@ -621,14 +577,11 @@
 
 					</div>
 
-					<!-- =================================================
-					     인사발령
-					================================================= -->
-
 					<div class="section-block">
 
+						<!-- 인사이동 / 人事異動 -->
 						<div class="section-label">
-							인<br>사<br>발<br>령
+							人<br>事<br>異<br>動
 						</div>
 
 						<div class="section-content">
@@ -637,16 +590,14 @@
 
 								<tr class="section-header">
 
-									<th>발령구분</th>
-									<th>발령일자</th>
-									<th>부서</th>
-									<th>직위</th>
-									<th>직책 및 담당업무</th>
-									<th>비고</th>
+									<th>異動区分</th>
+									<th>異動日</th>
+									<th>部署</th>
+									<th>役職</th>
+									<th>職責および担当業務</th>
+									<th>備考</th>
 
 								</tr>
-
-								<!-- Appointment 조회 연결 후 교체 -->
 
 								<c:forEach begin="1" end="9">
 
@@ -669,14 +620,11 @@
 
 					</div>
 
-					<!-- =================================================
-					     퇴직사항
-					================================================= -->
-
 					<div class="section-block">
 
+						<!-- 퇴직사항 / 退職事項 -->
 						<div class="section-label">
-							퇴<br>직<br>사<br>항
+							退<br>職<br>事<br>項
 						</div>
 
 						<div class="section-content">
@@ -685,11 +633,11 @@
 
 								<tr class="section-header">
 
-									<th>퇴직구분</th>
-									<th>퇴직일자</th>
-									<th>퇴직사유</th>
-									<th>퇴직금</th>
-									<th>퇴직 후 연락처</th>
+									<th>退職区分</th>
+									<th>退職日</th>
+									<th>退職理由</th>
+									<th>退職金</th>
+									<th>退職後連絡先</th>
 
 								</tr>
 
@@ -738,17 +686,14 @@
 
 	</div>
 
-	<!-- =========================================================
-	     사원선택 모달
-	========================================================= -->
-
+	<!-- 사원 선택 모달 / 社員選択モーダル -->
 	<div id="employeeModal" class="modal-backdrop">
 
 		<div class="modal">
 
 			<div class="modal-header">
 
-				<h3>인사기록카드 사원선택</h3>
+				<h3>人事記録カード 社員選択</h3>
 
 				<button type="button" class="modal-close"
 					onclick="closeEmployeeModal()">&times;</button>
@@ -770,17 +715,12 @@
 
 								<tr>
 
-									<th style="width: 14%;">구분</th>
-
-									<th style="width: 16%;">사원번호</th>
-
-									<th style="width: 18%;">성명</th>
-
-									<th style="width: 20%;">부서</th>
-
-									<th style="width: 16%;">직위</th>
-
-									<th style="width: 16%;">상태</th>
+									<th style="width: 14%;">区分</th>
+									<th style="width: 16%;">社員番号</th>
+									<th style="width: 18%;">氏名</th>
+									<th style="width: 20%;">部署</th>
+									<th style="width: 16%;">役職</th>
+									<th style="width: 16%;">状態</th>
 
 								</tr>
 
@@ -794,23 +734,19 @@
 										onclick="selectEmployee(this)">
 
 										<td><c:out value="${employee.employmentType}" /></td>
-
 										<td><c:out value="${employee.empId}" /></td>
-
 										<td><c:out value="${employee.nameKor}" /></td>
-
 										<td><c:out value="${employee.deptName}" /></td>
-
 										<td><c:out value="${employee.positionName}" /></td>
 
 										<td><c:choose>
 
 												<c:when test="${employee.status eq 'N'}">
-													퇴직
+													退職
 												</c:when>
 
 												<c:otherwise>
-													재직
+													在職
 												</c:otherwise>
 
 											</c:choose></td>
@@ -823,7 +759,7 @@
 
 									<tr>
 
-										<td colspan="6" style="height: 100px;">조회된 사원 목록이 없습니다.</td>
+										<td colspan="6" style="height: 100px;">該当する社員情報がありません。</td>
 
 									</tr>
 
@@ -840,10 +776,10 @@
 				<div class="modal-footer">
 
 					<button type="button" class="btn btn-primary"
-						onclick="submitSelectedEmployee()">사원선택</button>
+						onclick="submitSelectedEmployee()">社員選択</button>
 
 					<button type="button" class="btn btn-secondary"
-						onclick="closeEmployeeModal()">선택취소</button>
+						onclick="closeEmployeeModal()">キャンセル</button>
 
 				</div>
 
@@ -853,6 +789,7 @@
 
 	</div>
 
+	<!-- 사원 선택 모달 제어 / 社員選択モーダル制御 -->
 	<script>
 		function openEmployeeModal() {
 
@@ -888,7 +825,7 @@
 
 			if (!empId) {
 
-				alert("사원을 선택해주세요.");
+				alert("社員を選択してください。");
 
 				return;
 
