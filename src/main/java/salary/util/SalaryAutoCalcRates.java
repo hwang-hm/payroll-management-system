@@ -7,14 +7,6 @@ import java.util.Map;
 // 給与控除自動計算用レート。実務税法ではない
 public final class SalaryAutoCalcRates {
 
-	public static final String ITEM_BASIC_PAY = "기본급";
-	public static final String ITEM_NATIONAL_PENSION = "국민연금";
-	public static final String ITEM_HEALTH_INSURANCE = "건강보험";
-	public static final String ITEM_LONGTERM_CARE = "장기요양보험";
-	public static final String ITEM_EMPLOYMENT_INSURANCE = "고용보험";
-	public static final String ITEM_INCOME_TAX = "소득세";
-	public static final String ITEM_LOCAL_INCOME_TAX = "지방소득세";
-
 	// 기준액(기본급) 대비 요율
 	// 基準額(基本給)に対するレート
 	public static final double RATE_NATIONAL_PENSION = 0.045;
@@ -41,44 +33,18 @@ public final class SalaryAutoCalcRates {
 		return normalized.replace('\u3000', ' ').replace('\u00A0', ' ').trim();
 	}
 
-	// salary_item.item_name 한/일 표기를 내부 키로 통일
-	// salary_item.item_name の韓/日表記を内部キーに統一
+	// 확정된 salary_item.item_name을 정규화해서 반환
+	// 確定した salary_item.item_name を正規化して返却
 	public static String canonicalName(String itemName) {
 		String name = normalizeItemName(itemName);
 		if (name == null || name.isEmpty()) {
 			return null;
 		}
-		if (isOneOf(name, "기본급", "基本給") || name.contains("基本給") || name.equals("기본급")) {
-			return ITEM_BASIC_PAY;
-		}
-		if (isOneOf(name, "국민연금", "国民年金") || name.contains("国民年金") || name.contains("국민연금")) {
-			return ITEM_NATIONAL_PENSION;
-		}
-		if (isOneOf(name, "건강보험", "健康保険") || name.contains("健康保険") || name.contains("건강보험")) {
-			return ITEM_HEALTH_INSURANCE;
-		}
-		if (isOneOf(name, "장기요양보험", "노인장기요양보험", "介護保険", "介者保険")
-				|| name.contains("介護") || name.contains("介者") || name.contains("장기요양") || name.contains("요양보험")) {
-			return ITEM_LONGTERM_CARE;
-		}
-		if (isOneOf(name, "고용보험", "雇用保険") || name.contains("雇用保険") || name.contains("고용보험")) {
-			return ITEM_EMPLOYMENT_INSURANCE;
-		}
-		// 지방/주민세를 소득세보다 먼저 판별 (「所得税」를 포함해도 지방이 우선)
-		// 地方/住民税を所得税より先に判定
-		if (isOneOf(name, "지방소득세", "住民税", "居民税", "居民稅", "地方所得税", "地方税")
-				|| name.contains("住民") || name.contains("居民") || name.contains("地方所得") || name.contains("지방소득")) {
-			return ITEM_LOCAL_INCOME_TAX;
-		}
-		if (isOneOf(name, "소득세", "所得税", "所得稅")
-				|| ((name.contains("所得") || name.contains("소득")) && (name.contains("税") || name.contains("稅") || name.contains("세")))) {
-			return ITEM_INCOME_TAX;
-		}
 		return name;
 	}
 
 	public static boolean isBasicPayItem(String itemName) {
-		return ITEM_BASIC_PAY.equals(canonicalName(itemName));
+		return "基本給".equals(canonicalName(itemName));
 	}
 
 	// 기준액으로 공제 6종 금액 계산. Y/N이 N이면 해당 보험은 0
@@ -112,29 +78,20 @@ public final class SalaryAutoCalcRates {
 	// 内部キー(canonical) → 金額。entry detailは canonicalName 後に照会
 	public static Map<String, Long> toAmountMap(DeductionAmounts amounts) {
 		Map<String, Long> map = new LinkedHashMap<>();
-		map.put(ITEM_NATIONAL_PENSION, amounts.getNationalPension());
-		map.put(ITEM_HEALTH_INSURANCE, amounts.getHealthInsurance());
-		map.put(ITEM_LONGTERM_CARE, amounts.getLongtermCare());
-		map.put(ITEM_EMPLOYMENT_INSURANCE, amounts.getEmploymentInsurance());
-		map.put(ITEM_INCOME_TAX, amounts.getIncomeTax());
-		map.put(ITEM_LOCAL_INCOME_TAX, amounts.getLocalIncomeTax());
+		map.put("国民年金", amounts.getNationalPension());
+		map.put("健康保険", amounts.getHealthInsurance());
+		map.put("介護保険", amounts.getLongtermCare());
+		map.put("雇用保険", amounts.getEmploymentInsurance());
+		map.put("所得税", amounts.getIncomeTax());
+		map.put("住民税", amounts.getLocalIncomeTax());
 		return map;
 	}
 
 	public static boolean isAutoDeductionItem(String itemName) {
-		String canonical = canonicalName(itemName);
-		return ITEM_NATIONAL_PENSION.equals(canonical) || ITEM_HEALTH_INSURANCE.equals(canonical)
-				|| ITEM_LONGTERM_CARE.equals(canonical) || ITEM_EMPLOYMENT_INSURANCE.equals(canonical)
-				|| ITEM_INCOME_TAX.equals(canonical) || ITEM_LOCAL_INCOME_TAX.equals(canonical);
-	}
-
-	private static boolean isOneOf(String name, String... aliases) {
-		for (String alias : aliases) {
-			if (alias.equals(name)) {
-				return true;
-			}
-		}
-		return false;
+		String normalized = canonicalName(itemName);
+		return "国民年金".equals(normalized) || "健康保険".equals(normalized)
+				|| "介護保険".equals(normalized) || "雇用保険".equals(normalized)
+				|| "所得税".equals(normalized) || "住民税".equals(normalized);
 	}
 
 	public static final class DeductionAmounts {
@@ -180,26 +137,29 @@ public final class SalaryAutoCalcRates {
 		}
 
 		public long byItemName(String itemName) {
-			String canonical = canonicalName(itemName);
-			if (canonical == null) {
+			String normalized = canonicalName(itemName);
+			if (normalized == null) {
 				return 0L;
 			}
-			switch (canonical) {
-			case ITEM_NATIONAL_PENSION:
+			if ("国民年金".equals(normalized)) {
 				return nationalPension;
-			case ITEM_HEALTH_INSURANCE:
-				return healthInsurance;
-			case ITEM_LONGTERM_CARE:
-				return longtermCare;
-			case ITEM_EMPLOYMENT_INSURANCE:
-				return employmentInsurance;
-			case ITEM_INCOME_TAX:
-				return incomeTax;
-			case ITEM_LOCAL_INCOME_TAX:
-				return localIncomeTax;
-			default:
-				return 0L;
 			}
+			if ("健康保険".equals(normalized)) {
+				return healthInsurance;
+			}
+			if ("介護保険".equals(normalized)) {
+				return longtermCare;
+			}
+			if ("雇用保険".equals(normalized)) {
+				return employmentInsurance;
+			}
+			if ("所得税".equals(normalized)) {
+				return incomeTax;
+			}
+			if ("住民税".equals(normalized)) {
+				return localIncomeTax;
+			}
+			return 0L;
 		}
 	}
 }
