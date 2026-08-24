@@ -5,96 +5,74 @@
 <%@ taglib prefix="layout" tagdir="/WEB-INF/tags"%>
 
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
 
-<title>헥사곤존 - 퇴직증명서 발급</title>
+<title>ヘキサゴンゾーン - 退職証明書発行</title>
 
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/certificate.css" />
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/certificate.css" />
 
 </head>
 <body>
 
-
 	<layout:headerNav />
-
 
 	<main class="certificate-container">
 
-
-		<!-- ==================================================
-	     상단
-	================================================== -->
-
 		<div class="page-hero">
 
-			<h1>📄 제증명서 발급</h1>
+			<h1>📄 各種証明書発行</h1>
 
-			<p>사원을 선택하면 해당 사원의 퇴직증명서를 확인하고 발급할 수 있습니다.</p>
+			<p>社員を選択すると、該当社員の退職証明書を確認して発行できます。</p>
 
 		</div>
 
-
 		<div class="certificate-layout">
-
-
-			<!-- ==================================================
-		     왼쪽 사원 목록
-		================================================== -->
 
 			<section class="employee-panel">
 
-
-				<div class="panel-title">사원 목록</div>
-
+				<div class="panel-title">社員一覧</div>
 
 				<div class="search-area">
 
-
-					<input type="text" id="searchKeyword" placeholder="사원명 검색"
+					<input type="text" id="searchKeyword" placeholder="社員名検索"
 						onkeyup="if(event.key === 'Enter') searchEmployee();">
 
-
 					<button type="button" class="btn btn-search"
-						onclick="searchEmployee();">검색</button>
-
+						onclick="searchEmployee();">検索</button>
 
 					<button type="button" class="btn btn-all"
-						onclick="showAllEmployee();">전체보기</button>
+						onclick="showAllEmployee();">全件表示</button>
 
 				</div>
 
-
 				<table class="employee-table">
-
 
 					<thead>
 
 						<tr>
 
-							<th>구분</th>
+							<th>区分</th>
 
-							<th>성명</th>
+							<th>氏名</th>
 
-							<th>부서</th>
+							<th>部署</th>
 
-							<th>직위</th>
+							<th>役職</th>
 
-							<th>상태</th>
+							<th>状態</th>
 
 						</tr>
 
 					</thead>
 
-
 					<tbody>
 
-
 						<c:forEach var="employee" items="${empListPage.empListData}">
-
 
 							<tr class="${selectedEmpId == employee.empId ? 'selected' : ''}"
 								onclick="selectEmployee(
@@ -102,62 +80,44 @@
 								'${empListPage.currentPage}'
 							);">
 
-
 								<td><c:out value="${employee.employmentType}" /></td>
-
 
 								<td><c:out value="${employee.nameKor}" /></td>
 
-
 								<td><c:out value="${employee.deptName}" /></td>
-
 
 								<td><c:out value="${employee.positionName}" /></td>
 
-
 								<td><c:choose>
-
 
 										<c:when test="${employee.status == 'Y'}">
 
-											<span class="status-working"> 재직 </span>
+											<span class="status-working"> 在職 </span>
 
 										</c:when>
 
-
 										<c:otherwise>
 
-											<span class="status-retired"> 퇴직 </span>
+											<span class="status-retired"> 退職 </span>
 
 										</c:otherwise>
 
-
 									</c:choose></td>
-
 
 							</tr>
 
-
 						</c:forEach>
-
 
 					</tbody>
 
 				</table>
 
-
-				<!-- ==================================================
-			     페이징
-			================================================== -->
-
 				<c:if test="${empListPage.totalPage > 1}">
 
 					<div class="pagination">
 
-
 						<c:forEach var="page" begin="${empListPage.startPage}"
 							end="${empListPage.endPage}">
-
 
 							<a
 								href="${pageContext.request.contextPath}/emp/certificate/retirement.do?pageNo=${page}"
@@ -165,171 +125,106 @@
 
 								${page} </a>
 
-
 						</c:forEach>
-
 
 					</div>
 
 				</c:if>
 
-
 			</section>
-
-
-
-			<!-- ==================================================
-		     오른쪽 증명서
-		================================================== -->
 
 			<section class="preview-panel">
 
-
-				<!-- ==================================================
-			     증명서 탭
-			================================================== -->
-
 				<div class="certificate-tabs">
-
 
 					<a
 						href="${pageContext.request.contextPath}/emp/certificate/working.do"
-						class="certificate-tab"> 재직증명서 </a> <a
+						class="certificate-tab"> 在職証明書 </a> <a
 						href="${pageContext.request.contextPath}/emp/certificate/retirement.do"
-						class="certificate-tab active"> 퇴직증명서 </a>
-
+						class="certificate-tab active"> 退職証明書 </a>
 
 				</div>
 
-
 				<div class="certificate-preview-area">
-
 
 					<div class="certificate-paper">
 
-
-						<!-- ==================================================
-					     증명서 상단
-					================================================== -->
-
 						<div class="cert-top">
-
 
 							<div class="cert-logo">HEXAGON ZONE</div>
 
-
-							<div class="cert-title">퇴직증명서</div>
-
+							<div class="cert-title">退職証明書</div>
 
 							<div class="cert-option">
 
-
 								<label> <input type="checkbox" id="hideResidentNo"
-									onchange="toggleResidentNo();"> 주민등록번호 숨김
+									onchange="toggleResidentNo();"> 住民登録番号を非表示
 
 								</label>
 
-
 							</div>
-
 
 						</div>
 
-
-
-						<!-- ==================================================
-					     사원 정보
-					================================================== -->
-
 						<table class="cert-table">
 
-
-							<!-- 인적사항 -->
 							<tr>
 
-
-								<th rowspan="2" class="section-head">인적<br>사항
+								<th rowspan="2" class="section-head">個人<br>情報
 
 								</th>
 
-
-								<th>성명</th>
-
+								<th>氏名</th>
 
 								<td><c:out value="${emp.nameKor}" /></td>
 
-
-								<th>주민등록번호</th>
-
+								<th>住民登録番号</th>
 
 								<td id="residentNoCell"><c:out value="${emp.residentNo}" />
 
 								</td>
 
-
 							</tr>
-
 
 							<tr>
 
-
-								<th>주소</th>
-
+								<th>住所</th>
 
 								<td colspan="3"><c:out value="${emp.address}" /></td>
 
-
 							</tr>
 
-
-
-							<!-- 재직사항 -->
 							<tr>
 
-
-								<th rowspan="3" class="section-head">재직<br>사항
+								<th rowspan="3" class="section-head">在職<br>情報
 
 								</th>
 
+								<th>会社名</th>
 
-								<th>회사명</th>
+								<td>株式会社ヘキサゴンゾーン</td>
 
-
-								<td>(주)헥사곤존</td>
-
-
-								<th>사업자번호</th>
-
+								<th>事業者番号</th>
 
 								<td>1234-5678</td>
 
-
 							</tr>
-
 
 							<tr>
 
-
-								<th>부서</th>
-
+								<th>部署</th>
 
 								<td><c:out value="${emp.deptName}" /></td>
 
-
-								<th>직위</th>
-
+								<th>役職</th>
 
 								<td><c:out value="${emp.positionName}" /></td>
 
-
 							</tr>
-
 
 							<tr>
 
-
-								<th>재직기간</th>
-
+								<th>在職期間</th>
 
 								<td class="work-period"><c:if
 										test="${not empty emp.hireDate}">
@@ -345,282 +240,173 @@
 
 									</c:if></td>
 
-
-								<th>근속기간</th>
-
+								<th>勤続期間</th>
 
 								<td id="servicePeriod">-</td>
 
-
 							</tr>
-
 
 						</table>
 
-
-
-						<!-- ==================================================
-					     발급용도
-					================================================== -->
-
 						<div class="usage-row">
 
-
-							<div class="usage-label">발급용도</div>
-
+							<div class="usage-label">発行用途</div>
 
 							<div class="usage-input-area">
-
 
 								<select id="issuePurpose" class="cert-select"
 									onchange="changeIssuePurpose();">
 
+									<option value="">選択</option>
 
-									<option value="">선택</option>
+									<option value="ビザ申請用">ビザ申請用</option>
 
+									<option value="銀行提出用">銀行提出用</option>
 
-									<option value="비자 신청용">비자 신청용</option>
+									<option value="官公庁提出用">官公庁提出用</option>
 
+									<option value="学校提出用">学校提出用</option>
 
-									<option value="은행 제출용">은행 제출용</option>
+									<option value="会社提出用">会社提出用</option>
 
+									<option value="兵務庁提出用">兵務庁提出用</option>
 
-									<option value="관공서 제출용">관공서 제출용</option>
+									<option value="関連課題提出用">関連課題提出用</option>
 
-
-									<option value="학교 제출용">학교 제출용</option>
-
-
-									<option value="회사 제출용">회사 제출용</option>
-
-
-									<option value="병무청 제출용">병무청 제출용</option>
-
-
-									<option value="관련과제 제출용">관련과제 제출용</option>
-
-
-									<option value="직접입력">직접입력</option>
-
+									<option value="直接入力">直接入力</option>
 
 								</select> <input type="text" id="directPurpose" class="direct-purpose"
-									placeholder="발급용도를 입력해주세요.">
-
+									placeholder="発行用途を入力してください。">
 
 							</div>
 
-
 						</div>
 
-
-
-						<!-- ==================================================
-					     증명 문구
-					================================================== -->
-
-						<div class="cert-content">상기인은 당사에 위와 같이 재직하였음을 증명합니다.</div>
-
-
-
-						<!-- ==================================================
-					     발급 날짜
-					================================================== -->
+						<div class="cert-content">上記の者が当社に上記の期間在職していたことを証明します。</div>
 
 						<div class="cert-date">
 
-
-							<span id="todayYear"></span>년 <span id="todayMonth"></span>월 <span
-								id="todayDay"></span>일
-
+							<span id="todayYear"></span>年 <span id="todayMonth"></span>月 <span
+								id="todayDay"></span>日
 
 						</div>
-
-
-
-						<!-- ==================================================
-					     발급부서
-					================================================== -->
 
 						<table class="issue-info-table">
 
-
 							<tr>
 
-
-								<th>발급부서</th>
-
+								<th>発行部署</th>
 
 								<td class="issue-dept-cell"><select id="issueDepartment">
 
+										<option value="">選択</option>
 
-										<option value="">선택</option>
+										<option value="社長室">社長室</option>
 
+										<option value="開発チーム">開発チーム</option>
 
-										<option value="사장실">사장실</option>
+										<option value="コンテンツチーム">コンテンツチーム</option>
 
+										<option value="業務支援チーム">業務支援チーム</option>
 
-										<option value="개발팀">개발팀</option>
+										<option value="デザインチーム">デザインチーム</option>
 
+										<option value="管理チーム">管理チーム</option>
 
-										<option value="콘텐츠팀">콘텐츠팀</option>
-
-
-										<option value="업무지원팀">업무지원팀</option>
-
-
-										<option value="디자인팀">디자인팀</option>
-
-
-										<option value="관리팀">관리팀</option>
-
-
-										<option value="기획전략팀">기획전략팀</option>
-
+										<option value="企画戦略チーム">企画戦略チーム</option>
 
 								</select></td>
 
+								<th class="contact-label">連絡先</th>
 
-								<th class="contact-label">연락처</th>
-
-
-								<td class="contact-value">[전국] 1588-2390</td>
-
+								<td class="contact-value">[全国] 1588-2390</td>
 
 							</tr>
 
-
 						</table>
-
-
-
-						<!-- ==================================================
-					     대표자 / 직인
-					================================================== -->
 
 						<div class="cert-company-bottom">
 
-
 							<div class="representative-option">
 
-
 								<label> <input type="checkbox" id="showRepresentative"
-									checked> 대표자 표기
+									checked> 代表者表示
 
 								</label>
 
-
 							</div>
-
 
 							<div class="company-sign" id="representativeArea">
 
-
 								<div class="company-name">
 
-									(주)헥사곤존 <br> 대표이사
+									株式会社ヘキサゴンゾーン <br> 代表取締役
 
 								</div>
-
 
 								<div class="company-seal">
 
-									회사 <br> 직인
+									会社 <br> 印
 
 								</div>
 
-
 							</div>
-
 
 						</div>
 
-
 					</div>
 
-
 				</div>
-
-
-
-				<!-- ==================================================
-			     인쇄 버튼
-			================================================== -->
 
 				<div class="action-area">
 
-
 					<button type="button" class="print-btn"
-						onclick="printCertificate();">인쇄</button>
-
+						onclick="printCertificate();">印刷</button>
 
 				</div>
 
-
 			</section>
-
 
 		</div>
 
-
 	</main>
-
 
 	<layout:footer />
 
-
-
-	<!-- ==================================================
-     재직 사원 선택
-================================================== -->
-
 	<c:if test="${workingEmployee}">
 
+		<!-- 증명서 선택 및 발급 처리 / 証明書選択および発行処理 -->
 		<script>
 
 		alert(
-			"재직 중인 사원은 퇴직증명서를 발급할 수 없습니다."
+			"在職中の社員には退職証明書を発行できません。"
 		);
 
 	</script>
 
 	</c:if>
-
 
 	<c:if test="${employeeNotFound}">
 
 		<script>
 
 		alert(
-			"사원 정보를 찾을 수 없습니다."
+			"社員情報が見つかりません。"
 		);
 
 	</script>
 
 	</c:if>
 
-
-
 	<script>
-
-
-/* ==================================================
-   사원이 선택되어 있는지
-================================================== */
 
 const employeeSelected =
 	${not empty emp ? 'true' : 'false'};
-
-
-
-/* ==================================================
-   사원 선택
-================================================== */
 
 function selectEmployee(
 	empId,
 	pageNo
 ) {
-
 
 	location.href =
 		"${pageContext.request.contextPath}"
@@ -630,17 +416,9 @@ function selectEmployee(
 		+ "&pageNo="
 		+ encodeURIComponent(pageNo);
 
-
 }
 
-
-
-/* ==================================================
-   사원 검색
-================================================== */
-
 function searchEmployee() {
-
 
 	const keyword =
 		document
@@ -651,22 +429,18 @@ function searchEmployee() {
 			.trim()
 			.toLowerCase();
 
-
 	const rows =
 		document.querySelectorAll(
 			".employee-table tbody tr"
 		);
 
-
 	rows.forEach(function(row) {
-
 
 		const name =
 			row.children[1]
 				.innerText
 				.trim()
 				.toLowerCase();
-
 
 		if (
 			name.includes(keyword)
@@ -682,31 +456,22 @@ function searchEmployee() {
 
 		}
 
-
 	});
-
 
 }
 
-
-
-/* ==================================================
-   전체보기
-================================================== */
+<!-- 전체보기 처리 / 全件表示処理 -->
 
 function showAllEmployee() {
-
 
 	document.getElementById(
 		"searchKeyword"
 	).value = "";
 
-
 	const rows =
 		document.querySelectorAll(
 			".employee-table tbody tr"
 		);
-
 
 	rows.forEach(function(row) {
 
@@ -714,29 +479,21 @@ function showAllEmployee() {
 
 	});
 
-
 }
 
-
-
-/* ==================================================
-   발급용도 직접입력
-================================================== */
+<!-- 발급용도 직접입력 처리 / 発行用途直接入力処理 -->
 
 function changeIssuePurpose() {
-
 
 	const purpose =
 		document.getElementById(
 			"issuePurpose"
 		);
 
-
 	const directInput =
 		document.getElementById(
 			"directPurpose"
 		);
-
 
 	if (
 		!purpose
@@ -747,60 +504,42 @@ function changeIssuePurpose() {
 
 	}
 
-
 	if (
 		purpose.value
-		=== "직접입력"
+		=== "直接入力"
 	) {
-
 
 		directInput.style.display =
 			"inline-block";
 
-
 		directInput.focus();
 
-
 	} else {
-
 
 		directInput.style.display =
 			"none";
 
-
 		directInput.value =
 			"";
 
-
 	}
 
-
 }
-
-
-
-/* ==================================================
-   주민번호 숨김
-================================================== */
 
 const originalResidentNo =
 	"${emp.residentNo}";
 
-
 function toggleResidentNo() {
-
 
 	const checkbox =
 		document.getElementById(
 			"hideResidentNo"
 		);
 
-
 	const cell =
 		document.getElementById(
 			"residentNoCell"
 		);
-
 
 	if (
 		!checkbox
@@ -811,11 +550,9 @@ function toggleResidentNo() {
 
 	}
 
-
 	if (
 		checkbox.checked
 	) {
-
 
 		if (
 			originalResidentNo
@@ -823,80 +560,59 @@ function toggleResidentNo() {
 				.includes("-")
 		) {
 
-
 			const front =
 				originalResidentNo
 					.split("-")[0];
 
-
 			cell.innerText =
 				front
 				+ "-*******";
-
 
 		} else if (
 			originalResidentNo
 			&& originalResidentNo.length >= 6
 		) {
 
-
 			cell.innerText =
 				originalResidentNo
 					.substring(0, 6)
 				+ "-*******";
 
-
 		} else {
-
 
 			cell.innerText =
 				"******-*******";
 
 		}
 
-
 	} else {
-
 
 		cell.innerText =
 			originalResidentNo;
 
-
 	}
-
 
 }
 
-
-
-/* ==================================================
-   발급 날짜
-================================================== */
-
 function setToday() {
-
 
 	const today =
 		new Date();
-
 
 	const year =
 		document.getElementById(
 			"todayYear"
 		);
 
-
 	const month =
 		document.getElementById(
 			"todayMonth"
 		);
 
-
 	const day =
 		document.getElementById(
 			"todayDay"
 		);
-
 
 	if (year) {
 
@@ -904,7 +620,6 @@ function setToday() {
 			today.getFullYear();
 
 	}
-
 
 	if (month) {
 
@@ -918,7 +633,6 @@ function setToday() {
 
 	}
 
-
 	if (day) {
 
 		day.innerText =
@@ -931,25 +645,14 @@ function setToday() {
 
 	}
 
-
 }
 
-
-
-/* ==================================================
-   퇴직사원 근속기간 계산
-
-   입사일 → 퇴직일
-================================================== */
-
 function calculateServicePeriod() {
-
 
 	const target =
 		document.getElementById(
 			"servicePeriod"
 		);
-
 
 	if (!target) {
 
@@ -957,51 +660,41 @@ function calculateServicePeriod() {
 
 	}
 
-
 	const hireDateValue =
 		"${emp.hireDate}";
 
-
 	const retireDateValue =
 		"${emp.retireDate}";
-
 
 	if (
 		!hireDateValue
 		|| !retireDateValue
 	) {
 
-
 		target.innerText =
 			"-";
-
 
 		return;
 
 	}
-
 
 	const hireDate =
 		new Date(
 			hireDateValue
 		);
 
-
 	const retireDate =
 		new Date(
 			retireDateValue
 		);
 
-
 	let years =
 		retireDate.getFullYear()
 		- hireDate.getFullYear();
 
-
 	let months =
 		retireDate.getMonth()
 		- hireDate.getMonth();
-
 
 	if (
 		retireDate.getDate()
@@ -1012,7 +705,6 @@ function calculateServicePeriod() {
 
 	}
 
-
 	if (
 		months < 0
 	) {
@@ -1022,7 +714,6 @@ function calculateServicePeriod() {
 		months += 12;
 
 	}
-
 
 	if (
 		years < 0
@@ -1035,39 +726,28 @@ function calculateServicePeriod() {
 
 	}
 
-
 	target.innerText =
 		years
-		+ "년 "
+		+ "年 "
 		+ months
-		+ "개월";
-
+		+ "か月";
 
 }
-
-
-
-/* ==================================================
-   대표자 표기
-================================================== */
 
 document.addEventListener(
 	"change",
 
 	function(event) {
 
-
 		if (
 			event.target.id
 			=== "showRepresentative"
 		) {
 
-
 			const area =
 				document.getElementById(
 					"representativeArea"
 				);
-
 
 			if (!area) {
 
@@ -1075,42 +755,31 @@ document.addEventListener(
 
 			}
 
-
 			if (
 				event.target.checked
 			) {
 
-
 				area.style.visibility =
 					"visible";
 
-
 			} else {
-
 
 				area.style.visibility =
 					"hidden";
 
-
 			}
 
-
 		}
-
 
 	}
 );
 
-
-
-/* ==================================================
-   인쇄
-================================================== */
+<!-- 인쇄 처리 / 印刷処理 -->
 
 function printCertificate() {
 
     if (!employeeSelected) {
-        alert("먼저 퇴직증명서를 발급할 사원을 선택해주세요.");
+        alert("先に退職証明書を発行する社員を選択してください。");
         return;
     }
 
@@ -1118,19 +787,19 @@ function printCertificate() {
             document.getElementById("issuePurpose");
 
     if (issuePurpose && !issuePurpose.value) {
-        alert("발급용도를 선택해주세요.");
+        alert("発行用途を選択してください。");
         return;
     }
 
     let purposeValue = issuePurpose.value;
 
-    if (issuePurpose.value === "직접입력") {
+    if (issuePurpose.value === "直接入力") {
 
         const directPurpose =
                 document.getElementById("directPurpose");
 
         if (!directPurpose.value.trim()) {
-            alert("발급용도를 입력해주세요.");
+            alert("発行用途を入力してください。");
             directPurpose.focus();
             return;
         }
@@ -1142,11 +811,10 @@ function printCertificate() {
             document.getElementById("issueDepartment");
 
     if (issueDepartment && !issueDepartment.value) {
-        alert("발급부서를 선택해주세요.");
+        alert("発行部署を選択してください。");
         return;
     }
 
-    // 발급대장 저장
     const form = document.createElement("form");
 
     form.method = "post";
@@ -1176,25 +844,18 @@ function printCertificate() {
 
     form.submit();
 }
-/* ==================================================
-   최초 실행
-================================================== */
 
 window.addEventListener(
 	"DOMContentLoaded",
 
 	function() {
 
-
 		setToday();
-
 
 		calculateServicePeriod();
 
-
 	}
 );
-
 
 </script>
 </body>

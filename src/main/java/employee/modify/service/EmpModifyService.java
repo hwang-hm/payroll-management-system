@@ -7,14 +7,11 @@ import java.util.List;
 import employee.dao.DependentDao;
 import employee.dao.EmpDao;
 import employee.dao.EmpInfoSalaryDao;
-import employee.dao.NationalPensionDao;
 import employee.model.Dependent;
 import employee.model.EmpInfoSalary;
 import employee.model.Employee;
-import employee.model.NationalPensionInfo;
 import jdbc.JdbcUtil;
 import jdbc.connection.ConnectionProvider;
-import retirement.retire.service.EmpNotFoundExcpetion;
 
 public class EmpModifyService {
 
@@ -22,7 +19,6 @@ public class EmpModifyService {
 
 	private EmpDao empDao = new EmpDao();
 	private EmpInfoSalaryDao empInfoSalaryDao = new EmpInfoSalaryDao();
-	private NationalPensionDao npDao = new NationalPensionDao();
 	private DependentDao dependentDao = new DependentDao();
 
 	public void modifyEmp(int empId, EmpModifyRequest modifyrReq) {
@@ -36,7 +32,7 @@ public class EmpModifyService {
 			
 			int updatedEmp = empDao.updateEmp(conn, empId, emp);
 			if (updatedEmp == 0) {
-			    throw new RuntimeException("사원 정보 수정 실패");
+			    throw new RuntimeException("Failed to update employee information");
 			}
 			
 			EmpInfoSalary empInfoSalary = mapper.toEmpInfoSalary(modifyrReq.getEmpInfoSalaryReq());
@@ -58,7 +54,7 @@ public class EmpModifyService {
 
 			int updatedEmpInfoSalary = empInfoSalaryDao.updateEmpInfosalary(conn, empId, empInfoSalary);
 			if (updatedEmpInfoSalary == 0) {
-			    throw new RuntimeException("사원 급여 정보 수정 실패");
+			    throw new RuntimeException("Failed to update employee salary information");
 			}
 			
 			for (DependentRequest dependentReq : modifyrReq.getDependentReqs()) {
@@ -66,7 +62,7 @@ public class EmpModifyService {
 				int updatedDependent = dependentDao.updateDependent(conn, empId, dependent);
 				
 				if (updatedDependent == 0) {
-			        throw new RuntimeException("부양가족 정보 수정 실패");
+			        throw new RuntimeException("Failed to update dependent information");
 				}
 			}
 
