@@ -31,12 +31,12 @@ public class TransferExecuteService {
 			List<TransferApplyRow> rows = transferApplyDao.selectTransferApplyRowsByPeriod(conn, period.getPayYear(),
 					period.getPayMonth(), period.getPaySeq());
 			if (rows.isEmpty()) {
-				return "이체할 급여 대상이 없습니다.";
+				return "振込対象の給与がありません。";
 			}
 
 			TransferApplyRow sample = rows.get(0);
 			if (isBlank(sample.getWithdrawBank()) || isBlank(sample.getWithdrawAccount())) {
-				return "회사 출금계좌(payroll_information)가 없습니다.";
+				return "会社出金口座(payroll_information)がありません。";
 			}
 
 			List<Integer> candidateIds = new ArrayList<>();
@@ -50,7 +50,7 @@ public class TransferExecuteService {
 			int successCount = 0;
 			int skipNoAccount = 0;
 			int skipAlreadyTransferred = 0;
-			String memo = String.format("급여%04d-%02d", period.getPayYear(), period.getPayMonth());
+			String memo = String.format("給与%04d-%02d", period.getPayYear(), period.getPayMonth());
 			Date today = new Date();
 			List<TransferHistory> toInsert = new ArrayList<>();
 
@@ -74,14 +74,14 @@ public class TransferExecuteService {
 				history.setDepositorName(row.getNameKor());
 				history.setTransferAmount(row.getNetPay());
 				history.setDepositMemo(memo);
-				history.setTransferResult("성공");
+				history.setTransferResult("成功");
 				toInsert.add(history);
 				successCount++;
 			}
 
 			transferHistoryDao.insertBatch(conn, toInsert);
 			conn.commit();
-			return String.format("이체 완료: %d건, 계좌없음 %d건, 기이체 %d건", successCount, skipNoAccount,
+			return String.format("振込完了: %d件、口座なし %d件、既振込 %d件", successCount, skipNoAccount,
 					skipAlreadyTransferred);
 		} catch (SQLException e) {
 			JdbcUtil.rollback(conn);
