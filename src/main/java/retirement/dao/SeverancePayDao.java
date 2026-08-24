@@ -177,7 +177,7 @@ public class SeverancePayDao {
 				return rs.getInt(1);
 			}
 
-			throw new SQLException("severance_pay_id 생성 실패");
+			throw new SQLException("Failed to generate severance_pay_id");
 
 		} finally {
 			JdbcUtil.close(rs);

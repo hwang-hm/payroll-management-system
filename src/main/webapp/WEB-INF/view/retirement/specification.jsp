@@ -5,18 +5,19 @@
 <%@ taglib prefix="layout" tagdir="/WEB-INF/tags"%>
 
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
 
-<title>헥사곤존 - 퇴직급여명세서</title>
+<title>ヘキサゴンゾーン - 退職給付明細書</title>
 
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/certificate.css" />
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/specification.css"/>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/specification.css" />
 
 </head>
 
@@ -27,29 +28,26 @@
 	<main class="certificate-container">
 
 		<div class="page-hero">
-			<h1>📄 퇴직급여명세서</h1>
-			<p>사원을 선택하면 해당 사원의 퇴직급여명세서를 확인할 수 있습니다.</p>
+			<h1>📄 退職給付明細書</h1>
+			<p>社員を選択すると、該当社員の退職給付明細書を確認できます。</p>
 		</div>
 
 		<div class="certificate-layout">
 
-			<!-- ==================================================
-				사원 목록
-			================================================== -->
 			<section class="employee-panel no-print">
 
-				<div class="panel-title">사원 목록</div>
+				<div class="panel-title">社員一覧</div>
 
 				<div class="search-area">
 
-					<input type="text" id="searchKeyword" placeholder="사원명 검색"
+					<input type="text" id="searchKeyword" placeholder="社員名検索"
 						onkeyup="if(event.key === 'Enter') searchEmployee();">
 
 					<button type="button" class="btn btn-search"
-						onclick="searchEmployee();">검색</button>
+						onclick="searchEmployee();">検索</button>
 
 					<button type="button" class="btn btn-all"
-						onclick="showAllEmployee();">전체보기</button>
+						onclick="showAllEmployee();">全件表示</button>
 
 				</div>
 
@@ -57,10 +55,10 @@
 
 					<thead>
 						<tr>
-							<th>구분</th>
-							<th>성명</th>
-							<th>부서</th>
-							<th>상태</th>
+							<th>区分</th>
+							<th>氏名</th>
+							<th>部署</th>
+							<th>状態</th>
 						</tr>
 					</thead>
 
@@ -70,7 +68,6 @@
 
 							<c:choose>
 
-								<%-- 퇴직 사원: 선택 가능 --%>
 								<c:when test="${employee.status == 'N'}">
 
 									<tr
@@ -79,11 +76,10 @@
 										style="cursor: pointer;">
 								</c:when>
 
-								<%-- 재직 사원: 선택 불가 --%>
 								<c:otherwise>
 
 									<tr class="disabled-employee"
-										onclick="alert('퇴직한 사원만 퇴직급여명세서를 조회할 수 있습니다.');">
+										onclick="alert('退職した社員のみ退職給付明細書を照会できます。');">
 								</c:otherwise>
 
 							</c:choose>
@@ -95,11 +91,11 @@
 							<td><c:choose>
 
 									<c:when test="${employee.status == 'Y'}">
-										<span class="status-working">재직</span>
+										<span class="status-working">在職</span>
 									</c:when>
 
 									<c:otherwise>
-										<span class="status-retired">퇴직</span>
+										<span class="status-retired">退職</span>
 									</c:otherwise>
 
 								</c:choose></td>
@@ -112,7 +108,6 @@
 
 				</table>
 
-				<!-- 페이징 -->
 				<c:if test="${empListPage.totalPage > 1}">
 
 					<div class="pagination">
@@ -133,10 +128,6 @@
 
 			</section>
 
-
-			<!-- ==================================================
-				명세서 미리보기
-			================================================== -->
 			<section class="preview-panel">
 
 				<div class="certificate-preview-area">
@@ -147,26 +138,23 @@
 
 							<div class="specification-paper">
 
-								<div class="spec-title">퇴직급여명세서</div>
+								<div class="spec-title">退職給付明細書</div>
 
-
-								<!-- ==================================================
-									사원정보
-								================================================== -->
 								<div class="spec-section">
 
-									<div class="spec-section-title">사원정보</div>
+									<!-- 사원정보 / 社員情報 -->
+									<div class="spec-section-title">社員情報</div>
 
 									<table class="spec-table">
 
 										<tr>
 
-											<th>성명</th>
+											<th>氏名</th>
 
 											<td><c:out value="${specificationData.emp.nameKor}" />
 											</td>
 
-											<th>입사일</th>
+											<th>入社日</th>
 
 											<td><fmt:formatDate
 													value="${specificationData.emp.hireDate}"
@@ -176,12 +164,12 @@
 
 										<tr>
 
-											<th>부서</th>
+											<th>部署</th>
 
 											<td><c:out value="${specificationData.emp.deptName}" />
 											</td>
 
-											<th>퇴직일</th>
+											<th>退職日</th>
 
 											<td><fmt:formatDate
 													value="${specificationData.emp.retireDate}"
@@ -191,12 +179,12 @@
 
 										<tr>
 
-											<th>직위</th>
+											<th>役職</th>
 
 											<td><c:out value="${specificationData.emp.positionName}" />
 											</td>
 
-											<th>근속일수</th>
+											<th>勤続日数</th>
 
 											<td id="serviceDays">-</td>
 
@@ -206,19 +194,16 @@
 
 								</div>
 
-
-								<!-- ==================================================
-									급여내역
-								================================================== -->
 								<div class="spec-section">
 
-									<div class="spec-section-title">급여내역</div>
+									<!-- 급여내역 / 給与明細 -->
+									<div class="spec-section-title">給与明細</div>
 
 									<table class="spec-table">
 
 										<tr>
 
-											<th class="label">산정기간</th>
+											<th class="label">算定期間</th>
 
 											<c:forEach var="salary"
 												items="${specificationData.salaryList}">
@@ -239,14 +224,13 @@
 
 											</c:forEach>
 
-											<th>계</th>
+											<th>計</th>
 
 										</tr>
 
-
 										<tr>
 
-											<th>산정일수</th>
+											<th>算定日数</th>
 
 											<c:forEach var="salary"
 												items="${specificationData.salaryList}">
@@ -262,10 +246,9 @@
 
 										</tr>
 
-
 										<tr>
 
-											<th>급여총액</th>
+											<th>給与総額</th>
 
 											<c:forEach var="salary"
 												items="${specificationData.salaryList}">
@@ -286,22 +269,19 @@
 
 								</div>
 
-
-								<!-- ==================================================
-									기타소득
-								================================================== -->
 								<div class="spec-section">
 
-									<div class="spec-section-title">기타소득</div>
+									<!-- 기타소득 / その他所得 -->
+									<div class="spec-section-title">その他所得</div>
 
 									<table class="spec-table extra-income-table">
 
 										<thead>
 
 											<tr>
-												<th>지급항목</th>
-												<th>1년간 지급액</th>
-												<th>3개월분</th>
+												<th>支給項目</th>
+												<th>1年間支給額</th>
+												<th>3か月分</th>
 											</tr>
 
 										</thead>
@@ -325,8 +305,6 @@
 
 											</c:forEach>
 
-
-											<!-- 데이터가 없을 경우 빈 칸 유지 -->
 											<c:if test="${empty specificationData.otherTaxableIncome}">
 
 												<tr>
@@ -355,17 +333,13 @@
 
 								</div>
 
-
-								<!-- ==================================================
-									퇴직위로금 / 해고예고수당
-								================================================== -->
 								<div class="spec-section">
 
 									<table class="spec-table allowance-table">
 
 										<tr>
 
-											<th>퇴직위로금</th>
+											<th>退職慰労金</th>
 
 											<td><c:choose>
 
@@ -383,8 +357,7 @@
 
 												</c:choose></td>
 
-
-											<th>해고예고수당</th>
+											<th>解雇予告手当</th>
 
 											<td><c:choose>
 
@@ -408,23 +381,20 @@
 
 								</div>
 
-
-								<!-- ==================================================
-									퇴직소득
-								================================================== -->
 								<div class="spec-section">
 
-									<div class="spec-section-title">퇴직소득</div>
+									<!-- 퇴직소득 / 退職所得 -->
+									<div class="spec-section-title">退職所得</div>
 
 									<table class="spec-table retirement-income-table">
 
 										<tr>
 
-											<th rowspan="2">1일 평균임금</th>
+											<th rowspan="2">1日平均賃金</th>
 
-											<th>3개월 총계</th>
+											<th>3か月合計</th>
 
-											<td class="formula">급여총액 계 + 3개월분 기타소득 계</td>
+											<td class="formula">給与総額計 + 3か月分その他所得計</td>
 
 											<td class="result"><fmt:formatNumber
 													value="${specificationData.totalSalary + specificationData.totalOtherIncomeThreeMonths}"
@@ -432,12 +402,11 @@
 
 										</tr>
 
-
 										<tr>
 
-											<th>1일 평균임금</th>
+											<th>1日平均賃金</th>
 
-											<td class="formula">3개월 총계 / 산정일수</td>
+											<td class="formula">3か月合計 / 算定日数</td>
 
 											<td class="result"><fmt:formatNumber
 													value="${specificationData.dailyAverageWage}"
@@ -445,13 +414,12 @@
 
 										</tr>
 
-
 										<tr>
 
-											<th>1일 통상임금</th>
+											<th>1日通常賃金</th>
 
-											<td colspan="2" class="formula">1일 통상임금이 1일 평균임금보다 높은 경우
-												1일 통상임금으로 적용</td>
+											<td colspan="2" class="formula">1日通常賃金が1日平均賃金より高い場合
+												1日通常賃金を適用</td>
 
 											<td class="result"><c:choose>
 
@@ -471,13 +439,12 @@
 
 										</tr>
 
-
 										<tr>
 
-											<th>퇴직소득</th>
+											<th>退職所得</th>
 
-											<td colspan="2" class="formula">(적용 1일 임금 × 30일 × 근속일수 /
-												365) + 퇴직위로금 + 해고예고수당</td>
+											<td colspan="2" class="formula">（適用1日賃金 × 30日 × 勤続日数 /
+												365) + 退職慰労金 + 解雇予告手当</td>
 
 											<td class="result"><c:choose>
 
@@ -501,22 +468,19 @@
 
 								</div>
 
-
-								<!-- ==================================================
-									공제내역
-								================================================== -->
 								<div class="spec-section">
 
-									<div class="spec-section-title">공제내역</div>
+									<!-- 공제내역 / 控除内訳 -->
+									<div class="spec-section-title">控除内訳</div>
 
 									<table class="spec-table deduction-table">
 
 										<tr>
 
-											<th>퇴직소득세</th>
-											<th>지방소득세</th>
-											<th>기타공제</th>
-											<th>공제총액</th>
+											<th>退職所得税</th>
+											<th>地方所得税</th>
+											<th>その他控除</th>
+											<th>控除総額</th>
 
 										</tr>
 
@@ -538,7 +502,6 @@
 
 												</c:choose></td>
 
-
 											<td><c:choose>
 
 													<c:when test="${not empty specificationData.severancePay}">
@@ -554,7 +517,6 @@
 													</c:otherwise>
 
 												</c:choose></td>
-
 
 											<td><c:choose>
 
@@ -572,7 +534,6 @@
 
 												</c:choose></td>
 
-
 											<td class="result"><fmt:formatNumber
 													value="${specificationData.totalDeduction}" pattern="#,###" />
 
@@ -584,19 +545,15 @@
 
 								</div>
 
-
-								<!-- ==================================================
-									실수령액
-								================================================== -->
 								<div class="spec-section">
 
 									<table class="spec-table net-payment-table">
 
 										<tr>
 
-											<th>실수령액</th>
+											<th>実受取額</th>
 
-											<td class="description">퇴직급여 - 공제총액</td>
+											<td class="description">退職給付 - 控除総額</td>
 
 											<td class="result"><c:choose>
 
@@ -620,22 +577,18 @@
 
 								</div>
 
-
-								<div class="spec-footer-message">위 금액을 해당자의 퇴직금 정산액으로 정히
-									영수함</div>
-
+								<div class="spec-footer-message">上記金額を当該者の退職金精算額として受領しました。</div>
 
 								<div class="spec-date">
 
-									<span id="todayYear"></span>년 <span id="todayMonth"></span>월 <span
-										id="todayDay"></span>일
+									<span id="todayYear"></span>年 <span id="todayMonth"></span>月 <span
+										id="todayDay"></span>日
 
 								</div>
 
-
 								<div class="spec-company">
 
-									(주)헥사곤존<br> 대표이사
+									株式会社ヘキサゴンゾーン<br> 代表取締役
 
 								</div>
 
@@ -643,12 +596,11 @@
 
 						</c:when>
 
-
 						<c:otherwise>
 
 							<div class="specification-paper empty-specification">
 
-								퇴직급여명세서를 확인할 사원을 선택해주세요.</div>
+								退職給付明細書を確認する社員を選択してください。</div>
 
 						</c:otherwise>
 
@@ -656,11 +608,10 @@
 
 				</div>
 
-
 				<div class="action-area no-print">
 
 					<button type="button" class="print-btn"
-						onclick="printSpecification();">인쇄</button>
+						onclick="printSpecification();">印刷</button>
 
 				</div>
 
@@ -670,14 +621,10 @@
 
 	</main>
 
-
 	<layout:footer />
 
-
+	<!-- 사원 선택 및 명세서 출력 처리 / 社員選択および明細書印刷処理 -->
 	<script>
-		/* ==================================================
-		 사원 선택
-		 ================================================== */
 		function selectEmployee(empId, pageNo) {
 
 			location.href = "${pageContext.request.contextPath}"
@@ -687,9 +634,6 @@
 
 		}
 
-		/* ==================================================
-		 사원 검색
-		 ================================================== */
 		function searchEmployee() {
 
 			const keyword = document.getElementById("searchKeyword").value
@@ -715,9 +659,6 @@
 
 		}
 
-		/* ==================================================
-		 전체보기
-		 ================================================== */
 		function showAllEmployee() {
 
 			document.getElementById("searchKeyword").value = "";
@@ -732,9 +673,6 @@
 
 		}
 
-		/* ==================================================
-		 근속일수
-		 ================================================== */
 		function calculateServiceDays() {
 
 			const target = document.getElementById("serviceDays");
@@ -763,13 +701,10 @@
 
 			const serviceDays = Math.floor(diffTime / oneDay) + 1;
 
-			target.innerText = serviceDays.toLocaleString() + "일";
+			target.innerText = serviceDays.toLocaleString() + "日";
 
 		}
 
-		/* ==================================================
-		 오늘 날짜
-		 ================================================== */
 		function setToday() {
 
 			const today = new Date();
@@ -794,9 +729,6 @@
 
 		}
 
-		/* ==================================================
-		 인쇄
-		 ================================================== */
 		function printSpecification() {
 
 			const paper = document.querySelector(".specification-paper");
@@ -805,7 +737,7 @@
 
 			if (!paper || empty) {
 
-				alert("먼저 퇴직급여명세서를 확인할 사원을 선택해주세요.");
+				alert("先に退職給付明細書を確認する社員を選択してください。");
 
 				return;
 
@@ -815,9 +747,6 @@
 
 		}
 
-		/* ==================================================
-		 최초 실행
-		 ================================================== */
 		window.addEventListener("DOMContentLoaded", function() {
 
 			setToday();

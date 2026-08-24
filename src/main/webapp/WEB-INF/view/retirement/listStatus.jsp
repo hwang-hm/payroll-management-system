@@ -1,639 +1,440 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="layout" tagdir="/WEB-INF/tags" %>
+pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="layout" tagdir="/WEB-INF/tags"%>
 
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
 
-<title>사원 퇴직 관리 - 헥사곤존</title>
+<title>社員退職管理 - ヘキサゴンゾーン</title>
 
 <link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/listStatus.css"/>
+	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/listStatus.css" />
 
 </head>
 
 <body>
 
-<layout:headerNav />
+	<layout:headerNav />
 
+	<div class="container">
 
-<div class="container">
+		<!-- 페이지 상단 제목 및 설명 / ページ上部タイトルおよび説明 -->
+		<div class="page-header">
 
+			<h2>👥 社員退職管理</h2>
 
-    <div class="page-header">
+			<p>登録された社員の在職・退職状況を照会するメニューです。</p>
 
-        <h2>👥 사원 퇴직 관리</h2>
+		</div>
 
-        <p>
-            등록된 사원의 재직 및 퇴직 현황을 조회하는 메뉴입니다.
-        </p>
+		<div class="list-section">
 
-    </div>
+			<!-- 사원 검색 및 상태 필터 / 社員検索および状態フィルター -->
+			<form action="${pageContext.request.contextPath}/retirement/list.do"
+				method="get">
 
+				<div class="search-area">
 
-    <div class="list-section">
+					<div class="search-left">
 
+						<select name="searchType" class="search-type">
 
-        <%-- 임시 확인용
-        <p>페이지 객체 : ${retirementEmpPage}</p>
-        <p>총 인원 : ${retirementEmpPage.total}</p>
-        <p>리스트 : ${retirementEmpPage.retirementEmpListData}</p>
-        --%>
+							<option value="name"
+								${param.searchType == 'name' ? 'selected' : ''}>氏名</option>
 
+							<option value="empId"
+								${param.searchType == 'empId' ? 'selected' : ''}>社員番号</option>
 
-        <form
-            action="${pageContext.request.contextPath}/retirement/list.do"
-            method="get">
+							<option value="dept"
+								${param.searchType == 'dept' ? 'selected' : ''}>部署</option>
 
-            <div class="search-area">
+						</select> <input type="text" name="keyword" class="search-input"
+							value="${param.keyword}" placeholder="検索ワードを入力してください。">
 
+						<button type="submit" class="btn btn-outline btn-search"
+							title="検索">🔍</button>
 
-                <div class="search-left">
+						<a href="${pageContext.request.contextPath}/retirement/list.do"
+							class="btn btn-primary"> ▣ 全件表示 </a>
 
+					</div>
 
-                    <select
-                        name="searchType"
-                        class="search-type">
+					<div class="search-right">
 
-                        <option value="name"
-                            ${param.searchType == 'name' ? 'selected' : ''}>
-                            성명
-                        </option>
+						<select name="status" class="status-select"
+							onchange="this.form.submit();">
 
-                        <option value="empId"
-                            ${param.searchType == 'empId' ? 'selected' : ''}>
-                            사원번호
-                        </option>
+							<option value="" ${empty param.status ? 'selected' : ''}>
+								状態別</option>
 
-                        <option value="dept"
-                            ${param.searchType == 'dept' ? 'selected' : ''}>
-                            부서
-                        </option>
+							<option value="Y" ${param.status == 'Y' ? 'selected' : ''}>
+								在職</option>
 
+							<option value="N" ${param.status == 'N' ? 'selected' : ''}>
+								退職</option>
 
-                    </select>
+						</select>
 
+					</div>
 
-                    <input
-                        type="text"
-                        name="keyword"
-                        class="search-input"
-                        value="${param.keyword}"
-                        placeholder="검색어를 입력해주세요.">
+				</div>
 
+			</form>
 
-                    <button
-                        type="submit"
-                        class="btn btn-outline btn-search"
-                        title="검색">
+			<!-- 사원 퇴직 현황 목록 / 社員退職状況一覧 -->
+			<div class="table-wrap">
 
-                        🔍
+				<table class="emp-table">
 
-                    </button>
+					<colgroup>
 
+						<col style="width: 55px;">
+						<col style="width: 85px;">
+						<col style="width: 110px;">
+						<col style="width: 100px;">
+						<col style="width: 120px;">
+						<col style="width: 110px;">
+						<col style="width: 120px;">
+						<col style="width: 120px;">
+						<col style="width: 90px;">
+						<col style="width: 95px;">
+						<col style="width: 95px;">
 
-                    <a
-                        href="${pageContext.request.contextPath}/retirement/list.do"
-                        class="btn btn-primary">
+					</colgroup>
 
-                        ▣ 전체보기
+					<thead>
 
-                    </a>
+						<tr>
 
-                </div>
+							<th>番号</th>
+							<th>状態</th>
+							<th>社員番号</th>
+							<th>氏名</th>
+							<th>部署</th>
+							<th>役職</th>
+							<th>入社日</th>
+							<th>退職日</th>
+							<th>勤続年数</th>
+							<th>中間精算</th>
+							<th>退職精算</th>
 
+						</tr>
 
-                <div class="search-right">
+					</thead>
 
-                    <select
-                        name="status"
-                        class="status-select"
-                        onchange="this.form.submit();">
+					<tbody>
 
-                        <option value=""
-                            ${empty param.status ? 'selected' : ''}>
-                            상태별
-                        </option>
+						<c:forEach var="emp"
+							items="${retirementEmpPage.retirementEmpListData}"
+							varStatus="status">
 
-                        <option value="Y"
-                            ${param.status == 'Y' ? 'selected' : ''}>
-                            재직
-                        </option>
+							<tr>
 
-                        <option value="N"
-                            ${param.status == 'N' ? 'selected' : ''}>
-                            퇴직
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-            </div>
-
-        </form>
-
-
-
-        <div class="table-wrap">
-
-            <table class="emp-table">
-
-
-                <colgroup>
-
-                    <col style="width: 55px;">
-                    <col style="width: 85px;">
-                    <col style="width: 110px;">
-                    <col style="width: 100px;">
-                    <col style="width: 120px;">
-                    <col style="width: 110px;">
-                    <col style="width: 120px;">
-                    <col style="width: 120px;">
-                    <col style="width: 90px;">
-                    <col style="width: 95px;">
-                    <col style="width: 95px;">
-
-                </colgroup>
-
-
-                <thead>
-
-                    <tr>
-
-                        <th>번호</th>
-                        <th>상태</th>
-                        <th>사원번호</th>
-                        <th>성명</th>
-                        <th>부서</th>
-                        <th>직위</th>
-                        <th>입사일</th>
-                        <th>퇴직일</th>
-                        <th>근속연수</th>
-                        <th>중간정산</th>
-                        <th>퇴직정산</th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody>
-
-
-                    <c:forEach
-                        var="emp"
-                        items="${retirementEmpPage.retirementEmpListData}"
-                        varStatus="status">
-
-
-                        <tr>
-
-
-                            <td>
-                                ${(retirementEmpPage.currentPage - 1)
+								<td>${(retirementEmpPage.currentPage - 1)
                                     * 10 + status.count}
-                            </td>
+								</td>
 
+								<td><c:choose>
 
-                            <td>
+										<c:when test="${emp.status == 'Y'}">
 
-                                <c:choose>
+											<span class="status-working"> 在職 </span>
 
-                                    <c:when test="${emp.status == 'Y'}">
+										</c:when>
 
-                                        <span class="status-working">
-                                            재직
-                                        </span>
+										<c:otherwise>
 
-                                    </c:when>
+											<span class="status-retired"> 退職 </span>
 
-                                    <c:otherwise>
+										</c:otherwise>
 
-                                        <span class="status-retired">
-                                            퇴직
-                                        </span>
+									</c:choose></td>
 
-                                    </c:otherwise>
+								<td><a class="emp-link"
+									href="${pageContext.request.contextPath}/retirement/read.do?empId=${emp.empId}">
 
-                                </c:choose>
+										No-${emp.empId} </a></td>
 
-                            </td>
+								<td>${emp.nameKor}</td>
 
+								<td><c:choose>
 
-                            <td>
-
-                                <a
-                                    class="emp-link"
-                                    href="${pageContext.request.contextPath}/retirement/read.do?empId=${emp.empId}">
-
-                                    No-${emp.empId}
-
-                                </a>
-
-                            </td>
-
-
-                            <td>
-                                ${emp.nameKor}
-                            </td>
-
-
-                            <td>
-
-                                <c:choose>
-
-                                    <c:when test="${not empty emp.deptName}">
+										<c:when test="${not empty emp.deptName}">
                                         ${emp.deptName}
                                     </c:when>
 
-                                    <c:otherwise>
+										<c:otherwise>
                                         -
                                     </c:otherwise>
 
-                                </c:choose>
+									</c:choose></td>
 
-                            </td>
+								<td><c:choose>
 
-
-                            <td>
-
-                                <c:choose>
-
-                                    <c:when test="${not empty emp.positionName}">
+										<c:when test="${not empty emp.positionName}">
                                         ${emp.positionName}
                                     </c:when>
 
-                                    <c:otherwise>
+										<c:otherwise>
                                         -
                                     </c:otherwise>
 
-                                </c:choose>
+									</c:choose></td>
 
-                            </td>
+								<td>${emp.hireDate}</td>
 
+								<td><c:choose>
 
-                            <td>
-                                ${emp.hireDate}
-                            </td>
-
-
-                            <td>
-
-                                <c:choose>
-
-                                    <c:when test="${not empty emp.retireDate}">
+										<c:when test="${not empty emp.retireDate}">
                                         ${emp.retireDate}
                                     </c:when>
 
-                                    <c:otherwise>
+										<c:otherwise>
                                         -
                                     </c:otherwise>
 
-                                </c:choose>
+									</c:choose></td>
 
-                            </td>
+								<td>${emp.workYears}年</td>
 
+								<td>
 
-                            <td>
-                                ${emp.workYears}년
-                            </td>
+									<button type="button" class="calc-icon calc-no calc-button"
+										title="中間精算処理" onclick="openRetireModal('${emp.empId}')">
 
+										✕</button>
 
-                            <td>
+								</td>
 
-                                <button
-                                    type="button"
-                                    class="calc-icon calc-no calc-button"
-                                    title="중간정산 처리"
-                                    onclick="openRetireModal('${emp.empId}')">
+								<td>
 
-                                    ✕
+									<button type="button" class="calc-icon calc-no calc-button"
+										title="退職精算処理" onclick="openRetireModal('${emp.empId}')">
 
-                                </button>
+										✕</button>
 
-                            </td>
+								</td>
 
+							</tr>
 
-                            <td>
+						</c:forEach>
 
-                                <button
-                                    type="button"
-                                    class="calc-icon calc-no calc-button"
-                                    title="퇴직정산 처리"
-                                    onclick="openRetireModal('${emp.empId}')">
+						<c:if test="${empty retirementEmpPage.retirementEmpListData}">
 
-                                    ✕
+							<tr>
 
-                                </button>
+								<td colspan="11" class="empty-row">照会された社員がありません。</td>
 
-                            </td>
+							</tr>
 
+						</c:if>
 
-                        </tr>
+					</tbody>
 
+				</table>
 
-                    </c:forEach>
+			</div>
 
+			<c:if test="${retirementEmpPage.totalPages > 0}">
 
+				<!-- 페이지 이동 / ページング -->
+				<div class="pagination">
 
-                    <c:if test="${empty retirementEmpPage.retirementEmpListData}">
+					<c:if test="${retirementEmpPage.startPage > 1}">
 
-                        <tr>
+						<a class="page-link"
+							href="${pageContext.request.contextPath}/retirement/list.do?pageNo=${retirementEmpPage.startPage - 1}">
 
-                            <td
-                                colspan="11"
-                                class="empty-row">
+							前へ </a>
 
-                                조회된 사원이 없습니다.
+					</c:if>
 
-                            </td>
+					<c:forEach var="pageNo" begin="${retirementEmpPage.startPage}"
+						end="${retirementEmpPage.endPage}">
 
-                        </tr>
+						<c:choose>
 
-                    </c:if>
+							<c:when test="${pageNo == retirementEmpPage.currentPage}">
 
+								<span class="page-link active"> ${pageNo} </span>
 
-                </tbody>
+							</c:when>
 
+							<c:otherwise>
 
-            </table>
+								<a class="page-link"
+									href="${pageContext.request.contextPath}/retirement/list.do?pageNo=${pageNo}">
 
+									${pageNo} </a>
 
-        </div>
+							</c:otherwise>
 
+						</c:choose>
 
+					</c:forEach>
 
-        <c:if test="${retirementEmpPage.totalPages > 0}">
+					<c:if
+						test="${retirementEmpPage.endPage < retirementEmpPage.totalPages}">
 
-            <div class="pagination">
+						<a class="page-link"
+							href="${pageContext.request.contextPath}/retirement/list.do?pageNo=${retirementEmpPage.endPage + 1}">
 
+							次へ </a>
 
-                <c:if test="${retirementEmpPage.startPage > 1}">
+					</c:if>
 
-                    <a
-                        class="page-link"
-                        href="${pageContext.request.contextPath}/retirement/list.do?pageNo=${retirementEmpPage.startPage - 1}">
+				</div>
 
-                        이전
+			</c:if>
 
-                    </a>
+			<!-- 전체 사원 수 / 全社員数 -->
+			<div class="list-info">
 
-                </c:if>
+				<div>
 
+					合計 <strong> ${retirementEmpPage.total} </strong> 名
 
-                <c:forEach
-                    var="pageNo"
-                    begin="${retirementEmpPage.startPage}"
-                    end="${retirementEmpPage.endPage}">
+				</div>
 
+			</div>
 
-                    <c:choose>
+		</div>
 
-                        <c:when test="${pageNo == retirementEmpPage.currentPage}">
+	</div>
 
-                            <span class="page-link active">
-                                ${pageNo}
-                            </span>
+	<!-- 퇴직처리 모달 / 退職処理モーダル -->
+	<div id="retireModal" class="retire-modal">
 
-                        </c:when>
+		<div class="retire-modal-content">
 
-                        <c:otherwise>
+			<button type="button" class="retire-modal-close"
+				onclick="closeRetireModal()" aria-label="閉じる">×</button>
 
-                            <a
-                                class="page-link"
-                                href="${pageContext.request.contextPath}/retirement/list.do?pageNo=${pageNo}">
+			<h2>退職者 退職処理</h2>
 
-                                ${pageNo}
+			<form
+				action="${pageContext.request.contextPath}/retirement/retire.do"
+				method="post" onsubmit="return validateRetireForm();">
 
-                            </a>
+				<input type="hidden" id="retireEmpId" name="emp_id">
 
-                        </c:otherwise>
+				<div class="retire-form-box">
 
-                    </c:choose>
+					<div class="retire-form-row">
 
+						<label for="retirementType"> 退職区分 </label> <select
+							id="retirementType" name="retirement_type">
 
-                </c:forEach>
+							<option value="" selected>選択</option>
+							<option value="定年退職">定年退職</option>
+							<option value="整理解雇">整理解雇</option>
+							<option value="自己都合退職">自己都合退職</option>
+							<option value="役員退職">役員退職</option>
+							<option value="中間精算">中間精算</option>
+							<option value="その他">その他</option>
 
+						</select>
 
-                <c:if test="${retirementEmpPage.endPage < retirementEmpPage.totalPages}">
+					</div>
 
-                    <a
-                        class="page-link"
-                        href="${pageContext.request.contextPath}/retirement/list.do?pageNo=${retirementEmpPage.endPage + 1}">
+					<div class="retire-form-row">
 
-                        다음
+						<label for="retirementDate"> 退職日 </label> <input type="date"
+							id="retirementDate" name="retirement_date">
 
-                    </a>
+					</div>
 
-                </c:if>
+					<div class="retire-form-row">
 
+						<label for="retirementReason"> 退職理由 </label> <input type="text"
+							id="retirementReason" name="retirement_reason" maxlength="200">
 
-            </div>
+					</div>
 
-        </c:if>
+					<div class="retire-form-row">
 
+						<label for="contactAfterRetirement"> 退職後連絡先 </label> <input
+							type="text" id="contactAfterRetirement"
+							name="contact_after_retirement" maxlength="30">
 
+					</div>
 
-        <div class="list-info">
+				</div>
 
-            <div>
+				<div class="retire-button-area">
 
-                총
+					<button type="submit" class="retire-save-btn">保存</button>
 
-                <strong>
-                    ${retirementEmpPage.total}
-                </strong>
+				</div>
 
-                명
+			</form>
 
-            </div>
+		</div>
 
-        </div>
+	</div>
 
+	<layout:footer />
 
-    </div>
+	<!-- 퇴직처리 모달 및 입력 검증 / 退職処理モーダルおよび入力検証 -->
+	<script>
+		function openRetireModal(empId) {
 
+			document.getElementById("retireEmpId").value = empId;
 
-</div>
+			document.getElementById("retirementType").value = "";
+			document.getElementById("retirementDate").value = "";
+			document.getElementById("retirementReason").value = "";
+			document.getElementById("contactAfterRetirement").value = "";
 
+			document.getElementById("retireModal").style.display = "flex";
+		}
 
+		function closeRetireModal() {
+			document.getElementById("retireModal").style.display = "none";
+		}
 
-<!-- 퇴직처리 모달 -->
-<div id="retireModal" class="retire-modal">
+		function validateRetireForm() {
 
-    <div class="retire-modal-content">
+			const retirementType = document.getElementById("retirementType").value;
 
-        <button
-            type="button"
-            class="retire-modal-close"
-            onclick="closeRetireModal()"
-            aria-label="닫기">
-            ×
-        </button>
+			const retirementDate = document.getElementById("retirementDate").value;
 
-        <h2>퇴사자 퇴직처리</h2>
+			if (retirementType === "") {
+				alert("退職区分を選択してください。");
+				document.getElementById("retirementType").focus();
+				return false;
+			}
 
-        <form
-            action="${pageContext.request.contextPath}/retirement/retire.do"
-            method="post"
-            onsubmit="return validateRetireForm();">
+			if (retirementDate === "") {
+				alert("退職日を入力してください。");
+				document.getElementById("retirementDate").focus();
+				return false;
+			}
 
-            <input
-                type="hidden"
-                id="retireEmpId"
-                name="emp_id">
+			return confirm("該当社員の退職情報を保存しますか？");
+		}
 
-            <div class="retire-form-box">
+		window.addEventListener("click", function(event) {
 
-                <div class="retire-form-row">
+			const modal = document.getElementById("retireModal");
 
-                    <label for="retirementType">
-                        퇴직구분
-                    </label>
+			if (event.target === modal) {
+				closeRetireModal();
+			}
+		});
 
-                    <select
-                        id="retirementType"
-                        name="retirement_type">
+		document.addEventListener("keydown", function(event) {
 
-                        <option value="" selected>선택</option>
-                        <option value="정년퇴직">정년퇴직</option>
-                        <option value="정리해고">정리해고</option>
-                        <option value="자발적 퇴직">자발적 퇴직</option>
-                        <option value="임원퇴직">임원퇴직</option>
-                        <option value="중간정산">중간정산</option>
-                        <option value="기타">기타</option>
-
-                    </select>
-
-                </div>
-
-                <div class="retire-form-row">
-
-                    <label for="retirementDate">
-                        퇴직일자
-                    </label>
-
-                    <input
-                        type="date"
-                        id="retirementDate"
-                        name="retirement_date">
-
-                </div>
-
-                <div class="retire-form-row">
-
-                    <label for="retirementReason">
-                        퇴직사유
-                    </label>
-
-                    <input
-                        type="text"
-                        id="retirementReason"
-                        name="retirement_reason"
-                        maxlength="200">
-
-                </div>
-
-                <div class="retire-form-row">
-
-                    <label for="contactAfterRetirement">
-                        퇴직 후 연락처
-                    </label>
-
-                    <input
-                        type="text"
-                        id="contactAfterRetirement"
-                        name="contact_after_retirement"
-                        maxlength="30">
-
-                </div>
-
-            </div>
-
-            <div class="retire-button-area">
-
-                <button
-                    type="submit"
-                    class="retire-save-btn">
-                    저장
-                </button>
-
-            </div>
-
-        </form>
-
-    </div>
-
-</div>
-
-
-<layout:footer />
-
-
-
-<script>
-function openRetireModal(empId) {
-
-    document.getElementById("retireEmpId").value = empId;
-
-    document.getElementById("retirementType").value = "";
-    document.getElementById("retirementDate").value = "";
-    document.getElementById("retirementReason").value = "";
-    document.getElementById("contactAfterRetirement").value = "";
-
-    document.getElementById("retireModal").style.display = "flex";
-}
-
-function closeRetireModal() {
-    document.getElementById("retireModal").style.display = "none";
-}
-
-function validateRetireForm() {
-
-    const retirementType =
-        document.getElementById("retirementType").value;
-
-    const retirementDate =
-        document.getElementById("retirementDate").value;
-
-    if (retirementType === "") {
-        alert("퇴직구분을 선택해주세요.");
-        document.getElementById("retirementType").focus();
-        return false;
-    }
-
-    if (retirementDate === "") {
-        alert("퇴직일자를 입력해주세요.");
-        document.getElementById("retirementDate").focus();
-        return false;
-    }
-
-    return confirm("해당 사원의 퇴직 정보를 저장하시겠습니까?");
-}
-
-window.addEventListener("click", function(event) {
-
-    const modal = document.getElementById("retireModal");
-
-    if (event.target === modal) {
-        closeRetireModal();
-    }
-});
-
-document.addEventListener("keydown", function(event) {
-
-    if (event.key === "Escape") {
-        closeRetireModal();
-    }
-});
-</script>
-
+			if (event.key === "Escape") {
+				closeRetireModal();
+			}
+		});
+	</script>
 
 </body>
 </html>
