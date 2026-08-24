@@ -7,6 +7,7 @@ public class Dependent {
 	private Integer empId;
 
 	// 필수 입력 항목
+	// 必須入力項目
 	private String relation;
 	private String familyName;
 

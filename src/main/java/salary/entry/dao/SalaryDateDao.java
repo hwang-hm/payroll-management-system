@@ -12,6 +12,7 @@ import salary.model.SalaryDate;
 public class SalaryDateDao {
 
 	// salary_date_id로 한 건 찾기
+	// salary_date_id で1件検索
 	public SalaryDate selectById(Connection conn, int salaryDateId) throws SQLException {
 		String sql = "SELECT * FROM salary_date WHERE salary_date_id = ?";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -26,6 +27,7 @@ public class SalaryDateDao {
 	}
 
 	// 귀속년월+차수로 salary_date 한 건 찾기
+	// 帰属年月+回数で salary_date を1件検索
 	public SalaryDate selectByPeriod(Connection conn, int payYear, int payMonth, int paySeq) throws SQLException {
 		String sql = "SELECT * FROM salary_date WHERE pay_year = ? AND pay_month = ? AND pay_seq = ?";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -42,6 +44,7 @@ public class SalaryDateDao {
 	}
 
 	// 정산기간/지급일이랑 같이 salary_date 새로 넣음. 생성된 id를 salaryDate에 세팅
+	// 精算期間/支給日とともに salary_date を新規挿入。生成された id を salaryDate に設定
 	public int insert(Connection conn, SalaryDate salaryDate) throws SQLException {
 		String seqSql = "SELECT seq_salary_date.NEXTVAL FROM dual";
 		int salaryDateId;
@@ -69,6 +72,7 @@ public class SalaryDateDao {
 	}
 
 	// 조회결과를 salary_date로 옮겨담기
+	// 照会結果を salary_date へ転記
 	private SalaryDate toSalaryDate(ResultSet rs) throws SQLException {
 		SalaryDate salaryDate = new SalaryDate();
 		salaryDate.setSalaryDateId(rs.getInt("salary_date_id"));
@@ -82,6 +86,7 @@ public class SalaryDateDao {
 	}
 
 	// Date를 DB에 넣을 수 있게 Timestamp로 바꿈
+	// DateをDB登録できるよう Timestamp に変換
 	private Timestamp toTimestamp(Date date) {
 		return new Timestamp(date.getTime());
 	}

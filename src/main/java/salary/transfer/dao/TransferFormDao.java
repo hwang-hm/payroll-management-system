@@ -13,6 +13,7 @@ import salary.model.TransferFormItem;
 public class TransferFormDao {
 
 	// 저장된 이체양식 목록
+	// 保存済み振込様式一覧
 	public List<TransferForm> selectAllForms(Connection conn) throws SQLException {
 		String sql = "SELECT form_id, form_name FROM transfer_form ORDER BY form_id";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
@@ -28,6 +29,7 @@ public class TransferFormDao {
 	}
 
 	// 양식 하나 찾아오기
+	// 様式を1件取得
 	public TransferForm selectFormById(Connection conn, int formId) throws SQLException {
 		String sql = "SELECT form_id, form_name FROM transfer_form WHERE form_id = ?";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -45,6 +47,7 @@ public class TransferFormDao {
 	}
 
 	// 이체양식 새로 만들기
+	// 振込様式を新規作成
 	public int insertForm(Connection conn, String formName) throws SQLException {
 		String seqSql = "SELECT seq_transfer_form.NEXTVAL FROM dual";
 		String insertSql = "INSERT INTO transfer_form (form_id, form_name) VALUES (?, ?)";
@@ -64,6 +67,7 @@ public class TransferFormDao {
 	}
 
 	// 양식 이름만 수정
+	// 様式名のみ修正
 	public void updateFormName(Connection conn, int formId, String formName) throws SQLException {
 		String sql = "UPDATE transfer_form SET form_name = ? WHERE form_id = ?";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -74,6 +78,7 @@ public class TransferFormDao {
 	}
 
 	// 그 양식에 들어있는 표시항목들
+	// その様式に含まれる表示項目
 	public List<TransferFormItem> selectItemsByFormId(Connection conn, int formId) throws SQLException {
 		String sql = "SELECT item_id, form_id, item_code, display_order "
 				+ "FROM transfer_form_item WHERE form_id = ? ORDER BY display_order, item_id";
@@ -95,6 +100,7 @@ public class TransferFormDao {
 	}
 
 	// 양식 항목 지우고 다시 넣을 때 씀
+	// 様式項目を消して再投入するときに使用
 	public void deleteItemsByFormId(Connection conn, int formId) throws SQLException {
 		String sql = "DELETE FROM transfer_form_item WHERE form_id = ?";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -104,6 +110,7 @@ public class TransferFormDao {
 	}
 
 	// 양식에 표시할 항목 한 줄 추가
+	// 様式に表示する項目1行を追加
 	public void insertItem(Connection conn, int formId, String itemCode, int displayOrder) throws SQLException {
 		String sql = "INSERT INTO transfer_form_item (item_id, form_id, item_code, display_order) "
 				+ "VALUES (seq_transfer_form_item.NEXTVAL, ?, ?, ?)";
@@ -116,6 +123,7 @@ public class TransferFormDao {
 	}
 
 	// 양식 표시항목 batch insert
+	// 様式表示項目の batch insert
 	public void insertItemsBatch(Connection conn, int formId, List<String> itemCodes) throws SQLException {
 		if (itemCodes == null || itemCodes.isEmpty()) {
 			return;

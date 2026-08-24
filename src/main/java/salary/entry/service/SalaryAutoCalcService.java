@@ -20,6 +20,7 @@ import salary.util.SalaryAutoCalcRates.DeductionAmounts;
 import salary.util.SalaryTotals;
 
 // 선택 사원 급여상세의 공제 6종을 가라 요율로 자동 계산
+// 選択社員の給与詳細の控除6種を仮レートで自動計算
 public class SalaryAutoCalcService {
 
 	private final SalaryDao salaryDao = new SalaryDao();
@@ -27,6 +28,7 @@ public class SalaryAutoCalcService {
 	private final EmpInfoSalaryDao empInfoSalaryDao = new EmpInfoSalaryDao();
 
 	// detailId → 계산된 금액. 화면에서 스크롤 유지한 채 값만 갱신할 때 씀
+	// detailId → 計算済み金額。画面でスクロール維持のまま値だけ更新するときに使用
 	public Map<Integer, Long> autoCalc(int salaryId) {
 		Connection conn = null;
 		try {

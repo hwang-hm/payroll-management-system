@@ -10,6 +10,7 @@ import salary.util.PeriodRangeParams;
 import salary.util.RequestParamParser;
 
 // 사원별 급여내역 조회 페이지
+// 社員別給与明細照会ページ
 public class EmpSalaryHistoryHandler implements CommandHandler {
 
 	private final EmpSalaryHistoryService empSalaryHistoryService = new EmpSalaryHistoryService();

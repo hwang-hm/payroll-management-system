@@ -10,6 +10,7 @@ import mvc.command.CommandHandler;
 import salary.entry.service.SalaryAutoCalcService;
 
 // 급여입력 상세에서 공제항목 자동계산 (JSON, 화면 새로고침 없음)
+// 給与入力詳細で控除項目を自動計算 (JSON、画面再読込なし)
 public class SalaryAutoCalcHandler implements CommandHandler {
 
 	private final SalaryAutoCalcService autoCalcService = new SalaryAutoCalcService();

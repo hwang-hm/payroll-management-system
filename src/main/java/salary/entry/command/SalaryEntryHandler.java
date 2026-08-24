@@ -10,11 +10,13 @@ import salary.util.PayPeriodParams;
 import salary.util.RequestParamParser;
 
 //급여입력/관리 페이지 진입 핸들러.
+// 給与入力/管理ページ進入Handler。
 public class SalaryEntryHandler implements CommandHandler {
 
 	private final SalaryEntryService entryService = new SalaryEntryService();
 
 	// 화면에서 고른 년월/차수/사원으로 급여입력 화면 열어줌
+	// 画面で選んだ年月/回数/社員で給与入力画面を開く
 	@Override
 	public String process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		PayPeriodParams period = PayPeriodParams.fromRequest(req);

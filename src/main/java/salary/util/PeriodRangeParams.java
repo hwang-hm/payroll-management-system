@@ -5,6 +5,7 @@ import java.util.Calendar;
 import javax.servlet.http.HttpServletRequest;
 
 // 사원별 급여내역처럼 시작~종료 년월 범위 파라미터
+// 社員別給与明細と同様の開始〜終了年月範囲パラメータ
 public class PeriodRangeParams {
 
 	private final int startYear;

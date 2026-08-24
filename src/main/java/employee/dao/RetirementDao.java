@@ -14,6 +14,7 @@ import jdbc.JdbcUtil;
 public class RetirementDao {
 	
 	//Status 퇴직으로 변경
+	// Statusを退職に変更
 	 public int updateRetiredStatus (Connection conn, int empId, Date retireDate) throws SQLException {
 		 try (PreparedStatement pstmt = conn.prepareStatement("update employee set status = 'N', retire_date = ? where emp_id = ?")) {
 			 pstmt.setDate(1, retireDate);
@@ -23,6 +24,7 @@ public class RetirementDao {
 	 }
 	 
 	 //퇴직 정보 입력
+	 // 退職情報の入力
 	 public void insertRetirement (Connection conn, Retirement retirement) throws SQLException {
 			PreparedStatement pstmt = null;
 
@@ -46,6 +48,7 @@ public class RetirementDao {
 		}
 	 
 	 //사원번호로 사원 select
+	 // 社員番号で社員 select
 	    public Retirement selectById(Connection conn, int empId) throws SQLException{
 			 PreparedStatement pstmt = null;
 			 ResultSet rs = null;

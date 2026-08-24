@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // 사원별 급여내역 화면 전체 데이터
+// 社員別給与明細画面の全体データ
 public class EmpSalaryHistoryData {
 
 	private int startYear;

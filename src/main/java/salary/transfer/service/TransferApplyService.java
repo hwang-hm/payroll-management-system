@@ -24,6 +24,7 @@ public class TransferApplyService {
 	private final TransferFormDao transferFormDao = new TransferFormDao();
 
 	// 이체신청 화면에 뿌릴 양식이랑 대상자 목록 모아줌
+	// 振込申請画面に表示する様式と対象者一覧を集約
 	public TransferApplyData getApplyData(PayPeriodParams period, Integer formId) {
 		Connection conn = null;
 		try {
@@ -92,6 +93,7 @@ public class TransferApplyService {
 	}
 
 	// 이체양식 이름/표시항목 저장. 없으면 새로 만들고 있으면 항목 갈아끼움
+	// 振込様式の名前/表示項目を保存。なければ新規作成、あれば項目を差し替え
 	public int saveForm(Integer formId, String formName, String[] itemCodes) {
 		Connection conn = null;
 		try {
@@ -133,16 +135,19 @@ public class TransferApplyService {
 	}
 
 	// 올해
+	// 今年
 	public static int currentYear() {
 		return Calendar.getInstance().get(Calendar.YEAR);
 	}
 
 	// 이번 달
+	// 今月
 	public static int currentMonth() {
 		return Calendar.getInstance().get(Calendar.MONTH) + 1;
 	}
 
 	// 셀렉트박스용 연도 목록. 올해 기준으로 5년치
+	// セレクトボックス用年度一覧。今年基準で5年分
 	private List<Integer> buildYearOptions(int payYear) {
 		List<Integer> years = new ArrayList<>();
 		int base = Math.max(payYear, currentYear());

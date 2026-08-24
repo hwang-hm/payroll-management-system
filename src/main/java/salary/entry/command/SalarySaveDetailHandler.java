@@ -11,11 +11,13 @@ import salary.entry.service.SalarySaveDetailService;
 import salary.util.PayPeriodParams;
 
 //급여입력/관리 페이지에서 급여상세 내역 저장버튼 누를시 호출되는 핸들러.
+// 給与入力/管理ページで給与詳細の保存ボタン押下時に呼ばれるHandler。
 public class SalarySaveDetailHandler implements CommandHandler {
 
 	private final SalarySaveDetailService saveDetailService = new SalarySaveDetailService();
 
 	// 상세금액 저장하고 다시 급여입력 화면으로 돌아감
+	// 詳細金額を保存し、再び給与入力画面へ戻る
 	@Override
 	public String process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		if (!"POST".equalsIgnoreCase(req.getMethod())) {

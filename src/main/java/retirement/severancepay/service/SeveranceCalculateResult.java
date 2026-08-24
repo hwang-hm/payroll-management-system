@@ -3,20 +3,34 @@ package retirement.severancepay.service;
 public class SeveranceCalculateResult {
 	
 	// 계산 과정에서 화면에 보여줄 값
+	// 計算過程で画面に表示する値
     private long threeMonthTotal;           // 3개월 총계
+    // 3か月合計
     private long dailyAverageWage;          // 1일 평균임금
+    // 1日平均賃金
     private int retirementTaxYear;         // 퇴직일이 속하는 과세연도
+    // 退職日が属する課税年度
 
     // DB에 최종 저장되는 계산 결과
+    // DBに最終保存される計算結果
     private long retirementIncome;           // 퇴직소득
+    // 退職所得
     private long calculatedTax;              // 산출세액
+    // 算出税額
     private long retirementIncomeTax;        // 퇴직소득세
+    // 退職所得税
     private long localIncomeTax;             // 지방소득세
+    // 地方所得税
     private long deferredRetirementTax;      // 이연 퇴직소득세
+    // 繰延退職所得税
     private long deferredLocalTax;           // 이연 지방소득세
+    // 繰延地方所得税
     private long taxableRetirementPay;       // 과세대상 퇴직급여
+    // 課税対象退職給与
     private long withholdingTax;             // 차감원천징수세액
+    // 差引源泉徴収税額
     private long netPayment;                 // 실수령액
+    // 実受取額
 
     public SeveranceCalculateResult(
     		long threeMonthTotal,

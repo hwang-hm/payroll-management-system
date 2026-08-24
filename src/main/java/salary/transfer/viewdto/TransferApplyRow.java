@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 // 이체신청 목록 한 행 (조인 결과 + 이체 실행에 필요한 값)
+// 振込申請一覧1行 (JOIN結果 + 振込実行に必要な値)
 public class TransferApplyRow {
 
 	private int salaryId;
@@ -89,6 +90,7 @@ public class TransferApplyRow {
 	}
 
 	// 입사일 화면용. 없으면 '-'
+	// 入社日画面用。なければ '-'
 	public String getHireDateText() {
 		if (hireDate == null) {
 			return "-";
@@ -169,6 +171,7 @@ public class TransferApplyRow {
 	}
 
 	// 양식에서 고른 컬럼 코드에 맞는 값을 꺼내줌
+	// 様式で選んだカラムコードに合う値を取り出す
 	public String getValueByCode(String code) {
 		if (code == null) {
 			return "";
@@ -208,6 +211,7 @@ public class TransferApplyRow {
 	}
 
 	// 값 없으면 '-'로 보여주려고
+	// 値がなければ '-' で表示するため
 	private String nullToDash(String value) {
 		return value == null || value.trim().isEmpty() ? "-" : value;
 	}

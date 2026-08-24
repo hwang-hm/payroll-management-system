@@ -1,6 +1,7 @@
 package salary.entry.viewdto;
 
 //급여입력/관리 페이지 아랫부분의 년,월별 급여합계 view용 데이터
+// 給与入力/管理ページ下部の年・月別給与合計view用データ
 public class SalarySummary {
 
 	private int count;

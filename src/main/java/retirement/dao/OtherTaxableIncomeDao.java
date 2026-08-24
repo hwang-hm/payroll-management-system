@@ -15,6 +15,7 @@ import retirement.severancepay.service.OtherTaxableIncomeRequest;
 public class OtherTaxableIncomeDao {
 
     // 기타 과세소득 입력
+    // その他課税所得の入力
     public void insertOtherTaxableIncome(Connection conn, int severancePayId, OtherTaxableIncomeRequest request) throws SQLException {
 
         PreparedStatement pstmt = null;

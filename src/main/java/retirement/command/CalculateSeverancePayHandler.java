@@ -48,6 +48,7 @@ public class CalculateSeverancePayHandler implements CommandHandler {
 		request.setOtherDeduction(toLong(req.getParameter("otherDeduction")));
 
 		// 지급일
+		// 支給日
 		String paymentDate = req.getParameter("paymentDate");
 
 		if (paymentDate != null && !paymentDate.trim().isEmpty()) {
@@ -55,14 +56,17 @@ public class CalculateSeverancePayHandler implements CommandHandler {
 		}
 
 		// 기타 과세소득
+		// その他課税所得
 		List<OtherTaxableIncomeRequest> otherTaxableIncomes = createOtherTaxableIncomes(req);
 		request.setOtherTaxableIncomes(otherTaxableIncomes);
 
 		// 과세이연계좌
+		// 課税繰延口座
 		List<TaxDeferredAccountRequest> taxDeferredAccounts = createTaxDeferredAccounts(req);
 		request.setTaxDeferredAccounts(taxDeferredAccounts);
 
 		// 2. 퇴직금 계산
+		// 2. 退職金の計算
 		SeveranceCalculateResult result = calculateService.calculateSeverance(request);
 
 		Connection conn = null;
@@ -110,6 +114,7 @@ public class CalculateSeverancePayHandler implements CommandHandler {
 	}
 
 	// String -> Long 입력하지 않았으면 null
+	// String -> Long 未入力なら null
 	private Long toLong(String value) {
 
 		if (value == null || value.trim().isEmpty()) {
@@ -133,6 +138,7 @@ public class CalculateSeverancePayHandler implements CommandHandler {
 		for (int i = 0; i < amounts.length; i++) {
 
 			// 전부 비어있는 행은 저장하지 않음
+			// すべて空の行は保存しない
 			if ((amounts[i] == null || amounts[i].trim().isEmpty())
 					&& (paymentItems == null || paymentItems[i] == null || paymentItems[i].trim().isEmpty())) {
 				continue;

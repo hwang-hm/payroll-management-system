@@ -30,6 +30,7 @@ public class PrintWorkingHandler implements CommandHandler {
 	}
 
 	// 증명서 화면 조회
+	// 証明書画面の照会
 	private String processForm(HttpServletRequest request, HttpServletResponse response) {
 
 		String pageNoVal = request.getParameter("pageNo");
@@ -58,6 +59,7 @@ public class PrintWorkingHandler implements CommandHandler {
 		}
 
 		// 퇴직자는 재직증명서 발급 불가
+		// 退職者は在職証明書を発行不可
 		if ("N".equals(emp.getStatus())) {
 			request.setAttribute("retiredEmployee", true);
 			return FORM_VIEW;

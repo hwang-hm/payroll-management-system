@@ -50,6 +50,7 @@ public class SaveSeverancePayHandler implements CommandHandler {
 		request.setOtherDeduction(toLong(req.getParameter("otherDeduction")));
 
 		// 지급일
+		// 支給日
 		String paymentDate = req.getParameter("paymentDate");
 		
 		if (paymentDate != null && !paymentDate.trim().isEmpty()) {
@@ -57,9 +58,11 @@ public class SaveSeverancePayHandler implements CommandHandler {
 		}
 
 		// 기타 과세소득
+		// その他課税所得
 		request.setOtherTaxableIncomes(createOtherTaxableIncomes(req));
 
 		// 과세이연계좌
+		// 課税繰延口座
 		request.setTaxDeferredAccounts(createTaxDeferredAccounts(req));
 		
 		SeveranceCalculateResult result = calculateService.calculateSeverance(request);
@@ -182,6 +185,7 @@ public class SaveSeverancePayHandler implements CommandHandler {
 					|| depositAmounts[i].trim().isEmpty() || "0".equals(depositAmounts[i]);
 
 			// 전부 비어있으면 저장 안 함
+			// すべて空なら保存しない
 			if (emptyProvider && emptyBusinessNo && emptyAccount && emptyDate && emptyAmount) {
 				continue;
 			}

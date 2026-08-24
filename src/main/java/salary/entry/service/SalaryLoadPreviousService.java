@@ -22,6 +22,7 @@ public class SalaryLoadPreviousService {
 	private final SalaryDetailDao salaryDetailDao = new SalaryDetailDao();
 
 	// 선택한 지난 귀속년월 급여를 이번 달로 복사. 이미 있는 사원은 건너뜀
+	// 選択した過去帰属年月の給与を今月へコピー。既にいる社員はスキップ
 	public void load(PayPeriodParams target, PayPeriodParams source) {
 		Connection conn = null;
 		try {

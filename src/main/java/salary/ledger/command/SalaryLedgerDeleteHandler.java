@@ -8,6 +8,7 @@ import salary.entry.service.SalaryDeleteService;
 import salary.util.RequestParamParser;
 
 // 급여대장에서 특정 귀속년월·차수 급여 전체 삭제
+// 給与台帳で特定帰属年月・回数の給与を全削除
 public class SalaryLedgerDeleteHandler implements CommandHandler {
 
 	private final SalaryDeleteService deleteService = new SalaryDeleteService();

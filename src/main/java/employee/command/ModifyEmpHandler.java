@@ -78,6 +78,7 @@ public class ModifyEmpHandler implements CommandHandler {
 			errors.put("dependent", Boolean.TRUE);
 		} else {
 			// 입력된 부양가족 각각 검증
+			// 入力された扶養家族をそれぞれ検証
 			for (DependentRequest dependentReq : dependentReqs) {
 				dependentReq.validate(errors);
 			}

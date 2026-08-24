@@ -7,20 +7,32 @@ public class SeveranceCalculateRequest {
 	private int empId;
 	
 	// 직접 입력
+	// 直接入力
     private Long retirementBonus;           // 퇴직위로금
+    // 退職慰労金
     private Long dismissalAllowance;        // 해고예고수당
+    // 解雇予告手当
     private Long nonTaxableRetirementPay;   // 비과세퇴직급여
+    // 非課税退職給与
     private Long prepaidTax;                // 기납부세액
+    // 既納付税額
     private Long taxCredit;                 // 세액공제
+    // 税額控除
     private Long dailyOrdinaryWage;         // 1일 통상임금
+    // 1日通常賃金
     private Long ruralSpecialTax;           // 농어촌특별세
+    // 農漁村特別税
     private Long otherDeduction;            // 기타공제
+    // その他控除
     private Date paymentDate;                  // 지급일
+    // 支給日
 	
 	// 기타 과세소득
+	// その他課税所得
     private List<OtherTaxableIncomeRequest> otherTaxableIncomes;
 
     // 과세이연계좌 
+    // 課税繰延口座
     private List<TaxDeferredAccountRequest> taxDeferredAccounts;
 
 	public SeveranceCalculateRequest() {

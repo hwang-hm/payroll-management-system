@@ -11,6 +11,7 @@ import salary.ledger.viewdto.SalaryLedgerData;
 import salary.util.RequestParamParser;
 
 // 급여대장 조회 페이지 진입 핸들러.
+// 給与台帳照会ページ進入Handler。
 public class SalaryLedgerHandler implements CommandHandler {
 
 	private final SalaryLedgerService ledgerService = new SalaryLedgerService();

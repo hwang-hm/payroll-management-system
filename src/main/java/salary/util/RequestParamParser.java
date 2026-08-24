@@ -3,6 +3,7 @@ package salary.util;
 import javax.servlet.http.HttpServletRequest;
 
 // 핸들러에서 request 파라미터 파싱할 때 공통으로 씀
+// Handlerで request パラメータをパースするときに共通利用
 public final class RequestParamParser {
 
 	private RequestParamParser() {
@@ -39,6 +40,7 @@ public final class RequestParamParser {
 	}
 
 	// formId처럼 0이면 null로 볼 때
+	// formIdのように0なら null とみなすとき
 	public static Integer parseNullableIntOrZero(String value) {
 		if (value == null || value.trim().isEmpty() || "0".equals(value.trim())) {
 			return null;

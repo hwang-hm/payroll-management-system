@@ -1,6 +1,7 @@
 package salary.ledger.viewdto;
 
 // 급여대장 목록 한 행 (귀속연월·차수별 집계)
+// 給与台帳一覧1行 (帰属年月・回数別集計)
 public class SalaryLedgerRow {
 
 	private int salaryDateId;

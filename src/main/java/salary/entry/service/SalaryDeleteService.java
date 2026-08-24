@@ -21,6 +21,7 @@ public class SalaryDeleteService {
 	private final SalaryDateService salaryDateService = new SalaryDateService();
 
 	// 체크한 사원만 지움. 이번 귀속년월 급여만. 이체 이력도 같이 삭제
+	// チェックした社員のみ削除。今回帰属年月の給与のみ。振込履歴も同時削除
 	public void deleteSelected(PayPeriodParams period, List<Integer> salaryIds) {
 		if (salaryIds == null || salaryIds.isEmpty()) {
 			return;
@@ -43,6 +44,7 @@ public class SalaryDeleteService {
 	}
 
 	// 이번 귀속년월 정규직 급여 전부 지움. 일용직은 그대로. 이체 이력도 같이 삭제
+	// 今回帰属年月の正規社員給与を全削除。日雇いはそのまま。振込履歴も同時削除
 	public void deleteAll(PayPeriodParams period) {
 		Connection conn = null;
 		try {
@@ -66,6 +68,7 @@ public class SalaryDeleteService {
 	}
 
 	// 해당 salary_date의 급여 전부 지움 (일용직 포함). 급여대장 행 삭제용
+	// 該当 salary_date の給与を全削除 (日雇い含む)。給与台帳行削除用
 	public void deleteAllBySalaryDateId(int salaryDateId) {
 		Connection conn = null;
 		try {
@@ -83,6 +86,7 @@ public class SalaryDeleteService {
 	}
 
 	// transfer_history → salary_detail → salary 순으로 삭제
+	// transfer_history → salary_detail → salary の順で削除
 	private void deleteSalariesWithTransfer(Connection conn, List<Integer> salaryIds) throws SQLException {
 		if (salaryIds == null || salaryIds.isEmpty()) {
 			return;

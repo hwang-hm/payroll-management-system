@@ -5,12 +5,14 @@ import java.sql.Timestamp;
 
 public class Employee {
 	// 필수 입력 항목
+	// 必須入力項目
 	private Integer empId;
 	private String nameKor;
 	private Date hireDate;
 	private String employmentType;
 
 	// 선택 입력 항목
+	// 選択入力項目
 	private Integer deptId;
 	private String nationality;
 	private String nameEng;

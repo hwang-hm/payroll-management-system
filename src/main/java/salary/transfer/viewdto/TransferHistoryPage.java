@@ -7,6 +7,7 @@ import java.util.List;
 import salary.model.TransferHistory;
 
 // 이체결과 조회 한 페이지분. 목록이랑 페이지번호 같이 들고있음
+// 振込結果照会の1ページ分。一覧とページ番号を一緒に保持
 public class TransferHistoryPage {
 
 	private final Date startDate;
@@ -19,6 +20,7 @@ public class TransferHistoryPage {
 	private final int endPage;
 
 	// 총건수 가지고 페이지 번호들 계산해둠
+	// 総件数からページ番号を計算済み
 	public TransferHistoryPage(Date startDate, Date endDate, int total, int currentPage, int size,
 			List<TransferHistory> content) {
 		this.startDate = startDate;

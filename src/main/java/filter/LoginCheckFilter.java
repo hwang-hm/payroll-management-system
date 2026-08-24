@@ -14,20 +14,25 @@ import javax.servlet.http.HttpSession;
 
 public class LoginCheckFilter implements Filter {
 //테스트88
+// テスト88
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
 			throws IOException, ServletException { // 17행: 여는 중괄호 { 추가
+			// 17行: 開き中括弧 { を追加
 
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpSession session = request.getSession(false);
 
 		// 세션이 없거나 세션에 "authUser"(로그인 정보)가 없다면 로그인하지 않은 상태
+		// セッションがない、またはセッションに "authUser"(ログイン情報)がない場合は未ログイン状態
 		if (session == null || session.getAttribute("authUser") == null) {
 			HttpServletResponse response = (HttpServletResponse) res;
 			// 로그인 페이지로 강제 리다이렉트 (쉼표 오타 수정)
+			// ログインページへ強制リダイレクト (カンマ誤字を修正)
 			response.sendRedirect(request.getContextPath() + "/login.do");
 		} else {
 			// 로그인한 상태라면 막지 않고 원래 요청했던 다음 단계(핸들러/JSP)로 진행시킴ddd
+			// ログイン済みなら遮断せず、元のリクエスト先の次工程(Handler/JSP)へ進めるddd
 			chain.doFilter(req, res);
 		}
 	}
@@ -35,10 +40,12 @@ public class LoginCheckFilter implements Filter {
 	@Override
 	public void init(FilterConfig config) throws ServletException {
 		// 필터 초기화 시 필요한 코드가 있다면 작성 (현재는 생략 가능)
+		// フィルタ初期化時に必要なコードがあれば記述 (現状は省略可)
 	}
 
 	@Override
 	public void destroy() {
 		// 필터 소멸 시 처리할 코드가 있다면 작성 (현재는 생략 가능)
+		// フィルタ破棄時に処理するコードがあれば記述 (現状は省略可)
 	}
 }

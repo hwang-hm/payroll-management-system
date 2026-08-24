@@ -5,6 +5,7 @@ import java.util.Calendar;
 import javax.servlet.http.HttpServletRequest;
 
 // 귀속연월·급여차수 request 파라미터
+// 帰属年月・給与回数の request パラメータ
 public class PayPeriodParams {
 
 	private final int payYear;
@@ -30,6 +31,7 @@ public class PayPeriodParams {
 	}
 
 	// 없으면 올해·이번달·1차
+	// なければ今年・今月・1回
 	public static PayPeriodParams fromRequest(HttpServletRequest req) {
 		Calendar now = Calendar.getInstance();
 		return fromRequest(req, now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, 1);
@@ -44,6 +46,7 @@ public class PayPeriodParams {
 	}
 
 	// hidden 필드로 항상 넘어오는 POST용. 없으면 NumberFormatException
+	// hidden フィールドで常に渡る POST用。なければ NumberFormatException
 	public static PayPeriodParams requiredFromRequest(HttpServletRequest req) {
 		return new PayPeriodParams(
 				Integer.parseInt(req.getParameter("payYear")),

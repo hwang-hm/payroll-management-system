@@ -6,6 +6,7 @@ import java.util.List;
 import salary.model.SalaryDetail;
 
 // 급여명세서 오른쪽 미리보기 폼
+// 給与明細書右側プレビューフォーム
 public class PayStubForm {
 
 	private String nameKor;
@@ -18,6 +19,7 @@ public class PayStubForm {
 	private List<SalaryDetail> deductDetails = new ArrayList<>();
 	private List<PayStubDetailLine> detailLines = new ArrayList<>();
 	// A4에 맞춘 고정 높이용: 지급/공제 각각 최소 10줄
+	// A4に合わせた固定高さ用: 支給/控除それぞれ最低10行
 	private List<PayStubDetailLine> paySectionLines = new ArrayList<>();
 	private List<PayStubDetailLine> deductSectionLines = new ArrayList<>();
 	private long totalPay;

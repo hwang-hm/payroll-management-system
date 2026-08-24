@@ -13,9 +13,11 @@ import java.util.Map;
 import salary.util.SqlIn;
 
 // 급여입력용 근태 수당 합계 조회
+// 給与入力用勤怠手当合計の照会
 public class SalaryAttendanceDao {
 
 	// 사원·귀속연월 기준 attendance_type_id별 allowance_amount 합계
+	// 社員・帰属年月基準で attendance_type_id 別 allowance_amount 合計
 	public Map<Integer, Long> selectAllowanceSumByType(Connection conn, int empId, int year, int month)
 			throws SQLException {
 		Map<Integer, Map<Integer, Long>> all = selectAllowanceSumByEmpIds(conn,
@@ -25,6 +27,7 @@ public class SalaryAttendanceDao {
 	}
 
 	// 여러 사원의 근태수당 합계. empId → (attendanceTypeId → sum)
+	// 複数社員の勤怠手当合計。empId → (attendanceTypeId → sum)
 	public Map<Integer, Map<Integer, Long>> selectAllowanceSumByEmpIds(Connection conn, List<Integer> empIds,
 			int year, int month) throws SQLException {
 		Map<Integer, Map<Integer, Long>> result = new HashMap<>();

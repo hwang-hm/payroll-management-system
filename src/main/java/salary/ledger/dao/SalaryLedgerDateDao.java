@@ -12,6 +12,7 @@ import salary.model.SalaryDate;
 public class SalaryLedgerDateDao {
 
 	// 그 해 salary_date 목록
+	// その年の salary_date 一覧
 	public List<SalaryDate> selectByYear(Connection conn, int payYear) throws SQLException {
 		String sql = "SELECT * FROM salary_date WHERE pay_year = ? ORDER BY pay_month, pay_seq";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -27,6 +28,7 @@ public class SalaryLedgerDateDao {
 	}
 
 	// 조회결과를 salary_date로 옮겨담기
+	// 照会結果を salary_date へ転記
 	private SalaryDate toSalaryDate(ResultSet rs) throws SQLException {
 		SalaryDate salaryDate = new SalaryDate();
 		salaryDate.setSalaryDateId(rs.getInt("salary_date_id"));
