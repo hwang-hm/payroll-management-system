@@ -50,7 +50,7 @@ public class SalaryDateDao {
 		int salaryDateId;
 		try (PreparedStatement seqPstmt = conn.prepareStatement(seqSql); ResultSet rs = seqPstmt.executeQuery()) {
 			if (!rs.next()) {
-				throw new SQLException("salary_date 시퀀스 조회 실패");
+				throw new SQLException("salary_date シーケンスの取得に失敗しました。");
 			}
 			salaryDateId = rs.getInt(1);
 		}

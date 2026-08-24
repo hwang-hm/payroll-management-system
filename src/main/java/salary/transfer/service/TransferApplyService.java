@@ -102,7 +102,7 @@ public class TransferApplyService {
 
 			String name = formName == null ? "" : formName.trim();
 			if (name.isEmpty()) {
-				name = "이체양식";
+				name = "振込様式";
 			}
 
 			int savedFormId;

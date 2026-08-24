@@ -161,7 +161,7 @@ public class SalaryAddEmployeesService {
 		}
 
 		String itemName = detail.getItemName();
-		if ("기본급".equals(itemName) && empInfo != null && empInfo.getBaseSalary() > 0) {
+		if (SalaryAutoCalcRates.isBasicPayItem(itemName) && empInfo != null && empInfo.getBaseSalary() > 0) {
 			return empInfo.getBaseSalary();
 		}
 		if (SalaryAutoCalcRates.isAutoDeductionItem(itemName)) {
