@@ -9,6 +9,7 @@ import salary.ledger.viewdto.ItemLedgerData;
 import salary.util.PeriodRangeParams;
 
 // 항목별 대장 조회 페이지
+// 項目別台帳照会ページ
 public class ItemLedgerHandler implements CommandHandler {
 
 	private final ItemLedgerService itemLedgerService = new ItemLedgerService();

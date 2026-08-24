@@ -14,6 +14,7 @@ import jdbc.JdbcUtil;
 public class NationalPensionDao {
 
 	// 4대보험 등록
+	// 4大保険の登録
 	public void insertNP(Connection conn, int empId, NationalPensionInfo npi) throws SQLException {
 
 		PreparedStatement pstmt = null;
@@ -56,6 +57,7 @@ public class NationalPensionDao {
 	}
 
 	// 4대보험 수정
+	// 4大保険の修正
 	public int updateNp(Connection conn, int empId, NationalPensionInfo npi) throws SQLException {
 		try (PreparedStatement pstmt = conn.prepareStatement(
 				"update national_pension_information set national_no = ?, national_acq_date = ?, national_loss_date = ?, "
@@ -86,6 +88,7 @@ public class NationalPensionDao {
 	}
 
 	// 사원번호로 4대보험 정보 조회
+	// 社員番号で4大保険情報を照会
 	public NationalPensionInfo selectById(Connection conn, int empId) throws SQLException {
 
 		PreparedStatement pstmt = null;
@@ -112,6 +115,7 @@ public class NationalPensionDao {
 	}
 
 	// ResultSet 객체를 NationalPensionInfo로 변환
+	// ResultSetオブジェクトをNationalPensionInfoに変換
 	private NationalPensionInfo convertNationalPensionInfo(ResultSet rs) throws SQLException {
 
 		NationalPensionInfo npi = new NationalPensionInfo();

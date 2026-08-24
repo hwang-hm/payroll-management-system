@@ -13,6 +13,7 @@ import salary.ledger.viewdto.SalaryLedgerRow;
 public class SalaryLedgerDao {
 
 	// 연도별 귀속차수 집계 (인원·지급·공제·실지급)
+	// 年度別帰属回数集計 (人数・支給・控除・実支給)
 	public List<SalaryLedgerRow> selectLedgerRowsByPayYear(Connection conn, int payYear) throws SQLException {
 		String sql = "SELECT sd.salary_date_id, sd.pay_year, sd.pay_month, sd.pay_seq, "
 				+ "sd.start_date, sd.end_date, sd.pay_date, "
@@ -53,6 +54,7 @@ public class SalaryLedgerDao {
 	}
 
 	// 급여가 있는 연도만 뽑아서 셀렉트박스에 씀
+	// 給与がある年度だけ抽出してセレクトボックスに使用
 	public List<Integer> selectDistinctPayYears(Connection conn) throws SQLException {
 		String sql = "SELECT DISTINCT sd.pay_year FROM salary s "
 				+ "JOIN salary_date sd ON s.salary_date_id = sd.salary_date_id "

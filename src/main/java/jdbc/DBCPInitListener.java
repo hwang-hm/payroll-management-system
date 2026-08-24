@@ -82,7 +82,9 @@ public class DBCPInitListener implements ServletContextListener {
 			poolableConnFactory.setPool(connectionPool);
 
 			// 톰캣 드라이버와의 ClassCastException 충돌을 우회하기 위해
+			// TomcatドライバとのClassCastException衝突を回避するため
 			// 드라이버 매니저에서 가져오지 않고 직접 PoolingDriver 인스턴스를 생성하여 등록합니다.
+			// DriverManagerから取得せず、直接PoolingDriverインスタンスを生成して登録します。
 			Class.forName("org.apache.commons.dbcp2.PoolingDriver");
 			PoolingDriver driver = new PoolingDriver();
 
@@ -90,6 +92,7 @@ public class DBCPInitListener implements ServletContextListener {
 			driver.registerPool(poolName, connectionPool);
 
 			// 드라이버 매니저에 명시적으로 등록하여 ConnectionProvider가 찾을 수 있도록 합니다.
+			// DriverManagerに明示的に登録し、ConnectionProviderが参照できるようにします。
 			DriverManager.registerDriver(driver);
 
 		} catch (Exception e) {
@@ -107,5 +110,6 @@ public class DBCPInitListener implements ServletContextListener {
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 		// 자원 해제 시 필요한 로직 구현
+		// リソース解放時に必要なロジックを実装
 	}
 }

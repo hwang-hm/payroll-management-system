@@ -1,6 +1,7 @@
 package salary.ledger.viewdto;
 
 // 항목별 대장 월 컬럼
+// 項目別台帳の月カラム
 public class ItemLedgerMonth {
 
 	private int year;

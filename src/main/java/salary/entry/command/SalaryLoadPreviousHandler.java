@@ -9,6 +9,7 @@ import salary.util.PayPeriodParams;
 import salary.util.RequestParamParser;
 
 // 지난 귀속년월 급여를 이번 달로 불러오기
+// 過去の帰属年月給与を今月へ読込
 public class SalaryLoadPreviousHandler implements CommandHandler {
 
 	private final SalaryLoadPreviousService loadPreviousService = new SalaryLoadPreviousService();

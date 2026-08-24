@@ -1,21 +1,27 @@
 package salary.dayworker.model;
 
+/**
+ * 일용직 근로자 정보를 담는 도메인 모델 (VO/DTO)
+ * 日雇い労働者情報 ドメインモデル (VO/DTO)
+ */
 public class Dayworker {
-	private String employmentType;
-	private Integer empId;
-	private String nameKor;
-	private Integer deptId;
-	private String deptName; // [추가] 부서명
-	private Integer positionId;
-	private String positionName; // [추가] 직급명
-	private String status;
 
+	private String employmentType; // 고용 형태 / 雇用形態
+	private Integer empId; // 사번 / 社員番号
+	private String nameKor; // 성명(한글) / 氏名(韓国語)
+	private Integer deptId; // 부서 ID / 部署ID
+	private String deptName; // 부서명 / 部署名
+	private Integer positionId; // 직급 ID / 役職ID
+	private String positionName; // 직급명 / 役職名
+	private String status; // 재직 상태 / 在職ステータス
+
+	// 기본 생성자 / コンストラクタ
 	public Dayworker() {
 	}
 
+	// 필드 전체 생성자 / 全フィールドコンストラクタ
 	public Dayworker(String employmentType, Integer empId, String nameKor, Integer deptId, String deptName,
 			Integer positionId, String positionName, String status) {
-		super();
 		this.employmentType = employmentType;
 		this.empId = empId;
 		this.nameKor = nameKor;
@@ -26,6 +32,7 @@ public class Dayworker {
 		this.status = status;
 	}
 
+	// Getter & Setter 메서드 / Getter & Setter メソッド
 	public String getEmploymentType() {
 		return employmentType;
 	}
@@ -89,5 +96,4 @@ public class Dayworker {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
 }

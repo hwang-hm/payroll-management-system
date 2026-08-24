@@ -5,15 +5,15 @@
 <%@ taglib prefix="layout" tagdir="/WEB-INF/tags"%>
 
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>헥사곤존 - 일용직 급여입력/관리</title>
+<title>HEXAGON ZONE - 日雇い給与入力・管理</title>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 
 <style>
-/* 메인 컨테이너 */
+/* 메인 컨테이너 / メインコンテナ */
 .page-container {
 	max-width: 1300px;
 	margin: 0 auto 50px auto;
@@ -23,7 +23,7 @@
 	color: #334155;
 }
 
-/* 페이지 헤더 */
+/* 페이지 헤더 / ページヘッダー */
 .page-header {
 	margin-bottom: 24px;
 }
@@ -53,7 +53,7 @@
 	font-weight: 600;
 }
 
-/* 1. 상단 필터 & 정산기간 설정 바 */
+/* 1. 상단 필터 & 정산기간 설정 바 / 1. 上部フィルター＆精算期間設定バー */
 .filter-card {
 	background: #ffffff;
 	border: 1px solid #e2e8f0;
@@ -127,7 +127,7 @@
 	border-color: #2563eb;
 }
 
-/* 버튼 공통 스타일 */
+/* 버튼 공통 스타일 / ボタン共通スタイル */
 .btn {
 	padding: 7px 14px;
 	font-size: 13px;
@@ -170,7 +170,7 @@
 	background-color: #fee2e2;
 }
 
-/* 2. 메인 2열 그리드 레이아웃 */
+/* 2. 메인 2열 그리드 레이아웃 / 2. メイン2列グリッドレイアウト */
 .payroll-grid {
 	display: grid;
 	grid-template-columns: 380px 1fr;
@@ -199,7 +199,7 @@
 	margin: 0;
 }
 
-/* 테이블 공통 스타일 */
+/* 테이블 공통 스타일 / テーブル共通スタイル */
 .custom-table {
 	width: 100%;
 	border-collapse: collapse;
@@ -237,7 +237,7 @@
 	cursor: pointer;
 }
 
-/* 우측 상세 계산 영역 내 2분할 */
+/* 우측 상세 계산 영역 내 2분할 / 右側詳細計算エリア内2分割 */
 .detail-split {
 	display: grid;
 	grid-template-columns: 1fr 340px;
@@ -255,7 +255,7 @@
 	font-weight: 600;
 }
 
-/* 공제항목 테이블 */
+/* 공제항목 테이블 / 控除項目テーブル */
 .deduction-table {
 	width: 100%;
 	border-collapse: collapse;
@@ -286,7 +286,7 @@
 	font-size: 13px;
 }
 
-/* 합계 요약 영역 및 최종 배너 */
+/* 합계 요약 영역 및 최종 배너 / 合計サマリーエリアおよび最終バナー */
 .summary-bar {
 	display: flex;
 	justify-content: space-between;
@@ -327,47 +327,8 @@
 	padding: 10px 32px;
 	font-size: 14px;
 }
-</style>
-</head>
-<body>
 
-	<!-- 헤더 Include -->
-	<layout:headerNav />
-
-	<main class="page-container">
-		<div class="page-header">
-			<div class="page-title-group">
-				<span style="font-size: 24px;">🧮</span>
-				<h1 class="page-title">급여입력 / 관리 (일용직)</h1>
-			</div>
-			<p class="page-subtext">
-				일용직 근로자의 급여 및 상여금 정보를 입력, 저장, 관리하는 메뉴입니다. <span class="highlight">귀속연월과
-					급여차수를 먼저 확인하세요!</span>
-			</p>
-		</div>
-
-		<form id="payrollForm"
-			action="${pageContext.request.contextPath}/salary/dayworker/register.do"
-			method="post">
-
-			<!-- 사원 선택 및 필터 동기화를 위한 Hidden 필드 -->
-			<input type="hidden" name="empId" id="selectedEmpId" value="" /> <input
-				type="hidden" name="totalPay" id="formTotalPay" value="0" /> <input
-				type="hidden" name="totalDeduct" id="formTotalDeduct" value="0" />
-			<input type="hidden" name="netPay" id="formNetPay" value="0" />
-
-			<!-- 1. 상단 날짜 영역 컴포넌트 Include -->
-			<jsp:include page="./components/_salaryDate.jsp" />
-
-			<!-- 2. 메인 2열 레이아웃 (좌측: 사원목록 / 우측: 상세 급여 계산) -->
-			<div class="payroll-grid">
-				<jsp:include page="./components/_employeeList.jsp" />
-				<jsp:include page="./components/_salaryDetail.jsp" />
-			</div>
-
-		</form>
-		<!-- 급여 종합정보 스타일 및 HTML -->
-		<style>
+/* 급여 종합정보 스타일 / 給与総合情報スタイル */
 .grand-summary-section {
 	margin-top: 25px;
 	font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui,
@@ -398,7 +359,8 @@
 	font-weight: 700;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
-/* 카드별 색상 정의 */
+
+/* 카드별 색상 정의 / カード別カラー定義 */
 .card-grey {
 	background-color: #82888e;
 }
@@ -440,59 +402,102 @@
 	line-height: 1;
 }
 </style>
+</head>
+<body>
 
+	<!-- 헤더 Include / ヘッダー Include -->
+	<layout:headerNav />
+
+	<main class="page-container">
+		<div class="page-header">
+			<div class="page-title-group">
+				<span style="font-size: 24px;">🧮</span>
+				<h1 class="page-title">給与入力 / 管理 (日雇い)</h1>
+			</div>
+			<p class="page-subtext">
+				日雇い労働者の給与および賞与情報を入力、保存、管理するメニューです。 <span class="highlight">帰属年月と給与回数を先に確認してください！</span>
+			</p>
+		</div>
+
+		<form id="payrollForm"
+			action="${pageContext.request.contextPath}/salary/dayworker/register.do"
+			method="post">
+
+			<!-- 사원 선택 및 필터 동기화를 위한 Hidden 필드 -->
+			<!-- 社員選択およびフィルター同期のための Hidden フィールド -->
+			<input type="hidden" name="empId" id="selectedEmpId" value="" /> <input
+				type="hidden" name="totalPay" id="formTotalPay" value="0" /> <input
+				type="hidden" name="totalDeduct" id="formTotalDeduct" value="0" />
+			<input type="hidden" name="netPay" id="formNetPay" value="0" />
+
+			<!-- 1. 상단 날짜 영역 컴포넌트 Include / 1. 上部日付エリアコンポーネント Include -->
+			<jsp:include page="./components/_salaryDate.jsp" />
+
+			<!-- 2. 메인 2열 레이아웃 (좌측: 사원목록 / 우측: 상세 급여 계산) -->
+			<!-- 2. メイン2列レイアウト (左側: 社員リスト / 右側: 詳細給与計算) -->
+			<div class="payroll-grid">
+				<jsp:include page="./components/_employeeList.jsp" />
+				<jsp:include page="./components/_salaryDetail.jsp" />
+			</div>
+
+		</form>
+
+		<!-- 급여 종합정보 (하단 카드 4개) / 給与総合情報 (下部カード4個) -->
 		<div class="grand-summary-section">
-			<div class="grand-summary-title">급여 종합정보</div>
+			<div class="grand-summary-title">給与総合情報</div>
 			<div class="grand-summary-container">
-				<!-- 1. 월 합계 -->
+				<!-- 1. 월 합계 / 1. 月合計 -->
 				<div class="summary-card card-grey">
-					<span class="card-label">월 합계</span> <span class="card-value"><span
-						id="grandEmpCount">0</span> 건</span>
+					<span class="card-label">月合計</span> <span class="card-value"><span
+						id="grandEmpCount">0</span> 件</span>
 				</div>
-				<!-- 2. 지급 총액 -->
+				<!-- 2. 지급 총액 / 2. 支給総額 -->
 				<div class="summary-card card-blue">
 					<span class="card-label"> <span class="icon-badge">+</span>
-						지급 총액
+						支給総額
 					</span> <span class="card-value"><span id="grandTotalPay">0</span>
-						원</span>
+						円</span>
 				</div>
-				<!-- 3. 공제 총액 -->
+				<!-- 3. 공제 총액 / 3. 控除総額 -->
 				<div class="summary-card card-red">
 					<span class="card-label"> <span class="icon-badge">-</span>
-						공제 총액
+						控除総額
 					</span> <span class="card-value"><span id="grandTotalDeduct">0</span>
-						원</span>
+						円</span>
 				</div>
-				<!-- 4. 실지급액 -->
+				<!-- 4. 실지급액 / 4. 差引支給額 -->
 				<div class="summary-card card-dark">
-					<span class="card-label">실지급액</span> <span class="card-value"><span
-						id="grandNetPay">0</span> 원</span>
+					<span class="card-label">差引支給額</span> <span class="card-value"><span
+						id="grandNetPay">0</span> 円</span>
 				</div>
 			</div>
 		</div>
 	</main>
-	<!-- 푸터 Include -->
+
+	<!-- 푸터 Include / フッター Include -->
 	<layout:footer />
 
-	<!-- 클라이언트 동작 스크립트 -->
+	<!-- 클라이언트 동작 스크립트 / クライアント動作スクリプト -->
 	<script>
 		// DOM 로드 완료 후 초기화
+		// DOMロード完了後の初期化
 		document.addEventListener("DOMContentLoaded", function() {
 			
 			// 단일 Form 제출 이벤트 연동 (중복 제출 방지 및 AJAX 통합)
+			// 単一 Form 送信イベント連動 (重複送信防止および AJAX 統合)
 			const payrollForm = document.getElementById('payrollForm');
 			if (payrollForm) {
 				payrollForm.addEventListener('submit', function(e) {
-					e.preventDefault(); // 동기 폼 제출 방지
+					e.preventDefault(); // 동기 폼 제출 방지 / 同期フォーム送信の防止
 					
-					// 1. 유효성 검증
+					// 1. 유효성 검증 / 1. バリデーション検証
 					const year = document.getElementById('payYear')?.value;
 					const month = document.getElementById('payMonth')?.value;
 					const degree = document.getElementById('paySeq')?.value;
 					const empId = document.getElementById('selectedEmpId')?.value;
 
 					if (!year || !month || !degree) {
-						alert("귀속년월 또는 차수가 유효하지 않습니다.");
+						alert("帰属年月または回数が有効ではありません。");
 						if (!year) document.getElementById('payYear')?.focus();
 						else if (!month) document.getElementById('payMonth')?.focus();
 						else if (!degree) document.getElementById('paySeq')?.focus();
@@ -500,17 +505,18 @@
 					}
 
 					if (!empId) {
-						alert("사원을 선택해 주세요.");
+						alert("社員を選択してください。");
 						return;
 					}
 
-					// 2. 유효성 통과 시 AJAX 저장 실행
+					// 2. 유효성 통과 시 AJAX 저장 실행 / 2. 検証通過時に AJAX 保存を実行
 					saveSalaryData();
 				});
 			}
 		});
 
 		// 사원 선택 이벤트 (행 클릭 시)
+		// 社員選択イベント (行クリック時)
 		function selectWorker(element, empId, name) {
 			const rows = document.querySelectorAll('#workerListBody tr');
 			rows.forEach(r => r.classList.remove('active'));
@@ -519,22 +525,23 @@
 				element.classList.add('active');
 			}
 
-			// hidden input 업데이트
+			// hidden input 업데이트 / hidden input の更新
 			document.getElementById('selectedEmpId').value = empId;
 			
-			// 우측 급여 상세 헤더 사원명 변경
+			// 우측 급여 상세 헤더 사원명 변경 / 右側給与詳細ヘッダーの社員名変更
 			const targetEmpSpan = document.getElementById('targetEmpName');
 			if (targetEmpSpan) {
 				targetEmpSpan.innerText = name;
 			}
 
-			// 우측 급여/공제 상세 AJAX 조회 호출
+			// 우측 급여/공제 상세 AJAX 조회 호출 / 右側給与・控除詳細 AJAX 照会呼び出し
 			if (typeof loadEmployeeSalaryDetail === 'function') {
 				loadEmployeeSalaryDetail(empId, name);
 			}
 		}
 
 		// 급여 데이터 AJAX 전송 함수
+		// 給与データ AJAX 送信関数
 		function saveSalaryData() {
 			const form = document.getElementById('payrollForm');
 			const empId = document.getElementById('selectedEmpId')?.value;
@@ -544,6 +551,7 @@
 
 			for (const [key, value] of rawFormData.entries()) {
 				// 금액 관련 파라미터 천단위 콤마(,) 제거
+				// 金額関連パラメータのカンマ(,)除去
 				if (['amount', 'totalPay', 'totalDeduct', 'netPay'].includes(key)) {
 					params.append(key, value.replace(/,/g, ''));
 				} else {
@@ -559,30 +567,30 @@
 				body: params.toString()
 			})
 			.then(async response => {
-			    // 서버가 200 OK가 아닐 때 (500, 404, 405 등)
-			    if (!response.ok) {
-			        // 서버가 보낸 HTML 에러 창 또는 텍스트 읽어오기
-			        const errorText = await response.text();
-			        console.error("서버 에러 원문:", errorText);
-			        
-			        // alert으로 에러 내용 일부 출력
-			        throw new Error(`[HTTP ${response.status}] 서버 오류 발생!\n요청 URL: ${form.action}\n네트워크 탭(F12)을 확인하세요.`);
-			    }
-			    return response.json();
+				// 서버가 200 OK가 아닐 때 (500, 404, 405 등)
+				// サーバーが 200 OK でない場合 (500, 404, 405 等)
+				if (!response.ok) {
+					const errorText = await response.text();
+					console.error("서버 에러 원문 / サーバーエラー原文:", errorText);
+					
+					throw new Error(`[HTTP ${response.status}] サーバーエラーが発生しました！\nリクエストURL: ${form.action}\nネットワークタブ(F12)を確認してください。`);
+				}
+				return response.json();
 			})
 			.then(data => {
-			    alert(data.message);
-			    if (data.status === 'success') {
-			        location.reload();
-			    }
+				alert(data.message);
+				if (data.status === 'success') {
+					location.reload();
+				}
 			})
 			.catch(error => {
-			    console.error('AJAX Error:', error);
-			    alert(error.message);
+				console.error('AJAX Error:', error);
+				alert(error.message);
 			});
 		}
 		
 		// 급여 종합정보(하단 4개 카드) 값 업데이트 함수
+		// 給与総合情報 (下部4個のカード) 値更新関数
 		function updateGrandSummary(count, totalPay, totalDeduct, netPay) {
 			document.getElementById('grandEmpCount').innerText = (count || 0).toLocaleString();
 			document.getElementById('grandTotalPay').innerText = (totalPay || 0).toLocaleString();

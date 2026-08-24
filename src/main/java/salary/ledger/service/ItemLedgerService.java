@@ -93,6 +93,7 @@ public class ItemLedgerService {
 	}
 
 	// 12개월 초과면 시작월부터 12개월만 남김
+	// 12か月超過なら開始月から12か月分だけ残す
 	private boolean capToTwelveMonths(int[] period) {
 		int startIndex = period[0] * 12 + (period[1] - 1);
 		int endIndex = period[2] * 12 + (period[3] - 1);

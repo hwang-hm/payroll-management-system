@@ -4,13 +4,14 @@
 <%@ taglib prefix="layout" tagdir="/WEB-INF/tags"%>
 
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>4대보험 공제내역</title>
+<!-- 4대보험 공제내역 / 4大保険控除明細 -->
+<title>4大保険控除明細</title>
 <style>
 body {
-	font-family: 'Malgun Gothic', 'Noto Sans KR', sans-serif;
+	font-family: 'Malgun Gothic', 'Noto Sans KR', 'Meiryo', sans-serif;
 	font-size: 12px;
 	color: #333;
 	margin: 0;
@@ -92,6 +93,7 @@ th {
 
 /* ====================================================
    [1~5번째 사원정보 열 좌측 고정 (Sticky)]
+   [1〜5番目の社員情報列の左側固定 (Sticky)]
    ==================================================== */
 thead tr:nth-child(1) th:first-child {
 	position: sticky;
@@ -152,19 +154,19 @@ tbody tr td:nth-child(-n+5) {
 	background-color: #ffffff;
 }
 
-/* 6번째 열부터 데이터 열 너비 확보 */
+/* 6번째 열부터 데이터 열 너비 확보 / 6番目の列からデータ列の幅を確保 */
 thead tr:nth-child(2) th:nth-child(n+6),
 tbody tr td:nth-child(n+6) {
 	min-width: 90px;
 }
 
-/* 우측 총 합계 헤더 검정색 스타일 */
+/* 우측 총 합계 헤더 검정색 스타일 / 右側総合計ヘッダーのスタイル */
 .th-total-header {
-	background-color: #666666 !important; /* 회색계열 (#475569 또는 #666666 가능) */
+	background-color: #666666 !important;
 	color: #ffffff !important;
 }
 
-/* 데이터 행 호버 효과 */
+/* 데이터 행 호버 효과 / データ行ホバー効果 */
 tbody tr:hover td {
 	background-color: #f8fafc;
 }
@@ -175,6 +177,7 @@ tbody tr:hover td:nth-child(-n+5) {
 
 /* ====================================================
    [하단 합계 행 전용 스타일]
+   [下部合計行専用スタイル]
    ==================================================== */
 tbody tr.bg-total {
 	background-color: #fffde7 !important;
@@ -200,78 +203,92 @@ tbody tr.bg-total:hover td {
 </style>
 </head>
 <body>
+	<!-- 상단 네비게이션 / 上部ナビゲーション -->
 	<layout:headerNav />
 
 	<div class="page-container">
+		<!-- 페이지 헤더 타이틀 / ページヘッダータイトル -->
 		<div class="page-header-title">
-			<span>4대보험 공제내역</span>
+			<span>4大保険控除明細</span>
 		</div>
-		<div class="page-header-desc">급여정보 중 4대보험에 대한 근로자 &amp; 사업주분에 대한 월별 내역 검색 및 보기 쉽게 정리하여 제공되는 메뉴입니다.</div>
+		<!-- 페이지 설명 / ページ説明 -->
+		<div class="page-header-desc">給与情報のうち、4大保険に関する労働者分および事業主分の月別明細を検索し、分かりやすく整理して提供するメニューです。</div>
 
+		<!-- 급여 연월 필터 검색 영역 / 給与年月フィルター検索領域 -->
 		<jsp:include page="./_salaryDateFilter.jsp" />
 
+		<!-- 4대보험 공제 내역 테이블 / 4大保険控除明細テーブル -->
 		<div class="table-wrapper">
 			<table>
 				<thead>
 					<tr>
-						<th colspan="5">사원정보</th>
-						<th colspan="3">국민연금</th>
-						<th colspan="3">건강보험</th>
-						<th colspan="3">노인장기요양보험</th>
-						<th colspan="3">고용보험</th>
-						<th colspan="3" class="th-total-header">총 합계</th>
+						<th colspan="5">社員情報</th>
+						<th colspan="3">国民年金</th>
+						<th colspan="3">健康保険</th>
+						<th colspan="3">介護保険</th>
+						<th colspan="3">雇用保険</th>
+						<th colspan="3" class="th-total-header">総合計</th>
 					</tr>
 					<tr>
-						<th>구분</th>
-						<th>성명</th>
-						<th>입사일</th>
-						<th>부서</th>
-						<th>직위</th>
+						<th>区分</th>
+						<th>氏名</th>
+						<th>入社日</th>
+						<th>部署</th>
+						<th>役職</th>
 
-						<th>사업주</th>
-						<th>근로자</th>
-						<th>합계</th>
+						<th>事業主</th>
+						<th>労働者</th>
+						<th>合計</th>
 
-						<th>사업주</th>
-						<th>근로자</th>
-						<th>합계</th>
+						<th>事業主</th>
+						<th>労働者</th>
+						<th>合計</th>
 
-						<th>사업주</th>
-						<th>근로자</th>
-						<th>합계</th>
+						<th>事業主</th>
+						<th>労働者</th>
+						<th>合計</th>
 
-						<th>사업주</th>
-						<th>근로자</th>
-						<th>합계</th>
+						<th>事業主</th>
+						<th>労働者</th>
+						<th>合計</th>
 
-						<th class="th-total-header">사업주</th>
-						<th class="th-total-header">근로자</th>
-						<th class="th-total-header">합계</th>
+						<th class="th-total-header">事業主</th>
+						<th class="th-total-header">労働者</th>
+						<th class="th-total-header">合計</th>
 					</tr>
 				</thead>
 
 				<tbody id="insuranceTableContent">
 					<tr>
-						<td colspan="20" style="padding: 25px;">데이터를 불러오는 중입니다...</td>
+						<td colspan="20" style="padding: 25px;">データを読み込んでいます...</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
 
+	<!-- 하단 푸터 / 下部フッター -->
 	<layout:footer />
 
 	<script>
+		/**
+		 * 급여 정산 ID 기준 4대보험 공제 내역 비동기 조회
+		 * 給与計算ID基準の4大保険控除明細非同期照会
+		 */
 		function loadSocialInsuranceList(salaryDateId) {
 			const container = document.getElementById('insuranceTableContent');
 
+			// 급여 정산 ID가 없을 경우 안내 문구 표시
+			// 給与計算IDがない場合、案内文を表示
 			if (!salaryDateId) {
 				container.innerHTML = '<tr><td colspan="20" style="padding: 25px; color: #888;">'
-				                    + '해당 귀속년월/차수에 등록된 급여정산 정보가 없습니다.'
+				                    + '該当する帰属年月/回数に登録された給与計算情報がありません。'
 				                    + '</td></tr>';
 				return;
 			}
 
+			// AJAX 요청을 통한 4대보험 내역 HTML 바인딩
+			// AJAXリクエストによる4大保険明細HTMLバインディング
 			fetch('${pageContext.request.contextPath}/salary/socialInsurance.do?salaryDateId=' + salaryDateId)
 				.then(response => {
 					if (!response.ok) throw new Error("Network response was not ok");
@@ -283,8 +300,8 @@ tbody tr.bg-total:hover td {
 				.catch(error => {
 					console.error('Error loading social insurance list:', error);
 					container.innerHTML = '<tr><td colspan="20" style="padding: 25px; color: red;">'
-				                        + '데이터를 불러오는 중 오류가 발생했습니다.'
-				                        + '</td></tr>';
+					                    + 'データの読み込み中にエラーが発生しました。'
+					                    + '</td></tr>';
 				});
 		}
 	</script>

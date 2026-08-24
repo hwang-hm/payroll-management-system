@@ -5,6 +5,7 @@ import java.util.List;
 import salary.model.SalaryDetail;
 
 //급여입력/관리 페이지의 전반적인 view용 정보
+// 給与入力/管理ページの全体的なview用情報
 public class SalaryEntryData {
 
 	private int salaryDateId;

@@ -2,10 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<!-- 컨트롤러 전달 변수명 호환 처리 (insuranceList 또는 list 모두 대응) -->
+<!-- 컨트롤러 전달 변수명 호환 처리 (insuranceList 또는 list 모두 대응) / コントローラーから渡される変数名の互換処理 (insuranceList または list の両方に対応) -->
 <c:set var="targetList" value="${not empty insuranceList ? insuranceList : list}" />
 
-<!-- 1. 위에서 아래로 누적할 합계 변수 초기화 -->
+<!-- 1. 위에서 아래로 누적할 합계 변수 초기화 / 1. 縦方向に加算する合計変数の初期化 -->
 <c:set var="totNpBiz" value="0" />
 <c:set var="totNpEmp" value="0" />
 <c:set var="totNpTotal" value="0" />
@@ -26,7 +26,7 @@
 <c:set var="totTotalEmp" value="0" />
 <c:set var="totTotalSum" value="0" />
 
-<!-- 2. 목록 순회 및 열별 금액 누적 -->
+<!-- 2. 목록 순회 및 열별 금액 누적 / 2. リストのループ処理および列ごとの金額加算 -->
 <c:forEach var="item" items="${targetList}">
 	<c:set var="totNpBiz" value="${totNpBiz + (empty item.npBiz ? 0 : item.npBiz)}" />
 	<c:set var="totNpEmp" value="${totNpEmp + (empty item.npEmp ? 0 : item.npEmp)}" />
@@ -55,63 +55,63 @@
 		<td>${item.deptName}</td>
 		<td>${item.positionName}</td>
 
-		<!-- 국민연금 -->
+		<!-- 국민연금 / 国民年金 -->
 		<td class="text-right"><fmt:formatNumber value="${item.npBiz}" pattern="#,##0" /></td>
 		<td class="text-right"><fmt:formatNumber value="${item.npEmp}" pattern="#,##0" /></td>
 		<td class="text-right col-subtotal"><fmt:formatNumber value="${item.npTotal}" pattern="#,##0" /></td>
 
-		<!-- 건강보험 -->
+		<!-- 건강보험 / 健康保険 -->
 		<td class="text-right"><fmt:formatNumber value="${item.hiBiz}" pattern="#,##0" /></td>
 		<td class="text-right"><fmt:formatNumber value="${item.hiEmp}" pattern="#,##0" /></td>
 		<td class="text-right col-subtotal"><fmt:formatNumber value="${item.hiTotal}" pattern="#,##0" /></td>
 
-		<!-- 노인장기요양보험 -->
+		<!-- 노인장기요양보험 / 介護保険 -->
 		<td class="text-right"><fmt:formatNumber value="${item.ltcBiz}" pattern="#,##0" /></td>
 		<td class="text-right"><fmt:formatNumber value="${item.ltcEmp}" pattern="#,##0" /></td>
 		<td class="text-right col-subtotal"><fmt:formatNumber value="${item.ltcTotal}" pattern="#,##0" /></td>
 
-		<!-- 고용보험 -->
+		<!-- 고용보험 / 雇用保険 -->
 		<td class="text-right"><fmt:formatNumber value="${item.eiBiz}" pattern="#,##0" /></td>
 		<td class="text-right"><fmt:formatNumber value="${item.eiEmp}" pattern="#,##0" /></td>
 		<td class="text-right col-subtotal"><fmt:formatNumber value="${item.eiTotal}" pattern="#,##0" /></td>
 
-		<!-- 총 합계 -->
+		<!-- 총 합계 / 総合計 -->
 		<td class="text-right"><fmt:formatNumber value="${item.totalBiz}" pattern="#,##0" /></td>
 		<td class="text-right"><fmt:formatNumber value="${item.totalEmp}" pattern="#,##0" /></td>
 		<td class="text-right col-grandtotal"><fmt:formatNumber value="${item.totalSum}" pattern="#,##0" /></td>
 	</tr>
 </c:forEach>
 
-<!-- 3. 맨 밑 하단 전체 합계 행 -->
+<!-- 3. 맨 밑 하단 전체 합계 행 / 3. 最下部の全体合計行 -->
 <c:if test="${not empty targetList}">
 	<tr class="bg-total">
-		<td>합계</td>
+		<td>合計</td>
 		<td></td>
 		<td></td>
 		<td></td>
 		<td></td>
 
-		<!-- 국민연금 전체합 -->
+		<!-- 국민연금 전체합 / 国民年金全体合計 -->
 		<td class="text-right"><fmt:formatNumber value="${totNpBiz}" pattern="#,##0" /></td>
 		<td class="text-right"><fmt:formatNumber value="${totNpEmp}" pattern="#,##0" /></td>
 		<td class="text-right font-bold"><fmt:formatNumber value="${totNpTotal}" pattern="#,##0" /></td>
 
-		<!-- 건강보험 전체합 -->
+		<!-- 건강보험 전체합 / 健康保険全体合計 -->
 		<td class="text-right"><fmt:formatNumber value="${totHiBiz}" pattern="#,##0" /></td>
 		<td class="text-right"><fmt:formatNumber value="${totHiEmp}" pattern="#,##0" /></td>
 		<td class="text-right font-bold"><fmt:formatNumber value="${totHiTotal}" pattern="#,##0" /></td>
 
-		<!-- 노인장기요양보험 전체합 -->
+		<!-- 노인장기요양보험 전체합 / 介護保険全体合計 -->
 		<td class="text-right"><fmt:formatNumber value="${totLtcBiz}" pattern="#,##0" /></td>
 		<td class="text-right"><fmt:formatNumber value="${totLtcEmp}" pattern="#,##0" /></td>
 		<td class="text-right font-bold"><fmt:formatNumber value="${totLtcTotal}" pattern="#,##0" /></td>
 
-		<!-- 고용보험 전체합 -->
+		<!-- 고용보험 전체합 / 雇用保険全体合計 -->
 		<td class="text-right"><fmt:formatNumber value="${totEiBiz}" pattern="#,##0" /></td>
 		<td class="text-right"><fmt:formatNumber value="${totEiEmp}" pattern="#,##0" /></td>
 		<td class="text-right font-bold"><fmt:formatNumber value="${totEiTotal}" pattern="#,##0" /></td>
 
-		<!-- 전체 총 합계 -->
+		<!-- 전체 총 합계 / 全体総合計 -->
 		<td class="text-right"><fmt:formatNumber value="${totTotalBiz}" pattern="#,##0" /></td>
 		<td class="text-right"><fmt:formatNumber value="${totTotalEmp}" pattern="#,##0" /></td>
 		<td class="text-right font-bold"><fmt:formatNumber value="${totTotalSum}" pattern="#,##0" /></td>

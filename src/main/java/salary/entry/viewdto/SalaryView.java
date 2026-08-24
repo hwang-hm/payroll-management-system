@@ -1,6 +1,7 @@
 package salary.entry.viewdto;
 
 // 급여입력 왼쪽 목록 한 줄
+// 給与入力左一覧の1行
 public class SalaryView {
 
 	private int salaryId;

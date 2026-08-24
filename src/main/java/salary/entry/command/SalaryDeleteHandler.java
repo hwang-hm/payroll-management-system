@@ -11,6 +11,7 @@ import salary.entry.service.SalaryDeleteService;
 import salary.util.PayPeriodParams;
 
 // 급여입력에서 선택한 사원 급여 삭제
+// 給与入力で選択した社員の給与を削除
 public class SalaryDeleteHandler implements CommandHandler {
 
 	private final SalaryDeleteService deleteService = new SalaryDeleteService();

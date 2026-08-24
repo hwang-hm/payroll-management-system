@@ -13,6 +13,7 @@ import jdbc.JdbcUtil;
 public class DependentDao {
 
 	// 부양가족 정보 입력
+	// 扶養家族情報の入力
 	public void insertDependent(Connection conn, int empId, Dependent dependent) throws SQLException {
 
 		PreparedStatement pstmt = null;
@@ -46,6 +47,7 @@ public class DependentDao {
 	}
 
 	// 부양가족 정보 수정
+	// 扶養家族情報の修正
 	public int updateDependent(Connection conn, int empId, Dependent dependent) throws SQLException {
 		try (PreparedStatement pstmt = conn
 				.prepareStatement("update dependent set emp_id = ?, relation = ?, family_name = ?, "
@@ -72,6 +74,7 @@ public class DependentDao {
 	}
 
 	// 사원번호로 부양가족 목록 조회
+	// 社員番号で扶養家族一覧を照会
 	public List<Dependent> selectById(Connection conn, int empId) throws SQLException {
 
 		PreparedStatement pstmt = null;
@@ -97,6 +100,7 @@ public class DependentDao {
 	}
 
 	// ResultSet 객체를 Dependent로 변환
+	// ResultSetオブジェクトをDependentに変換
 	private Dependent convertDependent(ResultSet rs) throws SQLException {
 
 		Dependent dependent = new Dependent();

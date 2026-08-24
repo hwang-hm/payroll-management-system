@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // 항목별 대장 화면 전체 데이터
+// 項目別台帳画面の全体データ
 public class ItemLedgerData {
 
 	private int startYear;

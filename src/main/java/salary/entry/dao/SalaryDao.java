@@ -17,6 +17,7 @@ import salary.util.SqlIn;
 public class SalaryDao {
 
 	// 이번 급여에 그 사원이 이미 들어가 있는지 확인
+	// 今回の給与にその社員が既に含まれているか確認
 	public boolean existsBySalaryDateIdAndEmpId(Connection conn, int salaryDateId, int empId) throws SQLException {
 		String sql = "SELECT 1 FROM salary WHERE salary_date_id = ? AND emp_id = ?";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -29,6 +30,7 @@ public class SalaryDao {
 	}
 
 	// 해당 귀속년월에 이미 들어간 사원번호 전부
+	// 該当帰属年月に既に含まれている社員番号すべて
 	public Set<Integer> selectEmpIdsBySalaryDateId(Connection conn, int salaryDateId) throws SQLException {
 		String sql = "SELECT emp_id FROM salary WHERE salary_date_id = ?";
 		Set<Integer> empIds = new HashSet<>();
@@ -44,6 +46,7 @@ public class SalaryDao {
 	}
 
 	// 같은 달 급여 중 제일 앞에 있는 사람 salary_id. 상세항목 복사할 때 씀
+	// 同月給与のうち先頭の人の salary_id。詳細項目コピー時に使用
 	public Integer selectFirstSalaryIdBySalaryDateId(Connection conn, int salaryDateId) throws SQLException {
 		String sql = "SELECT MIN(salary_id) AS salary_id FROM salary WHERE salary_date_id = ?";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -61,6 +64,7 @@ public class SalaryDao {
 	}
 
 	// 사원 한 명 급여 행 새로 넣음
+	// 社員1名分の給与行を新規挿入
 	public int insert(Connection conn, Salary salary) throws SQLException {
 		String seqSql = "SELECT seq_salary.NEXTVAL FROM dual";
 		String insertSql = "INSERT INTO salary (salary_id, salary_date_id, emp_id, total_pay, total_deduct, net_pay, created_at) "
@@ -102,6 +106,7 @@ public class SalaryDao {
 	}
 
 	// 해당 귀속년월 급여 id 전부 (일용직 포함)
+	// 該当帰属年月の給与 id すべて (日雇い含む)
 	public List<Integer> selectIdsBySalaryDateId(Connection conn, int salaryDateId) throws SQLException {
 		String sql = "SELECT salary_id FROM salary WHERE salary_date_id = ? ORDER BY salary_id";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -117,6 +122,7 @@ public class SalaryDao {
 	}
 
 	// 해당 귀속년월 급여 헤더. 일용직은 빼둠
+	// 該当帰属年月の給与ヘッダー。日雇いは除外
 	public List<Salary> selectBySalaryDateIdExcludingDayworkers(Connection conn, int salaryDateId)
 			throws SQLException {
 		String sql = "SELECT s.salary_id, s.salary_date_id, s.emp_id, s.total_pay, s.total_deduct, s.net_pay "
@@ -143,6 +149,7 @@ public class SalaryDao {
 	}
 
 	// 여러 salary 한 번에 삭제
+	// 複数 salary を一括削除
 	public void deleteByIds(Connection conn, List<Integer> salaryIds) throws SQLException {
 		if (salaryIds == null || salaryIds.isEmpty()) {
 			return;
@@ -155,6 +162,7 @@ public class SalaryDao {
 	}
 
 	// 이번 귀속년월·목록에 속한 salary만 골라 반환 (삭제 검증용)
+	// 今回帰属年月・一覧に属する salary のみ選んで返却 (削除検証用)
 	public List<Integer> selectIdsBySalaryDateIdAndIds(Connection conn, int salaryDateId, List<Integer> salaryIds)
 			throws SQLException {
 		if (salaryIds == null || salaryIds.isEmpty()) {
@@ -176,6 +184,7 @@ public class SalaryDao {
 	}
 
 	// 지급합계/공제합계/실지급액 다시 저장
+	// 支給合計/控除合計/実支給額を再保存
 	public void updateTotals(Connection conn, int salaryId, long totalPay, long totalDeduct, long netPay)
 			throws SQLException {
 		String sql = "UPDATE salary SET total_pay = ?, total_deduct = ?, net_pay = ?, updated_at = SYSDATE WHERE salary_id = ?";
@@ -189,6 +198,7 @@ public class SalaryDao {
 	}
 
 	// 해당 귀속년월 급여 목록. 일용직은 빼둠
+	// 該当帰属年月の給与一覧。日雇いは除外
 	public List<SalaryView> selectViewListBySalaryDateId(Connection conn, int salaryDateId) throws SQLException {
 		String sql = "SELECT s.salary_id, s.emp_id, e.employment_type, e.name_kor, "
 				+ "NVL(d.dept_name, '-') AS dept_name, s.total_pay, s.total_deduct, s.net_pay " + "FROM salary s "
@@ -207,6 +217,7 @@ public class SalaryDao {
 	}
 
 	// 이번 급여에 아직 안 넣은 사원 목록
+	// 今回の給与にまだ未追加の社員一覧
 	public List<EmployeeSearchView> selectEmployeesForAdd(Connection conn, int salaryDateId) throws SQLException {
 		String sql = "SELECT e.emp_id, e.employment_type, e.name_kor, "
 				+ "NVL(d.dept_name, '-') AS dept_name, NVL(p.position_name, '-') AS position_name, "
@@ -227,6 +238,7 @@ public class SalaryDao {
 	}
 
 	// 이름이나 사번으로 아직 안 넣은 사원 찾기
+	// 氏名または社員番号で未追加の社員を検索
 	public List<EmployeeSearchView> selectEmployeesForAddByKeyword(Connection conn, int salaryDateId,
 			String searchKeyword) throws SQLException {
 		String sql = "SELECT e.emp_id, e.employment_type, e.name_kor, "
@@ -252,6 +264,7 @@ public class SalaryDao {
 	}
 
 	// 사원검색 모달에 뿌릴 값 옮겨담기
+	// 社員検索モーダル表示用の値へ転記
 	private EmployeeSearchView toEmployeeSearchView(ResultSet rs) throws SQLException {
 		EmployeeSearchView view = new EmployeeSearchView();
 		view.setEmpId(rs.getInt("emp_id"));
@@ -264,6 +277,7 @@ public class SalaryDao {
 	}
 
 	// 급여목록 한 줄로 옮겨담기
+	// 給与一覧1行へ転記
 	private SalaryView toSalaryView(ResultSet rs) throws SQLException {
 		SalaryView view = new SalaryView();
 		view.setSalaryId(rs.getInt("salary_id"));

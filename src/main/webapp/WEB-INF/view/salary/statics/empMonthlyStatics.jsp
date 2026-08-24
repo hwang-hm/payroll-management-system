@@ -11,7 +11,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>월별 개인급여 통계</title>
+<title>月別 個人給与統計</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
@@ -20,7 +20,7 @@
 .stat-container {
 	width: 1000px;
 	margin: 20px auto;
-	font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+	font-family: 'Pretendard', 'Malgun Gothic', '맑은 고딕', sans-serif;
 	color: #333;
 }
 
@@ -132,7 +132,7 @@
 	color: #666;
 }
 
-/* === 모달 CSS === */
+/* === 모달 CSS / 모달 CSS === */
 .modal-overlay {
 	position: fixed;
 	top: 0;
@@ -250,94 +250,93 @@
 </style>
 </head>
 <body>
-	<!-- 헤더 Include -->
+	<!-- 헤더 Include / ヘッダーInclude -->
 	<layout:headerNav />
 
 	<div class="stat-container">
 		<div class="stat-title">
-			<span>📈</span> 월별 개인급여 통계
+			<span>📈</span> 月別 個人給与統計
 		</div>
-		<div class="stat-subtitle">귀속년도와 사원을 검색하시면 해당사원의 월별 급여현황을 확인하실 수
-			있습니다.</div>
+		<div class="stat-subtitle">帰属年度と社員を検索すると、該当社員の月別給与状況を確認できます。</div>
 
-		<!-- 검색 폼 -->
+		<!-- 검색 폼 / 検索フォーム -->
 		<form id="searchForm"
 			action="${pageContext.request.contextPath}/salary/stats/monthlyPersonal.do"
 			method="get">
-			<!-- 사원 선택 시 채워지는 hidden id -->
+			<!-- 사원 선택 시 채워지는 hidden id / 社員選択時に設定されるhidden id -->
 			<input type="hidden" id="selectedEmpId" name="empId"
 				value="${selectedEmpId}" />
 
 			<div class="filter-box">
 				<div>
-					* 귀속년도를 선택해 주세요. &nbsp; <select name="year" id="selectedYear">
+					* 帰属年度を選択してください。 &nbsp; <select name="year" id="selectedYear">
 						<c:forEach var="y" begin="2015" end="${nowYear}">
 							<option value="${y}" ${y == selectedYear ? 'selected' : ''}>${y}
-								년</option>
+								年</option>
 						</c:forEach>
 					</select>
 				</div>
 
 				<div style="display: flex; align-items: center; gap: 6px;">
-					대상자를 선택해 주세요.
+					対象者を選択してください。
 					<div class="search-input-group">
 						<input type="text" id="targetEmpName" name="empName"
-							value="${selectedEmpName}" placeholder="사원선택" readonly
+							value="${selectedEmpName}" placeholder="社員選択" readonly
 							onclick="openWorkerModal()" />
 						<button type="button" class="btn-search-icon"
 							onclick="openWorkerModal()">🔍</button>
 					</div>
 				</div>
 
-				<button type="button" class="btn-submit" onclick="submitSearch()">조회</button>
+				<button type="button" class="btn-submit" onclick="submitSearch()">検索</button>
 			</div>
 		</form>
 
-		<!-- 차트 영역 -->
+		<!-- 차트 영역 / 차트 영역 -->
 		<div class="chart-wrapper">
 			<canvas id="salaryChart"></canvas>
 		</div>
 
-		<!-- 데이터 테이블 -->
+		<!-- 데이터 테이블 / 데이터 테이블 -->
 		<table class="stat-table">
 			<thead>
 				<tr>
-					<th style="width: 140px;">구분</th>
+					<th style="width: 140px;">区分</th>
 					<c:forEach var="item" items="${statList}">
-						<th>${item.month}월</th>
+						<th>${item.month}月</th>
 					</c:forEach>
-					<!-- 가장 오른쪽에 합계 헤더 추가 -->
-					<th style="background-color: #e6f0fa; width: 100px;">합계</th>
+					<!-- 가장 오른쪽에 합계 헤더 추가 / 最右側に合計ヘッダー追加 -->
+					<th style="background-color: #e6f0fa; width: 100px;">合計</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<th>월급여액 (천원)</th>
+					<th>月給与額 (千円)</th>
 					<c:forEach var="item" items="${statList}">
 						<td><fmt:formatNumber value="${item.totalPayThousand}"
 								pattern="#,##0" /></td>
 					</c:forEach>
-					<!-- 월급여액 합계 -->
+					<!-- 월급여액 합계 / 月給与額合計 -->
 					<td style="font-weight: bold; background-color: #f9fbfd;"><fmt:formatNumber
 							value="${paySum}" pattern="#,##0" /></td>
 				</tr>
 				<tr>
-					<th>ㄴ 공제액 (천원)</th>
+					<th>└ 控除金額 (千円)</th>
 					<c:forEach var="item" items="${statList}">
 						<td><fmt:formatNumber value="${item.totalDeductThousand}"
 								pattern="#,##0" /></td>
 					</c:forEach>
-					<!-- 공제액 합계 -->
+					<!-- 공제액 합계 / 控除額合計 -->
 					<td style="font-weight: bold; background-color: #f9fbfd;"><fmt:formatNumber
 							value="${deductSum}" pattern="#,##0" /></td>
 				</tr>
 				<tr>
-					<th>ㄴ 실지급액 (천원)</th>
+					<th>└ 手取り額 (千円)</th>
 					<c:forEach var="item" items="${statList}">
 						<td><fmt:formatNumber value="${item.netPayThousand}"
 								pattern="#,##0" /></td>
 					</c:forEach>
-					<!-- 실지급액 합계 -->
+					<!-- 실지급액 합계 / 手取り額合計 -->
 					<td
 						style="font-weight: bold; background-color: #f9fbfd;">
 						<fmt:formatNumber value="${netSum}" pattern="#,##0" />
@@ -345,35 +344,34 @@
 				</tr>
 			</tbody>
 		</table>
-		<div class="notice-text">※ 통계차트는 별도의 인쇄화면을 제공하지 않습니다. 회원님께서
-			윈도우즈에서 제공하는 스크린샷(ScreenShot) 기능을 이용하여 인쇄(Ctrl + P)하여 주시길 바랍니다.</div>
+		<div class="notice-text">※ 統計チャートは別途의 印刷画面を提供しておりません。Windowsで提供するスクリーンショット(ScreenShot)機能を利用して印刷(Ctrl + P)を行ってください。</div>
 	</div>
 
-	<!-- ==================== 사원 선택 모달 영역 ==================== -->
+	<!-- ==================== 사원 선택 모달 영역 / 社員選択モーダルエリア ==================== -->
 	<div id="workerSelectModal" class="modal-overlay"
 		style="display: none;">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h3 class="modal-title">전체 사원 선택</h3>
+				<h3 class="modal-title">全社員選択</h3>
 			</div>
 
 			<div class="modal-body">
 				<div class="modal-filter-bar">
 					<div class="filter-left">
 						<div class="search-input-group">
-							<input type="text" id="modalSearchKeyword" placeholder="사원검색"
+							<input type="text" id="modalSearchKeyword" placeholder="社員検索"
 								onkeyup="filterModalWorkers()" />
 							<button type="button" class="btn-search-icon"
 								onclick="filterModalWorkers()">🔍</button>
 						</div>
 						<button type="button" class="btn-reset-filter"
-							onclick="resetModalFilter()">전체보기</button>
+							onclick="resetModalFilter()">全体表示</button>
 					</div>
 					<div class="filter-right">
 						<select id="filterStatus" onchange="filterModalWorkers()">
-							<option value="">상태별</option>
-							<option value="재직">재직</option>
-							<option value="퇴직">퇴직</option>
+							<option value="">ステータス別</option>
+							<option value="재직">在職</option>
+							<option value="퇴직">退職</option>
 						</select>
 					</div>
 				</div>
@@ -382,34 +380,34 @@
 					<table class="erp-modal-table">
 						<thead>
 							<tr>
-								<th style="width: 70px;">구분</th>
-								<th style="width: 110px;">사원번호</th>
-								<th style="width: 90px;">성명</th>
-								<th style="width: 100px;">부서</th>
-								<th style="width: 80px;">직위</th>
-								<th style="width: 70px;">상태</th>
+								<th style="width: 70px;">区分</th>
+								<th style="width: 110px;">社員番号</th>
+								<th style="width: 90px;">氏名</th>
+								<th style="width: 100px;">部署</th>
+								<th style="width: 80px;">役職</th>
+								<th style="width: 70px;">ステータ스</th>
 							</tr>
 						</thead>
 						<tbody id="modalWorkerListBody">
-							<!-- 비동기 수신 영역 -->
+							<!-- 비동기 수신 영역 / 非同期受信エリア -->
 						</tbody>
 					</table>
 				</div>
 
 				<div class="modal-footer">
 					<button type="button" class="btn-erp-gray"
-						onclick="closeWorkerModal()">닫기</button>
+						onclick="closeWorkerModal()">閉じる</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!-- 푸터 Include -->
+	<!-- 푸터 Include / フッターInclude -->
 	<layout:footer />
 
 	<script>
 Chart.register(ChartDataLabels);
 
-// 1. 차트 바인딩
+// 1. 차트 바인딩 / 1. チャートバインディング
 document.addEventListener('DOMContentLoaded', function() {
 	const dataList = [
 		<c:forEach var="item" items="${statList}" varStatus="status">
@@ -426,7 +424,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 let myChart = null;
 function renderChart(data) {
-	const labels = data.map(item => item.month + '월');
+	const labels = data.map(item => item.month + '月');
 	const deductData = data.map(item => item.deduct);
 	const netPayData = data.map(item => item.netPay);
 	const ctx = document.getElementById('salaryChart').getContext('2d');
@@ -438,8 +436,8 @@ function renderChart(data) {
 		data: {
 			labels: labels,
 			datasets: [
-				{ label: '공제금액 (천원)', data: deductData, backgroundColor: '#f8a575', stack: 'stack1' },
-				{ label: '실지급액 (천원)', data: netPayData, backgroundColor: '#8da4d0', stack: 'stack1' }
+				{ label: '控除金額 (千円)', data: deductData, backgroundColor: '#f8a575', stack: 'stack1' },
+				{ label: '手取り額 (千円)', data: netPayData, backgroundColor: '#8da4d0', stack: 'stack1' }
 			]
 		},
 		options: {
@@ -447,15 +445,15 @@ function renderChart(data) {
 			maintainAspectRatio: false,
 			scales: { x: { stacked: true }, y: { stacked: true } },
 			plugins: {
-				// ===== 범례(Legend) 위치 설정 추가 =====
-	            legend: {
-	                display: true,
-	                position: 'bottom', // 'top', 'bottom', 'left', 'right' 중 선택
-	                labels: {
-	                    boxWidth: 15,   // 범례 색상 상자 가로 크기
-	                    padding: 15     // 범례와 차트/범례 항목 간 여백
-	                }
-	            },
+				// ===== 범례(Legend) 위치 설정 추가 / 凡例(Legend)位置設定追加 =====
+				legend: {
+					display: true,
+					position: 'bottom', // 'top', 'bottom', 'left', 'right' 中選択 / 中から選択
+					labels: {
+						boxWidth: 15,   // 범례 색상 상자 가로 크기 / 凡例カラーボックスの横幅
+						padding: 15     // 범례와 차트/범례 항목 간 여백 / 凡例とチャート/凡例項目間の余白
+					}
+				},
 				datalabels: {
 					color: '#333',
 					font: { weight: 'bold', size: 10 },
@@ -466,7 +464,7 @@ function renderChart(data) {
 	});
 }
 
-// 2. 모달 열기 및 목록 비동기 조회
+// 2. 모달 열기 및 목록 비동기 조회 / 2. モーダルオープンおよび一覧非同期取得
 function openWorkerModal() {
 	const modal = document.getElementById('workerSelectModal');
 	if (modal) {
@@ -484,14 +482,14 @@ function closeWorkerModal() {
 	}
 }
 
-// 3. 비동기 HTML 수신
+// 3. 비동기 HTML 수신 / 3. 非同期HTML受信
 function fetchWorkerMasterList() {
 	const tbody = document.getElementById('modalWorkerListBody');
-	tbody.innerHTML = '<tr><td colspan="6" style="padding:20px; text-align:center;">목록을 불러오는 중...</td></tr>';
+	tbody.innerHTML = '<tr><td colspan="6" style="padding:20px; text-align:center;">一覧を読み込んでいます...</td></tr>';
 
 	fetch('${pageContext.request.contextPath}/emp/getAllList.do')
 		.then(res => {
-			if (!res.ok) throw new Error('응답 실패');
+			if (!res.ok) throw new Error('応答失敗');
 			return res.text();
 		})
 		.then(html => {
@@ -499,29 +497,29 @@ function fetchWorkerMasterList() {
 		})
 		.catch(err => {
 			console.error(err);
-			tbody.innerHTML = '<tr><td colspan="6" style="color:red; padding:20px; text-align:center;">사원 목록을 불러올 수 없습니다.</td></tr>';
+			tbody.innerHTML = '<tr><td colspan="6" style="color:red; padding:20px; text-align:center;">社員一覧を読み込めませんでした。</td></tr>';
 		});
 }
 
-// 4. 모달에서 사원 행 클릭 시 메인 창 전달
+// 4. 모달에서 사원 행 클릭 시 메인 창 전달 / 4. モーダルで社員行クリック時にメインウィンドウへ設定
 function selectModalEmp(empId, empName) {
 	document.getElementById('selectedEmpId').value = empId;
 	document.getElementById('targetEmpName').value = empName;
 	closeWorkerModal();
 }
 
-// 5. 검색 버튼 클릭 시 메인 폼 전송 (귀속년도 + empId로 급여 데이터 조회)
+// 5. 검색 버튼 클릭 시 메인 폼 전송 (귀속년도 + empId로 급여 데이터 조회) / 5. 検索ボタンクリック時にメインフォーム送信 (帰属年度 + empIdで給与データ検索)
 function submitSearch() {
 	const empId = document.getElementById('selectedEmpId').value;
 	if (!empId) {
-		alert('대상 사원을 선택해 주세요.');
+		alert('対象社員を選択してください。');
 		openWorkerModal();
 		return;
 	}
 	document.getElementById('searchForm').submit();
 }
 
-// 6. 모달 내부 클라이언트 필터링
+// 6. 모달 내부 클라이언트 필터링 / 6. モーダル内部クライアントフィルタリング
 function filterModalWorkers() {
 	const keyword = document.getElementById('modalSearchKeyword').value.toLowerCase().trim();
 	const statusFilter = document.getElementById('filterStatus').value;

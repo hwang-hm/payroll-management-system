@@ -1,6 +1,7 @@
 package salary.ledger.viewdto;
 
 // 사원선택 모달 부서 필터용
+// 社員選択モーダルの部署フィルタ用
 public class EmpSalaryHistoryDept {
 
 	private int deptId;

@@ -14,7 +14,9 @@ public class SalaryDateService {
 	private final SalaryDateDao salaryDateDao = new SalaryDateDao();
 
 	// 귀속년월 최초선택시 salarydate를 생성해버림. 지급기간과 지급일 데이터가 들어가야 하기 때문.
+	// 帰属年月の初回選択時に salarydate を生成してしまう。支給期間と支給日データが入る必要があるため。
 	// 차후에 더미성 최초 데이터를 한방에 넣는 방식으로 변경 가능성 있음
+	// 将来、ダミー初回データを一括投入する方式へ変更の可能性あり
 	public SalaryDate ensureByPeriod(Connection conn, PayPeriodParams period) throws SQLException {
 		int payYear = period.getPayYear();
 		int payMonth = period.getPayMonth();

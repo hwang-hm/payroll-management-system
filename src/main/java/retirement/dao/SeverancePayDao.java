@@ -18,6 +18,7 @@ import retirement.severancepay.service.SeveranceSalaryData;
 
 public class SeverancePayDao {
 	// 퇴직금 계산용 급여 조회
+	// 退職金計算用給与の照会
 	public List<SeveranceSalaryData> selectSalaryForSeverance(Connection conn, int empId, Date startDate, Date endDate)
 			throws SQLException {
 
@@ -80,6 +81,7 @@ public class SeverancePayDao {
 			pstmt.setInt(1, request.getEmpId());
 
 			// 퇴직위로금
+			// 退職慰労金
 			if (request.getRetirementBonus() != null) {
 				pstmt.setLong(2, request.getRetirementBonus());
 			} else {
@@ -87,6 +89,7 @@ public class SeverancePayDao {
 			}
 
 			// 해고예고수당
+			// 解雇予告手当
 			if (request.getDismissalAllowance() != null) {
 				pstmt.setLong(3, request.getDismissalAllowance());
 			} else {
@@ -94,6 +97,7 @@ public class SeverancePayDao {
 			}
 
 			// 비과세 퇴직급여
+			// 非課税退職給与
 			if (request.getNonTaxableRetirementPay() != null) {
 				pstmt.setLong(4, request.getNonTaxableRetirementPay());
 			} else {
@@ -101,6 +105,7 @@ public class SeverancePayDao {
 			}
 
 			// 기납부세액
+			// 既納付税額
 			if (request.getPrepaidTax() != null) {
 				pstmt.setLong(5, request.getPrepaidTax());
 			} else {
@@ -108,6 +113,7 @@ public class SeverancePayDao {
 			}
 
 			// 세액공제
+			// 税額控除
 			if (request.getTaxCredit() != null) {
 				pstmt.setLong(6, request.getTaxCredit());
 			} else {
@@ -115,6 +121,7 @@ public class SeverancePayDao {
 			}
 
 			// 1일 통상임금
+			// 1日通常賃金
 			if (request.getDailyOrdinaryWage() != null) {
 				pstmt.setLong(7, request.getDailyOrdinaryWage());
 			} else {
@@ -122,6 +129,7 @@ public class SeverancePayDao {
 			}
 
 			// 계산 결과
+			// 計算結果
 			pstmt.setLong(8, result.getRetirementIncome());
 			pstmt.setLong(9, result.getCalculatedTax());
 			pstmt.setLong(10, result.getRetirementIncomeTax());
@@ -130,6 +138,7 @@ public class SeverancePayDao {
 			pstmt.setLong(13, result.getDeferredLocalTax());
 
 			// 농어촌특별세
+			// 農漁村特別税
 			if (request.getRuralSpecialTax() != null) {
 				pstmt.setLong(14, request.getRuralSpecialTax());
 			} else {
@@ -137,6 +146,7 @@ public class SeverancePayDao {
 			}
 
 			// 기타공제
+			// その他控除
 			if (request.getOtherDeduction() != null) {
 				pstmt.setLong(15, request.getOtherDeduction());
 			} else {
@@ -148,6 +158,7 @@ public class SeverancePayDao {
 			pstmt.setLong(18, result.getNetPayment());
 
 			// 지급일
+			// 支給日
 			if (request.getPaymentDate() != null) {
 				pstmt.setDate(19, request.getPaymentDate());
 			} else {
@@ -157,6 +168,7 @@ public class SeverancePayDao {
 			pstmt.executeUpdate();
 
 			// 방금 생성된 severance_pay_id 조회
+			// 直前に生成された severance_pay_id を照会
 			stmt = conn.createStatement();
 
 			rs = stmt.executeQuery("select seq_severance_pay.currval from dual");

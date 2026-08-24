@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 // 급여 공제 자동계산용 가라 요율. 실무 세법 아님, 퍼센트 눈속임
+// 給与控除自動計算用の仮レート。実務税法ではない、パーセントの仮値
 public final class SalaryAutoCalcRates {
 
 	public static final String ITEM_NATIONAL_PENSION = "국민연금";
@@ -14,19 +15,23 @@ public final class SalaryAutoCalcRates {
 	public static final String ITEM_LOCAL_INCOME_TAX = "지방소득세";
 
 	// 기준액(기본급) 대비 요율
+	// 基準額(基本給)に対するレート
 	public static final double RATE_NATIONAL_PENSION = 0.045;
 	public static final double RATE_HEALTH_INSURANCE = 0.03545;
 	public static final double RATE_EMPLOYMENT_INSURANCE = 0.009;
 	public static final double RATE_INCOME_TAX = 0.03;
 	// 건강보험액 대비
+	// 健康保険料額に対する
 	public static final double RATE_LONGTERM_CARE_OF_HEALTH = 0.1295;
 	// 소득세액 대비
+	// 所得税額に対する
 	public static final double RATE_LOCAL_INCOME_TAX_OF_INCOME = 0.1;
 
 	private SalaryAutoCalcRates() {
 	}
 
 	// 기준액으로 공제 6종 금액 계산. Y/N이 N이면 해당 보험은 0
+	// 基準額で控除6種の金額を計算。Y/NがNなら該当保険は0
 	public static DeductionAmounts calc(long baseAmount, boolean nationalPensionYn, boolean healthInsuranceYn,
 			boolean longtermCareYn, boolean employmentInsuranceYn) {
 		long base = Math.max(baseAmount, 0L);
@@ -43,6 +48,7 @@ public final class SalaryAutoCalcRates {
 	}
 
 	// 보험 Y/N 없이 전부 적용
+	// 保険 Y/N なしで全部適用
 	public static DeductionAmounts calc(long baseAmount) {
 		return calc(baseAmount, true, true, true, true);
 	}
@@ -52,6 +58,7 @@ public final class SalaryAutoCalcRates {
 	}
 
 	// 항목명 → 금액. entry detail 매칭용
+	// 項目名 → 金額。entry detail 突合用
 	public static Map<String, Long> toAmountMap(DeductionAmounts amounts) {
 		Map<String, Long> map = new LinkedHashMap<>();
 		map.put(ITEM_NATIONAL_PENSION, amounts.getNationalPension());

@@ -43,6 +43,7 @@ public class Register2EmpHandler implements CommandHandler {
 
 
 	// 사원등록2 화면
+	// 社員登録2画面
 	private String processForm(HttpServletRequest request,
 			HttpServletResponse response) {
 
@@ -67,6 +68,7 @@ public class Register2EmpHandler implements CommandHandler {
 
 
 	// 사원정보2 저장
+	// 社員情報2の保存
 	private String processSubmit(HttpServletRequest request,
 			HttpServletResponse response) {
 
@@ -83,6 +85,7 @@ public class Register2EmpHandler implements CommandHandler {
         int empId = Integer.parseInt(empIdParam);
 
         // 사원 조회
+        // 社員照会
         Employee emp =  empRegister2Service.getEmp(empId);
 
 
@@ -97,13 +100,16 @@ public class Register2EmpHandler implements CommandHandler {
 
 
         // 퇴직정보 저장
+        // 退職情報の保存
         empRegister2Service.registereEmp2(registerReq2);
 
         // 저장된 DB 값을 다시 조회
+        // 保存されたDB値を再照会
         Retirement retirement = empRegister2Service.getRetirement(empId);
         SeverancePay severancePay = emp2InfoSelectService.getSeverancePay(empId);
 
         // JSP 전달
+        // JSPへ渡す
         request.setAttribute("emp", emp);
         request.setAttribute("retirement", retirement);
         request.setAttribute("register2Success",true);

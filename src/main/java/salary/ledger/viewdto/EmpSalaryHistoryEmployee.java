@@ -1,6 +1,7 @@
 package salary.ledger.viewdto;
 
 // 사원별 급여내역 모달에 뿌릴 사원 한 줄
+// 社員別給与明細モーダル表示用の社員1行
 public class EmpSalaryHistoryEmployee {
 
 	private int empId;

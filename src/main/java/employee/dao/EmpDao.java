@@ -18,6 +18,7 @@ import jdbc.JdbcUtil;
 public class EmpDao {
 	
 	//사원 기본정보 입력
+	// 社員基本情報の入力
 	public Employee insertEmp(Connection conn, Employee emp) throws SQLException {
 		PreparedStatement pstmt = null;
 		Statement stmt = null;
@@ -81,6 +82,7 @@ public class EmpDao {
 	}
 	
 	//전체 사원수
+	// 全社員数
 	 public int selectCount(Connection conn) throws SQLException {
 
 		    String sql = "select count(*) from employee";
@@ -97,6 +99,7 @@ public class EmpDao {
 		}
 	   
 	   // 페이징
+	   // ページング
 	   public List<EmpListData> select(
 	           Connection conn,
 	           int firstRow,
@@ -136,6 +139,7 @@ public class EmpDao {
 	   }
 	       
 	       //ResultSet 객체를 RetirementEmpListData로 변환
+	       // ResultSetオブジェクトをRetirementEmpListDataに変換
 	       private EmpListData convertEmpListData(ResultSet rs) throws SQLException {
 
 	             return new EmpListData(
@@ -154,6 +158,7 @@ public class EmpDao {
 	         }
 	
 	       //고용형태 count
+	       // 雇用形態 count
 	       public int selectCountByEmpType (Connection conn, String empType) throws SQLException {
 	    	   String sql = "select count(*) from employee where employment_type = ? and status = 'Y'";
 	    	   
@@ -173,6 +178,7 @@ public class EmpDao {
 	       }
 	       
 	       //재직, 퇴직 count
+	       // 在職、退職 count
 	       public int selectCountByStatus(Connection conn, String status)
 	    	        throws SQLException {
 
@@ -193,6 +199,7 @@ public class EmpDao {
 	    	}
 	       
 	       //사원번호로 사원 select
+	       // 社員番号で社員 select
 	       public Employee selectById(Connection conn, int empId) throws SQLException{
 	  		 PreparedStatement pstmt = null;
 	  		 ResultSet rs = null;
@@ -214,6 +221,7 @@ public class EmpDao {
 	  	 }
 	       
 	       //ResultSet 객체를 Employee로 변환
+	       // ResultSetオブジェクトをEmployeeに変換
 	       private Employee convertEmployee(ResultSet rs) throws SQLException {
 
 	             return new Employee(
@@ -242,6 +250,7 @@ public class EmpDao {
 	         }
 	       
 	       //사원번호로 사원 select - dept, position join
+	       // 社員番号で社員 select - dept, position join
 	       public EmployeeDetailData selectByIdJoin(Connection conn, int empId) throws SQLException{
 	  		 PreparedStatement pstmt = null;
 	  		 ResultSet rs = null;
@@ -355,6 +364,7 @@ public class EmpDao {
 	    	}
 	       
 	       //사원 정보 수정
+	       // 社員情報の修正
 			public int updateEmp(Connection conn, int empId, Employee emp) throws SQLException {
 				try (PreparedStatement pstmt = conn.prepareStatement(
 						"update employee set name_kor = ?, hire_date = ?, dept_id = ?, nationality = ?, "

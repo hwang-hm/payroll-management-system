@@ -21,6 +21,7 @@ public class TransferResultService {
 	private final TransferHistoryDao transferHistoryDao = new TransferHistoryDao();
 
 	// 조회기간에 맞는 이체결과 한 페이지치 가져옴
+	// 照会期間に合う振込結果を1ページ分取得
 	public TransferHistoryPage getResultPage(Date startDate, Date endDate, int pageNo) {
 		Date[] period = normalizePeriod(startDate, endDate);
 		Date start = period[0];
@@ -55,6 +56,7 @@ public class TransferResultService {
 	}
 
 	// 처음 들어왔을 때 기본기간. 이번달 1일~오늘
+	// 初回入場時のデフォルト期間。今月1日〜今日
 	public static Date[] defaultPeriod() {
 		Calendar end = Calendar.getInstance();
 		truncateTime(end);
@@ -64,6 +66,7 @@ public class TransferResultService {
 	}
 
 	// 시작/종료 뒤바뀌거나 1년 넘어가면 적당히 잘라줌
+	// 開始/終了が逆転、または1年を超える場合は適宜切り詰め
 	private Date[] normalizePeriod(Date startDate, Date endDate) {
 		Date[] defaults = defaultPeriod();
 		Date start = startDate == null ? defaults[0] : truncate(startDate);
@@ -102,6 +105,7 @@ public class TransferResultService {
 	}
 
 	// 날짜에서 시간 버리고 날짜만 남김
+	// 日付から時刻を捨てて日付のみ残す
 	private Date truncate(Date date) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
@@ -110,6 +114,7 @@ public class TransferResultService {
 	}
 
 	// 시분초를 0으로 맞춤
+	// 時分秒を0に合わせる
 	private static void truncateTime(Calendar cal) {
 		cal.set(Calendar.HOUR_OF_DAY, 0);
 		cal.set(Calendar.MINUTE, 0);

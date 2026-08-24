@@ -25,6 +25,7 @@ public class PayStubService {
 	private final SalaryDetailDao salaryDetailDao = new SalaryDetailDao();
 
 	// 귀속연월·차수 기준으로 급여명세서 화면 데이터를 모아줌
+	// 帰属年月・回数基準で給与明細書画面データを集約
 	public PayStubData getPayStubData(PayPeriodParams period, int selectedSalaryId, String searchKeyword) {
 		try (Connection conn = ConnectionProvider.getConnection()) {
 			PayStubData data = new PayStubData();
@@ -89,6 +90,7 @@ public class PayStubService {
 	}
 
 	// 지급/공제 섹션은 최소 10줄을 항상 그려서 A4 느낌의 고정 레이아웃을 유지
+	// 支給/控除セクションは最低10行を常に描画し、A4風の固定レイアウトを維持
 	private List<PayStubDetailLine> toFixedSectionLines(List<SalaryDetail> details, int minRows,
 			boolean isPaySection) {
 		int targetSize = Math.max(minRows, details == null ? 0 : details.size());
@@ -105,6 +107,7 @@ public class PayStubService {
 					line.setDeductItemName(d.getItemName());
 					line.setDeductAmount(d.getAmount());
 					line.setPayCalcMethod(d.getCalcMethod()); // 미사용이지만 null 방지용
+					// 未使用だが null 防止用
 				}
 			}
 			lines.add(line);

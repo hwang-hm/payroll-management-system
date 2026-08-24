@@ -17,6 +17,7 @@ import retirement.retire.service.EmpRetireRequest;
 public class RetirementEmpDao {
 
 	// Status 퇴직으로 변경
+	// Statusを退職に変更
 	public int updateRetiredStatus(Connection conn, int empId, Date retireDate) throws SQLException {
 		try (PreparedStatement pstmt = conn
 				.prepareStatement("update employee set status = 'N', retire_date = ? where emp_id = ?")) {
@@ -27,6 +28,7 @@ public class RetirementEmpDao {
 	}
 
 	// 퇴직 정보 입력
+	// 退職情報の入力
 	public void insertRetirement(Connection conn, EmpRetireRequest empRetireReq) throws SQLException {
 		PreparedStatement pstmt = null;
 		Statement stmt = null;
@@ -54,6 +56,7 @@ public class RetirementEmpDao {
 	}
 
 	// 전체 사원수
+	// 全社員数
 	public int selectCount(Connection conn) throws SQLException {
 
 		String sql = "select count(*) from employee";
@@ -69,6 +72,7 @@ public class RetirementEmpDao {
 	}
 
 	// 페이징
+	// ページング
 	public List<RetirementEmpListData> select(Connection conn, int firstRow, int endRow) throws SQLException {
 
 		PreparedStatement pstmt = null;
@@ -104,6 +108,7 @@ public class RetirementEmpDao {
 	}
 
 	// ResultSet 객체를 RetirementEmpListData로 변환
+	// ResultSetオブジェクトをRetirementEmpListDataに変換
 	private RetirementEmpListData convertEmpListData(ResultSet rs) throws SQLException {
 
 		return new RetirementEmpListData(

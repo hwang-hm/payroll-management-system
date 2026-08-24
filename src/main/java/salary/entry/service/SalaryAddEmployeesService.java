@@ -34,7 +34,9 @@ public class SalaryAddEmployeesService {
 	private final EmpInfoSalaryDao empInfoSalaryDao = new EmpInfoSalaryDao();
 
 	// 선택한 사원들을 이번 급여에 추가. 이미 들어가 있으면 건너뜀.
+	// 選択した社員を今回の給与に追加。既に含まれていればスキップ。
 	// 마지막으로 추가된 salaryId 반환 (없으면 null)
+	// 最後に追加された salaryId を返却 (なければ null)
 	public Integer add(int salaryDateId, List<Integer> empIds) {
 		if (empIds == null || empIds.isEmpty()) {
 			return null;

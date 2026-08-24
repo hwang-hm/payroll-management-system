@@ -22,18 +22,18 @@
 	align-items: center;
 }
 
-/* 3. 헤더 로고 영역 (다크블루) */
+/* 3. 헤더 로고 및 유저 정보 영역 */
 .payzon-header .header-top {
 	background-color: #2b3648;
 	color: #ffffff;
-	padding: 30px 50px;
+	padding: 15px 30px;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 }
 
 .payzon-header .brand-logo {
-	font-size: 20px;
+	font-size: 22px;
 	font-weight: 800;
 	color: #ffffff;
 	display: flex;
@@ -43,7 +43,7 @@
 
 .payzon-header .brand-logo span {
 	color: #38bdf8;
-	font-size: 14px;
+	font-size: 15px;
 	font-weight: 600;
 }
 
@@ -60,7 +60,56 @@
 	text-decoration: none;
 }
 
-/* 4. 파란색 GNB 네비게이션 (페이존 스타일 균등 분할 적용) */
+/* 4. 숏컷 바로가기 영역 (가로 100% 균등 분할) */
+.payzon-header .shortcut-bar {
+	background-color: #ffffff;
+	border-bottom: 1px solid #cbd5e1;
+	display: flex;
+	width: 100%;
+}
+
+.payzon-header .shortcut-item {
+	flex: 1; /* 모든 항목이 가로 공간을 1:1 비율로 균등하게 나눔 */
+	border-right: 1px solid #e2e8f0;
+	text-align: center;
+}
+
+.payzon-header .shortcut-item:last-child {
+	border-right: none;
+}
+
+.payzon-header .shortcut-link {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 12px 2px;
+	text-decoration: none;
+	color: #334155;
+	width: 100%;
+	transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.payzon-header .shortcut-link:hover {
+	background-color: #f1f5f9;
+	color: #1d4ed8;
+}
+
+.payzon-header .shortcut-icon {
+	font-size: 22px;
+	margin-bottom: 6px;
+	line-height: 1;
+}
+
+.payzon-header .shortcut-label {
+	font-size: 11px;
+	font-weight: 700;
+	text-align: center;
+	letter-spacing: -0.5px;
+	white-space: nowrap;
+}
+
+/* 5. 파란색 GNB 네비게이션 (가로 100% 균등 분할) */
 .payzon-header .gnb-navbar {
 	background-color: #1d4ed8;
 	display: flex;
@@ -70,7 +119,6 @@
 	border-bottom: 2px solid #1e40af;
 }
 
-/* 개별 메뉴 항목: flex: 1을 부여해 전체 폭을 동일하게 나누어 가집니다. */
 .payzon-header .gnb-item {
 	flex: 1;
 	position: relative;
@@ -82,17 +130,12 @@
 	border-right: none;
 }
 
-/* HOME 전용 약간 좁은 비율 설정 (원할 경우 주석 해제하여 조절 가능) */
-.payzon-header .gnb-item.home-item {
-	flex: 0.6;
-}
-
 .payzon-header .gnb-link {
 	display: block;
-	padding: 12px 0;
+	padding: 11px 0;
 	color: #ffffff;
 	text-decoration: none;
-	font-size: 14px;
+	font-size: 13px;
 	font-weight: 700;
 	width: 100%;
 	transition: background 0.2s ease;
@@ -102,7 +145,7 @@
 	background-color: #1e40af;
 }
 
-/* 5. 마우스 올리면 나오는 서브 드롭다운 (상위 메뉴 너비와 100% 동일하게 맞춰짐) */
+/* 6. 서브 드롭다운 */
 .payzon-header .sub-dropdown {
 	display: none;
 	position: absolute;
@@ -145,6 +188,7 @@
 	<!-- 1. 최상단 배너 -->
 	<div class="top-banner">
 		<span>★ 현재 고객님은 체험판 이용중 이십니다.</span>
+		<span><a href="#" style="color:#fff; text-decoration:none;">회원가입</a> | <a href="#" style="color:#fff; text-decoration:none;">로그아웃</a></span>
 	</div>
 
 	<!-- 2. 브랜드 로고 영역 -->
@@ -157,14 +201,84 @@
 		</div>
 	</div>
 
-	<!-- 3. 메인 네비게이션 바 -->
-	<nav class="gnb-navbar">
-		<div class="gnb-item home-item">
-			<a href="${pageContext.request.contextPath}/index.jsp"
-				class="gnb-link">🏠 HOME</a>
+	<!-- 3. 아이콘 숏컷 바로가기 바 (12개 메뉴 균등 분할) -->
+	<div class="shortcut-bar">
+		<div class="shortcut-item">
+			<a href="${pageContext.request.contextPath}/index.jsp" class="shortcut-link">
+				<span class="shortcut-icon">🏠</span>
+				<span class="shortcut-label">HOME</span>
+			</a>
 		</div>
+		<div class="shortcut-item">
+			<a href="${pageContext.request.contextPath}/config/register.do" class="shortcut-link">
+				<span class="shortcut-icon">👤</span>
+				<span class="shortcut-label">사원등록</span>
+			</a>
+		</div>
+		<div class="shortcut-item">
+			<a href="${pageContext.request.contextPath}/emp/list.do" class="shortcut-link">
+				<span class="shortcut-icon">🗂️</span>
+				<span class="shortcut-label">사원현황</span>
+			</a>
+		</div>
+		<div class="shortcut-item">
+			<a href="${pageContext.request.contextPath}/emp/certificate/working.do" class="shortcut-link">
+				<span class="shortcut-icon">📜</span>
+				<span class="shortcut-label">제증명서발급</span>
+			</a>
+		</div>
+		<div class="shortcut-item">
+			<a href="${pageContext.request.contextPath}/attendance/record/list.do" class="shortcut-link">
+				<span class="shortcut-icon">⏱️</span>
+				<span class="shortcut-label">근태기록/관리</span>
+			</a>
+		</div>
+		<div class="shortcut-item">
+			<a href="${pageContext.request.contextPath}/attendance/vacation.do" class="shortcut-link">
+				<span class="shortcut-icon">📅</span>
+				<span class="shortcut-label">휴가조회</span>
+			</a>
+		</div>
+		<div class="shortcut-item">
+			<a href="${pageContext.request.contextPath}/salary/entry.do" class="shortcut-link">
+				<span class="shortcut-icon">💵</span>
+				<span class="shortcut-label">급여입력/관리</span>
+			</a>
+		</div>
+		<div class="shortcut-item">
+			<a href="${pageContext.request.contextPath}/salary/dayworker/register.do" class="shortcut-link">
+				<span class="shortcut-icon">📆</span>
+				<span class="shortcut-label">급여입력(일용)</span>
+			</a>
+		</div>
+		<div class="shortcut-item">
+			<a href="${pageContext.request.contextPath}/salary/ledger.do" class="shortcut-link">
+				<span class="shortcut-icon">📋</span>
+				<span class="shortcut-label">급여대장</span>
+			</a>
+		</div>
+		<div class="shortcut-item">
+			<a href="${pageContext.request.contextPath}/salary/payslip.do" class="shortcut-link">
+				<span class="shortcut-icon">🧾</span>
+				<span class="shortcut-label">급여명세서</span>
+			</a>
+		</div>
+		<div class="shortcut-item">
+			<a href="${pageContext.request.contextPath}/salary/empHistory.do" class="shortcut-link">
+				<span class="shortcut-icon">👥</span>
+				<span class="shortcut-label">사원별급여내역</span>
+			</a>
+		</div>
+		<div class="shortcut-item">
+			<a href="${pageContext.request.contextPath}/retirement/list.do" class="shortcut-link">
+				<span class="shortcut-icon">💼</span>
+				<span class="shortcut-label">퇴직관리</span>
+			</a>
+		</div>
+	</div>
 
-		<!-- 기본환경 설정 -->
+	<!-- 4. 메인 네비게이션 바 (GNB) -->
+	<nav class="gnb-navbar">
 		<div class="gnb-item">
 			<a href="#" class="gnb-link">기본환경 설정 ▾</a>
 			<div class="sub-dropdown"> 
@@ -174,7 +288,6 @@
 			</div>
 		</div>
 
-		<!-- 인사관리 -->
 		<div class="gnb-item">
 			<a href="#" class="gnb-link">인사관리 ▾</a>
 			<div class="sub-dropdown">
@@ -185,7 +298,6 @@
 			</div>
 		</div>
 
-		<!-- 근태관리 -->
 		<div class="gnb-item">
 			<a href="#" class="gnb-link">근태관리 ▾</a>
 			<div class="sub-dropdown">
@@ -197,7 +309,6 @@
 			</div>
 		</div>
 
-		<!-- 급여관리 -->
 		<div class="gnb-item">
 			<a href="#" class="gnb-link">급여관리 ▾</a>
 			<div class="sub-dropdown">
@@ -213,7 +324,6 @@
 			</div>
 		</div>
 
-		<!-- 급여통계 -->
 		<div class="gnb-item">
 			<a href="#" class="gnb-link">급여통계 ▾</a>
 			<div class="sub-dropdown">
@@ -225,7 +335,6 @@
 			</div>
 		</div>
 
-		<!-- 퇴직관리 -->
 		<div class="gnb-item">
 			<a href="#" class="gnb-link">퇴직관리 ▾</a>
 			<div class="sub-dropdown">
@@ -237,5 +346,4 @@
 	</nav>
 </header>
 
-<!-- 헤더와 본문 사이 기본 여백 -->
 <div style="margin-bottom: 30px;"></div>

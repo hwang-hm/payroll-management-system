@@ -7,6 +7,7 @@ import salary.model.TransferForm;
 import salary.transfer.TransferColumn;
 
 // 이체신청 화면에 뿌릴 전체 데이터
+// 振込申請画面に表示する全体データ
 public class TransferApplyData {
 
 	private int payYear;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // 항목별 대장 사원 한 줄
+// 項目別台帳の社員1行
 public class ItemLedgerRow {
 
 	private int empId;
