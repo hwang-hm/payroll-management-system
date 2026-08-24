@@ -49,6 +49,7 @@ public class SeverancePayHandler implements CommandHandler {
 			conn = ConnectionProvider.getConnection();
 
 			// 사원선택 모달 목록
+			// 社員選択モーダル一覧
 			List<EmployeeDetailData> employeeList = empDao.selectAllJoin(conn);
 			req.setAttribute("employeeList", employeeList);
 			String empIdValue = req.getParameter("empId");
@@ -68,10 +69,12 @@ public class SeverancePayHandler implements CommandHandler {
 			}
 
 			// 급여 계좌정보 조회
+			// 給与口座情報の照会
 			EmpInfoSalary empInfoSalary = empInfoSalaryDao.selectBankByEmpId(conn, empId);
 			req.setAttribute("empInfoSalary", empInfoSalary);
 
 			// 선택사원 관련 정보 세팅
+			// 選択社員関連情報の設定
 			setEmployeeData(req, selectedEmp);
 			return FORM_VIEW;
 
@@ -91,6 +94,7 @@ public class SeverancePayHandler implements CommandHandler {
 			conn = ConnectionProvider.getConnection();
 
 			// 1. 사원번호
+			// 1. 社員番号
 			String empIdValue = req.getParameter("empId");
 
 			if (empIdValue == null || empIdValue.trim().isEmpty()) {
@@ -101,10 +105,12 @@ public class SeverancePayHandler implements CommandHandler {
 			int empId = Integer.parseInt(empIdValue);
 
 			// 2. 사원목록
+			// 2. 社員一覧
 			List<EmployeeDetailData> employeeList = empDao.selectAllJoin(conn);
 			req.setAttribute("employeeList", employeeList);
 
 			// 3. 선택한 사원
+			// 3. 選択した社員
 			EmployeeDetailData selectedEmp = empDao.selectByIdJoin(conn, empId);
 
 			if (selectedEmp == null) {
@@ -113,9 +119,11 @@ public class SeverancePayHandler implements CommandHandler {
 			}
 
 			// 4. 사원 상단 정보
+			// 4. 社員上部情報
 			setEmployeeData(req, selectedEmp);
 
 			// 5. 급여내역 계산
+			// 5. 給与明細の計算
 			SeveranceSalaryResult salaryResult = calculateService.loadSalary(empId);
 			req.setAttribute("salaryResult", salaryResult);
 

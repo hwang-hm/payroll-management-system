@@ -107,6 +107,7 @@ public class EmpInfoSalaryDao {
 	}
 	
 	//사원 급여 정보 수정
+	// 社員給与情報の修正
 	public int updateEmpInfosalary (Connection conn, int empId, EmpInfoSalary empInfoSalary) throws SQLException {
 		try (PreparedStatement pstmt = conn.prepareStatement(
 	            "update employee_information_salary set "
@@ -171,6 +172,7 @@ public class EmpInfoSalaryDao {
 	}
 	
 	//사원번호로 select
+	// 社員番号で select
     public EmpInfoSalary selectById(Connection conn, int empId) throws SQLException{
 		 PreparedStatement pstmt = null;
 		 ResultSet rs = null;
@@ -192,6 +194,7 @@ public class EmpInfoSalaryDao {
 	 }
 
 	// 여러 사원 급여정보 일괄 조회
+	// 複数社員の給与情報を一括照会
 	public Map<Integer, EmpInfoSalary> selectByEmpIds(Connection conn, List<Integer> empIds) throws SQLException {
 		Map<Integer, EmpInfoSalary> map = new HashMap<>();
 		if (empIds == null || empIds.isEmpty()) {
@@ -225,6 +228,7 @@ public class EmpInfoSalaryDao {
 	}
     
 		// ResultSet 객체를 EmpInfoSalary로 변환
+		// ResultSetオブジェクトをEmpInfoSalaryに変換
 		private EmpInfoSalary convertEmpInfoSalary(ResultSet rs) throws SQLException {
 
 			EmpInfoSalary empInfoSalary = new EmpInfoSalary();

@@ -38,6 +38,7 @@ public class EmpRegisterService {
 			EmpInfoSalary empInfoSalary = mapper.toEmpInfoSalary(registerReq.getEmpInfoSalaryReq());
 			
 			  // 근로소득자 → 4대보험 전체 적용
+			  // 給与所得者 → 4大保険を全体適用
 	        if ("WORKER".equals(empInfoSalary.getIncomeTaxType())) {
 	            empInfoSalary.setNationalPensionYN("Y");
 	            empInfoSalary.setHealthInsuranceYN("Y");
@@ -47,6 +48,7 @@ public class EmpRegisterService {
 
 
 	        // 건강보험 → 장기요양보험 자동 적용
+	        // 健康保険 → 介護保険を自動適用
 	        if ("Y".equals(empInfoSalary.getHealthInsuranceYN())) {
 	            empInfoSalary.setLongtermCareYN("Y");
 	        }

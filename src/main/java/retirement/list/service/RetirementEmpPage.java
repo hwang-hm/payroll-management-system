@@ -21,6 +21,7 @@ public class RetirementEmpPage {
         this.retirementEmpListData = retirementEmpListData;
 
         // 페이지 정보 계산
+        // ページ情報の計算
         if (total == 0) {
             totalPage = 0;
             startPage = 0;

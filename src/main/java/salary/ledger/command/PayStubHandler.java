@@ -10,6 +10,7 @@ import salary.util.PayPeriodParams;
 import salary.util.RequestParamParser;
 
 // 급여명세서 조회 페이지 진입 핸들러.
+// 給与明細書照会ページ進入Handler。
 public class PayStubHandler implements CommandHandler {
 
 	private final PayStubService payStubService = new PayStubService();

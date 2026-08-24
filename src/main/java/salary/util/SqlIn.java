@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 // Oracle IN (?) 플레이스홀더 생성
+// Oracle IN (?) プレースホルダ生成
 public final class SqlIn {
 
 	private SqlIn() {

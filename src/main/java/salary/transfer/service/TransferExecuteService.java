@@ -21,6 +21,7 @@ public class TransferExecuteService {
 	private final TransferHistoryDao transferHistoryDao = new TransferHistoryDao();
 
 	// 해당 귀속년월 대상으로 이체 돌림. 계좌없거나 이미 이체된 사람은 건너뜀
+	// 該当帰属年月を対象に振込実行。口座なしまたは既振込の人はスキップ
 	public String execute(PayPeriodParams period) {
 		Connection conn = null;
 		try {
@@ -91,6 +92,7 @@ public class TransferExecuteService {
 	}
 
 	// 빈 문자열인지 확인
+	// 空文字列か確認
 	private boolean isBlank(String value) {
 		return value == null || value.trim().isEmpty();
 	}

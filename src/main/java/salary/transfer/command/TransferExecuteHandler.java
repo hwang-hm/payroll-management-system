@@ -12,11 +12,13 @@ import salary.util.PayPeriodParams;
 import salary.util.RequestParamParser;
 
 // 급여이체하기 버튼 누르면 실제로 이체 돌리는 핸들러.
+// 給与振込実行ボタン押下で実際に振込を行うHandler。
 public class TransferExecuteHandler implements CommandHandler {
 
 	private final TransferExecuteService executeService = new TransferExecuteService();
 
 	// 이체 실행하고 결과 메시지 붙여서 신청화면으로 다시 보냄
+	// 振込を実行し結果メッセージを付けて申請画面へ戻す
 	@Override
 	public String process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		if (!"POST".equalsIgnoreCase(req.getMethod())) {

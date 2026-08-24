@@ -14,6 +14,7 @@ import salary.ledger.viewdto.EmpSalaryHistoryRow;
 public class EmpSalaryHistoryDao {
 
 	// 사원·기간별 월차수 급여내역. 보수월액(기본급)과 4대보험·갑근세는 salary_detail에서 집계
+	// 社員・期間別の月回数給与明細。報酬月額(基本給)と4大保険・甲勤税は salary_detail から集計
 	public List<EmpSalaryHistoryRow> selectHistoryByEmpAndPeriod(Connection conn, int empId, int startYm, int endYm)
 			throws SQLException {
 		String sql = "SELECT s.salary_id, sd.pay_year, sd.pay_month, sd.pay_seq, "

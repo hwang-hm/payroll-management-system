@@ -10,6 +10,7 @@ import java.util.List;
 public class ItemLedgerDao {
 
 	// 기간·항목명으로 사원별 월 합계. 같은 달 여러 차수는 합산
+	// 期間・項目名で社員別月合計。同月の複数回数は合算
 	public List<ItemAmount> selectItemAmountsByPeriod(Connection conn, String itemName, int startYm, int endYm)
 			throws SQLException {
 		String sql = "SELECT e.emp_id, e.employment_type, e.name_kor, "

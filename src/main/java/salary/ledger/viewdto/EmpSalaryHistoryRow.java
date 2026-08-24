@@ -1,6 +1,7 @@
 package salary.ledger.viewdto;
 
 // 사원별 급여내역 한 줄 (월·차수별)
+// 社員別給与明細1行 (月・回数別)
 public class EmpSalaryHistoryRow {
 
 	private int salaryId;

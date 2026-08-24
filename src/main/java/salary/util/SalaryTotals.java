@@ -5,6 +5,7 @@ import java.util.List;
 import salary.model.SalaryDetail;
 
 // 급여상세 목록에서 지급/공제 합계 계산
+// 給与詳細一覧から支給/控除合計を計算
 public final class SalaryTotals {
 
 	private SalaryTotals() {

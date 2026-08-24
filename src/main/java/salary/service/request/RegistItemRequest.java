@@ -158,6 +158,7 @@ public class RegistItemRequest {
 		checkEmpty(errors, itemType, "itemType");
 
 		// 3. 과세 여부 검증 (Y: 과세, N: 비과세)
+		// 3. 課税可否の検証 (Y: 課税, N: 非課税)
 		// 3. 課税有無検証（Y: 課税, N: 非課税）
 		checkEmpty(errors, taxYn, "taxYn");
 

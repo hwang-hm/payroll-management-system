@@ -15,9 +15,13 @@ public class SeveranceSalaryData {
 	    private Date endDate;
 	    
 	    private Date calculationStartDate;   // 실제 산정 시작일
+	    // 実際の算定開始日
 	    private Date calculationEndDate;     // 실제 산정 종료일
+	    // 実際の算定終了日
 	    private int calculationDays;         // 실제 산정일수
+	    // 実際の算定日数
 	    private long calculatedPay;           // 산정기간에 반영할 급여액
+	    // 算定期間に反映する給与額
 
 	    
 

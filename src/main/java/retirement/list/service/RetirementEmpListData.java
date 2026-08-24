@@ -17,6 +17,7 @@ public class RetirementEmpListData {
     private String status;
 
     // 근속연수
+    // 勤続年数
     private int workYears;
 
 
@@ -42,6 +43,7 @@ public class RetirementEmpListData {
         this.status = status;
 
         // 근속연수 계산
+        // 勤続年数の計算
         if (hireDate != null) {
 
             int hireYear = hireDate.toLocalDate().getYear();
@@ -49,10 +51,12 @@ public class RetirementEmpListData {
             int endYear;
 
             // 퇴직일이 있으면 퇴직연도 기준
+            // 退職日があれば退職年度基準
             if (retireDate != null) {
                 endYear = retireDate.toLocalDate().getYear();
 
             // 아직 재직 중이면 현재연도 기준
+            // まだ在職中なら現在年度基準
             } else {
                 endYear = LocalDate.now().getYear();
             }

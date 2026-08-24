@@ -18,6 +18,7 @@ import salary.util.SqlIn;
 public class TransferHistoryDao {
 
 	// 그 급여건에 이체 이력이 있는지 확인
+	// その給与件に振込履歴があるか確認
 	public boolean existsBySalaryId(Connection conn, int salaryId) throws SQLException {
 		String sql = "SELECT 1 FROM transfer_history WHERE salary_id = ?";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -29,6 +30,7 @@ public class TransferHistoryDao {
 	}
 
 	// 이체 이력이 하나라도 있는 salary_id 집합
+	// 振込履歴が1件でもある salary_id 集合
 	public Set<Integer> selectSalaryIdsHavingHistory(Connection conn, List<Integer> salaryIds) throws SQLException {
 		if (salaryIds == null || salaryIds.isEmpty()) {
 			return Collections.emptySet();
@@ -48,6 +50,7 @@ public class TransferHistoryDao {
 	}
 
 	// 해당 salary들의 이체 이력 삭제
+	// 該当 salary の振込履歴を削除
 	public void deleteBySalaryIds(Connection conn, List<Integer> salaryIds) throws SQLException {
 		if (salaryIds == null || salaryIds.isEmpty()) {
 			return;
@@ -61,6 +64,7 @@ public class TransferHistoryDao {
 	}
 
 	// 이체 한 건 이력 저장
+	// 振込1件の履歴を保存
 	public int insert(Connection conn, TransferHistory history) throws SQLException {
 		String sql = "INSERT INTO transfer_history (transfer_id, salary_id, transfer_date, withdraw_bank, "
 				+ "withdraw_account, deposit_bank, deposit_account, depositor_name, transfer_amount, "
@@ -73,6 +77,7 @@ public class TransferHistoryDao {
 	}
 
 	// 이체 이력 batch insert
+	// 振込履歴の batch insert
 	public void insertBatch(Connection conn, List<TransferHistory> histories) throws SQLException {
 		if (histories == null || histories.isEmpty()) {
 			return;
@@ -103,6 +108,7 @@ public class TransferHistoryDao {
 	}
 
 	// 조회기간 안 이체건 몇 개인지. 페이지 계산용
+	// 照会期間内の振込件数。ページ計算用
 	public int selectCountByPeriod(Connection conn, Date startDate, Date endDate) throws SQLException {
 		String sql = "SELECT COUNT(*) FROM transfer_history WHERE TRUNC(transfer_date) BETWEEN ? AND ?";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -118,6 +124,7 @@ public class TransferHistoryDao {
 	}
 
 	// 조회기간 안 이체결과, 한 페이지분만큼만 가져옴
+	// 照会期間内の振込結果を1ページ分だけ取得
 	public List<TransferHistory> selectByPeriod(Connection conn, Date startDate, Date endDate, int firstRow,
 			int endRow) throws SQLException {
 		String sql = "SELECT * FROM (SELECT ROWNUM AS rnum, a.* FROM ("
@@ -142,6 +149,7 @@ public class TransferHistoryDao {
 	}
 
 	// 조회결과를 이체이력으로 옮겨담기
+	// 照会結果を振込履歴へ転記
 	private TransferHistory toHistory(ResultSet rs) throws SQLException {
 		TransferHistory history = new TransferHistory();
 		history.setTransferId(rs.getInt("transfer_id"));
@@ -159,11 +167,13 @@ public class TransferHistoryDao {
 	}
 
 	// Date를 Timestamp로 바꿔서 넣기
+	// Dateを Timestamp に変換して登録
 	private Timestamp toTimestamp(Date date) {
 		return new Timestamp(date.getTime());
 	}
 
 	// Date를 sql Date로 바꿔서 조회조건에 쓰기
+	// Dateを sql Date に変換して照会条件に使用
 	private java.sql.Date toSqlDate(Date date) {
 		return new java.sql.Date(date.getTime());
 	}

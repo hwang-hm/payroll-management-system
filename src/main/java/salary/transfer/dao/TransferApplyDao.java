@@ -12,6 +12,7 @@ import salary.transfer.viewdto.TransferApplyRow;
 public class TransferApplyDao {
 
 	// 이체신청 화면에 뿌릴 사원+계좌+금액 목록
+	// 振込申請画面に表示する社員+口座+金額一覧
 	public List<TransferApplyRow> selectTransferApplyRowsByPeriod(Connection conn,
 			int payYear, int payMonth, int paySeq) throws SQLException {
 		String sql = "SELECT s.salary_id, s.emp_id, e.employment_type, e.name_kor, e.name_eng, "
@@ -45,6 +46,7 @@ public class TransferApplyDao {
 	}
 
 	// 이체신청 한 줄로 옮겨담기
+	// 振込申請1行へ転記
 	private TransferApplyRow toTransferApplyRow(ResultSet rs) throws SQLException {
 		TransferApplyRow row = new TransferApplyRow();
 		row.setSalaryId(rs.getInt("salary_id"));

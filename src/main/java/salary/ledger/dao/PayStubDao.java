@@ -13,6 +13,7 @@ import salary.ledger.viewdto.PayStubRow;
 public class PayStubDao {
 
 	// 해당 귀속연월 급여명세서 목록. 구분/성명으로 검색 가능
+	// 該当帰属年月の給与明細書一覧。区分/氏名で検索可能
 	public List<PayStubRow> selectRowsBySalaryDateId(Connection conn, int salaryDateId, String searchKeyword)
 			throws SQLException {
 		StringBuilder sql = new StringBuilder(
@@ -44,6 +45,7 @@ public class PayStubDao {
 	}
 
 	// 명세서 헤더에 뿌릴 사원·급여 기본정보
+	// 明細書ヘッダーに表示する社員・給与基本情報
 	public PayStubForm selectFormBySalaryId(Connection conn, int salaryId) throws SQLException {
 		String sql = "SELECT e.name_kor, e.resident_no, e.hire_date, "
 				+ "NVL(d.dept_name, '-') AS dept_name, NVL(p.position_name, '-') AS position_name, "
@@ -91,6 +93,7 @@ public class PayStubDao {
 	}
 
 	// 주민번호 앞 6자리를 생년월일로 변환
+	// 住民番号先頭6桁を生年月日に変換
 	private String formatBirthDate(String residentNo) {
 		if (residentNo == null || residentNo.length() < 7) {
 			return "-";

@@ -5,6 +5,7 @@ import java.util.List;
 import salary.entry.viewdto.SalarySummary;
 
 // 급여대장 조회 페이지 view용 데이터
+// 給与台帳照会ページview用データ
 public class SalaryLedgerData {
 
 	private int payYear;

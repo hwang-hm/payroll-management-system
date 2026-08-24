@@ -2,7 +2,9 @@ package salary.transfer;
 
 /**
  * 이체양식에서 선택 가능한 컬럼 전체 목록.
+ * 振込様式で選択可能なカラム全一覧。
  * code 값은 transfer_form_item.item_code 와 동일하게 사용한다.
+ * code 値は transfer_form_item.item_code と同一に使用する。
  */
 public enum TransferColumn {
 
@@ -38,6 +40,7 @@ public enum TransferColumn {
 	}
 
 	// 저장된 코드값으로 컬럼 찾아줌. 없으면 null
+	// 保存済みコード値でカラムを検索。なければ null
 	public static TransferColumn fromCode(String code) {
 		if (code == null) {
 			return null;

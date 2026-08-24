@@ -13,6 +13,7 @@ import salary.transfer.viewdto.TransferHistoryPage;
 import salary.util.RequestParamParser;
 
 // 급여이체 결과 조회 화면 핸들러.
+// 給与振込結果照会画面のHandler。
 public class TransferResultHandler implements CommandHandler {
 
 	private static final String DATE_PATTERN = "yyyy-MM-dd";
@@ -20,6 +21,7 @@ public class TransferResultHandler implements CommandHandler {
 	private final TransferResultService resultService = new TransferResultService();
 
 	// 조회기간이랑 페이지 받아서 결과화면 열어줌. 날짜 없으면 이번달로
+	// 照会期間とページを受け取り結果画面を開く。日付がなければ今月
 	@Override
 	public String process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		Date startDate = parseDate(req.getParameter("startDate"));
@@ -42,6 +44,7 @@ public class TransferResultHandler implements CommandHandler {
 	}
 
 	// yyyy-MM-dd 문자열을 날짜로 바꿈. 이상하면 null
+	// yyyy-MM-dd 文字列を日付に変換。不正なら null
 	private Date parseDate(String value) {
 		if (value == null || value.trim().isEmpty()) {
 			return null;

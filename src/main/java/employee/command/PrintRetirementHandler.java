@@ -57,6 +57,7 @@ public class PrintRetirementHandler implements CommandHandler {
 		}
 
 		// 재직자는 퇴직증명서 발급 불가
+		// 在職者は退職証明書を発行不可
 		if ("Y".equals(emp.getStatus())) {
 			request.setAttribute("workingEmployee", true);
 			return FORM_VIEW;
@@ -69,6 +70,7 @@ public class PrintRetirementHandler implements CommandHandler {
 	}
 
 	// 실제 발급
+	// 実際の発行
 	private String processSubmit(HttpServletRequest request, HttpServletResponse response) {
 
 		String empIdParam = request.getParameter("empId");

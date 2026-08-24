@@ -35,5 +35,6 @@ public class CharacterEncodingFilter implements Filter {
     @Override
     public void destroy() {
         // 필터가 종료될 때 필요한 로직 
+        // フィルタ終了時に必要なロジック
     }
 }

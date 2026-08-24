@@ -1,6 +1,7 @@
 package salary.ledger.viewdto;
 
 // 급여명세서 왼쪽 목록 한 줄
+// 給与明細書左一覧の1行
 public class PayStubRow {
 
 	private int salaryId;

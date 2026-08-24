@@ -14,6 +14,7 @@ import salary.util.SqlIn;
 public class SalaryDetailDao {
 
 	// 그 사원 급여상세 전부 가져오기
+	// その社員の給与詳細をすべて取得
 	public List<SalaryDetail> selectBySalaryId(Connection conn, int salaryId) throws SQLException {
 		String sql = "SELECT * FROM salary_detail WHERE salary_id = ? ORDER BY detail_id";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -29,6 +30,7 @@ public class SalaryDetailDao {
 	}
 
 	// 급여상세 한 줄 새로 넣음
+	// 給与詳細1行を新規挿入
 	public void insert(Connection conn, SalaryDetail detail) throws SQLException {
 		String sql = "INSERT INTO salary_detail (detail_id, salary_id, salary_item_id, attendance_type_id, "
 				+ "item_type, item_name, tax_yn, tax_free_name, tax_free_limit, calc_method, round_unit, "
@@ -41,6 +43,7 @@ public class SalaryDetailDao {
 	}
 
 	// 급여상세 여러 줄 batch insert
+	// 給与詳細複数行の batch insert
 	public void insertBatch(Connection conn, List<SalaryDetail> details) throws SQLException {
 		if (details == null || details.isEmpty()) {
 			return;
@@ -59,6 +62,7 @@ public class SalaryDetailDao {
 	}
 
 	// 원본 salary_detail을 대상 salary_id로 한 방 복사
+	// 元の salary_detail を対象 salary_id へ一括コピー
 	public void copyFromSalary(Connection conn, int sourceSalaryId, int targetSalaryId) throws SQLException {
 		String sql = "INSERT INTO salary_detail (detail_id, salary_id, salary_item_id, attendance_type_id, "
 				+ "item_type, item_name, tax_yn, tax_free_name, tax_free_limit, calc_method, round_unit, "
@@ -74,6 +78,7 @@ public class SalaryDetailDao {
 	}
 
 	// 화면에서 고친 금액이랑 계산방법이랑 저장
+	// 画面で修正した金額と計算方法を保存
 	public void updateAmountAndCalcMethod(Connection conn, int detailId, long amount, String calcMethod)
 			throws SQLException {
 		String sql = "UPDATE salary_detail SET amount = ?, calc_method = ? WHERE detail_id = ?";
@@ -86,6 +91,7 @@ public class SalaryDetailDao {
 	}
 
 	// 금액/산출식 batch update
+	// 金額/算出式の batch update
 	public void updateAmountAndCalcMethodBatch(Connection conn, List<Integer> detailIds, List<Long> amounts,
 			List<String> calcMethods) throws SQLException {
 		if (detailIds == null || detailIds.isEmpty()) {
@@ -147,6 +153,7 @@ public class SalaryDetailDao {
 	}
 
 	// 조회결과를 급여상세로 옮겨담기
+	// 照会結果を給与詳細へ転記
 	private SalaryDetail toDetail(ResultSet rs) throws SQLException {
 		SalaryDetail detail = new SalaryDetail();
 		detail.setDetailId(rs.getInt("detail_id"));

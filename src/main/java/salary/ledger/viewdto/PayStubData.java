@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // 급여명세서 화면 전체 데이터
+// 給与明細書画面の全体データ
 public class PayStubData {
 
 	private int payYear;
