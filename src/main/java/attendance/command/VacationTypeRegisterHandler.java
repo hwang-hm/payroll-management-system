@@ -65,7 +65,7 @@ public class VacationTypeRegisterHandler implements CommandHandler {
 		req.setAttribute("vacationTypes", vacationTypes);
 		req.setAttribute("formVacationType", vacationType);
 		req.setAttribute("errorMessage", message);
-		return "/view/config/vacationType.jsp";
+		return "/WEB-INF/view/config/vacationType.jsp";
 	}
 
 	private Date toDate(String value) {

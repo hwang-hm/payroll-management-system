@@ -76,6 +76,6 @@ public class AttendanceTypeListHandler implements CommandHandler {
             }
         }
 
-        return "/view/config/attendanceType.jsp";
+        return "/WEB-INF/view/config/attendanceType.jsp";
     }
 }
