@@ -74,7 +74,7 @@ public class AttendanceTypeDeleteHandler implements CommandHandler {
 
 		req.setAttribute("errorMessage", message);
 
-		return "/view/config/attendanceType.jsp";
+		return "/WEB-INF/view/config/attendanceType.jsp";
 	}
 
 	/**
