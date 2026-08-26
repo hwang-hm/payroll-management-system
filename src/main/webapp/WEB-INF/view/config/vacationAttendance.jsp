@@ -20,7 +20,9 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>休暇項目設定</title>
+<title>ヘキサゴンゾーン - 休暇項目設定</title>
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 <style>
 .attendance-container {
 	max-width: 1180px;

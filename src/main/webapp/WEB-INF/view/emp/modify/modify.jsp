@@ -7,7 +7,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>社員情報更新 - ヘキサゴンゾーン</title>
+<title>ヘキサゴンゾーン - 社員情報更新</title>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 <link rel="stylesheet"
@@ -727,7 +727,7 @@
 						<table class="form-table">
 							<tr>
 								<th>兵役区分</th>
-								<td><select name="militaryType"><option value="">選択してください</option>
+								<td><select name="militaryType"><option value="">選択</option>
 										<option value="兵役済み"
 											${militaryReq.militaryType == '兵役済み' || param.militaryType == '兵役済み' ? 'selected' : ''}>兵役済み</option>
 										<option value="未履行"

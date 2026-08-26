@@ -7,8 +7,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>社員別給与内訳</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+  <title>ヘキサゴンゾーン - 社員別給与内訳</title>
   <style>
     :root {
       --primary: #2563eb;

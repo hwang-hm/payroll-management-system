@@ -8,7 +8,7 @@ pageEncoding="UTF-8"%>
 <head>
 <meta charset="UTF-8">
 
-<title>社員退職管理 - ヘキサゴンゾーン</title>
+<title>ヘキサゴンゾーン - 社員退職管理</title>
 
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />

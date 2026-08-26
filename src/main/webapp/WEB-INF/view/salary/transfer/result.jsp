@@ -7,7 +7,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>給与振込結果照会</title>
+  <title>ヘキサゴンゾーン - 給与振込結果照会</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
   <style>
     :root {

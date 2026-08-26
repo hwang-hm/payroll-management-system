@@ -7,8 +7,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>項目別台帳</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+  <title>ヘキサゴンゾーン - 項目別台帳</title>
   <style>
     :root {
       --primary: #2563eb;
