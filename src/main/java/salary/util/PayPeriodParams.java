@@ -30,10 +30,11 @@ public class PayPeriodParams {
 		return paySeq;
 	}
 
-	// 없으면 올해·이번달·1차
-	// なければ今年・今月・1回
+	// 없으면 올해·지난달·1차 (1월이면 전년 12월)
+	// なければ今年・前月・1回（1月なら前年12月）
 	public static PayPeriodParams fromRequest(HttpServletRequest req) {
 		Calendar now = Calendar.getInstance();
+		now.add(Calendar.MONTH, -1);
 		return fromRequest(req, now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, 1);
 	}
 
