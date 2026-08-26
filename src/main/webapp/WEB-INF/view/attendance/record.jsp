@@ -18,14 +18,14 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>勤怠記録管理</title>
-
+<title>ヘキサゴンゾーン - 勤怠記録管理</title>
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 <style>
 .record-container {
 	max-width: 1400px;
 	margin: 0 auto 50px;
 	padding: 0 20px;
-	font-family: Arial, "Malgun Gothic", sans-serif;
 	color: #333;
 }
 

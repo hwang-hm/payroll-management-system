@@ -11,7 +11,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>月別 全体給与統計</title>
+<title>ヘキサゴンゾーン - 月別 全体給与統計</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>

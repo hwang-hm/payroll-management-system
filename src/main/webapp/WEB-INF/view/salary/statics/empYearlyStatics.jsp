@@ -11,7 +11,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>年度別 個人年収統計</title>
+<title>ヘキサゴンゾーン - 年度別 個人年収統計</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>

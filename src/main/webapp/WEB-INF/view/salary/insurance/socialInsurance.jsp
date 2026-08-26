@@ -8,7 +8,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- 4대보험 공제내역 / 4大保険控除明細 -->
-<title>4大保険控除明細</title>
+<title>ヘキサゴンゾーン - 4大保険控除明細</title>
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 <style>
 body {
 	font-family: 'Malgun Gothic', 'Noto Sans KR', 'Meiryo', sans-serif;
