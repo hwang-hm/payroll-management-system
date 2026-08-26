@@ -20,8 +20,8 @@ public class TransferResultHandler implements CommandHandler {
 
 	private final TransferResultService resultService = new TransferResultService();
 
-	// 조회기간이랑 페이지 받아서 결과화면 열어줌. 날짜 없으면 이번달로
-	// 照会期間とページを受け取り結果画面を開く。日付がなければ今月
+		// 조회기간이랑 페이지 받아서 결과화면 열어줌. 날짜 없으면 이번달로
+		// 照会期間とページを受け取り結果画面を開く。日付がなければ今月
 	@Override
 	public String process(HttpServletRequest req, HttpServletResponse res) throws Exception {
 		Date startDate = parseDate(req.getParameter("startDate"));
