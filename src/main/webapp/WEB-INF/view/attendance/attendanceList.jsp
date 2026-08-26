@@ -4,10 +4,10 @@
 <%@ taglib prefix="layout" tagdir="/WEB-INF/tags"%>
 
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>근태조회</title>
+<title>勤怠照会</title>
 <style>
 /* Layout Base */
 .attendance-container { max-width: 1600px; margin: 20px auto 50px; padding: 0 20px; font-family: 'Malgun Gothic', Arial, sans-serif; color: #333; }
@@ -47,8 +47,8 @@
 
 /* Header Days Color */
 .day-num { font-weight: bold; font-size: 12px; }
-.day-sat { color: #2b6cb0; background-color: #f0f7ff !important; } /* 토요일 */
-.day-sun { color: #e53e3e; background-color: #fff5f5 !important; } /* 일요일 */
+.day-sat { color: #2b6cb0; background-color: #f0f7ff !important; } /* 土曜日 */
+.day-sun { color: #e53e3e; background-color: #fff5f5 !important; } /* 日曜日 */
 
 /* Attendance Red Dot */
 .attendance-dot { display: inline-block; width: 8px; height: 8px; background-color: #ef4444; border-radius: 50%; }
@@ -62,46 +62,46 @@
 <body>
 	<layout:headerNav />
 	<main class="attendance-container">
-		<h2 class="page-title">근태조회</h2>
-		<p class="description">사원별 근태현황을 한 번에 보실 수 있습니다. 월별, 상세 근태내역도 확인합니다.</p>
+		<h2 class="page-title">勤怠照会</h2>
+		<p class="description">社員別の勤怠状況を一目でご確認いただけます。月別および詳細な勤怠履歴も確認可能です。</p>
 
-		<!-- 상단 검색 및 필터 바 -->
+		<!-- 上部検索およびフィルターバー -->
 		<div class="filter-panel">
 			<form class="filter-left" method="get" action="${pageContext.request.contextPath}/attendance/list.do">
 				<select name="year">
 					<c:forEach var="y" begin="2020" end="2030">
-						<option value="${y}" ${selectedYear == y ? 'selected' : ''}>${y} 년</option>
+						<option value="${y}" ${selectedYear == y ? 'selected' : ''}>${y} 年</option>
 					</c:forEach>
 				</select>
 				<select name="month">
 					<c:forEach var="m" begin="1" end="12">
 						<option value="${m}" ${selectedMonth == m ? 'selected' : ''}>
-							<fmt:formatNumber value="${m}" pattern="00" /> 월
+							<fmt:formatNumber value="${m}" pattern="00" /> 月
 						</option>
 					</c:forEach>
 				</select>
-				<button class="btn-search" type="submit">조회</button>
+				<button class="btn-search" type="submit">検索</button>
 			</form>
 			<div class="filter-right">
-				<select disabled><option>재직</option></select>
-				<select disabled><option>구분별</option></select>
-				<select disabled><option>부서별</option></select>
-				<select disabled><option>직급별</option></select>
-				<button disabled style="padding: 4px 8px; font-size: 12px; cursor: pointer;">⚡ 정렬기준 설정하기</button>
+				<select disabled><option>在職</option></select>
+				<select disabled><option>区分別</option></select>
+				<select disabled><option>部署別</option></select>
+				<select disabled><option>役職別</option></select>
+				<button disabled style="padding: 4px 8px; font-size: 12px; cursor: pointer;">⚡ 並び替え基準の設定</button>
 			</div>
 		</div>
 
-		<!-- 달력 Grid 테이블 -->
+		<!-- カレンダー Grid テーブル -->
 		<div class="calendar-table-container">
 			<table class="calendar-table">
 				<thead>
 					<tr>
-						<th class="col-meta w-type">구분</th>
-						<th class="col-info w-empno">사원번호</th>
-						<th class="col-info w-name">성명</th>
-						<th class="col-info w-dept">부서</th>
-						<th class="col-info w-pos">직위</th>
-						<!-- 2행 헤더 달력 (1~16 / 17~31일) -->
+						<th class="col-meta w-type">区分</th>
+						<th class="col-info w-empno">社員番号</th>
+						<th class="col-info w-name">氏名</th>
+						<th class="col-info w-dept">部署</th>
+						<th class="col-info w-pos">役職</th>
+						<!-- 2行ヘッダーカレンダー (1~16日 / 17~31日) -->
 						<th class="calendar-grid-cell">
 							<table class="sub-grid-table">
 								<tr>
@@ -122,7 +122,7 @@
 											</c:otherwise>
 										</c:choose>
 									</c:forEach>
-									<!-- 31일이 없는 달인 경우 빈 칸 채움 -->
+									<!-- 31日がない月の場合、空欄を補完 -->
 									<c:if test="${daysInMonth < 31}">
 										<c:forEach begin="${daysInMonth + 1}" end="31">
 											<td></td>
@@ -131,30 +131,30 @@
 								</tr>
 							</table>
 						</th>
-						<th class="col-meta w-summary">합계</th>
-						<th class="col-meta w-deduct">휴가공제</th>
+						<th class="col-meta w-summary">合計</th>
+						<th class="col-meta w-deduct">休暇控除</th>
 					</tr>
 				</thead>
 				<tbody>
 					<c:choose>
 						<c:when test="${empty empListPage.empListData}">
 							<tr>
-								<td colspan="8" style="padding: 20px;">등록된 사원이 없습니다.</td>
+								<td colspan="8" style="padding: 20px;">登録されている社員がいません。</td>
 							</tr>
 						</c:when>
 						<c:otherwise>
 							<c:forEach var="employee" items="${empListPage.empListData}">
 								<tr>
-									<td class="w-type">정규직</td>
+									<td class="w-type">正社員</td>
 									<td class="w-empno">No-${employee.empId}</td>
 									<td class="w-name"><c:out value="${employee.nameKor}" /></td>
 									<td class="w-dept"><c:out value="${employee.deptName}" /></td>
 									<td class="w-pos"><c:out value="${employee.positionName}" /></td>
 
-									<!-- 2행 31일 Cell Grid -->
+									<!-- 2行 31日 Cell Grid -->
 									<td class="calendar-grid-cell">
 										<table class="sub-grid-table">
-											<!-- 상단: 1일 ~ 16일 -->
+											<!-- 上段: 1日 ~ 16日 -->
 											<tr>
 												<c:forEach var="d" begin="1" end="16">
 													<c:set var="dow" value="${dayOfWeekMap[d]}" />
@@ -166,7 +166,7 @@
 													</td>
 												</c:forEach>
 											</tr>
-											<!-- 하단: 17일 ~ 31일 -->
+											<!-- 下段: 17일 ~ 31일 -->
 											<tr>
 												<c:forEach var="d" begin="17" end="31">
 													<c:choose>
@@ -188,10 +188,10 @@
 										</table>
 									</td>
 
-									<!-- 합계 및 휴가공제 -->
+									<!-- 合計および休暇控除 -->
 									<td class="w-summary">
 										<c:if test="${not empty empAttendanceDaysMap[employee.empId] && empAttendanceDaysMap[employee.empId].size() > 0}">
-											• 조회: ${empAttendanceDaysMap[employee.empId].size()}건
+											• 照会: ${empAttendanceDaysMap[employee.empId].size()}件
 										</c:if>
 									</td>
 									<td class="w-deduct">0</td>
