@@ -57,6 +57,6 @@ public class VacationTypeDeleteHandler implements CommandHandler {
 		List<VacationType> vacationTypes = vacationTypeService.getVacationTypes();
 		req.setAttribute("vacationTypes", vacationTypes);
 		req.setAttribute("errorMessage", message);
-		return "/view/config/vacationType.jsp";
+		return "/WEB-INF/view/config/vacationType.jsp";
 	}
 }

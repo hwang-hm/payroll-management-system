@@ -33,7 +33,7 @@ public class TransferFormSaveHandler implements CommandHandler {
 		int savedFormId = applyService.saveForm(formId, formName, itemCodes);
 		PayPeriodParams period = PayPeriodParams.fromRequest(req);
 
-		String message = URLEncoder.encode("양식이 저장되었습니다.", StandardCharsets.UTF_8.name());
+		String message = URLEncoder.encode("様式を保存しました。", StandardCharsets.UTF_8.name());
 		res.sendRedirect(req.getContextPath() + "/salary/transfer/apply.do?" + period.toQueryString()
 				+ "&formId=" + savedFormId + "&message=" + message);
 		return null;

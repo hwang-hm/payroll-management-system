@@ -60,7 +60,8 @@
     .list-table td {
       padding: 9px 8px; border-bottom: 1px solid var(--border); text-align: center;
     }
-    .list-table tbody tr:hover { background: #eff6ff; }
+    .list-table tbody tr.clickable { cursor: pointer; }
+    .list-table tbody tr.clickable:hover { background: #eff6ff; }
     .amount-pay { color: var(--pay-color); font-weight: 600; }
     .amount-deduct { color: var(--deduct-color); font-weight: 600; }
     .list-table tfoot td {
@@ -114,7 +115,8 @@
         </thead>
         <tbody>
           <c:forEach var="row" items="${ledgerData.rows}">
-            <tr>
+            <tr class="clickable"
+                onclick="location.href='${pageContext.request.contextPath}/salary/ledger/detail.do?salaryDateId=${row.salaryDateId}'">
               <td>
                 ${row.payYear}-<fmt:formatNumber value="${row.payMonth}" minIntegerDigits="2"/>
               </td>
@@ -127,7 +129,7 @@
               <td class="amount-pay"><fmt:formatNumber value="${row.totalPay}" pattern="#,###"/></td>
               <td class="amount-deduct"><fmt:formatNumber value="${row.totalDeduct}" pattern="#,###"/></td>
               <td><fmt:formatNumber value="${row.netPay}" pattern="#,###"/></td>
-              <td>
+              <td onclick="event.stopPropagation();">
                 <form action="${pageContext.request.contextPath}/salary/ledger/delete.do" method="post"
                       style="display:inline;margin:0;"
                       onsubmit="return confirm('該当帰属年月・回数の給与をすべて削除しますか？');">

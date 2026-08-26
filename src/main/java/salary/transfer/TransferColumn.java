@@ -8,20 +8,20 @@ package salary.transfer;
  */
 public enum TransferColumn {
 
-	EMP_TYPE("EMP_TYPE", "구분"),
-	EMP_ID("EMP_ID", "사원번호"),
-	NAME_KOR("NAME_KOR", "성명"),
-	NAME_ENG("NAME_ENG", "성명(E)"),
-	DEPT("DEPT", "부서"),
-	POSITION("POSITION", "직위"),
-	HIRE_DATE("HIRE_DATE", "입사일"),
-	MOBILE("MOBILE", "휴대폰번호"),
+	EMP_TYPE("EMP_TYPE", "区分"),
+	EMP_ID("EMP_ID", "社員番号"),
+	NAME_KOR("NAME_KOR", "氏名"),
+	NAME_ENG("NAME_ENG", "氏名(E)"),
+	DEPT("DEPT", "部署"),
+	POSITION("POSITION", "職位"),
+	HIRE_DATE("HIRE_DATE", "入社日"),
+	MOBILE("MOBILE", "携帯電話番号"),
 	EMAIL("EMAIL", "E-mail"),
-	BANK("BANK", "금융기관"),
-	ACCOUNT("ACCOUNT", "계좌번호"),
-	TOTAL_PAY("TOTAL_PAY", "지급합계"),
-	TOTAL_DEDUCT("TOTAL_DEDUCT", "공제합계"),
-	NET_PAY("NET_PAY", "실지급액");
+	BANK("BANK", "金融機関"),
+	ACCOUNT("ACCOUNT", "口座番号"),
+	TOTAL_PAY("TOTAL_PAY", "支給合計"),
+	TOTAL_DEDUCT("TOTAL_DEDUCT", "控除合計"),
+	NET_PAY("NET_PAY", "実支給額");
 
 	private final String code;
 	private final String label;

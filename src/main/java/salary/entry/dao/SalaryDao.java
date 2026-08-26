@@ -73,7 +73,7 @@ public class SalaryDao {
 		int newSalaryId;
 		try (PreparedStatement seqPstmt = conn.prepareStatement(seqSql); ResultSet rs = seqPstmt.executeQuery()) {
 			if (!rs.next()) {
-				throw new SQLException("salary_id 시퀀스 조회에 실패했습니다.");
+				throw new SQLException("salary_id シーケンスの取得に失敗しました。");
 			}
 			newSalaryId = rs.getInt(1);
 		}
@@ -127,7 +127,7 @@ public class SalaryDao {
 			throws SQLException {
 		String sql = "SELECT s.salary_id, s.salary_date_id, s.emp_id, s.total_pay, s.total_deduct, s.net_pay "
 				+ "FROM salary s JOIN employee e ON s.emp_id = e.emp_id "
-				+ "WHERE s.salary_date_id = ? AND e.employment_type <> '일용직' ORDER BY s.salary_id";
+				+ "WHERE s.salary_date_id = ? AND e.employment_type <> '日雇い' ORDER BY s.salary_id";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, salaryDateId);
 			try (ResultSet rs = pstmt.executeQuery()) {
@@ -203,7 +203,7 @@ public class SalaryDao {
 		String sql = "SELECT s.salary_id, s.emp_id, e.employment_type, e.name_kor, "
 				+ "NVL(d.dept_name, '-') AS dept_name, s.total_pay, s.total_deduct, s.net_pay " + "FROM salary s "
 				+ "JOIN employee e ON s.emp_id = e.emp_id " + "LEFT JOIN department d ON e.dept_id = d.dept_id "
-				+ "WHERE s.salary_date_id = ? " + "AND e.employment_type <> '일용직' " + "ORDER BY s.salary_id";
+				+ "WHERE s.salary_date_id = ? " + "AND e.employment_type <> '日雇い' " + "ORDER BY s.salary_id";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, salaryDateId);
 			try (ResultSet rs = pstmt.executeQuery()) {
@@ -223,7 +223,7 @@ public class SalaryDao {
 				+ "NVL(d.dept_name, '-') AS dept_name, NVL(p.position_name, '-') AS position_name, "
 				+ "CASE WHEN e.status = 'Y' THEN '在職' WHEN e.status = 'N' THEN '退職' ELSE '在職' END AS status_label "
 				+ "FROM employee e " + "LEFT JOIN department d ON e.dept_id = d.dept_id "
-				+ "LEFT JOIN position p ON e.position_id = p.position_id " + "WHERE e.employment_type <> '일용직' "
+				+ "LEFT JOIN position p ON e.position_id = p.position_id " + "WHERE e.employment_type <> '日雇い' "
 				+ "AND e.emp_id NOT IN (SELECT emp_id FROM salary WHERE salary_date_id = ?) " + "ORDER BY e.emp_id";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, salaryDateId);
@@ -245,7 +245,7 @@ public class SalaryDao {
 				+ "NVL(d.dept_name, '-') AS dept_name, NVL(p.position_name, '-') AS position_name, "
 				+ "CASE WHEN e.status = 'Y' THEN '在職' WHEN e.status = 'N' THEN '退職' ELSE '在職' END AS status_label "
 				+ "FROM employee e " + "LEFT JOIN department d ON e.dept_id = d.dept_id "
-				+ "LEFT JOIN position p ON e.position_id = p.position_id " + "WHERE e.employment_type <> '일용직' "
+				+ "LEFT JOIN position p ON e.position_id = p.position_id " + "WHERE e.employment_type <> '日雇い' "
 				+ "AND e.emp_id NOT IN (SELECT emp_id FROM salary WHERE salary_date_id = ?) "
 				+ "AND (e.name_kor LIKE ? OR TO_CHAR(e.emp_id) LIKE ?) " + "ORDER BY e.emp_id";
 		String keyword = "%" + searchKeyword.trim() + "%";

@@ -64,11 +64,11 @@ public class SalaryAutoCalcService {
 			List<String> calcMethods = new ArrayList<>();
 
 			for (SalaryDetail detail : details) {
-				String itemName = detail.getItemName();
-				if (!amountMap.containsKey(itemName)) {
+				String canonical = SalaryAutoCalcRates.canonicalName(detail.getItemName());
+				if (canonical == null || !amountMap.containsKey(canonical)) {
 					continue;
 				}
-				long amount = amountMap.get(itemName);
+				long amount = amountMap.get(canonical);
 				detail.setAmount(amount);
 				detail.setCalcMethod(null);
 				detailIds.add(detail.getDetailId());
@@ -92,14 +92,20 @@ public class SalaryAutoCalcService {
 
 	private long findBaseAmount(List<SalaryDetail> details) {
 		for (SalaryDetail detail : details) {
-			if ("기본급".equals(detail.getItemName()) && detail.getAmount() != null && detail.getAmount() > 0) {
+			if (SalaryAutoCalcRates.isBasicPayItem(detail.getItemName()) && detail.getAmount() != null
+					&& detail.getAmount() > 0) {
 				return detail.getAmount();
 			}
 		}
 		return 0L;
 	}
 
+	// 미설정(null/blank)은 적용(Y). 명시적 N만 제외
+	// 未設定(null/blank)は適用(Y)。明示的な N のみ除外
 	private boolean isYn(String value) {
-		return "Y".equalsIgnoreCase(value);
+		if (value == null || value.trim().isEmpty()) {
+			return true;
+		}
+		return !"N".equalsIgnoreCase(value.trim());
 	}
 }

@@ -64,7 +64,7 @@ public class SeverancePayHandler implements CommandHandler {
 
 			if (selectedEmp == null) {
 
-				req.setAttribute("error", "사원 정보를 찾을 수 없습니다.");
+				req.setAttribute("error", "社員情報が見つかりません。");
 				return FORM_VIEW;
 			}
 
@@ -98,7 +98,7 @@ public class SeverancePayHandler implements CommandHandler {
 			String empIdValue = req.getParameter("empId");
 
 			if (empIdValue == null || empIdValue.trim().isEmpty()) {
-				req.setAttribute("salaryLoadError", "사원을 선택해주세요.");
+				req.setAttribute("salaryLoadError", "社員を選択してください。");
 				return FORM_VIEW;
 			}
 
@@ -114,7 +114,7 @@ public class SeverancePayHandler implements CommandHandler {
 			EmployeeDetailData selectedEmp = empDao.selectByIdJoin(conn, empId);
 
 			if (selectedEmp == null) {
-				req.setAttribute("salaryLoadError", "사원 정보를 찾을 수 없습니다.");
+				req.setAttribute("salaryLoadError", "社員情報が見つかりません。");
 				return FORM_VIEW;
 			}
 

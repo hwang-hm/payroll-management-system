@@ -6,17 +6,18 @@
 <%@ taglib prefix="layout" tagdir="/WEB-INF/tags"%>
 
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ja">
 
 <head>
 
 <meta charset="UTF-8">
 
-<title>퇴직급여 입력/관리 - 헥사곤존</title>
+<title>退職給付入力・管理 - ヘキサゴンゾーン</title>
 
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/severancePay.css"/>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/severancePay.css" />
 
 </head>
 
@@ -26,29 +27,22 @@
 
 	<div class="container">
 
-
-		<!-- =========================
-         제목
-    ========================== -->
+		<!-- 페이지 상단 제목 및 설명 / ページ上部タイトルおよび説明 -->
 		<div class="page-header">
 
-			<h2>🧮 퇴직급여 입력/관리</h2>
+			<h2>🧮 退職給付入力・管理</h2>
 
-			<p>퇴직사원에 대한 퇴직급여 정보를 입력, 계산, 저장하는 메뉴입니다.</p>
+			<p>退職社員の退職給付情報を入力・計算・保存するメニューです。</p>
 
 		</div>
 
-
-		<!-- =========================
-         지급년도 / 신규추가
-    ========================== -->
 		<div class="section-card">
 
 			<div class="top-control">
 
 				<div class="year-area">
 
-					<span>* 지급년도</span> <select name="payYear">
+					<span>* 支給年度</span> <select name="payYear">
 
 						<c:forEach var="year" begin="2020" end="2030">
 
@@ -61,33 +55,29 @@
 
 				</div>
 
-
 				<button type="button" class="btn btn-primary"
-					onclick="openEmployeeModal();">＋ 신규추가</button>
+					onclick="openEmployeeModal();">＋ 新規追加</button>
 
 			</div>
 
-
-			<!-- 저장된 퇴직급여 목록 영역 -->
 			<table class="data-table">
 
 				<thead>
 					<tr>
-						<th>지급일</th>
-						<th>구분</th>
-						<th>성명</th>
-						<th>직위</th>
-						<th>부서</th>
-						<th>산정기간</th>
-						<th>근속일수</th>
-						<th>실지급액</th>
-						<th>지급방법</th>
+						<th>支給日</th>
+						<th>区分</th>
+						<th>氏名</th>
+						<th>役職</th>
+						<th>部署</th>
+						<th>算定期間</th>
+						<th>勤続日数</th>
+						<th>実支給額</th>
+						<th>支給方法</th>
 					</tr>
 				</thead>
 
 				<tbody>
 
-					<%-- 선택한 사원은 저장 전이라도 상단 표에 표시 --%>
 					<c:if test="${not empty selectedEmp}">
 						<tr class="selected-pay-row">
 							<td><c:choose>
@@ -129,11 +119,11 @@
 									</c:when>
 									<c:otherwise>-</c:otherwise>
 								</c:choose></td>
-							<td>${serviceDays}일</td>
+							<td>${serviceDays}日</td>
 							<td><c:choose>
 									<c:when test="${not empty severanceResult}">
 										<fmt:formatNumber value="${severanceResult.netPayment}"
-											pattern="#,###" />원
+											pattern="#,###" />ウォン
 								</c:when>
 									<c:otherwise>-</c:otherwise>
 								</c:choose></td>
@@ -146,7 +136,6 @@
 						</tr>
 					</c:if>
 
-					<%-- DB에 저장된 퇴직급여 목록 --%>
 					<c:forEach var="pay" items="${severancePayList}">
 						<tr>
 							<td>${pay.paymentDate}</td>
@@ -164,8 +153,7 @@
 
 					<c:if test="${empty selectedEmp && empty severancePayList}">
 						<tr>
-							<td colspan="9" style="height: 55px; color: #94a3b8;">저장된
-								퇴직급여 내역이 없습니다.</td>
+							<td colspan="9" style="height: 55px; color: #94a3b8;">保存された退職給付履歴がありません。</td>
 						</tr>
 					</c:if>
 
@@ -175,30 +163,25 @@
 
 		</div>
 
-
-
-		<!-- =========================
-         선택 사원
-    ========================== -->
-
 		<c:if test="${not empty selectedEmp}">
 
 			<div class="employee-bar">
 
 				<div class="employee-name">${selectedEmp.nameKor}
-					${selectedEmp.positionName} 퇴직계산</div>
+					${selectedEmp.positionName} 退職計算</div>
 
+				<!-- 선택 사원 정보 / 選択社員情報 -->
 				<div class="employee-info">
-					<strong>구분</strong> <span class="employee-value"> 퇴직정산 </span>
+					<strong>区分</strong> <span class="employee-value"> 退職精算 </span>
 				</div>
 
 				<div class="employee-info">
-					<strong>입사일</strong> <span class="employee-value">
+					<strong>入社日</strong> <span class="employee-value">
 						${selectedEmp.hireDate} </span>
 				</div>
 
 				<div class="employee-info">
-					<strong>퇴직일</strong> <span class="employee-value"> <c:choose>
+					<strong>退職日</strong> <span class="employee-value"> <c:choose>
 							<c:when test="${not empty selectedEmp.retireDate}">
                             ${selectedEmp.retireDate}
                         </c:when>
@@ -211,62 +194,48 @@
 				</div>
 
 				<div class="employee-info">
-					<strong>근속연수</strong> <span class="employee-highlight">
-						${serviceYears}년 </span>
+					<strong>勤続年数</strong> <span class="employee-highlight">
+						${serviceYears}年 </span>
 				</div>
 
 				<div class="employee-info">
-					<strong>근속일수</strong> <span class="employee-highlight">
-						${serviceDays}일 </span>
+					<strong>勤続日数</strong> <span class="employee-highlight">
+						${serviceDays}日 </span>
 				</div>
 
 			</div>
 
 		</c:if>
 
-
-
-		<!-- =========================
-         전체 입력 form
-    ========================== -->
-
+		<!-- 퇴직급여 입력 폼 / 退職給付入力フォーム -->
 		<form id="severanceForm" method="post">
 
 			<input type="hidden" name="empId" id="selectedEmpId"
 				value="${selectedEmp.empId}">
 
-
-			<!-- =========================
-             급여 + 기타과세소득
-        ========================== -->
-
 			<div class="two-column">
 
-
-				<!-- 급여내역 -->
 				<div class="section-card">
 
 					<div class="section-title">
 
 						<div>
-							<h3>급여내역</h3>
-							<span class="description"> 사유발생일 이전 최근 3개월 지급합계 금액 </span>
+							<h3>給与明細</h3>
+							<span class="description"> 事由発生日以前の直近3か月支給合計額 </span>
 						</div>
 
-
 						<button type="button" class="btn btn-primary"
-							onclick="loadSalary();">급여내역 불러오기</button>
+							onclick="loadSalary();">給与明細を読み込む</button>
 
 					</div>
-
 
 					<table class="data-table">
 
 						<thead>
 							<tr>
-								<th style="width: 48%;">산정기간</th>
-								<th style="width: 22%;">산정일수</th>
-								<th style="width: 30%;">급여총액</th>
+								<th style="width: 48%;">算定期間</th>
+								<th style="width: 22%;">算定日数</th>
+								<th style="width: 30%;">給与総額</th>
 							</tr>
 						</thead>
 
@@ -300,7 +269,6 @@
 
 								</c:when>
 
-
 								<c:otherwise>
 
 									<c:forEach begin="1" end="4">
@@ -327,10 +295,9 @@
 
 							</c:choose>
 
-
 							<tr>
 
-								<th>총 합계</th>
+								<th>合計</th>
 
 								<td class="result-cell">${empty salaryResult
                                     ? 0
@@ -349,18 +316,14 @@
 
 					</table>
 
+					<div class="notice">ただし、月途中の日付で計算する場合は、該当月の支給合計額を日数で按分した金額を基準に表示します。</div>
 
-					<div class="notice">단, 중간일자 계산일 경우 해당월의 지급합계 금액에서 일수로 나눈 값을
-						기준으로 표시</div>
-
-
-					<!-- 퇴직위로금 / 해고예고수당 -->
 					<table class="data-table input-summary">
 
 						<thead>
 							<tr>
-								<th>퇴직위로금</th>
-								<th>해고예고수당</th>
+								<th>退職慰労金</th>
+								<th>解雇予告手当</th>
 							</tr>
 						</thead>
 
@@ -383,30 +346,26 @@
 
 				</div>
 
-
-
-				<!-- 기타 과세소득 -->
 				<div class="section-card">
 
 					<div class="section-title">
 
 						<div>
-							<h3>기타 과세소득</h3>
-							<span class="description"> 사유 발생일 이전 1년간분의 금액 입력 </span>
+							<h3>その他課税所得</h3>
+							<span class="description"> 事由発生日以前1年間の金額を入力 </span>
 						</div>
 
 					</div>
-
 
 					<table class="data-table">
 
 						<thead>
 
 							<tr>
-								<th>지급년월</th>
-								<th>지급항목</th>
-								<th>금액</th>
-								<th>3개월분</th>
+								<th>支給年月</th>
+								<th>支給項目</th>
+								<th>金額</th>
+								<th>3か月分</th>
 							</tr>
 
 						</thead>
@@ -415,7 +374,6 @@
 
 							<c:choose>
 
-								<%-- 계산 전에 입력한 값이 있는 경우 --%>
 								<c:when test="${not empty severanceRequest.otherTaxableIncomes}">
 
 									<c:forEach var="income"
@@ -449,8 +407,6 @@
 
 								</c:when>
 
-
-								<%-- 처음 화면 --%>
 								<c:otherwise>
 
 									<c:forEach begin="1" end="5">
@@ -481,16 +437,14 @@
 
 					</table>
 
-
-					<!-- 비과세 / 기납부 / 세액공제 -->
 					<table class="data-table input-summary">
 
 						<thead>
 
 							<tr>
-								<th>비과세 퇴직급여</th>
-								<th>기납부(또는 기과세이연) 세액</th>
-								<th>세액공제</th>
+								<th>非課税退職給付</th>
+								<th>既納付（または既課税繰延）税額</th>
+								<th>税額控除</th>
 							</tr>
 
 						</thead>
@@ -519,34 +473,27 @@
 
 			</div>
 
-
-
-			<!-- =========================
-             과세이연계좌
-        ========================== -->
-
 			<div class="section-card">
 
 				<div class="section-title">
 
 					<div>
-						<h3>과세이연계좌</h3>
-						<span class="description"> 해당 사항이 없는 경우 입력하지 않습니다. </span>
+						<h3>課税繰延口座</h3>
+						<span class="description"> 該当事項がない場合は入力しません。 </span>
 					</div>
 
 				</div>
-
 
 				<table class="data-table">
 
 					<thead>
 
 						<tr>
-							<th>퇴직연금사업자명</th>
-							<th>사업자등록번호</th>
-							<th>계좌번호</th>
-							<th>입금(이체)일</th>
-							<th>계좌입금금액</th>
+							<th>退職年金事業者名</th>
+							<th>事業者登録番号</th>
+							<th>口座番号</th>
+							<th>入金（振込）日</th>
+							<th>口座入金額</th>
 						</tr>
 
 					</thead>
@@ -583,7 +530,6 @@
 
 							</c:when>
 
-
 							<c:otherwise>
 
 								<c:forEach begin="1" end="2">
@@ -615,29 +561,16 @@
 
 				</table>
 
-
-				<div class="notice">과세이연계좌가 있는 경우에만 입력해주세요.</div>
+				<div class="notice">課税繰延口座がある場合のみ入力してください。</div>
 
 			</div>
-
-
-
-			<!-- =========================
-             퇴직금 계산하기
-        ========================== -->
 
 			<div class="calculate-area">
 
 				<button type="button" class="btn btn-calculate"
-					onclick="calculateSeverance();">퇴직금 계산하기</button>
+					onclick="calculateSeverance();">退職金を計算</button>
 
 			</div>
-
-
-
-			<!-- =========================
-             계산 결과
-        ========================== -->
 
 			<c:if test="${not empty severanceResult}">
 
@@ -648,12 +581,12 @@
 						<thead>
 
 							<tr>
-								<th>3개월 총계</th>
-								<th>1일 평균임금</th>
-								<th>1일 통상임금</th>
-								<th>퇴직소득</th>
-								<th>퇴직일이 속하는 과세연도</th>
-								<th>산출세액</th>
+								<th>3か月合計</th>
+								<th>1日平均賃金</th>
+								<th>1日通常賃金</th>
+								<th>退職所得</th>
+								<th>退職日が属する課税年度</th>
+								<th>算出税額</th>
 							</tr>
 
 						</thead>
@@ -690,19 +623,17 @@
 
 					</table>
 
-
-
 					<table class="data-table result-table">
 
 						<thead>
 
 							<tr>
-								<th>퇴직소득세</th>
-								<th>지방소득세</th>
-								<th>이연 퇴직소득세</th>
-								<th>이연 지방소득세</th>
-								<th>농어촌특별세</th>
-								<th>기타공제</th>
+								<th>退職所得税</th>
+								<th>地方所得税</th>
+								<th>繰延退職所得税</th>
+								<th>繰延地方所得税</th>
+								<th>農漁村特別税</th>
+								<th>その他控除</th>
 							</tr>
 
 						</thead>
@@ -739,19 +670,16 @@
 
 					</table>
 
-
-					<!-- 최종 결과 -->
-
 					<table class="data-table final-result-table result-table">
 
 						<thead>
 
 							<tr>
-								<th>과세대상 퇴직급여</th>
-								<th>차감원천징수세액</th>
-								<th>실수령액</th>
-								<th>지급방법</th>
-								<th>지급일</th>
+								<th>課税対象退職給付</th>
+								<th>差引源泉徴収税額</th>
+								<th>実受取額</th>
+								<th>支給方法</th>
+								<th>支給日</th>
 							</tr>
 
 						</thead>
@@ -762,19 +690,19 @@
 
 								<td><span class="final-price"> <fmt:formatNumber
 											value="${severanceResult.taxableRetirementPay}"
-											pattern="#,###" /> 원
+											pattern="#,###" /> ウォン
 
 								</span></td>
 
 								<td><span class="final-price"> <fmt:formatNumber
 											value="${severanceResult.withholdingTax}" pattern="#,###" />
 
-										원
+										ウォン
 
 								</span></td>
 
 								<td><span class="final-price"> <fmt:formatNumber
-											value="${severanceResult.netPayment}" pattern="#,###" /> 원
+											value="${severanceResult.netPayment}" pattern="#,###" /> ウォン
 
 								</span></td>
 
@@ -792,7 +720,7 @@
 
 										<c:otherwise>
 
-											<input type="text" name="paymentMethod" placeholder="지급방법">
+											<input type="text" name="paymentMethod" placeholder="支給方法">
 
 										</c:otherwise>
 
@@ -807,9 +735,6 @@
 
 					</table>
 
-
-
-					<!-- 저장에 필요한 계산결과 -->
 					<input type="hidden" name="threeMonthTotal"
 						value="${severanceResult.threeMonthTotal}"> <input
 						type="hidden" name="dailyAverageWage"
@@ -835,14 +760,13 @@
 						type="hidden" name="netPayment"
 						value="${severanceResult.netPayment}">
 
-
 					<div class="bottom-buttons">
 
 						<button type="button" class="btn btn-primary btn-save"
-							onclick="saveSeverance();">저장</button>
+							onclick="saveSeverance();">保存</button>
 
 						<button type="button" class="btn btn-cancel"
-							onclick="location.reload();">취소</button>
+							onclick="location.reload();">キャンセル</button>
 
 					</div>
 
@@ -850,34 +774,26 @@
 
 			</c:if>
 
-
 		</form>
 
 	</div>
 
-
-
-	<!-- =========================================================
-     사원 선택 모달
-========================================================= -->
-
+	<!-- 사원 선택 모달 / 社員選択モーダル -->
 	<div id="employeeModal" class="employee-modal">
 
 		<div class="employee-modal-content">
 
-			<h2>퇴직급여지급 사원선택</h2>
-
+			<h2>退職給付支給 社員選択</h2>
 
 			<div class="modal-search">
 
-				<input type="text" id="employeeSearchKeyword" placeholder="사원검색"
+				<input type="text" id="employeeSearchKeyword" placeholder="社員検索"
 					onkeyup="filterEmployees();">
 
 				<button type="button" class="btn btn-outline"
-					onclick="clearEmployeeSearch();">▣ 전체보기</button>
+					onclick="clearEmployeeSearch();">▣ 全件表示</button>
 
 			</div>
-
 
 			<div class="modal-table-wrap">
 
@@ -887,16 +803,15 @@
 
 						<tr>
 							<th style="width: 45px;"></th>
-							<th>구분</th>
-							<th>사원번호</th>
-							<th>성명</th>
-							<th>부서</th>
-							<th>직위</th>
-							<th>상태</th>
+							<th>区分</th>
+							<th>社員番号</th>
+							<th>氏名</th>
+							<th>部署</th>
+							<th>役職</th>
+							<th>状態</th>
 						</tr>
 
 					</thead>
-
 
 					<tbody>
 
@@ -923,11 +838,11 @@
 								<td><c:choose>
 
 										<c:when test="${emp.status == 'Y'}">
-                                        재직
+                                        在職
                                     </c:when>
 
 										<c:otherwise>
-                                        퇴직
+                                        退職
                                     </c:otherwise>
 
 									</c:choose></td>
@@ -942,14 +857,13 @@
 
 			</div>
 
-
 			<div class="modal-button-area">
 
 				<button type="button" class="btn btn-primary"
-					onclick="confirmEmployeeSelection();">사원선택</button>
+					onclick="confirmEmployeeSelection();">社員選択</button>
 
 				<button type="button" class="btn btn-outline"
-					onclick="closeEmployeeModal();">선택취소</button>
+					onclick="closeEmployeeModal();">選択キャンセル</button>
 
 			</div>
 
@@ -957,15 +871,10 @@
 
 	</div>
 
-
 	<layout:footer />
 
-
+	<!-- 사원 선택 및 퇴직급여 계산·저장 처리 / 社員選択および退職給付計算・保存処理 -->
 	<script>
-		/* =========================
-		 신규추가 - 사원선택
-		 ========================= */
-
 		function openEmployeeModal() {
 
 			document.getElementById("employeeModal").style.display = "flex";
@@ -976,7 +885,6 @@
 			document.getElementById("employeeModal").style.display = "none";
 		}
 
-		/* 사원행 클릭 */
 		function selectEmployeeRow(row) {
 
 			const radio = row.querySelector('input[name="modalEmp"]');
@@ -996,7 +904,6 @@
 			row.classList.add("selected");
 		}
 
-		/* 사원선택 완료 */
 		function confirmEmployeeSelection() {
 
 			const selected = document
@@ -1004,24 +911,18 @@
 
 			if (!selected) {
 
-				alert("사원을 선택해주세요.");
+				alert("社員を選択してください。");
 
 				return;
 			}
 
 			const empId = selected.value;
 
-			/*
-			   사원 선택 후 서버로 이동
-			   GET Handler에서 selectedEmp를 조회해
-			   다시 JSP에 전달
-			 */
 			location.href = "${pageContext.request.contextPath}"
 					+ "/retirement/severance.do?empId="
 					+ encodeURIComponent(empId);
 		}
 
-		/* 검색 */
 		function filterEmployees() {
 
 			const keyword = document.getElementById("employeeSearchKeyword").value
@@ -1045,17 +946,13 @@
 			filterEmployees();
 		}
 
-		/* =========================
-		 급여내역 불러오기
-		 ========================= */
-
 		function loadSalary() {
 
 			const empId = document.getElementById("selectedEmpId").value;
 
 			if (!empId) {
 
-				alert("먼저 신규추가에서 사원을 선택해주세요.");
+				alert("先に新規追加から社員を選択してください。");
 
 				return;
 			}
@@ -1068,10 +965,6 @@
 
 			form.submit();
 		}
-
-		/* =========================
-		 기타과세소득 3개월분
-		 ========================= */
 
 		function calculateThreeMonthIncome(input) {
 
@@ -1086,17 +979,13 @@
 			resultCell.innerText = threeMonthAmount.toLocaleString();
 		}
 
-		/* =========================
-		 퇴직금 계산
-		 ========================= */
-
 		function calculateSeverance() {
 
 			const empId = document.getElementById("selectedEmpId").value;
 
 			if (!empId) {
 
-				alert("먼저 사원을 선택해주세요.");
+				alert("先に社員を選択してください。");
 
 				return;
 			}
@@ -1110,13 +999,9 @@
 			form.submit();
 		}
 
-		/* =========================
-		 저장
-		 ========================= */
-
 		function saveSeverance() {
 
-			if (!confirm("계산된 퇴직급여 정보를 저장하시겠습니까?")) {
+			if (!confirm("計算された退職給付情報を保存しますか？")) {
 				return;
 			}
 
@@ -1129,7 +1014,6 @@
 			form.submit();
 		}
 
-		/* 모달 바깥 클릭 */
 		window.addEventListener("click", function(event) {
 
 			const modal = document.getElementById("employeeModal");
@@ -1139,7 +1023,6 @@
 			}
 		});
 
-		/* ESC */
 		document.addEventListener("keydown", function(event) {
 
 			if (event.key === "Escape") {
@@ -1147,12 +1030,10 @@
 			}
 		});
 
-		/* 저장 성공 */
 		<c:if test="${saveSuccess}">
-		alert("퇴직급여가 저장되었습니다.");
+		alert("退職給付が保存されました。");
 		</c:if>
 
-		/* 오류 */
 		<c:if test="${not empty salaryLoadError}">
 		alert("${salaryLoadError}");
 		</c:if>

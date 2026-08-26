@@ -31,7 +31,7 @@ public class VacationTypeListHandler implements CommandHandler {
 			}
 		}
 
-		return "/view/config/vacationType.jsp";
+		return "/WEB-INF/view/config/vacationType.jsp";
 	}
 
 }

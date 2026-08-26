@@ -54,7 +54,7 @@ public class TransferFormDao {
 		int formId;
 		try (PreparedStatement seqPstmt = conn.prepareStatement(seqSql); ResultSet rs = seqPstmt.executeQuery()) {
 			if (!rs.next()) {
-				throw new SQLException("transfer_form 시퀀스 조회 실패");
+				throw new SQLException("transfer_form シーケンスの取得に失敗しました。");
 			}
 			formId = rs.getInt(1);
 		}
