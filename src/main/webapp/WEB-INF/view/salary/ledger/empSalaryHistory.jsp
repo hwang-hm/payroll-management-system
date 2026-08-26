@@ -129,7 +129,7 @@
     <div class="EmpSalaryHistory-filter">
       <label>期間選択</label>
       <select name="startYear">
-        <c:forEach var="y" items="${historyData.yearOptions}">
+        <c:forEach var="y" begin="2017" end="2027">
           <option value="${y}" ${y eq historyData.startYear ? 'selected' : ''}>${y}年</option>
         </c:forEach>
       </select>
@@ -142,7 +142,7 @@
       </select>
       <span>~</span>
       <select name="endYear">
-        <c:forEach var="y" items="${historyData.yearOptions}">
+        <c:forEach var="y" begin="2017" end="2027">
           <option value="${y}" ${y eq historyData.endYear ? 'selected' : ''}>${y}年</option>
         </c:forEach>
       </select>

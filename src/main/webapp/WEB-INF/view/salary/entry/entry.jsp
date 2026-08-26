@@ -207,7 +207,7 @@
     <div class="filter-bar">
       <label>帰属年月</label>
       <select name="payYear" onchange="this.form.submit()">
-        <c:forEach var="y" begin="2024" end="2027">
+        <c:forEach var="y" begin="2017" end="2027">
           <option value="${y}" ${y eq entryData.payYear ? 'selected' : ''}>${y}年</option>
         </c:forEach>
       </select>
