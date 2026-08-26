@@ -622,7 +622,7 @@
 											</select></td>
 											<td><input type="text" name="familyName"></td>
 											<td><select name="nationality">
-													<option value="" selected>選択してください</option>
+													<option value="" selected>選択</option>
 													<option value="内国人">内国人</option>
 													<option value="外国人">外国人</option>
 											</select></td>
@@ -742,7 +742,7 @@
 						<table class="form-table">
 							<tr>
 								<th>兵役区分</th>
-								<td><select name="militaryType"><option value="">選択してください</option>
+								<td><select name="militaryType"><option value="">選択</option>
 										<option value="履行済"
 											${militaryReq.militaryType == '履行済' || param.militaryType == '履行済' ? 'selected' : ''}>兵役済</option>
 										<option value="未履行"
@@ -750,7 +750,7 @@
 										<option value="免除"
 											${militaryReq.militaryType == '免除' || param.militaryType == '免除' ? 'selected' : ''}>免除</option></select></td>
 								<th>軍種</th>
-								<td><select name="militaryBranch"><option value="">選択してください</option>
+								<td><select name="militaryBranch"><option value="">選択</option>
 										<option value="陸軍"
 											${militaryReq.militaryBranch == '陸軍' || param.militaryBranch == '陸軍' ? 'selected' : ''}>陸軍</option>
 										<option value="海軍"
