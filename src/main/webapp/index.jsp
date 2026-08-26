@@ -3,14 +3,14 @@
 <%@ taglib prefix="layout" tagdir="/WEB-INF/tags" %>
 
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>헥사곤존 - 인사&급여관리 시스템 </title>
+  <title>ヘキサゴンゾーン - 人事・給与管理システム</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
   
   <style>
-    /* 메인 페이지 전용 스타일 */
+    /* メインページ専用スタイル */
     .dashboard-container {
       max-width: 1200px;
       margin: 0 auto 50px auto;
@@ -19,7 +19,7 @@
       color: #334155;
     }
 
-    /* 1. 히어로 메인 히어로 배너 */
+    /* 1. ヒーローメインバナー */
     .hero-section {
       background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
       color: #ffffff;
@@ -57,7 +57,7 @@
       color: #93c5fd;
     }
 
-    /* 2. 대시보드 요약 카드 */
+    /* 2. ダッシュボード要約カード */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -98,7 +98,7 @@
       font-weight: 600;
     }
 
-    /* 3. 퀵 메뉴 (주요 링크) */
+    /* 3. クイックメニュー (主要リンク) */
     .section-title {
       font-size: 18px;
       font-weight: 700;
@@ -140,7 +140,7 @@
       font-size: 24px;
     }
 
-    /* 4. 하단 2열 정보 레이아웃 */
+    /* 4. 下段2列情報レイアウト */
     .content-split {
       display: grid;
       grid-template-columns: 2fr 1fr;
@@ -202,95 +202,95 @@
 </head>
 <body>
 
-  <!-- 헤더 태그 -->
+  <!-- ヘッダータグ -->
   <layout:headerNav />
 
-  <!-- 본문 영역 시작 -->
+  <!-- 本文エリア開始 -->
   <main class="dashboard-container">
     
-    <!-- 1. 메인 히어로 영역 -->
+    <!-- 1. メインヒーローエリア -->
     <div class="hero-section">
       <div class="hero-text">
-        <h1>스마트한 인사·급여 관리의 시작 🚀</h1>
-        <h1>여기는 new_update 깃 테스트중입니다</h1>
-        <p>헥사곤존에서 빠르고 정확하게 업무를 처리하세요.</p>
+        <h1>スマートな人事・給与管理の始まり 🚀</h1>
+        <h1>こちらは new_update Gitテスト中です</h1>
+        <p>ヘキサゴンゾーンでスピーディーかつ正確に業務を処理しましょう。</p>
       </div>
       <div class="team-badge">
-        <strong>2팀</strong> (팀장 : 이기정)<br/>
-        김윤지 · 안병준 · 이예빈 · 황현민
+        <strong>第2チーム</strong> (チームリーダー : イ・ギジョン)<br/>
+        キム・ユンジ · アン・ビョンジュン · イ・イェビン · ファン・ヒョンミン
       </div>
     </div>
 
-    <!-- 2. 요약 지표 카드 -->
+    <!-- 2. 要約指標カード -->
     <div class="stats-grid">
       <div class="stat-card">
-        <div class="title">총 재직 사원</div>
-        <div class="value">48명</div>
-        <div class="sub-text">↑ 지난달 대비 +2명</div>
+        <div class="title">総在職社員数</div>
+        <div class="value">48名</div>
+        <div class="sub-text">↑ 先月比 +2名</div>
       </div>
       <div class="stat-card">
-        <div class="title">당월 급여 집행액</div>
+        <div class="title">当月給与支給額</div>
         <div class="value">₩ 142.5M</div>
-        <div class="sub-text">정기 지급 완료</div>
+        <div class="sub-text">定期支給完了</div>
       </div>
       <div class="stat-card">
-        <div class="title">이번 달 근태 처리</div>
+        <div class="title">今月の勤怠処理率</div>
         <div class="value">98.2%</div>
-        <div class="sub-text">정상 출퇴근 기록</div>
+        <div class="sub-text">正常出退勤記録</div>
       </div>
       <div class="stat-card">
-        <div class="title">퇴직/정산 신청</div>
-        <div class="value">1건</div>
-        <div class="sub-text" style="color: #f59e0b;">처리 대기 중</div>
+        <div class="title">退職/精算申請</div>
+        <div class="value">1件</div>
+        <div class="sub-text" style="color: #f59e0b;">処理待ち</div>
       </div>
     </div>
 
-    <!-- 3. 자주 찾는 메뉴 (Quick Links) -->
-    <h2 class="section-title">빠른 실행 메뉴</h2>
+    <!-- 3. よく使うメニュー (Quick Links) -->
+    <h2 class="section-title">クイックメニュー</h2>
     <div class="quick-menu-grid">
       <a href="${pageContext.request.contextPath}/config/register.do" class="quick-btn">
         <span class="icon">👤</span>
-        <span>신규 사원 등록</span>
+        <span>新規社員登録</span>
       </a>
       <a href="${pageContext.request.contextPath}/emp/list.do" class="quick-btn">
         <span class="icon">📋</span>
-        <span>사원 현황 조회</span>
+        <span>社員一覧照会</span>
       </a>
       <a href="${pageContext.request.contextPath}/attendance/record/list.do" class="quick-btn">
         <span class="icon">⏰</span>
-        <span>근태 관리</span>
+        <span>勤怠管理</span>
       </a>
       <a href="${pageContext.request.contextPath}/salary/entry.do" class="quick-btn">
         <span class="icon">💳</span>
-        <span>급여 계산/지급</span>
+        <span>給与計算・支給</span>
       </a>
       <a href="${pageContext.request.contextPath}/salary/stats/yearlyTotal.do" class="quick-btn">
         <span class="icon">📊</span>
-        <span>급여 통계 분석</span>
+        <span>給与統計分析</span>
       </a>
       <a href="${pageContext.request.contextPath}/retirement/list.do" class="quick-btn">
         <span class="icon">🏖️</span>
-        <span>퇴직 관리</span>
+        <span>退職管理</span>
       </a>
     </div>
 
-    <!-- 4. 공지사항 / 시스템 정보 -->
+    <!-- 4. お知らせ / システム情報 -->
     <div class="content-split">
       <div class="panel">
         <div class="panel-header">
-          <h3>시스템 공지사항</h3>
+          <h3>システムお知らせ</h3>
         </div>
         <ul class="notice-list">
           <li class="notice-item">
-            <a href="#">[안내] 이번 달 정기 급여 계산 기준 및 변경 사항 안내</a>
+            <a href="#">[案内] 今月の定期給与計算基準および変更事項のご案内</a>
             <span class="date">2026.07.25</span>
           </li>
           <li class="notice-item">
-            <a href="#">[업데이트] 사원 관리 시스템 UI 개선 및 속도 향상 적용</a>
+            <a href="#">[アップデート] 社員管理システムUI改善および速度向上適用</a>
             <span class="date">2026.07.18</span>
           </li>
           <li class="notice-item">
-            <a href="#">[필독] 하반기 연차 사용 촉진 제도 실행 관련 안내</a>
+            <a href="#">[必読] 下半期有給休暇取得促進制度の実施に関するご案内</a>
             <span class="date">2026.07.10</span>
           </li>
         </ul>
@@ -298,20 +298,20 @@
 
       <div class="panel" style="background-color: #f8fafc;">
         <div class="panel-header">
-          <h3>팀 정보</h3>
+          <h3>チーム情報</h3>
         </div>
         <p style="font-size: 13px; color: #64748b; line-height: 1.6;">
-          <strong>프로젝트 담당:</strong> 2팀<br/>
-          <strong>팀장:</strong> 이기정<br/>
-          <strong>팀원:</strong> 김윤지, 안병준, 이예빈, 황현민
+          <strong>プロジェクト担当:</strong> 第2チーム<br/>
+          <strong>チームリーダー:</strong> イ・ギジョン<br/>
+          <strong>チームメンバー:</strong> キム・ユンジ、アン・ビョンジュン、イ・イェビン、ファン・ヒョンミン
         </p>
       </div>
     </div>
 
   </main>
-  <!-- 본문 영역 끝 -->
+  <!-- 本文エリア終了 -->
 
-  <!-- 푸터 태그 -->
+  <!-- フッタータグ -->
   <layout:footer />
 
 </body>

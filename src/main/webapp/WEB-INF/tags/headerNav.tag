@@ -1,9 +1,9 @@
 <%@ tag language="java" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<!-- 헤더 전용 CSS 스타일 -->
+<!-- ヘッダー専用 CSS スタイル -->
 <style>
-/* 1. 기본 리셋 및 폰트 */
+/* 1. 基本リセットおよびフォント */
 .payzon-header * {
 	box-sizing: border-box;
 	margin: 0;
@@ -11,7 +11,7 @@
 	font-family: 'Pretendard Variable', Pretendard, -apple-system, sans-serif;
 }
 
-/* 2. 최상단 배너 (붉은색) */
+/* 2. 最上段バナー (赤色) */
 .payzon-header .top-banner {
 	background-color: #e11d48;
 	color: #ffffff;
@@ -22,7 +22,7 @@
 	align-items: center;
 }
 
-/* 3. 헤더 로고 및 유저 정보 영역 */
+/* 3. ヘッダーロゴおよびユーザー情報エリア */
 .payzon-header .header-top {
 	background-color: #2b3648;
 	color: #ffffff;
@@ -60,7 +60,7 @@
 	text-decoration: none;
 }
 
-/* 4. 숏컷 바로가기 영역 (가로 100% 균등 분할) */
+/* 4. ショートカットエリア (横100% 均等分割) */
 .payzon-header .shortcut-bar {
 	background-color: #ffffff;
 	border-bottom: 1px solid #cbd5e1;
@@ -69,7 +69,7 @@
 }
 
 .payzon-header .shortcut-item {
-	flex: 1; /* 모든 항목이 가로 공간을 1:1 비율로 균등하게 나눔 */
+	flex: 1; /* すべての項目が横幅を 1:1 比率で均等分割 */
 	border-right: 1px solid #e2e8f0;
 	text-align: center;
 }
@@ -109,7 +109,7 @@
 	white-space: nowrap;
 }
 
-/* 5. 파란색 GNB 네비게이션 (가로 100% 균등 분할) */
+/* 5. 青色 GNB ナビゲーション (横100% 均等分割) */
 .payzon-header .gnb-navbar {
 	background-color: #1d4ed8;
 	display: flex;
@@ -145,7 +145,7 @@
 	background-color: #1e40af;
 }
 
-/* 6. 서브 드롭다운 */
+/* 6. サブドロップダウン */
 .payzon-header .sub-dropdown {
 	display: none;
 	position: absolute;
@@ -183,25 +183,25 @@
 }
 </style>
 
-<!-- 헤더 전체 감싸는 태그 -->
+<!-- ヘッダー全体を包むタグ -->
 <header class="payzon-header">
-	<!-- 1. 최상단 배너 -->
+	<!-- 1. 最上段バナー -->
 	<div class="top-banner">
-		<span>★ 현재 고객님은 체험판 이용중 이십니다.</span>
-		<span><a href="#" style="color:#fff; text-decoration:none;">회원가입</a> | <a href="#" style="color:#fff; text-decoration:none;">로그아웃</a></span>
+		<span>★ 現在、体験版をご利用中です。</span>
+		<span><a href="#" style="color:#fff; text-decoration:none;">会員登録</a> | <a href="#" style="color:#fff; text-decoration:none;">ログアウト</a></span>
 	</div>
 
-	<!-- 2. 브랜드 로고 영역 -->
+	<!-- 2. ブランドロゴエリア -->
 	<div class="header-top">
 		<div class="brand-logo">
-			헥사존 <span>인사&급여관리</span>
+			ヘキサゾーン <span>人事・給与管理</span>
 		</div>
 		<div class="user-info">
-			<span>고객님 무료체험회원 입니다.</span>
+			<span>無料体験会員様</span>
 		</div>
 	</div>
 
-	<!-- 3. 아이콘 숏컷 바로가기 바 (12개 메뉴 균등 분할) -->
+	<!-- 3. アイコンショートカットバー (12個のメニューを均等分割) -->
 	<div class="shortcut-bar">
 		<div class="shortcut-item">
 			<a href="${pageContext.request.contextPath}/index.jsp" class="shortcut-link">
@@ -212,135 +212,135 @@
 		<div class="shortcut-item">
 			<a href="${pageContext.request.contextPath}/config/register.do" class="shortcut-link">
 				<span class="shortcut-icon">👤</span>
-				<span class="shortcut-label">사원등록</span>
+				<span class="shortcut-label">社員登録</span>
 			</a>
 		</div>
 		<div class="shortcut-item">
 			<a href="${pageContext.request.contextPath}/emp/list.do" class="shortcut-link">
 				<span class="shortcut-icon">🗂️</span>
-				<span class="shortcut-label">사원현황</span>
+				<span class="shortcut-label">社員一覧</span>
 			</a>
 		</div>
 		<div class="shortcut-item">
 			<a href="${pageContext.request.contextPath}/emp/certificate/working.do" class="shortcut-link">
 				<span class="shortcut-icon">📜</span>
-				<span class="shortcut-label">제증명서발급</span>
+				<span class="shortcut-label">証明書発行</span>
 			</a>
 		</div>
 		<div class="shortcut-item">
 			<a href="${pageContext.request.contextPath}/attendance/record/list.do" class="shortcut-link">
 				<span class="shortcut-icon">⏱️</span>
-				<span class="shortcut-label">근태기록/관리</span>
+				<span class="shortcut-label">勤怠記録・管理</span>
 			</a>
 		</div>
 		<div class="shortcut-item">
 			<a href="${pageContext.request.contextPath}/attendance/vacation.do" class="shortcut-link">
 				<span class="shortcut-icon">📅</span>
-				<span class="shortcut-label">휴가조회</span>
+				<span class="shortcut-label">休暇照会</span>
 			</a>
 		</div>
 		<div class="shortcut-item">
 			<a href="${pageContext.request.contextPath}/salary/entry.do" class="shortcut-link">
 				<span class="shortcut-icon">💵</span>
-				<span class="shortcut-label">급여입력/관리</span>
+				<span class="shortcut-label">給与入力・管理</span>
 			</a>
 		</div>
 		<div class="shortcut-item">
 			<a href="${pageContext.request.contextPath}/salary/dayworker/register.do" class="shortcut-link">
 				<span class="shortcut-icon">📆</span>
-				<span class="shortcut-label">급여입력(일용)</span>
+				<span class="shortcut-label">給与入力(日雇い)</span>
 			</a>
 		</div>
 		<div class="shortcut-item">
 			<a href="${pageContext.request.contextPath}/salary/ledger.do" class="shortcut-link">
 				<span class="shortcut-icon">📋</span>
-				<span class="shortcut-label">급여대장</span>
+				<span class="shortcut-label">賃金台帳</span>
 			</a>
 		</div>
 		<div class="shortcut-item">
 			<a href="${pageContext.request.contextPath}/salary/payslip.do" class="shortcut-link">
 				<span class="shortcut-icon">🧾</span>
-				<span class="shortcut-label">급여명세서</span>
+				<span class="shortcut-label">給与明細書</span>
 			</a>
 		</div>
 		<div class="shortcut-item">
 			<a href="${pageContext.request.contextPath}/salary/empHistory.do" class="shortcut-link">
 				<span class="shortcut-icon">👥</span>
-				<span class="shortcut-label">사원별급여내역</span>
+				<span class="shortcut-label">社員別給与履歴</span>
 			</a>
 		</div>
 		<div class="shortcut-item">
 			<a href="${pageContext.request.contextPath}/retirement/list.do" class="shortcut-link">
 				<span class="shortcut-icon">💼</span>
-				<span class="shortcut-label">퇴직관리</span>
+				<span class="shortcut-label">退職管理</span>
 			</a>
 		</div>
 	</div>
 
-	<!-- 4. 메인 네비게이션 바 (GNB) -->
+	<!-- 4. メインナビゲーションバー (GNB) -->
 	<nav class="gnb-navbar">
 		<div class="gnb-item">
-			<a href="#" class="gnb-link">기본환경 설정 ▾</a>
+			<a href="#" class="gnb-link">基本環境設定 ▾</a>
 			<div class="sub-dropdown"> 
-				<a href="${pageContext.request.contextPath}/config/register.do">사원 등록</a>
-				<a href="${pageContext.request.contextPath}/config/vacation-attendance.do">휴가/근태 설정</a>
-				<a href="${pageContext.request.contextPath}/config/salaryItem.do">급여항목 설정</a>
+				<a href="${pageContext.request.contextPath}/config/register.do">社員登録</a>
+				<a href="${pageContext.request.contextPath}/config/vacation-attendance.do">休暇・勤怠設定</a>
+				<a href="${pageContext.request.contextPath}/config/salaryItem.do">給与項目設定</a>
 			</div>
 		</div>
 
 		<div class="gnb-item">
-			<a href="#" class="gnb-link">인사관리 ▾</a>
+			<a href="#" class="gnb-link">人事管理 ▾</a>
 			<div class="sub-dropdown">
-				<a href="${pageContext.request.contextPath}/emp/list.do">사원현황/관리</a>
-				<a href="${pageContext.request.contextPath}/emp/empCard.do">인사기록 카드</a>
-				<a href="${pageContext.request.contextPath}/emp/certificate/working.do">제증명서 발급</a> 
-				<a href="${pageContext.request.contextPath}/emp/certificate/list.do">제증명서 발급대장</a>
+				<a href="${pageContext.request.contextPath}/emp/list.do">社員一覧・管理</a>
+				<a href="${pageContext.request.contextPath}/emp/empCard.do">人事記録カード</a>
+				<a href="${pageContext.request.contextPath}/emp/certificate/working.do">証明書発行</a> 
+				<a href="${pageContext.request.contextPath}/emp/certificate/list.do">証明書発行台帳</a>
 			</div>
 		</div>
 
 		<div class="gnb-item">
-			<a href="#" class="gnb-link">근태관리 ▾</a>
+			<a href="#" class="gnb-link">勤怠管理 ▾</a>
 			<div class="sub-dropdown">
-				<a href="${pageContext.request.contextPath}/attendance/record/list.do">근태기록/관리</a>
-				<a href="${pageContext.request.contextPath}/attendance/list.do">근태조회</a>
-				<a href="${pageContext.request.contextPath}/attendance/vacation.do">휴가조회</a>
-				<a href="${pageContext.request.contextPath}/attendance/daily/record.do">일용직근무기록/관리</a> 
-				<a href="${pageContext.request.contextPath}/attendance/daily/list.do">일용직근무 조회</a>
+				<a href="${pageContext.request.contextPath}/attendance/record/list.do">勤怠記録・管理</a>
+				<a href="${pageContext.request.contextPath}/attendance/list.do">勤怠照会</a>
+				<a href="${pageContext.request.contextPath}/attendance/vacation.do">休暇照会</a>
+				<a href="${pageContext.request.contextPath}/attendance/daily/record.do">日雇い勤務記録・管理</a> 
+				<a href="${pageContext.request.contextPath}/attendance/daily/list.do">日雇い勤務照会</a>
 			</div>
 		</div>
 
 		<div class="gnb-item">
-			<a href="#" class="gnb-link">급여관리 ▾</a>
+			<a href="#" class="gnb-link">給与管理 ▾</a>
 			<div class="sub-dropdown">
-				<a href="${pageContext.request.contextPath}/salary/entry.do">급여입력/관리</a>
-				<a href="${pageContext.request.contextPath}/salary/dayworker/register.do">급여입력/관리(일용직)</a>
-				<a href="${pageContext.request.contextPath}/salary/ledger.do">급여대장</a>
-				<a href="${pageContext.request.contextPath}/salary/payslip.do">급여명세서</a>
-				<a href="${pageContext.request.contextPath}/salary/empHistory.do">사원별급여내역</a> 
-				<a href="${pageContext.request.contextPath}/salary/transfer/apply.do">급여이체신청</a> 
-				<a href="${pageContext.request.contextPath}/salary/transfer/result.do">급여이체결과조회</a> 
-				<a href="${pageContext.request.contextPath}/salary/itemRegister.do">항목별대장</a> 
-				<a href="${pageContext.request.contextPath}/salary/socialInsurance.do">4대보험공제내역</a>
+				<a href="${pageContext.request.contextPath}/salary/entry.do">給与入力・管理</a>
+				<a href="${pageContext.request.contextPath}/salary/dayworker/register.do">給与入力・管理(日雇い)</a>
+				<a href="${pageContext.request.contextPath}/salary/ledger.do">賃金台帳</a>
+				<a href="${pageContext.request.contextPath}/salary/payslip.do">給与明細書</a>
+				<a href="${pageContext.request.contextPath}/salary/empHistory.do">社員別給与履歴</a> 
+				<a href="${pageContext.request.contextPath}/salary/transfer/apply.do">給与振込申請</a> 
+				<a href="${pageContext.request.contextPath}/salary/transfer/result.do">給与振込結果照会</a> 
+				<a href="${pageContext.request.contextPath}/salary/itemRegister.do">項目別台帳</a> 
+				<a href="${pageContext.request.contextPath}/salary/socialInsurance.do">社会保険控除明細</a>
 			</div>
 		</div>
 
 		<div class="gnb-item">
-			<a href="#" class="gnb-link">급여통계 ▾</a>
+			<a href="#" class="gnb-link">給与統計 ▾</a>
 			<div class="sub-dropdown">
-				<a href="${pageContext.request.contextPath}/salary/stats/yearlyTotal.do">연도별전체급여 통계</a> 
-				<a href="${pageContext.request.contextPath}/salary/stats/monthlyTotal.do">월별전체급여 통계</a> 
-				<a href="${pageContext.request.contextPath}/salary/stats/yearlyPersonal.do">연도별개인연봉 통계</a> 
-				<a href="${pageContext.request.contextPath}/salary/stats/monthlyPersonal.do">월별개인급여 통계</a> 
-				<a href="${pageContext.request.contextPath}/salary/stats/itemComposition.do">급여항목구성 통계</a>
+				<a href="${pageContext.request.contextPath}/salary/stats/yearlyTotal.do">年度別全体給与統計</a> 
+				<a href="${pageContext.request.contextPath}/salary/stats/monthlyTotal.do">月別全体給与統計</a> 
+				<a href="${pageContext.request.contextPath}/salary/stats/yearlyPersonal.do">年度別個人年収統計</a> 
+				<a href="${pageContext.request.contextPath}/salary/stats/monthlyPersonal.do">月別個人給与統計</a> 
+				<a href="${pageContext.request.contextPath}/salary/stats/itemComposition.do">給与項目構成統計</a>
 			</div>
 		</div>
 
 		<div class="gnb-item">
-			<a href="#" class="gnb-link">퇴직관리 ▾</a>
+			<a href="#" class="gnb-link">退職管理 ▾</a>
 			<div class="sub-dropdown">
-				<a href="${pageContext.request.contextPath}/retirement/list.do">사원 퇴직처리</a> 
-				<a href="${pageContext.request.contextPath}/retirement/severance.do">퇴직급여 입력/관리</a> 
-				<a href="${pageContext.request.contextPath}/retirement/specification.do">퇴직급여명세서</a>
+				<a href="${pageContext.request.contextPath}/retirement/list.do">社員退職処理</a> 
+				<a href="${pageContext.request.contextPath}/retirement/severance.do">退職手当入力・管理</a> 
+				<a href="${pageContext.request.contextPath}/retirement/specification.do">退職給与明細書</a>
 			</div>
 		</div>
 	</nav>
