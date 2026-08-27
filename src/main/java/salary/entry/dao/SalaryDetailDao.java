@@ -69,7 +69,7 @@ public class SalaryDetailDao {
 				+ "default_amount, memo, amount) "
 				+ "SELECT seq_salary_detail.NEXTVAL, ?, salary_item_id, attendance_type_id, "
 				+ "item_type, item_name, tax_yn, tax_free_name, tax_free_limit, calc_method, round_unit, "
-				+ "default_amount, memo, amount FROM salary_detail WHERE salary_id = ? ORDER BY detail_id";
+				+ "default_amount, memo, amount FROM salary_detail WHERE salary_id = ?";
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, targetSalaryId);
 			pstmt.setInt(2, sourceSalaryId);
