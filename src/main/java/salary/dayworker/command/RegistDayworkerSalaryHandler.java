@@ -67,20 +67,20 @@ public class RegistDayworkerSalaryHandler implements CommandHandler {
 
 			// 검증 실패 시 오류 JSON 반환 / 検証失敗時にエラーJSONを返却
 			if (!errors.isEmpty()) {
-				out.print("{\"status\":\"fail\", \"message\":\"필수 입력값이 누락되었거나 유효하지 않습니다. / 必須入力項目が漏れているか無効です。\"}");
+				out.print("{\"status\":\"fail\", \"message\":\"必須入力項目が漏れているか無効です。\"}");
 				return null;
 			}
 
 			// 3. 급여 등록 서비스 호출 / 3. 給与登録サービスの呼び出し
 			registService.regist(registReq);
-			out.print("{\"status\":\"success\", \"message\":\"일용직 급여 내역이 성공적으로 저장되었습니다. / 日雇い給与明細が正常に保存されました。\"}");
+			out.print("{\"status\":\"success\", \"message\":\"日雇い給与明細が正常に保存されました。\"}");
 
 		} catch (Exception e) {
 			e.printStackTrace(); // 콘솔 에러 로깅 / コンソールエラーログ出力
 
 			// 예외 발생 시 서버 에러 JSON 반환 / 例外発生時にサーバーエラーJSONを返却
 			String errMsg = e.getMessage() != null ? e.getMessage().replace("\"", "'") : "알 수 없는 서버 오류 / 不明なサーバーエラー";
-			out.print("{\"status\":\"error\", \"message\":\"저장 실패 / 保存失敗: " + errMsg + "\"}");
+			out.print("{\"status\":\"error\", \"message\":\"保存失敗: " + errMsg + "\"}");
 		}
 
 		return null;
