@@ -25,7 +25,7 @@ public class DayworkerDao {
 		String sql = "SELECT e.employment_type, e.emp_id, e.name_kor, e.dept_id, "
 				+ "d.dept_name AS dept_name, e.position_id, p.position_name AS position_name, e.status "
 				+ "FROM employee e " + "LEFT JOIN department d ON e.dept_id = d.dept_id "
-				+ "LEFT JOIN position p ON e.position_id = p.position_id " + "WHERE e.employment_type = '일용직' "
+				+ "LEFT JOIN position p ON e.position_id = p.position_id " + "WHERE e.employment_type = '日雇い' "
 				+ "ORDER BY e.emp_id ASC";
 
 		try {

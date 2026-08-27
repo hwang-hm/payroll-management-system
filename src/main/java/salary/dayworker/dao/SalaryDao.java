@@ -75,7 +75,7 @@ public class SalaryDao {
 		String sql = "SELECT s.salary_id, s.salary_date_id, s.emp_id, s.total_pay, s.total_deduct, s.net_pay, "
 				+ "e.name_kor, e.employment_type, " + "d.dept_name " + "FROM salary s "
 				+ "JOIN employee e ON s.emp_id = e.emp_id " + "LEFT JOIN department d ON e.dept_id = d.dept_id "
-				+ "WHERE s.salary_date_id = ? AND e.employment_type = '일용직'";
+				+ "WHERE s.salary_date_id = ? AND e.employment_type = '日雇い'";
 
 		List<GetSalaryListDTO> salaryList = new ArrayList<>();
 
