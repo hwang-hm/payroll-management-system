@@ -45,7 +45,7 @@ public class GetDayworkerSalaryDetailHandler implements CommandHandler {
 		} catch (Exception e) {
 			e.printStackTrace();
 			// 예외 발생 시 에러 JSON 응답 / 例外発生時エラーJSONレスポンス
-			String errMsg = e.getMessage() != null ? escapeJson(e.getMessage()) : "서버 오류 발생 / サーバーエラー発生";
+			String errMsg = e.getMessage() != null ? escapeJson(e.getMessage()) : "サーバーエラー発生";
 			out.print("{\"error\": \"" + errMsg + "\"}");
 		}
 
