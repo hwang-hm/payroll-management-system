@@ -55,13 +55,11 @@ public class TransferResultService {
 		}
 	}
 
-	// 처음 들어왔을 때 기본기간. 지난달 1일~말일
-	// 初回入場時のデフォルト期間。前月1日〜末日
+	// 처음 들어왔을 때 기본기간. 이번달 1일~오늘
+	// 初回入場時のデフォルト期間。今月1日〜今日
 	public static Date[] defaultPeriod() {
 		Calendar end = Calendar.getInstance();
 		truncateTime(end);
-		end.set(Calendar.DAY_OF_MONTH, 1);
-		end.add(Calendar.DAY_OF_MONTH, -1);
 		Calendar start = (Calendar) end.clone();
 		start.set(Calendar.DAY_OF_MONTH, 1);
 		return new Date[] { start.getTime(), end.getTime() };
