@@ -494,6 +494,10 @@ function applySelectedWorkers() {
 	const mainTbody = document.getElementById('workerListBody');
 	let addedCount = 0;
 
+	// 빈 목록 placeholder 행 제거 (data-emp-id 없는 tr)
+	// 空リストのプレースホルダー行を削除 (data-emp-id のない tr)
+	mainTbody.querySelectorAll('tr:not([data-emp-id])').forEach(r => r.remove());
+
 	checkedBoxes.forEach(chk => {
 		const empId = chk.dataset.empId;
 		const empName = chk.dataset.empName;
