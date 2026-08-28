@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="layout" tagdir="/WEB-INF/tags"%>
 
@@ -155,11 +155,10 @@ pageEncoding="UTF-8"%>
 
 									</c:choose></td>
 
-<%-- 								<td><a class="emp-link"
-									href="${pageContext.request.contextPath}/retirement/read.do?empId=${emp.empId}">
+								<td><a class="emp-link"
+									href="${pageContext.request.contextPath}/emp/modify2.do?empId=${emp.empId}">
 
 										No-${emp.empId} </a></td>
- --%>
 								<td>${emp.nameKor}</td>
 
 								<td><c:choose>
