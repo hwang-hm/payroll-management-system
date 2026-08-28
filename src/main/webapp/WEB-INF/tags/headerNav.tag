@@ -304,9 +304,9 @@
 		<div class="gnb-item">
 			<a href="#" class="gnb-link">人事管理 ▾</a>
 			<div class="sub-dropdown">
-				<a href="${pageContext.request.contextPath}/emp/list.do">社員一覧・管理</a>
+				<a href="${pageContext.request.contextPath}/emp/list.do">社員現況・管理</a>
 				<a href="${pageContext.request.contextPath}/emp/empCard.do">人事記録カード</a>
-				<a href="${pageContext.request.contextPath}/emp/certificate/working.do">証明書発行</a> 
+				<a href="${pageContext.request.contextPath}/emp/certificate/working.do">各種証明書発行</a> 
 				<a href="${pageContext.request.contextPath}/emp/certificate/list.do">証明書発行台帳</a>
 			</div>
 		</div>
@@ -314,10 +314,10 @@
 		<div class="gnb-item">
 			<a href="#" class="gnb-link">勤怠管理 ▾</a>
 			<div class="sub-dropdown">
-				<a href="${pageContext.request.contextPath}/attendance/record/list.do">勤怠記録・管理</a>
+				<a href="${pageContext.request.contextPath}/attendance/record/list.do">勤怠記録管理</a>
 				<a href="${pageContext.request.contextPath}/attendance/list.do">勤怠照会</a>
 				<a href="${pageContext.request.contextPath}/attendance/vacation.do">休暇照会</a>
-				<a href="${pageContext.request.contextPath}/attendance/daily/record.do">日雇い勤務記録・管理</a> 
+				<a href="${pageContext.request.contextPath}/attendance/daily/record.do">日雇い勤務記録／管理</a> 
 				<a href="${pageContext.request.contextPath}/attendance/daily/list.do">日雇い勤務照会</a>
 			</div>
 		</div>
@@ -325,25 +325,25 @@
 		<div class="gnb-item">
 			<a href="#" class="gnb-link">給与管理 ▾</a>
 			<div class="sub-dropdown">
-				<a href="${pageContext.request.contextPath}/salary/entry.do">給与入力・管理</a>
-				<a href="${pageContext.request.contextPath}/salary/dayworker/register.do">給与入力・管理(日雇い)</a>
-				<a href="${pageContext.request.contextPath}/salary/ledger.do">賃金台帳</a>
+				<a href="${pageContext.request.contextPath}/salary/entry.do">給与入力/管理</a>
+				<a href="${pageContext.request.contextPath}/salary/dayworker/register.do">給与入力 / 管理 (日雇い)</a>
+				<a href="${pageContext.request.contextPath}/salary/ledger.do">給与台帳</a>
 				<a href="${pageContext.request.contextPath}/salary/payslip.do">給与明細書</a>
-				<a href="${pageContext.request.contextPath}/salary/empHistory.do">社員別給与履歴</a> 
+				<a href="${pageContext.request.contextPath}/salary/empHistory.do">社員別給与内訳</a> 
 				<a href="${pageContext.request.contextPath}/salary/transfer/apply.do">給与振込申請</a> 
 				<a href="${pageContext.request.contextPath}/salary/transfer/result.do">給与振込結果照会</a> 
 				<a href="${pageContext.request.contextPath}/salary/itemRegister.do">項目別台帳</a> 
-				<a href="${pageContext.request.contextPath}/salary/socialInsurance.do">社会保険控除明細</a>
+				<a href="${pageContext.request.contextPath}/salary/socialInsurance.do">4大保険控除明細</a>
 			</div>
 		</div>
 
 		<div class="gnb-item">
 			<a href="#" class="gnb-link">給与統計 ▾</a>
 			<div class="sub-dropdown">
-				<a href="${pageContext.request.contextPath}/salary/stats/yearlyTotal.do">年度別全体給与統計</a> 
-				<a href="${pageContext.request.contextPath}/salary/stats/monthlyTotal.do">月別全体給与統計</a> 
-				<a href="${pageContext.request.contextPath}/salary/stats/yearlyPersonal.do">年度別個人年収統計</a> 
-				<a href="${pageContext.request.contextPath}/salary/stats/monthlyPersonal.do">月別個人給与統計</a> 
+				<a href="${pageContext.request.contextPath}/salary/stats/yearlyTotal.do">年度別 全体給与統計</a> 
+				<a href="${pageContext.request.contextPath}/salary/stats/monthlyTotal.do">月別 全体給与統計</a> 
+				<a href="${pageContext.request.contextPath}/salary/stats/yearlyPersonal.do">年度別 個人年収統計</a> 
+				<a href="${pageContext.request.contextPath}/salary/stats/monthlyPersonal.do">月別 個人給与統計</a> 
 				<a href="${pageContext.request.contextPath}/salary/stats/itemComposition.do">給与項目構成統計</a>
 			</div>
 		</div>
@@ -351,9 +351,9 @@
 		<div class="gnb-item">
 			<a href="#" class="gnb-link">退職管理 ▾</a>
 			<div class="sub-dropdown">
-				<a href="${pageContext.request.contextPath}/retirement/list.do">社員退職処理</a> 
-				<a href="${pageContext.request.contextPath}/retirement/severance.do">退職手当入力・管理</a> 
-				<a href="${pageContext.request.contextPath}/retirement/specification.do">退職給与明細書</a>
+				<a href="${pageContext.request.contextPath}/retirement/list.do">社員退職管理</a> 
+				<a href="${pageContext.request.contextPath}/retirement/severance.do">退職給付入力・管理</a> 
+				<a href="${pageContext.request.contextPath}/retirement/specification.do">退職給付明細書</a>
 			</div>
 		</div>
 	</nav>
