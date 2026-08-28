@@ -8,7 +8,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>ヘキサゴンゾーン - 人事記録カード</title>
+<title>ヘキサゾーン - 人事記録カード</title>
 
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />

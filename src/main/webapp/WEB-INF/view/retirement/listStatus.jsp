@@ -8,7 +8,7 @@ pageEncoding="UTF-8"%>
 <head>
 <meta charset="UTF-8">
 
-<title>ヘキサゴンゾーン - 社員退職管理</title>
+<title>ヘキサゾーン - 社員退職管理</title>
 
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
@@ -155,11 +155,11 @@ pageEncoding="UTF-8"%>
 
 									</c:choose></td>
 
-								<td><a class="emp-link"
+<%-- 								<td><a class="emp-link"
 									href="${pageContext.request.contextPath}/retirement/read.do?empId=${emp.empId}">
 
 										No-${emp.empId} </a></td>
-
+ --%>
 								<td>${emp.nameKor}</td>
 
 								<td><c:choose>

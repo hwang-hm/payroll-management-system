@@ -7,7 +7,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>ヘキサゴンゾーン - 項目別台帳</title>
+  <title>ヘキサゾーン - 項目別台帳</title>
   <style>
     :root {
       --primary: #2563eb;

@@ -8,7 +8,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>ヘキサゴンゾーン - 休暇照会</title>
+<title>ヘキサゾーン - 休暇照会</title>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 <style>
