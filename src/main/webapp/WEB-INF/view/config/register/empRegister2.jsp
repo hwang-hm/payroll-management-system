@@ -6,7 +6,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>ヘキサゴンゾーン - 社員情報2</title>
+<title>ヘキサゾーン - 社員情報2</title>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 <link rel="stylesheet"

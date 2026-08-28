@@ -15,7 +15,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>ヘキサゴンゾーン - 休暇項目設定</title>
+<title>ヘキサゾーン - 休暇項目設定</title>
 <style>
 .vacation-container {
 	max-width: 1180px;

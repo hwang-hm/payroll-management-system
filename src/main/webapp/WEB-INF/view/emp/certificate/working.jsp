@@ -9,7 +9,7 @@
 <head>
 <meta charset="UTF-8">
 
-<title>ヘキサゴンゾーン - 在職証明書発行</title>
+<title>ヘキサゾーン - 在職証明書発行</title>
 
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
@@ -107,7 +107,7 @@
 					<div class="certificate-paper">
 
 						<div class="cert-top">
-							<div class="cert-logo">HEXAGON ZONE</div>
+							<div class="cert-logo">HEXA ZONE</div>
 							<div class="cert-title">在職証明書</div>
 							<div class="cert-option">
 								<label> <input type="checkbox" id="hideResidentNo"

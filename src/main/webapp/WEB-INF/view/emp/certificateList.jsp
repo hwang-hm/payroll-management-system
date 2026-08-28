@@ -9,7 +9,7 @@
 <head>
 <meta charset="UTF-8">
 
-<title>ヘキサゴンゾーン - 証明書発行台帳</title>
+<title>ヘキサゾーン - 証明書発行台帳</title>
 
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />

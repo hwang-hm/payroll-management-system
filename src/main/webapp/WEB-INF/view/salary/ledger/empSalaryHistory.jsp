@@ -7,7 +7,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>ヘキサゴンゾーン - 社員別給与内訳</title>
+  <title>ヘキサゾーン - 社員別給与内訳</title>
   <style>
     :root {
       --primary: #2563eb;
