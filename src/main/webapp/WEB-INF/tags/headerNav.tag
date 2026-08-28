@@ -165,11 +165,24 @@
 	text-decoration: none;
 	font-size: 13px;
 	text-align: center;
-	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 	transition: background 0.2s ease, color 0.2s ease;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	overflow: hidden;
+}
+
+/* 홀짝 퐁당퐁당: 같은 블루 계열에서 채도만 살짝 다르게 */
+.payzon-header .sub-dropdown a:nth-child(odd) {
+	background-color: hsl(224, 70%, 32%);
+}
+
+.payzon-header .sub-dropdown a:nth-child(even) {
+	background-color: hsl(224, 48%, 38%);
+}
+
+.payzon-header .sub-dropdown a:last-child {
+	border-bottom: none;
 }
 
 .payzon-header .sub-dropdown a:hover {
